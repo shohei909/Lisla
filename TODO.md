@@ -8,17 +8,17 @@
 - [ ] minify
 - [ ] object map
 
-## Schema for Sora 
+## Schema for Sora (Schora) 
 - [ ] auto generate
 - [ ] lint
 - [ ] documment generate
 - [ ] auto complete
 
 ## Patch for Sora
-Long term
+Later
 
 ## Schora patch generation 
--[ ] for Schora
+- [ ] for Schora
 
 # Rust CLI tool
 - [ ] help
@@ -27,16 +27,19 @@ Long term
   - [ ] windows 
 
 # Haxe library
-Long term
+Later
 
 # VSCode plugin
-Long term
+Later
+
+# Online playground
+Later
 
 # Specification
 ## Sora
 - [x] overview
 - [ ] test case
-  - [ ] basic
+  - [x] basic
    - [x] sample
   - [ ] advanced
 - [ ] japanese
@@ -51,4 +54,4 @@ Long term
 - [ ] japanese
 
 ## Binary format
-Long term
+Later

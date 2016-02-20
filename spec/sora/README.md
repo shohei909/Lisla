@@ -60,20 +60,45 @@ If you want to include special characters or white spaces in string, you can enc
     </tr>
 </table>
 
-### Multi-line string
-
-If you want to include newline in string, multi-line string syntax can be use.
-Multi-line string syntax starts with 3 or more double or single quotes, and end with same quotes.
+Quotes number can be 3 or more. 
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
-"""
+"""a"b"c""", '''' 'abc' ''''
+            </code></pre>
+        </td>
+        <td>
+            <pre><code>
+["a\"b\"c", " 'abc' "]
+            </code></pre>
+        </td>
+    </tr>
+</table>
+
+2 quotes can not be use, because `""` and `''` mean empty string.
+
+### Multi-line string
+
+Sora supports multi-line string.
+
+In multi-line string syntax, some white spaces and newlines are ignored. 
+
+* If the line of openinng quote has only white spaces, the white spaces and first newline are ignored.  
+* If the line of closing quote has only white spaces, the white spaces and last newline are ignored.
+* If the line of closing quote starts with white spaces, same number of white spaces at the start of each lines excepting openinng quote line are ignored. In this case each of the white spaces must have same sequence.
+
+<table>
+    <tr><th>Sora</th><th>Json</th></tr>
+    <tr>
+        <td>
+            <pre><code>
+"
 Multi
 line
-"""
+"
     '''''
     Sora
      is
@@ -317,7 +342,7 @@ Many test cases are prepared. You should check all of them.
 
 ## Version
 
-Current specfication version is `0.1` (draft).  
+<!-- Current specfication version is `0.1` (draft). -->  
 <!-- Current test cases version is `0.1.0`. -->
 
 ## Lisence 
