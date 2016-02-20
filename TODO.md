@@ -24,7 +24,7 @@ Later
 - [ ] help
 - [ ] first impliment
 - [ ] installer
-  - [ ] windows 
+    - [ ] windows 
 
 # Haxe library
 Later
@@ -39,9 +39,10 @@ Later
 ## Sora
 - [x] overview
 - [ ] test case
-  - [x] basic
-   - [x] sample
-  - [ ] advanced
+    - [x] basic
+        - [x] sample
+        - [x] corner
+    - [ ] advanced
 - [ ] japanese
 
 ## Schema for Sora
