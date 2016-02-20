@@ -40,22 +40,6 @@ abcd
 
 The root of Sora is array, so that single `abcd` corresponds to `["abcd"]` of JSON.
 
-<table>
-    <tr><th>Sora</th><th>Json</th></tr>
-    <tr>
-        <td>
-            <pre><code>
-a, bc, def
-            </code></pre>
-        </td>
-        <td>
-            <pre><code>
-["a", ["bc", "def"]]
-            </code></pre>
-        </td>
-    </tr>
-</table>
-
 ### Quoted string
 
 If you want to include special characters or white spaces in string, you can enclose string with double quotes `"` or  single quotes `'`.
@@ -99,7 +83,7 @@ line
         </td>
         <td>
             <pre><code>
-["Multi\r\nline", "Sora\n is\n  awesome."]
+["Multi\nline", "Sora\n is\n  awesome."]
             </code></pre>
         </td>
     </tr>
@@ -151,12 +135,12 @@ Escape sequences can be use in each of string literal.
     <tr>
         <td>
             <pre><code>
-"Multi\nLine", "\"", \u{305D}\u{3089}
+"Multi\r\nLine", "\"", \u{305D}\u{3089}
             </code></pre>
         </td>
         <td>
             <pre><code>
-["Multi\r\nline", ["\"", "そら"]]
+["Multi\r\nline", "\"", "そら"]
             </code></pre>
         </td>
     </tr>
@@ -173,12 +157,12 @@ As you already seen, strings can be separate with comma (`,`).
     <tr>
         <td>
             <pre><code>
-a, bc, def 
+a, bc, def
             </code></pre>
         </td>
         <td>
             <pre><code>
-["a", ["bc", "def"]]
+["a", "bc", "def"]
             </code></pre>
         </td>
     </tr>
@@ -195,12 +179,12 @@ Newline (LF, CR, CR+LF) can be also use as separator.
             <pre><code>
 a
 bc
-def 
+def
             </code></pre>
         </td>
         <td>
             <pre><code>
-["a", ["bc", "def"]]
+["a", "bc", "def"]
             </code></pre>
         </td>
     </tr>
@@ -216,12 +200,14 @@ Nested array start with opening bracket `[` and end with closing bracket `]`.
         <td>
             <pre><code>
 [a, [[bc, def], [g]]]
-[ [ """
-    h
-    i
-    """
-  ]
-  jk
+[ 
+    [ 
+        """
+        h
+        i
+        """
+    ]
+    jk
 ]
             </code></pre>
         </td>
@@ -240,20 +226,20 @@ You can omit separators after or before brackets.
     <tr>
         <td>
             <pre><code>
-[a [bc def] [g]] [ [h\ni] jk]
+[a [bc, def] [g]] [[h\ni] jk]
             </code></pre>
         </td>
         <td>
             <pre><code>
-[["a", [["bc", "def"], ["g"]]], [["h\ni"], jk]]
+[["a", [["bc", "def"], ["g"]]], [["h\ni"], "jk"]]
             </code></pre>
         </td>
     </tr>
 </table>
 
-### Ignoring 
+## Skipping 
 
-Sora ignores unquated empty string.
+Sora skips unquated empty string.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -281,7 +267,6 @@ Sora ignores unquated empty string.
 
 If you want to express empty string, use `""` or `''`. 
 
-
 ## Comment
 
 Sora supports single line comment.
@@ -297,7 +282,11 @@ Multi-line comment is not supported.
 
 ```
 /// This is comment for various tools (e.g. editor, document generation).
-/// @auther shohei909
+/// @[ // add tags with sora
+///     [auther, shohei909]
+///     [version, 0.1]
+///     [license, "public domain"]
+/// ]
 ```
 
 ### Keeping comment

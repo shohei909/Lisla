@@ -1,0 +1,10 @@
+// Sora
+""""""""
+//! Comments start with ! are keeped when Sora is minified.
+///! Keeping document comments are also avarable.
+""""""""
+
+// Json
+""""""""
+[]
+""""""""

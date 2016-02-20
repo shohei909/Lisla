@@ -2,6 +2,7 @@
 # Rust library
 ## Sora
 - [ ] parse
+- [ ] write
 - [ ] format
 - [ ] syntax highlight
 - [ ] minify
@@ -36,6 +37,7 @@ Long term
 - [x] overview
 - [ ] test case
   - [ ] basic
+   - [x] sample
   - [ ] advanced
 - [ ] japanese
 
