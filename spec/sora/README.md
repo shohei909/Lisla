@@ -42,7 +42,7 @@ The root of Sora is array, so that single `abcd` corresponds to `["abcd"]` of JS
 
 ### Quoted string
 
-If you want to include special characters or white spaces in string, you can enclose string with double quotes `"` or  single quotes `'`.
+If you want to include special characters or white spaces in string, you can enclose the string with double quotes `"` or  single quotes `'`.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -60,7 +60,7 @@ If you want to include special characters or white spaces in string, you can enc
     </tr>
 </table>
 
-Quotes number can be 3 or more. 
+The quotes number can be 3 or more. 
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -78,11 +78,11 @@ Quotes number can be 3 or more.
     </tr>
 </table>
 
-2 quotes can not be use, because `""` and `''` mean empty string.
+2 quotes can not be use, because `""` and `''` mean an empty string.
 
 ### Multi-line string
 
-Sora supports multi-line string.
+Sora supports multi-line string syntax.
 
 In multi-line string syntax, some white spaces and newlines are ignored. 
 
