@@ -4,6 +4,7 @@
 - [ ] parse
 - [ ] write
 - [ ] format
+- [ ] repair
 - [ ] syntax highlight
 - [ ] minify
 - [ ] object map
@@ -51,7 +52,7 @@ Later
             - [ ] valid
 - [ ] japanese
 
-## Schema for Sora
+## Schema for Sora (Schora)
 - [ ] overview
 - [ ] japanese
 
