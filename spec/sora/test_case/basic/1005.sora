@@ -1,0 +1,16 @@
+// Sora
+""""""""
+/
+/notcomment
+// comment \n comment \r comment
+[/]/_/\0/,/\u{2f}\u{2F}/\u{00002f}notcomment
+"// not comment"
+'// not comment
+  // not comment
+  // not comment'
+""""""""
+
+// Json
+""""""""
+["/", "/notcomment", ["/"], "/_/\0/", "/////notcomment", "// not comment", "// not comment", "// not comment\n// not comment\n// not comment"]
+""""""""

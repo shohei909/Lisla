@@ -20,7 +20,7 @@ Sora is simple, but enough.
 
 ### Unquoted string
 
-If a description includes no special characters (`"'[]`), newline characters (LF(#xA), CR(#xD)), white spaces (`` ``(#x20) or `\t`(#x9)), or comment syntax (`//`), it is considered string.
+If a description includes no special characters (`"'[],`), newline characters (LF(#xA), CR(#xD)), white spaces (`` ``(#x20) or `\t`(#x9)), or comment syntax (`//`), it is considered string.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -132,7 +132,7 @@ Sora also supports escape sequences:
     <td>Tab</td>
     </tr>
     <tr>
-    <td><code>\\\\</code></td>
+    <td><code>\\</code></td>
     <td>Backslash</td>
     </tr>
     <tr>

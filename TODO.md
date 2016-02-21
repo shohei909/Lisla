@@ -43,6 +43,12 @@ Later
         - [x] sample
         - [x] corner
     - [ ] advanced
+        - [ ] sample
+            - [ ] invalid
+                - [x] nonfatal
+                - [ ] fatal
+                    - [ ] invalid unicode
+            - [ ] valid
 - [ ] japanese
 
 ## Schema for Sora
