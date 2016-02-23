@@ -52,13 +52,17 @@ Later
             - [ ] valid
 - [ ] japanese
 
-## Schema for Sora (Schora)
-- [ ] overview
-- [ ] japanese
-
 ## Patch for Sora
 - [ ] overview
+- [ ] schora for patch
 - [ ] test case
+- [ ] japanese
+
+## Schema for Sora (Schora)
+- [ ] overview
+- [ ] schora standard library
+- [ ] schora for schora
+    - [ ] constraint
 - [ ] japanese
 
 ## Binary format

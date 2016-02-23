@@ -1,0 +1,30 @@
+[type [bool] [or [bools]]]
+
+[types [bools] 
+    [
+        [const true]
+        [const false]
+    ]
+]
+
+[type [option [type t]] [or [options [t]]]]
+[types [options [type t]]
+    [
+        [array [[const some] [t]]]
+        [const none]
+    ]
+]
+
+[type [map [type key] [type value]]
+    [array [] []
+        [
+            /// Each of keys can not be dupplicated. 
+            [array [[key], [value]]]
+            [limit 
+                [any]
+                [0, _], 
+                [0, 1]
+            ]
+        ]
+    ]
+]
