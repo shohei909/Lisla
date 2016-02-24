@@ -39,6 +39,7 @@ Later
 # Specification
 ## Sora
 - [x] overview
+- [ ] implemention guide line
 - [ ] test case
     - [x] basic
         - [x] sample
@@ -46,7 +47,8 @@ Later
     - [ ] advanced
         - [ ] sample
             - [ ] invalid
-                - [x] nonfatal
+                - [ ] nonfatal
+                    - [ ] blacklisted whitespaces
                 - [ ] fatal
                     - [ ] invalid unicode
             - [ ] valid
@@ -56,6 +58,7 @@ Later
 - [ ] overview
 - [ ] schora for patch
 - [ ] test case
+- [ ] standerd_patch for Commonly-used
 - [ ] japanese
 
 ## Schema for Sora (Schora)
@@ -64,6 +67,9 @@ Later
 - [ ] schora for schora
     - [ ] constraint
 - [ ] japanese
+
+## Sora DSL
+Later
 
 ## Binary format
 Later

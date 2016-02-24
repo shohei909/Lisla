@@ -20,7 +20,7 @@ Sora is simple, but enough.
 
 ### Unquoted string
 
-If a description includes no special characters (`"'[],`), newline characters (LF(#xA), CR(#xD)), white spaces (`` ``(#x20) or `\t`(#x9)), or comment syntax (`//`), it is considered string.
+If a description includes no special characters (`"'[],`), newline characters (LF(#xA), CR(#xD)), whitespaces (`` ``(#x20) or `\t`(#x9)), blacklisted whitespaces, or comment syntax (`//`), it is considered string.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -42,7 +42,7 @@ The root of Sora is array, so that single `abcd` corresponds to `["abcd"]` of JS
 
 ### Quoted string
 
-If you want to include special characters or white spaces in string, you can enclose the string with double quotes `"` or  single quotes `'`.
+If you want to include special characters, whitespaces or blacklisted whitespaces in string, you can enclose the string with double quotes `"` or  single quotes `'`.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -82,9 +82,9 @@ The quotes number can be 3 or more.
 
 ### Multi-line string
 
-Sora supports multi-line string syntax.
+Sora supports multi-line quoted string syntax.
 
-In multi-line string syntax, some white spaces and newlines are ignored. 
+In multi-line string syntax, some whitespaces and newlines are ignored. 
 
 * If the line of openinng quote has only white spaces, the white spaces and first newline are ignored.  
 * If the line of closing quote has only white spaces, the white spaces and last newline are ignored.
@@ -171,6 +171,32 @@ Escape sequences can be use in each of string literal.
     </tr>
 </table>
 
+### Blacklisted whitespaces
+
+Below is the blacklist of whitespace characters. They could cause confusing behavior, So that, Sora prohibits the use of them in unquoted string.
+
+* `U+000B` (VT, Vertical Tab)
+* `U+000C` (FF, From feed)
+* `U+0085` (NEL, Next line) 
+* `U+00A0` (No break space)
+* `U+1680` (Ogham space mark)
+* `U+2000` (En quad)
+* `U+2001` (Em quad)
+* `U+2002` (En space)
+* `U+2003` (Em space)
+* `U+2004` (Three-per-em space)
+* `U+2005` (Four-per-em space)
+* `U+2006` (Six-per-em-space)
+* `U+2007` (Figure space)
+* `U+2008` (Punctuation space)
+* `U+2009` (Thin space)
+* `U+200A` (Hair space)
+* `U+2028` (Line sparator)
+* `U+2029` (Paragraph sparator)
+* `U+202F` (Narrow no-break space)
+* `U+205F` (Medium mathematical space)
+* `U+3000` (Ideographic space)
+
 ## Array
 
 ### Comma separator 
@@ -182,7 +208,7 @@ As you already seen, strings can be separate with comma (`,`).
     <tr>
         <td>
             <pre><code>
-a, bc, def
+a,bc,def
             </code></pre>
         </td>
         <td>
@@ -193,9 +219,9 @@ a, bc, def
     </tr>
 </table>
 
-### Newline separator
+### Whitespace separator, Newline separator
 
-Newline (LF, CR, CR+LF) can be also use as separator.
+Whitespaces(`` ``(#x20), `\t`(#x9)) and newlines(LF, CR, CR+LF) can be also use as separator.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -203,13 +229,13 @@ Newline (LF, CR, CR+LF) can be also use as separator.
         <td>
             <pre><code>
 a
-bc
+b c
 def
             </code></pre>
         </td>
         <td>
             <pre><code>
-["a", "bc", "def"]
+["a", "b", "c", "def"]
             </code></pre>
         </td>
     </tr>
@@ -217,14 +243,14 @@ def
 
 ### Nest
 
-Nested array start with opening bracket `[` and end with closing bracket `]`.
+Nested array starts with opening bracket `[` and ends with closing bracket `]`.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
-[a, [[bc, def], [g]]]
+[a [[bc def] [g]]]
 [ 
     [ 
         """
@@ -244,24 +270,6 @@ Nested array start with opening bracket `[` and end with closing bracket `]`.
     </tr>
 </table>
 
-You can omit separators after or before brackets.
-
-<table>
-    <tr><th>Sora</th><th>Json</th></tr>
-    <tr>
-        <td>
-            <pre><code>
-[a [bc, def] [g]] [[h\ni] jk]
-            </code></pre>
-        </td>
-        <td>
-            <pre><code>
-[["a", [["bc", "def"], ["g"]]], [["h\ni"], "jk"]]
-            </code></pre>
-        </td>
-    </tr>
-</table>
-
 ## Skipping 
 
 Sora skips unquated empty string.
@@ -274,8 +282,8 @@ Sora skips unquated empty string.
 ,a,,b,
 
 
-,,[,c,
-,[,],,]
+  ,,[  ,c,
+,[,],  ,]
 
 ,d
 

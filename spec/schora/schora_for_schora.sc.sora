@@ -185,7 +185,7 @@
 /// "YYYY-MM-DD" format. The supported range is '1000-01-01' to '9999-12-31'.
 [type [date_type] [array [[const date]]]]
 
-/// "YYYY-MM-DD HH:MM:SS[.fraction]" format. The fraction can be 0 to 6 digits. The supported range is '1000-01-01 00:00:00.000000' to '9999-12-31'.  
+/// "YYYY-MM-DDTHH:MM:SS[.fraction]" format. The fraction can be 0 to 6 digits. The supported range is '1000-01-01 00:00:00.000000' to '9999-12-31'.  
 [type [datetime_type] [array [[const datetime]]]]
 
 // ---------------
