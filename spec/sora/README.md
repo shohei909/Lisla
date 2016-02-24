@@ -270,6 +270,24 @@ Nested array starts with opening bracket `[` and ends with closing bracket `]`.
     </tr>
 </table>
 
+You can omit separators after or before brackets.
+
+<table>
+    <tr><th>Sora</th><th>Json</th></tr>
+    <tr>
+        <td>
+            <pre><code>
+["a"[bc def][g]][[h\ni]jk]
+            </code></pre>
+        </td>
+        <td>
+            <pre><code>
+[["a", [["bc", "def"], ["g"]]], [["h\ni"], "jk"]]
+            </code></pre>
+        </td>
+    </tr>
+</table>
+
 ## Skipping 
 
 Sora skips unquated empty string.

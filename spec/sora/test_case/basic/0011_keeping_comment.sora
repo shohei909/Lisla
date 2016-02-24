@@ -2,7 +2,8 @@
 """"""""
 //! Comments start with ! are keeped when Sora is minified.
 ///! Keeping document comments are also avarable.
-// ///! not keeping comments
+// //! not keeping comment
+// ///! not keeping comment
 ////! not keeping comment
 """"""""
 
