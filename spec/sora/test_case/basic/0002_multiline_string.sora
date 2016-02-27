@@ -1,17 +1,19 @@
 // Sora
-""""""""
+''''''''
 "
 Multi
 line
 "
     '''''
     Sora
+
      is
+
       awesome.
     '''''
-""""""""
+''''''''
 
 // Json
-""""""""
-["Multi\nline", "Sora\n is\n  awesome."]
-""""""""
+''''''''
+["Multi\nline", "Sora\n\n is\n\n  awesome."]
+''''''''

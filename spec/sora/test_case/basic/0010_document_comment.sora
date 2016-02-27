@@ -1,14 +1,14 @@
 // Sora
-""""""""
+''''''''
 /// This is comment for various tools (e.g. editor, document generation).
 /// @[ // add tags with sora
 ///     [auther, shohei909]
 ///     [version, 0.1]
 ///     [license, "public domain"]
 /// ]
-""""""""
+''''''''
 
 // Json
-""""""""
+''''''''
 []
-""""""""
+''''''''

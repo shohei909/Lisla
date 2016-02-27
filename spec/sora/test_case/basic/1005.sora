@@ -1,5 +1,5 @@
 // Sora
-""""""""
+''''''''
 /
 /notcomment
 // comment \n comment \r comment
@@ -8,9 +8,9 @@
 '// not comment
   // not comment
   // not comment'
-""""""""
+''''''''
 
 // Json
-""""""""
+''''''''
 ["/", "/notcomment", ["/"], "/_/\0/", "/////notcomment", "// not comment", "// not comment", "// not comment\n// not comment\n// not comment"]
-""""""""
+''''''''

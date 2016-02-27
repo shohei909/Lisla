@@ -86,9 +86,10 @@ Sora supports multi-line quoted string syntax.
 
 In multi-line string syntax, some whitespaces and newlines are ignored. 
 
-* If the line of openinng quote has only white spaces, the white spaces and first newline are ignored.  
-* If the line of closing quote has only white spaces, the white spaces and last newline are ignored.
-* If the line of closing quote starts with white spaces, same number of white spaces at the start of each lines excepting openinng quote line are ignored. In this case each of the white spaces must have same sequence.
+* If the last line starts with white spaces, the same number white spaces at the start of each lines excepting the first line are ignored. 
+    * In this case each of these lines must starts with same white spaces sequence or is a empty line.
+* If the first line has only white spaces, the white spaces and first newline are ignored.  
+* If the last line has only white spaces, the white spaces and last newline are ignored.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -101,14 +102,16 @@ line
 "
     '''''
     Sora
+
      is
+
       awesome.
     '''''
             </code></pre>
         </td>
         <td>
             <pre><code>
-["Multi\nline", "Sora\n is\n  awesome."]
+["Multi\nline", "Sora\n\n is\n\n  awesome."]
             </code></pre>
         </td>
     </tr>
@@ -153,14 +156,14 @@ Sora also supports escape sequences:
     </tr>
 </table>
 
-Escape sequences can be use in each of string literal.
+Escape sequences can be use in unquoted strings or quoted strings of double-quotes.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
-"Multi\r\nLine", "\"", \u{305D}\u{3089}
+"Multi\r\nline", "\"", \u{305D}\u{3089}
             </code></pre>
         </td>
         <td>
@@ -171,9 +174,27 @@ Escape sequences can be use in each of string literal.
     </tr>
 </table>
 
+In quoted strings of single-quotes, escape sequences are disabled. 
+
+<table>
+    <tr><th>Sora</th><th>Json</th></tr>
+    <tr>
+        <td>
+            <pre><code>
+'Single\r\nline', '\', '''\u{305D}\u{3089}'''
+            </code></pre>
+        </td>
+        <td>
+            <pre><code>
+["Single\\r\\nline", "\\", "\\u{305D}\\u{3089}"]
+            </code></pre>
+        </td>
+    </tr>
+</table>
+
 ### Blacklisted whitespaces
 
-Below is the blacklist of whitespace characters. They could cause confusing behavior, So that, Sora prohibits the use of them in unquoted string.
+Below is the blacklist of whitespace characters. They could cause confusing behaviors. So that, Sora prohibits the use of them in unquoted strings.
 
 * `U+000B` (VT, Vertical Tab)
 * `U+000C` (FF, From feed)
@@ -201,7 +222,7 @@ Below is the blacklist of whitespace characters. They could cause confusing beha
 
 ### Comma separator 
 
-As you already seen, strings can be separate with comma (`,`).
+As you already seen, strings can be separated with comma (`,`).
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -221,7 +242,7 @@ a,bc,def
 
 ### Whitespace separator, Newline separator
 
-Whitespaces(`` ``(#x20), `\t`(#x9)) and newlines(LF, CR, CR+LF) can be also use as separator.
+Whitespaces(`` ``(#x20), `\t`(#x9)) and newlines(LF, CR) can be also use as separator.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
