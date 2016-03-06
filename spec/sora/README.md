@@ -1,6 +1,6 @@
 # Sora is a human-readable data serialization language 
 
-Sora means "String OR Array". As it suggests, Sora only supports string and array data type.
+Sora means "String OR Array". As it suggests, Sora only supports string and array data types.
 
 So Sora is
 * easy to learn,
@@ -353,19 +353,24 @@ Multi-line comment is not supported.
 ### Document comment
 
 ```
-/// This is comment for various tools (e.g. editor, document generation).
-/// @[ // add tags with sora
+/// [document
+///     'This is comment for various tools (e.g. editor, document generation).'
 ///     [auther, shohei909]
 ///     [version, 0.1]
 ///     [license, "public domain"]
 /// ]
+
+/// 'first element'
+aaa
 ```
+
+Document comment is also described with Sora. 
 
 ### Keeping comment
 
 ```
 //! Comments start with ! are keeped when Sora is minified.
-///! Keeping document comments are also avarable.
+///! 'Keeping document comments are also avarable.'
 ```
 
 ## Encoding
