@@ -2,13 +2,11 @@ use super::super::data::*;
 use super::tag::*;
 use super::*;
 
-use std::ops::Range;
-
 pub type OutputArray = (Vec<StrOrArr<Tag>>, TagWriter<TagWriterStarted>);
 
 pub enum Context {
     Array(ArrayContext),
-    OpeningQuote(char, i64),
+    OpeningQuote(char, usize),
     QuotedString(QuotedStringContext),
     UnquotedString(UnquotedStringContext),
     Comment(CommentContext),
@@ -20,7 +18,7 @@ pub enum ArrayContext {
     NotSeparated,
 
     // (length)
-    Slash(i32),
+    Slash(usize),
 }
 
 pub struct CommentContext {
@@ -29,17 +27,18 @@ pub struct CommentContext {
 }
 
 pub struct QuotedStringContext {
-    pub lines: Vec<(String, i64)>,
+    pub lines: Vec<(String, usize)>,
     pub inline_context: QuotedStringInlineContext,
     pub quote: char,
-    pub opening_quotes: i64,
+    pub opening_quotes: usize,
+    pub start_position: usize,
     pub tag: TagWriter<TagWriterStarted>,
 }
 
 pub enum QuotedStringInlineContext {
     Indent,
     Body,
-    Quotes(i64),
+    Quotes(usize),
     EscapeSequence(EscapeSequenceContext),
 }
 

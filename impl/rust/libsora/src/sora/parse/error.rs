@@ -2,7 +2,6 @@ use super::super::data::*;
 use super::*;
 
 use std::ops::Range;
-use std::marker::PhantomData;
 
 
 #[derive(Debug)]
@@ -14,12 +13,12 @@ pub struct Error {
 #[derive(Debug)]
 pub struct ErrorDetail {
     pub kind: ErrorKind,
-    pub position: Range<i64>,
+    pub position: Range<usize>,
     pub fatal: bool,
 }
 
 impl ErrorDetail {
-    pub fn new(kind: ErrorKind, position: Range<i64>, fatal: bool) -> Self {
+    pub fn new(kind: ErrorKind, position: Range<usize>, fatal: bool) -> Self {
         ErrorDetail {
             kind: kind,
             position: position,
@@ -32,7 +31,9 @@ impl ErrorDetail {
 pub enum ErrorKind {
     BlacklistedWhitespace(char),
     InvalidEscapeSequence(String),
-    InvalidUnicodeEscape,
+    InvalidDigitUnicodeEscape,
+    InvalidUnicode,
+    InvalidIndent,
     UnclosedArray,
     UnclosedString,
     ExtraClosingBracket,

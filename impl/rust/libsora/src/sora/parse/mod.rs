@@ -1,9 +1,10 @@
-use super::string::Trim;
 use super::data::*;
 
+use std::char;
 use std::str::Chars;
 use std::mem::replace;
 use std::ops::Range;
+
 
 pub mod error;
 mod data;
@@ -13,6 +14,7 @@ use self::data::*;
 use self::error::*;
 use self::tag::*;
 
+use rustc_serialize::hex::FromHex;
 
 
 // ===============================================================================
@@ -48,7 +50,7 @@ macro_rules! maybe(
 
 #[derive(Debug)]
 pub struct Tag {
-    pub position: Option<Range<i64>>,
+    pub position: Option<Range<usize>>,
     pub document: Option<Document>,
 }
 
@@ -61,7 +63,7 @@ pub struct Tag {
 #[derive(Debug)]
 pub struct Document {
     pub content: Box<ArrData<Tag>>,
-    pub source_map: Vec<Range<i64>>,
+    pub source_map: Vec<Range<usize>>,
 }
 
 
@@ -95,7 +97,7 @@ impl Config {
 
 pub struct Parser<'a> {
     config: &'a Config,
-    position: i64,
+    position: usize,
     output: OutputArray,
     stack: Vec<OutputArray>,
     extra_tag: TagWriter<TagWriterNotStarted>,
@@ -170,7 +172,7 @@ impl<'a> Parser<'a> {
         if let ArrayContext::Slash(length) = detail {
             let context: Context = if character == '/' {
                 if length == 3 {
-                    self.extra_tag.write_document(self.config, character);
+                    self.extra_tag.write_document(self.config, character, self.position);
                     return Result::Ok(Context::Comment(CommentContext {
                         keeping: false,
                         document: true,
@@ -187,7 +189,7 @@ impl<'a> Parser<'a> {
                     let document = length == 3;
                     let keeping = character == '!';
                     if document && !keeping {
-                        self.extra_tag.write_document(self.config, character);
+                        self.extra_tag.write_document(self.config, character, self.position);
                     }
                     Context::Comment(CommentContext {
                         keeping: keeping,
@@ -255,7 +257,7 @@ impl<'a> Parser<'a> {
     fn process_opening_quote(&mut self,
                              character: char,
                              quote: char,
-                             length: i64)
+                             length: usize)
                              -> Result<Context, ()> {
         if character == quote {
             return Result::Ok(Context::OpeningQuote(quote, length + 1));
@@ -330,7 +332,7 @@ impl<'a> Parser<'a> {
         Result::Ok(Context::QuotedString(detail))
     }
 
-    fn add_quotes(&mut self, length: i64, detail: &mut QuotedStringContext) {
+    fn add_quotes(&mut self, length: usize, detail: &mut QuotedStringContext) {
         let (ref mut line, _) = *detail.lines.last_mut().unwrap();
         for _ in 0..length {
             line.push(detail.quote);
@@ -351,7 +353,9 @@ impl<'a> Parser<'a> {
             }
 
             match character {
-                '\\' => QuotedStringInlineContext::EscapeSequence(EscapeSequenceContext::Head),
+                '\\' if detail.quote == '"' => {
+                    QuotedStringInlineContext::EscapeSequence(EscapeSequenceContext::Head)
+                }
 
                 '\r' | '\n' => {
                     detail.lines.push((String::new(), 0));
@@ -390,7 +394,7 @@ impl<'a> Parser<'a> {
             UnquotedStringInlineContext::Body(is_slash) => {
                 if is_slash {
                     if character == '/' {
-                        self.end_unquoted_string(detail);
+                        try!(self.end_unquoted_string(detail));
                         return Result::Ok(Context::Array(ArrayContext::Slash(2)));
                     } else {
                         detail.string.push('/')
@@ -401,7 +405,7 @@ impl<'a> Parser<'a> {
                     UnquotedStringOperation::Continue(next_inline_context) => next_inline_context,
 
                     UnquotedStringOperation::End => {
-                        self.end_unquoted_string(detail);
+                        try!(self.end_unquoted_string(detail));
                         return self.process_array(character, ArrayContext::NotSeparated);
                     }
                 }
@@ -431,10 +435,6 @@ impl<'a> Parser<'a> {
 
                 '/' => UnquotedStringOperation::Continue(UnquotedStringInlineContext::Body(true)),
 
-                '\\' => {
-                    UnquotedStringOperation::Continue(UnquotedStringInlineContext::EscapeSequence(EscapeSequenceContext::Head))
-                }
-
                 '\"' | '\'' => {
                     let p = self.position;
                     error!(self,
@@ -443,6 +443,9 @@ impl<'a> Parser<'a> {
                     UnquotedStringOperation::End
                 }
 
+                '\\' => {
+                    UnquotedStringOperation::Continue(UnquotedStringInlineContext::EscapeSequence(EscapeSequenceContext::Head))
+                }
                 _ => {
                     detail.string.push(character);
                     UnquotedStringOperation::Continue(UnquotedStringInlineContext::Body(false))
@@ -475,14 +478,7 @@ impl<'a> Parser<'a> {
                     '\"' => EscapeSequenceOperation::End('\"'),
 
                     _ => {
-                        let p = self.position;
-                        let mut string = String::new();
-                        string.push(character);
-                        error!(self,
-                               ErrorDetail::new(ErrorKind::InvalidEscapeSequence(string),
-                                                (p - 2)..p,
-                                                false));
-
+                        try!(self.interrupt_escape_sequence(Option::Some(character), detail));
                         EscapeSequenceOperation::End(character)
                     } 
                 }
@@ -493,22 +489,62 @@ impl<'a> Parser<'a> {
                     let context = EscapeSequenceContext::Unicode(Some(String::new()));
                     EscapeSequenceOperation::Continue(context)
                 } else {
-                    let p = self.position;
-                    let mut string = String::new();
-                    string.push(character);
-                    error!(self,
-                           ErrorDetail::new(ErrorKind::InvalidEscapeSequence(string),
-                                            (p - 2)..p,
-                                            false));
-
+                    try!(self.interrupt_escape_sequence(Option::Some(character), detail));
                     EscapeSequenceOperation::End(character)
                 }
             }
 
             EscapeSequenceContext::Unicode(Some(mut string)) => {
-                string.push(character);
-                let context = EscapeSequenceContext::Unicode(Some(string));
-                EscapeSequenceOperation::Continue(context)
+                match character {
+                    '0'...'9' | 'A'...'F' | 'a'...'f' => {
+                        string.push(character);
+                        let next_detail = EscapeSequenceContext::Unicode(Some(string));
+                        EscapeSequenceOperation::Continue(next_detail)
+                    }
+
+                    '}' => {
+                        let len = string.len();
+                        if len < 1 || 6 < len {
+                            let p = self.position;
+                            error!(self,
+                                   ErrorDetail {
+                                       position: (p - len - 3)..p,
+                                       kind: ErrorKind::InvalidDigitUnicodeEscape,
+                                       fatal: false,
+                                   });
+                            EscapeSequenceOperation::End('u')
+                        } else {
+                            let maybe_character = string.from_hex().ok().and_then(|bytes| {
+                                let code = bytes.into_iter()
+                                                .fold(0u32, |val, byte| val << 8 | byte as u32);
+
+                                char::from_u32(code)
+                            });
+
+                            let escaped_character = match maybe_character {
+                                Some(c) => c,
+                                None => {
+                                    let p = self.position;
+                                    error!(self,
+                                           ErrorDetail {
+                                               position: (p - len - 3)..p,
+                                               kind: ErrorKind::InvalidUnicode,
+                                               fatal: false,
+                                           });
+                                    'u'
+                                }
+                            };
+
+                            EscapeSequenceOperation::End(escaped_character)
+                        }
+                    }
+
+                    _ => {
+                        let next_detail = EscapeSequenceContext::Unicode(Some(string));
+                        try!(self.interrupt_escape_sequence(Option::Some(character), next_detail));
+                        EscapeSequenceOperation::End('u')
+                    }
+                }
             }
         };
 
@@ -571,7 +607,7 @@ impl<'a> Parser<'a> {
                     Context::Array(ArrayContext::NotSeparated)
                 }
                 Context::UnquotedString(detail) => {
-                    self.end_unquoted_string(detail);
+                    try!(self.end_unquoted_string(detail));
                     Context::Array(ArrayContext::NotSeparated)
                 }
                 Context::Comment(_) => Context::Array(ArrayContext::Normal),
@@ -608,7 +644,7 @@ impl<'a> Parser<'a> {
         output_vec.push(data);
     }
 
-    fn end_opening_quote(&mut self, quote: char, length: i64) -> Context {
+    fn end_opening_quote(&mut self, quote: char, length: usize) -> Context {
         let tag = replace(&mut self.extra_tag, TagWriter::new());
 
         if length == 2 {
@@ -627,6 +663,7 @@ impl<'a> Parser<'a> {
             Context::QuotedString(QuotedStringContext {
                 lines: vec![(String::new(), 0)],
                 quote: quote,
+                start_position: self.position - 1,
                 inline_context: QuotedStringInlineContext::Indent,
                 opening_quotes: length,
                 tag: tag.start(self.config, self.position - length),
@@ -647,7 +684,7 @@ impl<'a> Parser<'a> {
                 }
             }
             QuotedStringInlineContext::EscapeSequence(detail) => {
-                try!(self.end_escape_sequence(detail))
+                try!(self.interrupt_escape_sequence(Option::None, detail))
             }
         }
 
@@ -655,9 +692,10 @@ impl<'a> Parser<'a> {
     }
 
     fn end_closed_quoted_string(&mut self,
-                                length: i64,
-                                detail: QuotedStringContext)
+                                length: usize,
+                                mut detail: QuotedStringContext)
                                 -> Result<(), ()> {
+
         if length > detail.opening_quotes {
             let p = self.position;
             error!(self,
@@ -665,7 +703,60 @@ impl<'a> Parser<'a> {
         }
 
         let (ref mut output_vec, _) = self.output;
-        let string = detail.lines.trim();
+
+        let mut string = String::new();
+        let mut string_position = detail.start_position;
+        if let Some(last) = detail.lines.pop() {
+            let mut into_iter = detail.lines.into_iter();
+            if let Some(first) = into_iter.next() {
+                {
+                    let (line, indent) = first;
+                    string_position += line.len();
+                    if line.len() != indent + 1 {
+                        string.push_str(&line);
+                    }
+                }
+
+                let (last_line, last_indent) = last;
+                let (last_head, last_body) = last_line.split_at(last_indent);
+
+                for (line, indent) in into_iter {
+                    string_position += line.len();
+
+                    if line.len() == 1 {
+                        string.push_str(&line);
+                        continue;
+                    }
+
+                    if indent < last_indent {
+                        let p = self.position - line.len();
+                        error!(self,
+                               ErrorDetail::new(ErrorKind::InvalidIndent, p..(p + indent), false));
+                    } else {
+                        let (head, body) = line.split_at(last_indent);
+                        if last_head != head {
+                            let p = self.position - body.len();
+                            error!(self,
+                                   ErrorDetail::new(ErrorKind::InvalidIndent,
+                                                    (p - last_indent)..p,
+                                                    false));
+                        }
+
+                        string.push_str(&body);
+                    }
+                }
+
+                if last_body.len() == 0 {
+                    string.pop();
+                } else {
+                    string.push_str(&last_body);
+                }
+            } else {
+                let (last_line, _) = last;
+                string.push_str(&last_line);
+            }
+        }
+
         let data = StrOrArr::Str(StrData {
             data: string,
             is_quoted: true,
@@ -677,7 +768,7 @@ impl<'a> Parser<'a> {
     }
 
     fn end_unclosed_quoted_string(&mut self,
-                                  length: i64,
+                                  length: usize,
                                   mut detail: QuotedStringContext)
                                   -> Result<(), ()> {
         self.add_quotes(detail.opening_quotes - length, &mut detail);
@@ -693,18 +784,39 @@ impl<'a> Parser<'a> {
         self.end_closed_quoted_string(detail.opening_quotes, detail)
     }
 
-    fn end_escape_sequence(&mut self, detail: EscapeSequenceContext) -> Result<(), ()> {
+    fn interrupt_escape_sequence(&mut self,
+                                 character: Option<char>,
+                                 detail: EscapeSequenceContext)
+                                 -> Result<(), ()> {
+        let mut string = String::from("\\");
+
+        match detail {
+            EscapeSequenceContext::Head => {}
+            EscapeSequenceContext::Unicode(state) => {
+                string.push('u');
+                if let Some(s) = state {
+                    string.push('{');
+                    string.push_str(s.as_str());
+                }
+            }
+        }
+
+        if let Some(c) = character {
+            string.push(c);
+        }
+
         let p = self.position;
         error!(self,
                ErrorDetail {
-                   kind: ErrorKind::InvalidEscapeSequence(String::new()),
-                   position: (p - 1)..p,
+                   position: (p - string.len())..p,
+                   kind: ErrorKind::InvalidEscapeSequence(string),
                    fatal: false,
                });
+
         Result::Ok(())
     }
 
-    fn end_unquoted_string(&mut self, detail: UnquotedStringContext) {
+    fn end_unquoted_string(&mut self, detail: UnquotedStringContext) -> Result<(), ()> {
         match detail.inline_context {
             UnquotedStringInlineContext::Body(is_slash) => {
                 let mut string = detail.string;
@@ -721,9 +833,11 @@ impl<'a> Parser<'a> {
             }
 
             UnquotedStringInlineContext::EscapeSequence(detail) => {
-                self.end_escape_sequence(detail);
+                try!(self.interrupt_escape_sequence(Option::None, detail));
             }
         }
+
+        Result::Ok(())
     }
 }
 

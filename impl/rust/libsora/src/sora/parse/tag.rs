@@ -24,7 +24,7 @@ impl TagWriter<TagWriterNotStarted> {
         }
     }
 
-    pub fn write_document(&mut self, config: &Config, character: char) {
+    pub fn write_document(&mut self, config: &Config, character: char, position: usize) {
         if !config.collects_document {
             return;
         }
@@ -38,14 +38,14 @@ impl TagWriter<TagWriterNotStarted> {
         }
     }
 
-    fn end_document(&mut self) {
+    fn end_document(&mut self, position: usize) {
         if let Option::Some(ref doc) = self.document {
             // TODO
         }
     }
 
-    pub fn start(mut self, config: &Config, position: i64) -> TagWriter<TagWriterStarted> {
-        self.end_document();
+    pub fn start(mut self, config: &Config, position: usize) -> TagWriter<TagWriterStarted> {
+        self.end_document(position);
 
         self.tag.position = if config.collects_position {
             Option::Some(Range {
@@ -63,14 +63,14 @@ impl TagWriter<TagWriterNotStarted> {
         }
     }
 
-    pub fn interrupt(mut self, position: i64) -> Tag {
-        self.end_document();
+    pub fn interrupt(mut self, position: usize) -> Tag {
+        self.end_document(position);
         self.tag
     }
 }
 
 impl TagWriter<TagWriterStarted> {
-    pub fn end(mut self, position: i64) -> Tag {
+    pub fn end(mut self, position: usize) -> Tag {
         if let Some(ref mut p) = self.tag.position {
             p.end = position;
         }
@@ -80,5 +80,5 @@ impl TagWriter<TagWriterStarted> {
 
 
 struct DocumentWriter {
-    source_map: Vec<Range<i64>>,
+    source_map: Vec<Range<usize>>,
 }
