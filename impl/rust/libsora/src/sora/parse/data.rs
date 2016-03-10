@@ -1,8 +1,8 @@
-use super::super::data::*;
+use super::super::*;
 use super::tag::*;
 use super::*;
 
-pub type OutputArray = (Vec<StrOrArr<Tag>>, TagWriter<TagWriterStarted>);
+pub type OutputArray = (Vec<Sora<Tag>>, TagWriter<TagWriterStarted>);
 
 pub enum Context {
     Array(ArrayContext),

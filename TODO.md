@@ -2,6 +2,8 @@
 # Rust library
 ## Sora
 - [ ] parse
+    - [x] basic
+    - [ ] document comment
 - [ ] write
 - [ ] format
 - [ ] repair

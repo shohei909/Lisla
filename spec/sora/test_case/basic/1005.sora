@@ -14,5 +14,5 @@ not/comment
 
 // Json
 ''''''''
-["/", "/notcomment", ["/"], "/_/\0/", "/////notcomment", "// not comment", "// not comment", "// not comment\n// not comment\n// not comment"]
+["test", "not/comment", "/", "/notcomment", ["/"], "/_/\u0000/", "/////notcomment", "// not comment", "// not comment\n// not comment\n// not comment"]
 ''''''''

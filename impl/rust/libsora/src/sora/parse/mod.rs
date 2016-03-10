@@ -1,4 +1,4 @@
-use super::data::*;
+use super::*;
 
 use std::char;
 use std::str::Chars;
@@ -62,10 +62,9 @@ pub struct Tag {
 
 #[derive(Debug)]
 pub struct Document {
-    pub content: Box<ArrData<Tag>>,
+    pub content: Box<SoraArray<Tag>>,
     pub source_map: Vec<Range<usize>>,
 }
-
 
 
 
@@ -91,6 +90,7 @@ impl Config {
 }
 
 
+
 // ===============================================================================
 // Parser structure
 // ===============================================================================
@@ -111,7 +111,7 @@ pub struct Parser<'a> {
 // Parser impl
 // ===============================================================================
 
-pub fn parse(chars: Chars, config: &Config) -> Result<ArrData<Tag>, Error> {
+pub fn parse(chars: Chars, config: &Config) -> Result<SoraArray<Tag>, Error> {
     let mut parser = Parser::new(&config);
 
     for character in chars {
@@ -347,22 +347,25 @@ impl<'a> Parser<'a> {
         let context = if character == detail.quote {
             QuotedStringInlineContext::Quotes(1)
         } else {
-            {
-                let (ref mut line, _) = *detail.lines.last_mut().unwrap();
-                line.push(character);
-            }
-
             match character {
                 '\\' if detail.quote == '"' => {
                     QuotedStringInlineContext::EscapeSequence(EscapeSequenceContext::Head)
                 }
 
                 '\r' | '\n' => {
+                    {
+                        let (ref mut line, _) = *detail.lines.last_mut().unwrap();
+                        line.push(character);
+                    }
                     detail.lines.push((String::new(), 0));
                     QuotedStringInlineContext::Indent
                 }
 
-                _ => QuotedStringInlineContext::Body,
+                _ => {
+                    let (ref mut line, _) = *detail.lines.last_mut().unwrap();
+                    line.push(character);
+                    QuotedStringInlineContext::Body
+                }
             }
         };
 
@@ -394,7 +397,7 @@ impl<'a> Parser<'a> {
             UnquotedStringInlineContext::Body(is_slash) => {
                 if is_slash {
                     if character == '/' {
-                        try!(self.end_unquoted_string(detail));
+                        self.end_unquoted_string_body(detail);
                         return Result::Ok(Context::Array(ArrayContext::Slash(2)));
                     } else {
                         detail.string.push('/')
@@ -405,7 +408,7 @@ impl<'a> Parser<'a> {
                     UnquotedStringOperation::Continue(next_inline_context) => next_inline_context,
 
                     UnquotedStringOperation::End => {
-                        try!(self.end_unquoted_string(detail));
+                        self.end_unquoted_string_body(detail);
                         return self.process_array(character, ArrayContext::NotSeparated);
                     }
                 }
@@ -565,7 +568,7 @@ impl<'a> Parser<'a> {
     // End
     // ---------------------------------------------------
     #[inline]
-    pub fn end(mut self) -> Result<ArrData<Tag>, Error> {
+    pub fn end(mut self) -> Result<SoraArray<Tag>, Error> {
         self.position += 1;
 
         if self.end_context().is_err() {
@@ -577,7 +580,7 @@ impl<'a> Parser<'a> {
 
         let (output_vec, tag) = self.output;
         let extra_tag = replace(&mut self.extra_tag, TagWriter::new());
-        let data = ArrData {
+        let data = SoraArray {
             data: output_vec,
             tag: tag.end(self.position),
             extra_tag: extra_tag.interrupt(self.position),
@@ -603,11 +606,11 @@ impl<'a> Parser<'a> {
                 }
                 Context::OpeningQuote(quote, length) => self.end_opening_quote(quote, length),
                 Context::QuotedString(detail) => {
-                    try!(self.end_quoted_string(detail));
+                    self.end_quoted_string(detail);
                     Context::Array(ArrayContext::NotSeparated)
                 }
                 Context::UnquotedString(detail) => {
-                    try!(self.end_unquoted_string(detail));
+                    self.end_unquoted_string(detail);
                     Context::Array(ArrayContext::NotSeparated)
                 }
                 Context::Comment(_) => Context::Array(ArrayContext::Normal),
@@ -635,7 +638,7 @@ impl<'a> Parser<'a> {
 
         let (ref mut output_vec, _) = self.output;
         let (arr, tag) = old_output;
-        let data = StrOrArr::Arr(ArrData {
+        let data = Sora::Array(SoraArray {
             data: arr,
             tag: tag.end(self.position),
             extra_tag: old_extra_tag.interrupt(self.position),
@@ -650,7 +653,7 @@ impl<'a> Parser<'a> {
         if length == 2 {
             {
                 let (ref mut output_vec, _) = self.output;
-                let data = StrOrArr::Str(StrData {
+                let data = Sora::String(SoraString {
                     data: String::new(),
                     is_quoted: true,
                     tag: tag.start(self.config, self.position - 2)
@@ -757,7 +760,7 @@ impl<'a> Parser<'a> {
             }
         }
 
-        let data = StrOrArr::Str(StrData {
+        let data = Sora::String(SoraString {
             data: string,
             is_quoted: true,
             tag: detail.tag.end(self.position),
@@ -816,20 +819,16 @@ impl<'a> Parser<'a> {
         Result::Ok(())
     }
 
-    fn end_unquoted_string(&mut self, detail: UnquotedStringContext) -> Result<(), ()> {
+    fn end_unquoted_string(&mut self, mut detail: UnquotedStringContext) -> Result<(), ()> {
         match detail.inline_context {
             UnquotedStringInlineContext::Body(is_slash) => {
-                let mut string = detail.string;
-                if is_slash {
-                    string.push('/');
+                {
+                    let ref mut string = detail.string;
+                    if is_slash {
+                        string.push('/');
+                    }
                 }
-                let (ref mut output_vec, _) = self.output;
-                let data = StrOrArr::Str(StrData {
-                    data: string,
-                    is_quoted: false,
-                    tag: detail.tag.end(self.position),
-                });
-                output_vec.push(data);
+                self.end_unquoted_string_body(detail);
             }
 
             UnquotedStringInlineContext::EscapeSequence(detail) => {
@@ -838,6 +837,17 @@ impl<'a> Parser<'a> {
         }
 
         Result::Ok(())
+    }
+
+    fn end_unquoted_string_body(&mut self, detail: UnquotedStringContext) {
+        let string = detail.string;
+        let (ref mut output_vec, _) = self.output;
+        let data = Sora::String(SoraString {
+            data: string,
+            is_quoted: false,
+            tag: detail.tag.end(self.position),
+        });
+        output_vec.push(data);
     }
 }
 

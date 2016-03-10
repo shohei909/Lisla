@@ -1,8 +1,13 @@
 extern crate libsora;
-use libsora::sora::parse;
+extern crate rustc_serialize;
+
+use libsora::sora::*;
+use libsora::sora::parse::Tag;
 
 use std::fs;
 use std::io::Read;
+use rustc_serialize::json::Json;
+
 
 const TEST_CASES_PATH: &'static str = "./../../../spec/sora/test_case/";
 
@@ -19,28 +24,49 @@ fn test_basic() {
         let mut string = String::new();
         file.read_to_string(&mut string).unwrap();
 
-        match parse::parse(string.chars(), &config) {
-            Ok(data) => {
-                let mut into_iter = data.data.into_iter();
-                let inner_string = into_iter.next().unwrap().str().unwrap();
-                let json_string = into_iter.next().unwrap().str().unwrap();
+        let case_data = parse::parse(string.chars(), &config).unwrap();
+        let mut into_iter = case_data.data.into_iter();
 
-                println!("Sora: {}", inner_string);
-                println!("Json: {}", json_string);
+        let sora_string = into_iter.next().unwrap().str().unwrap();
+        let json_string = into_iter.next().unwrap().str().unwrap();
+        let sora_data = parse::parse(sora_string.chars(), &config).unwrap();
+        let json_data = Json::from_str(json_string.as_str()).unwrap();
 
-                match parse::parse(inner_string.chars(), &config) {
-                    Ok(data) => {
-                        println!("Parsed Data: {:?}", data);
-                    }
-                    Err(err) => {
-                        panic!("Error: {:?}", err);
-                    }
-                }
+        equals(&Sora::Array(sora_data),
+               &json_data,
+               entry.path().to_str().unwrap(),
+               &mut vec![]);
+    }
+}
+
+fn equals(sora: &Sora<Tag>, json: &Json, path: &str, stack: &mut Vec<usize>) {
+    match (sora, json) {
+        (&Sora::Array(ref s), &Json::Array(ref j)) => {
+            assert!(s.data.len() == j.len(),
+                    "unmatched array length({}:{:?}): {:?} {:?}",
+                    path,
+                    stack,
+                    s.data.len(),
+                    j.len());
+
+            for (i, (sc, jc)) in s.data.iter().zip(j.iter()).enumerate() {
+                stack.push(i);
+                equals(sc, jc, path, stack);
+                stack.pop();
             }
+        }
 
-            Err(err) => {
-                panic!("Error: {:?}", err);
-            }
+        (&Sora::String(ref s), &Json::String(ref j)) => {
+            assert!(s.data.as_str() == j.as_str(),
+                    "unmatched string({}:{:?}): {:?} {:?}",
+                    path,
+                    stack,
+                    s.data,
+                    j);
+        }
+
+        (_, _) => {
+            panic!("unmatched({}:{:?}): {:?} {:?}", path, stack, sora, json);
         }
     }
 }
@@ -65,9 +91,7 @@ fn test_invalid_nonfatal() {
             Ok(data) => {
                 panic!("data: {} : {:?}", name, data);
             }
-            Err(err) => {
-                // println!("Err: {} : {:?}", name, err);
-            }
+            Err(err) => {}
         }
     }
 }

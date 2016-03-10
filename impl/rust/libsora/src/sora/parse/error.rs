@@ -1,4 +1,4 @@
-use super::super::data::*;
+use super::super::*;
 use super::*;
 
 use std::ops::Range;
@@ -6,7 +6,7 @@ use std::ops::Range;
 
 #[derive(Debug)]
 pub struct Error {
-    pub data: Option<ArrData<Tag>>,
+    pub data: Option<SoraArray<Tag>>,
     pub details: Vec<ErrorDetail>,
 }
 
