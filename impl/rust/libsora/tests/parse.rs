@@ -20,6 +20,11 @@ fn test_basic() {
 
     for result in dir {
         let entry = result.unwrap();
+        let metadata = entry.metadata().unwrap();
+        if metadata.is_dir() {
+            continue;
+        }
+
         let mut file = fs::File::open(entry.path()).unwrap();
         let mut string = String::new();
         file.read_to_string(&mut string).unwrap();
@@ -80,6 +85,11 @@ fn test_invalid_nonfatal() {
 
     for result in dir {
         let entry = result.unwrap();
+        let metadata = entry.metadata().unwrap();
+        if metadata.is_dir() {
+            continue;
+        }
+
         let path = entry.path();
         let name = String::from(path.to_str().unwrap());
         let mut file = fs::File::open(path).unwrap();
