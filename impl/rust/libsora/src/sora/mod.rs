@@ -1,27 +1,47 @@
 pub mod parse;
+pub mod write;
+pub mod tag;
+pub mod util;
 
-#[derive(Debug)]
-pub enum Sora<Tag> {
-    /// 
-    String(SoraString<Tag>),
-    Array(SoraArray<Tag>),
-}
+use self::tag::*;
 
-#[derive(Debug)]
-pub struct SoraString<Tag> {
+#[derive(Debug, Clone)]
+pub struct SoraString {
     pub data: String,
-    pub is_quoted: bool,
-    pub tag: Tag,
+    pub tag: Tag<StringTag>,
 }
 
-#[derive(Debug)]
-pub struct SoraArray<Tag> {
-    pub data: Vec<Sora<Tag>>,
-    pub tag: Tag,
-    pub extra_tag: Tag,
+impl SoraString {
+    pub fn new(string: String) -> Self {
+        SoraString {
+            data: string,
+            tag: Tag::new().for_string(QuoteKind::Quoted(QuoteChar::Double, 1)),
+        }
+    }
 }
 
-impl<Tag> Sora<Tag> {
+#[derive(Debug, Clone)]
+pub struct SoraArray {
+    pub data: Vec<Sora>,
+    pub tag: Tag<ArrayTag>,
+}
+
+impl SoraArray {
+    pub fn new(arr: Vec<Sora>) -> Self {
+        SoraArray {
+            data: arr,
+            tag: Tag::new().for_array(),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum Sora {
+    String(SoraString),
+    Array(SoraArray),
+}
+
+impl Sora {
     pub fn str(self) -> Option<String> {
         match self {
             Sora::String(data) => Option::Some(data.data),
@@ -29,7 +49,7 @@ impl<Tag> Sora<Tag> {
         }
     }
 
-    pub fn arr(self) -> Option<Vec<Sora<Tag>>> {
+    pub fn arr(self) -> Option<Vec<Sora>> {
         match self {
             Sora::String(_) => Option::None,
             Sora::Array(data) => Option::Some(data.data),

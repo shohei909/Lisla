@@ -354,10 +354,15 @@ Multi-line comment is not supported.
 
 ```
 /// [document
-///     'This is comment for various tools (e.g. editor, document generation).'
+///     '''
+///     # Sample for document comment.
+///
+///     This is comment for various tools (e.g. editor, document generation).'
+///     '''
 ///     [auther, shohei909]
 ///     [version, 0.1]
 ///     [license, "public domain"]
+///     [document_format, markdown]
 /// ]
 
 /// 'first element'

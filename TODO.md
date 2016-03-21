@@ -6,7 +6,6 @@
     - [ ] document comment
 - [ ] write
 - [ ] format
-- [ ] repair
 - [ ] syntax highlight
 - [ ] minify
 - [ ] object map
@@ -16,6 +15,8 @@
 - [ ] lint
 - [ ] documment generate
 - [ ] auto complete
+- [ ] Schora To Rust
+- [ ] Rust To Schora
 
 ## Patch for Sora
 Later
@@ -51,9 +52,13 @@ Later
             - [ ] invalid
                 - [ ] nonfatal
                     - [ ] blacklisted whitespaces
+                    - [ ] repair
                 - [ ] fatal
                     - [ ] invalid unicode
             - [ ] valid
+                - [ ] minify
+                - [ ] format
+                - [ ] auto complete
 - [ ] japanese
 
 ## Patch for Sora

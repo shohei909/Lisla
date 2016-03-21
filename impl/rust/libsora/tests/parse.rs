@@ -2,7 +2,6 @@ extern crate libsora;
 extern crate rustc_serialize;
 
 use libsora::sora::*;
-use libsora::sora::parse::Tag;
 
 use std::fs;
 use std::io::Read;
@@ -44,7 +43,7 @@ fn test_basic() {
     }
 }
 
-fn equals(sora: &Sora<Tag>, json: &Json, path: &str, stack: &mut Vec<usize>) {
+fn equals(sora: &Sora, json: &Json, path: &str, stack: &mut Vec<usize>) {
     match (sora, json) {
         (&Sora::Array(ref s), &Json::Array(ref j)) => {
             assert!(s.data.len() == j.len(),
@@ -101,7 +100,7 @@ fn test_invalid_nonfatal() {
             Ok(data) => {
                 panic!("data: {} : {:?}", name, data);
             }
-            Err(err) => {}
+            Err(_) => {}
         }
     }
 }

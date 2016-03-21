@@ -1,30 +1,42 @@
-[type [bool] [or [bools]]]
-
-[types [bools] 
-    [
+[type [bool] 
+    [or
         [const true]
         [const false]
     ]
 ]
 
-[type [option [type t]] [or [options [t]]]]
-[types [options [type t]]
-    [
-        [array [[const some] [t]]]
-        [const none]
+[type [option [type t]]
+    [or
+        [tuple [t]]
+        [unit]
     ]
 ]
 
-[type [map [type key] [type value]]
-    [array [] []
-        [
-            /// Each of keys can not be dupplicated. 
-            [array [[key], [value]]]
-            [limit 
-                [any]
-                [0, _], 
-                [0, 1]
-            ]
-        ]
+[type [unit]
+    [collection]
+]
+
+[type [tuple [types ts]] 
+    [collection
+        [required [ts]]
+    ]
+]
+
+[type [array [type t]]
+    [collection
+        [rest [t]]
+    ]
+]
+
+[type [variant [[string unquoted] label] [rest ts]]
+    [tuple
+        [label]
+        [ts]
+    ]
+]
+
+[type [map [type k] [type v]]
+    [array
+        [tuple [k] [v]]
     ]
 ]

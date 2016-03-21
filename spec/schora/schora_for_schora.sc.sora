@@ -1,91 +1,59 @@
 [main 
-    [array [] []
-        [// Rest parameters
-            [declaration]
-            /// "main" must be decleared once. 
-            [limit
-                [main_declaration]
-                [0, ...] 
-                [1, 1]
-            ]
-        ]
+    [collection
+        [required [main_declaration]]
+        [rest [sub_declaration]]
     ]
 ]
 
 // ===============
 // Declaration
 // ===============
-[type [declaration] [or [declarations]]]
-[types [declarations]
-    [
-        [main_declaration]
+
+/// Declear available types 
+[type [main_declaration]
+    [variant main
+        [or
+            [collection_type]
+            [other_type]
+        ]
+    ]
+]
+
+[type [sub_declaration]
+    [or
         [type_declaration]
         [types_declaration]
     ]
 ]
 
-/// Declear available types 
-[type [main_declaration]
-    [array 
-        [ // Required Parameters
-            [const main] 
-            [or
-                [
-                    [collection_type]
-                    [other_type]
-                ]
-            ]
-        ]
-    ]
-]
-
 [type [type_declaration]
-    [array
-        [ // Required Parameters
-            [const type]
-            [array
-                [string]
-                []
-                [type_parameter_declaration]
-            ]
-            [all_type]
+    [variant type
+        [collection
+            [required [string unquoted]]
+            [rest [type_parameter_declaration]]
         ]
+        [type]
     ]
 ]
 
 [type [types_declaration]
-    [array
-        [ // Required Parameters
-            [const type]
-            [array
-                [string]
-                []
-                [type_parameter_declaration]
-            ]
-            [all_type_array]
+    [variant types
+        [collection
+            [required [string unquoted]]
+            [rest [type_parameter_declaration]]
         ]
+        [types]
     ]
 ]
 
 [type [type_parameter_declaration] 
     [or
-        [array
-            [
-                [const type]
-                [string]
-            ]
-        ]
-        [array
-            [
-                [const types]
-                [string]
-            ]
-        ]        
-        [array
-            [
-                [scalar_type]
-                [string]
-            ]
+        [variant type [string unquoted]]
+        [variant types [string unquoted]]
+        [variant rest_types [string unquoted]]
+        [tuple
+            [scalar_type]
+            [string unquoted]
         ]
     ]
 ]
@@ -93,36 +61,26 @@
 // ===============
 // Types
 // ===============
-[type [all_type_array] [or all_type_arrays]]]
-[types [all_type_arrays]
-    [
-        [array [] []
-            [ // Rest parameters
-                [all_type]
-            ]
-        ]
-        [user_defined_types]
-    ]
-]
 
-[type [all_type] [or [all_types]]]
-[types [all_types]
-    [
+[type [type]
+    [or
         [scalar_type]
         [collection_type]
         [other_type]
     ]
 ]
 
+[type [types]
+    [array [type]]
+]
+
 // ---------------
 // Scalar types
 // ---------------
-[type [scalar_type] [or [scalar_types]]]
-[types [scalar_types]
-    [
+[type [scalar_type_kind]
+    [or
         [int_type]
-        [uint_type]
-        [hex_type]
+        [float_type]
         [const_type]
         [date_type]
         [datetime_type]
@@ -132,124 +90,122 @@
 ]
 
 [type [int_type] 
-    [array
-        [ // Required parameters
-            [const int]
-            /// number of bit
-            [bit_size]
-        ] 
-    ]
+    [variant int]
 ]
 
-[type [uint_type] 
-    [array
-        [ // Required parameters
-            [const uint]
-            /// number of bit
-            [bit_size]
-        ] 
-    ]
+[type [float_type] 
+    [variant float]
 ]
 
-/// "0x000000" format.
-[type [hex_type]
-    [array
-        [ // Required parameters
-            [const hex]
-            /// number of bit
-            [bit_size]
+[type [const_type] 
+    [collection
+        [required
+            [const const unquoted] 
+            [string]
         ]
-    ]
-]
-
-[type [bit_size]
-    [or
-        [
-            [uint big] 
-            [const big]
-        ]
+        [optional [quote_kind]]
     ]
 ]
 
 [type [const_type] 
-    [array
-        [ // Required parameters
-            [const const]
-            [string]
+    [collection
+        [required
+            [const string unquoted] 
         ]
+        [optional [quote_kind]]
     ]
 ]
 
-[type [const_type] [array [[const string]]]]
+[type [quote_kind]
+    [or
+        [const quoted]
+        [const unquoted]
+    ]
+]
 
 /// "YYYY-MM-DD" format. The supported range is '1000-01-01' to '9999-12-31'.
-[type [date_type] [array [[const date]]]]
+[type [date_type] 
+    [variant date]
+]
 
-/// "YYYY-MM-DDTHH:MM:SS[.fraction]" format. The fraction can be 0 to 6 digits. The supported range is '1000-01-01 00:00:00.000000' to '9999-12-31'.  
-[type [datetime_type] [array [[const datetime]]]]
+/// "YYYY-MM-DDTHH:MM:SS[.fraction]" format. The fraction can be 0 to 6 digits. The supported range is '1000-01-01T00:00:00.000000' to '9999-12-31T99:99:99.999999'.  
+[type [datetime_type] [variant datetime]]
+
 
 // ---------------
 // Collection type
 // ---------------
-[type [collection_type] [or [collection_types]]]
-[types [collection_types]
-    [
-        [array_type]
-        [user_defined_type]
+[type [collection_type_kind]
+    [or
+        [collection_type]
+        [user_defined_collection_type]
     ]
 ]
+
+[type [collection_type]
+    [collection 
+        [reqiured [const collection]]
+        [optional_fields
+            [collection 
+                [required [const reqiured unquoted]]
+                [rest [types]]
+            ]
+            
+            [collection
+                [required [const optional unquoted]]
+                [rest [types]]
+            ]
+            
+            [variant rest [type]]
+            
+            [collection 
+                [required [const reqiured unquoted]]
+                [rest [types]]
+            ]
+            
+            [collection
+                [required [const optional unquoted]]
+                [rest [types]]
+            ]
+        ]
+    ]
+]
+
+
 
 // ---------------
 // Other type
 // ---------------
-[type [other_type] [or [other_types]]]
-[type [other_types]
-    [or 
+[type [other_type_kind]
+    [or
         [any_type]
         [or_type]
-        [user_defined_type]
+        [user_defined_other_type]
     ]
 ]
 
 [type [any_type] 
-    [array
-        [ // Required parameters
-            [const any]
-        ]
-    ]
+    [tuple "any"]
 ]
 
 [type [or_type] 
-    [array
-        [ // Required parameters
-            [const or]
-            [all_type_array]
+    [collection
+        [required "or"]
+        [rest
+            [type]
+            [types]
         ]
     ]
 ]
 
 /// Reference to user defined  type.
-[type [user_defined_scalar_type] [default_user_defined]]
+[type [user_defined_scalar_type] [or]]
 
 /// Reference to user defined  type.
-[type [user_defined_collection_type] [default_user_defined]]
+[type [user_defined_collection_type] [or]]
 
 /// Reference to user defined other type.
-[type [user_defined_other_type] [default_user_defined]]
+[type [user_defined_other_type] [or]]
 
 /// Reference to user defined types.
-[type [user_defined_types] [default_user_defined]]
-
-[type [default_user_defined]
-    [array
-        [ // Required parameters
-            [string]
-        ]
-        []
-        [ // Rest parameters
-            [all_type]
-            [all_type_array]
-            [string]
-        ]
-    ]
-]
+[type [user_defined_types] [or]]

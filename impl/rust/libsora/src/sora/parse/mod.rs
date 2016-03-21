@@ -1,4 +1,6 @@
 use super::*;
+use super::util::is_blacklisted_whitespace;
+use super::tag::*;
 
 use std::char;
 use std::str::Chars;
@@ -7,12 +9,12 @@ use std::ops::Range;
 
 
 pub mod error;
-mod data;
-mod tag;
+mod context;
+mod tag_write;
 
-use self::data::*;
+use self::context::*;
 use self::error::*;
-use self::tag::*;
+use self::tag_write::*;
 
 use rustc_serialize::hex::FromHex;
 
@@ -41,30 +43,6 @@ macro_rules! maybe(
     }};
 );
 
-
-
-
-// ===============================================================================
-// Tag
-// ===============================================================================
-
-#[derive(Debug)]
-pub struct Tag {
-    pub position: Option<Range<usize>>,
-    pub document: Option<Document>,
-}
-
-
-
-// ===============================================================================
-// Document
-// ===============================================================================
-
-#[derive(Debug)]
-pub struct Document {
-    pub content: Box<SoraArray<Tag>>,
-    pub source_map: Vec<Range<usize>>,
-}
 
 
 
@@ -100,10 +78,11 @@ pub struct Parser<'a> {
     position: usize,
     output: OutputArray,
     stack: Vec<OutputArray>,
-    extra_tag: TagWriter<TagWriterNotStarted>,
-    errors: Vec<ErrorDetail>,
+    errors: Vec<ErrorEntry>,
     context: Option<Context>,
 }
+
+type OutputArray = (Vec<Sora>, TagWriter<ArrayTag>);
 
 
 
@@ -111,14 +90,14 @@ pub struct Parser<'a> {
 // Parser impl
 // ===============================================================================
 
-pub fn parse(chars: Chars, config: &Config) -> Result<SoraArray<Tag>, Error> {
+pub fn parse(chars: Chars, config: &Config) -> Result<SoraArray, Error> {
     let mut parser = Parser::new(&config);
 
     for character in chars {
         if parser.process(character).is_err() {
             return Result::Err(Error {
                 data: Option::None,
-                details: parser.errors,
+                entries: parser.errors,
             });
         }
     }
@@ -130,8 +109,7 @@ impl<'a> Parser<'a> {
     pub fn new(config: &'a Config) -> Self {
         Parser {
             position: 0,
-            output: (vec![], TagWriter::new().start(config, 0)),
-            extra_tag: TagWriter::new(),
+            output: (vec![], TagWriter::new()),
             config: config,
             stack: vec![],
             errors: vec![],
@@ -172,7 +150,8 @@ impl<'a> Parser<'a> {
         if let ArrayContext::Slash(length) = detail {
             let context: Context = if character == '/' {
                 if length == 3 {
-                    self.extra_tag.write_document(self.config, character, self.position);
+                    let (_, ref mut tag) = self.output;
+                    tag.write_document(self.config, character, self.position);
                     return Result::Ok(Context::Comment(CommentContext {
                         keeping: false,
                         document: true,
@@ -189,7 +168,8 @@ impl<'a> Parser<'a> {
                     let document = length == 3;
                     let keeping = character == '!';
                     if document && !keeping {
-                        self.extra_tag.write_document(self.config, character, self.position);
+                        let (_, ref mut tag) = self.output;
+                        tag.write_document(self.config, character, self.position);
                     }
                     Context::Comment(CommentContext {
                         keeping: keeping,
@@ -204,7 +184,8 @@ impl<'a> Parser<'a> {
         }
 
         let context = match character {
-            ',' | ' ' | '\t' | '\n' | '\r' => Context::Array(ArrayContext::Normal),
+            ',' | ' ' | '\t' | '\n' => Context::Array(ArrayContext::Normal),
+            '\r' => Context::Array(ArrayContext::CarriageReturn),
 
             '[' => self.start_array(),
 
@@ -214,7 +195,7 @@ impl<'a> Parser<'a> {
                 } else {
                     let p = self.position;
                     error!(self,
-                           ErrorDetail::new(ErrorKind::ExtraClosingBracket, (p - 1)..p, false));
+                           ErrorEntry::new(ErrorKind::ExtraClosingBracket, (p - 1)..p, false));
                 }
 
                 Context::Array(ArrayContext::Normal)
@@ -226,11 +207,12 @@ impl<'a> Parser<'a> {
                 if let ArrayContext::NotSeparated = detail {
                     let p = self.position;
                     error!(self,
-                           ErrorDetail::new(ErrorKind::SeparatorRequired, (p - 1)..p, false));
+                           ErrorEntry::new(ErrorKind::SeparatorRequired, (p - 1)..p, false));
                 }
 
                 match character {
-                    '\"' | '\'' => Context::OpeningQuote(character, 1),
+                    '\"' => Context::OpeningQuote(QuoteChar::Double, 1),
+                    '\'' => Context::OpeningQuote(QuoteChar::Single, 1),
 
                     _ => {
                         let next_detail = self.start_unquoted_string_context();
@@ -245,9 +227,12 @@ impl<'a> Parser<'a> {
 
     #[inline]
     fn start_array(&mut self) -> Context {
-        let tag = replace(&mut self.extra_tag, TagWriter::new());
-        let output = replace(&mut self.output,
-                             (vec![], tag.start(self.config, self.position)));
+        let tag = {
+            let (_, ref mut tag) = self.output;
+            tag.pop_for_array(self.config, self.position)
+        };
+
+        let output = replace(&mut self.output, (vec![], tag));
         self.stack.push(output);
 
         Context::Array(ArrayContext::Normal)
@@ -256,10 +241,10 @@ impl<'a> Parser<'a> {
     #[inline]
     fn process_opening_quote(&mut self,
                              character: char,
-                             quote: char,
+                             quote: QuoteChar,
                              length: usize)
                              -> Result<Context, ()> {
-        if character == quote {
+        if quote.is_match(character) {
             return Result::Ok(Context::OpeningQuote(quote, length + 1));
         }
 
@@ -269,12 +254,12 @@ impl<'a> Parser<'a> {
 
     #[inline]
     fn start_unquoted_string_context(&mut self) -> UnquotedStringContext {
-        let tag = replace(&mut self.extra_tag, TagWriter::new());
+        let (_, ref mut tag) = self.output;
 
         UnquotedStringContext {
             string: String::new(),
             inline_context: UnquotedStringInlineContext::Body(false),
-            tag: tag.start(self.config, self.position),
+            tag: tag.pop_for_string(self.config, self.position, QuoteKind::Unquoted),
         }
     }
 
@@ -292,28 +277,32 @@ impl<'a> Parser<'a> {
                     }
 
                     EscapeSequenceOperation::End(character) => {
-                        let (ref mut line, _) = *detail.lines.last_mut().unwrap();
+                        let (ref mut line, _, _) = *detail.lines.last_mut().unwrap();
                         line.push(character);
                         QuotedStringInlineContext::Body
                     }
                 }
             }
 
-            QuotedStringInlineContext::Indent => {
+            QuotedStringInlineContext::CarriageReturn => {
                 match character {
-                    ' ' | '\t' => {
-                        let (ref mut line, ref mut i) = *detail.lines.last_mut().unwrap();
-                        *i += 1;
-                        line.push(character);
+                    '\n' => {
+                        self.new_line_quoted_string(NewLineChar::CrLf, &mut detail);
                         QuotedStringInlineContext::Indent
                     }
-
-                    _ => try!(self.process_quoted_string_body(character, &mut detail)),
+                    _ => {
+                        self.new_line_quoted_string(NewLineChar::Cr, &mut detail);
+                        try!(self.process_quoted_string_indent(character, &mut detail))
+                    }
                 }
             }
 
+            QuotedStringInlineContext::Indent => {
+                try!(self.process_quoted_string_indent(character, &mut detail))
+            }
+
             QuotedStringInlineContext::Quotes(length) => {
-                if character == detail.quote {
+                if detail.quote.is_match(character) {
                     QuotedStringInlineContext::Quotes(length + 1)
                 } else if length < detail.opening_quotes {
                     self.add_quotes(length, &mut detail);
@@ -333,10 +322,28 @@ impl<'a> Parser<'a> {
     }
 
     fn add_quotes(&mut self, length: usize, detail: &mut QuotedStringContext) {
-        let (ref mut line, _) = *detail.lines.last_mut().unwrap();
+        let (ref mut line, _, _) = *detail.lines.last_mut().unwrap();
         for _ in 0..length {
-            line.push(detail.quote);
+            detail.quote.write_to(line);
         }
+    }
+
+    #[inline]
+    fn process_quoted_string_indent(&mut self,
+                                    character: char,
+                                    detail: &mut QuotedStringContext)
+                                    -> Result<QuotedStringInlineContext, ()> {
+        let context = match character {
+            ' ' | '\t' => {
+                let (ref mut line, _, ref mut i) = *detail.lines.last_mut().unwrap();
+                *i += 1;
+                line.push(character);
+                QuotedStringInlineContext::Indent
+            }
+            _ => try!(self.process_quoted_string_body(character, detail)),
+        };
+
+        Result::Ok(context)
     }
 
     #[inline]
@@ -344,25 +351,23 @@ impl<'a> Parser<'a> {
                                   character: char,
                                   detail: &mut QuotedStringContext)
                                   -> Result<QuotedStringInlineContext, ()> {
-        let context = if character == detail.quote {
+        let context = if detail.quote.is_match(character) {
             QuotedStringInlineContext::Quotes(1)
         } else {
             match character {
-                '\\' if detail.quote == '"' => {
+                '\\' if detail.quote.is_match('"') => {
                     QuotedStringInlineContext::EscapeSequence(EscapeSequenceContext::Head)
                 }
 
-                '\r' | '\n' => {
-                    {
-                        let (ref mut line, _) = *detail.lines.last_mut().unwrap();
-                        line.push(character);
-                    }
-                    detail.lines.push((String::new(), 0));
+                '\n' => {
+                    self.new_line_quoted_string(NewLineChar::Lf, detail);
                     QuotedStringInlineContext::Indent
                 }
 
+                '\r' => QuotedStringInlineContext::CarriageReturn,
+
                 _ => {
-                    let (ref mut line, _) = *detail.lines.last_mut().unwrap();
+                    let (ref mut line, _, _) = *detail.lines.last_mut().unwrap();
                     line.push(character);
                     QuotedStringInlineContext::Body
                 }
@@ -370,6 +375,15 @@ impl<'a> Parser<'a> {
         };
 
         Result::Ok(context)
+    }
+
+    fn new_line_quoted_string(&self, character: NewLineChar, detail: &mut QuotedStringContext) {
+        {
+            let (_, ref mut new_line, _) = *detail.lines.last_mut().unwrap();
+            *new_line = Option::Some(character);
+        }
+
+        detail.lines.push((String::new(), Option::None, 0));
     }
 
     fn process_unquoted_string(&mut self,
@@ -426,9 +440,9 @@ impl<'a> Parser<'a> {
         let operation = if is_blacklisted_whitespace(character) {
             let p = self.position;
             error!(self,
-                   ErrorDetail::new(ErrorKind::BlacklistedWhitespace(character),
-                                    (p - 1)..p,
-                                    false));
+                   ErrorEntry::new(ErrorKind::BlacklistedWhitespace(character),
+                                   (p - 1)..p,
+                                   false));
 
             detail.string.push(character);
             UnquotedStringOperation::Continue(UnquotedStringInlineContext::Body(false))
@@ -441,7 +455,7 @@ impl<'a> Parser<'a> {
                 '\"' | '\'' => {
                     let p = self.position;
                     error!(self,
-                           ErrorDetail::new(ErrorKind::SeparatorRequired, (p - 1)..p, false));
+                           ErrorEntry::new(ErrorKind::SeparatorRequired, (p - 1)..p, false));
 
                     UnquotedStringOperation::End
                 }
@@ -510,7 +524,7 @@ impl<'a> Parser<'a> {
                         if len < 1 || 6 < len {
                             let p = self.position;
                             error!(self,
-                                   ErrorDetail {
+                                   ErrorEntry {
                                        position: (p - len - 3)..p,
                                        kind: ErrorKind::InvalidDigitUnicodeEscape,
                                        fatal: false,
@@ -529,7 +543,7 @@ impl<'a> Parser<'a> {
                                 None => {
                                     let p = self.position;
                                     error!(self,
-                                           ErrorDetail {
+                                           ErrorEntry {
                                                position: (p - len - 3)..p,
                                                kind: ErrorKind::InvalidUnicode,
                                                fatal: false,
@@ -556,7 +570,7 @@ impl<'a> Parser<'a> {
 
     fn process_comment(&mut self, character: char, detail: CommentContext) -> Result<Context, ()> {
         let context = match character {
-            '\n' | '\r' => Context::Array(ArrayContext::Normal),
+            '\n' | '\r' => try!(self.process_array(character, ArrayContext::Normal)),
             _ => Context::Comment(detail),
         };
 
@@ -568,28 +582,26 @@ impl<'a> Parser<'a> {
     // End
     // ---------------------------------------------------
     #[inline]
-    pub fn end(mut self) -> Result<SoraArray<Tag>, Error> {
+    pub fn end(mut self) -> Result<SoraArray, Error> {
         self.position += 1;
 
         if self.end_context().is_err() {
             return Result::Err(Error {
                 data: Option::None,
-                details: self.errors,
+                entries: self.errors,
             });
         }
 
         let (output_vec, tag) = self.output;
-        let extra_tag = replace(&mut self.extra_tag, TagWriter::new());
         let data = SoraArray {
             data: output_vec,
             tag: tag.end(self.position),
-            extra_tag: extra_tag.interrupt(self.position),
         };
 
         if !self.errors.is_empty() {
             return Result::Err(Error {
                 data: Option::Some(data),
-                details: self.errors,
+                entries: self.errors,
             });
         }
 
@@ -606,11 +618,11 @@ impl<'a> Parser<'a> {
                 }
                 Context::OpeningQuote(quote, length) => self.end_opening_quote(quote, length),
                 Context::QuotedString(detail) => {
-                    self.end_quoted_string(detail);
+                    try!(self.end_quoted_string(detail));
                     Context::Array(ArrayContext::NotSeparated)
                 }
                 Context::UnquotedString(detail) => {
-                    self.end_unquoted_string(detail);
+                    try!(self.end_unquoted_string(detail));
                     Context::Array(ArrayContext::NotSeparated)
                 }
                 Context::Comment(_) => Context::Array(ArrayContext::Normal),
@@ -620,7 +632,7 @@ impl<'a> Parser<'a> {
         while let Some(next_output) = self.stack.pop() {
             let p = self.position;
             error!(self,
-                   ErrorDetail {
+                   ErrorEntry {
                        kind: ErrorKind::UnclosedArray,
                        position: (p - 1)..p,
                        fatal: false,
@@ -634,29 +646,28 @@ impl<'a> Parser<'a> {
 
     fn end_array(&mut self, next_output: OutputArray) {
         let old_output = replace(&mut self.output, next_output);
-        let old_extra_tag = replace(&mut self.extra_tag, TagWriter::new());
 
         let (ref mut output_vec, _) = self.output;
         let (arr, tag) = old_output;
+
         let data = Sora::Array(SoraArray {
             data: arr,
             tag: tag.end(self.position),
-            extra_tag: old_extra_tag.interrupt(self.position),
         });
 
         output_vec.push(data);
     }
 
-    fn end_opening_quote(&mut self, quote: char, length: usize) -> Context {
-        let tag = replace(&mut self.extra_tag, TagWriter::new());
+    fn end_opening_quote(&mut self, quote: QuoteChar, length: usize) -> Context {
+        let (ref mut output_vec, ref mut tag) = self.output;
 
         if length == 2 {
             {
-                let (ref mut output_vec, _) = self.output;
                 let data = Sora::String(SoraString {
                     data: String::new(),
-                    is_quoted: true,
-                    tag: tag.start(self.config, self.position - 2)
+                    tag: tag.pop_for_string(self.config,
+                                            self.position - 2,
+                                            QuoteKind::Quoted(quote, 1))
                             .end(self.position),
                 });
                 output_vec.push(data);
@@ -664,18 +675,25 @@ impl<'a> Parser<'a> {
             Context::Array(ArrayContext::NotSeparated)
         } else {
             Context::QuotedString(QuotedStringContext {
-                lines: vec![(String::new(), 0)],
+                lines: vec![(String::new(), Option::None, 0)],
                 quote: quote,
                 start_position: self.position - 1,
                 inline_context: QuotedStringInlineContext::Indent,
                 opening_quotes: length,
-                tag: tag.start(self.config, self.position - length),
+                tag: tag.pop_for_string(self.config,
+                                        self.position - length,
+                                        QuoteKind::Quoted(quote, length)),
             })
         }
     }
 
-    fn end_quoted_string(&mut self, detail: QuotedStringContext) -> Result<(), ()> {
+    fn end_quoted_string(&mut self, mut detail: QuotedStringContext) -> Result<(), ()> {
         match detail.inline_context {
+            QuotedStringInlineContext::CarriageReturn => {
+                self.new_line_quoted_string(NewLineChar::Cr, &mut detail);
+                try!(self.end_unclosed_quoted_string(0, detail))
+            }
+
             QuotedStringInlineContext::Body | QuotedStringInlineContext::Indent => {
                 try!(self.end_unclosed_quoted_string(0, detail))
             }
@@ -702,67 +720,85 @@ impl<'a> Parser<'a> {
         if length > detail.opening_quotes {
             let p = self.position;
             error!(self,
-                   ErrorDetail::new(ErrorKind::TooManyClosingQuotes, (p - length)..p, false));
+                   ErrorEntry::new(ErrorKind::TooManyClosingQuotes, (p - length)..p, false));
         }
 
         let (ref mut output_vec, _) = self.output;
 
         let mut string = String::new();
         let mut string_position = detail.start_position;
+
         if let Some(last) = detail.lines.pop() {
             let mut into_iter = detail.lines.into_iter();
             if let Some(first) = into_iter.next() {
-                {
-                    let (line, indent) = first;
-                    string_position += line.len();
-                    if line.len() != indent + 1 {
-                        string.push_str(&line);
-                    }
-                }
+                let mut last_new_line = Option::None;
 
-                let (last_line, last_indent) = last;
+                {
+                    let (line, maybe_new_line, indent) = first;
+                    let new_line = maybe_new_line.unwrap();
+                    string_position += line.len() + new_line.len();
+                    if line.len() != indent {
+                        string.push_str(&line);
+                        new_line.write_to(&mut string);
+                        last_new_line = Option::Some(new_line);
+                    }
+                };
+
+                let (last_line, _, last_indent) = last;
                 let (last_head, last_body) = last_line.split_at(last_indent);
 
-                for (line, indent) in into_iter {
-                    string_position += line.len();
+                for (line, maybe_new_line, indent) in into_iter {
+                    let new_line = maybe_new_line.unwrap();
 
-                    if line.len() == 1 {
+                    string_position += line.len() + new_line.len();
+
+                    if line.len() == 0 {
                         string.push_str(&line);
+                        new_line.write_to(&mut string);
+                        last_new_line = Option::Some(new_line);
                         continue;
                     }
 
-                    if indent < last_indent {
+                    let (head, body) = if indent < last_indent {
                         let p = self.position - line.len();
                         error!(self,
-                               ErrorDetail::new(ErrorKind::InvalidIndent, p..(p + indent), false));
-                    } else {
-                        let (head, body) = line.split_at(last_indent);
-                        if last_head != head {
-                            let p = self.position - body.len();
-                            error!(self,
-                                   ErrorDetail::new(ErrorKind::InvalidIndent,
-                                                    (p - last_indent)..p,
-                                                    false));
-                        }
+                               ErrorEntry::new(ErrorKind::InvalidIndent, p..(p + indent), false));
 
-                        string.push_str(&body);
+                        line.split_at(indent)
+                    } else {
+                        line.split_at(last_indent)
+                    };
+
+                    if last_head != head {
+                        let p = self.position - body.len();
+                        error!(self,
+                               ErrorEntry::new(ErrorKind::InvalidIndent,
+                                               (p - last_indent)..p,
+                                               false));
                     }
+
+                    string.push_str(&body);
+                    new_line.write_to(&mut string);
+                    last_new_line = Option::Some(new_line);
                 }
 
                 if last_body.len() == 0 {
-                    string.pop();
+                    if let Some(nl) = last_new_line {
+                        for _ in 0..nl.len() {
+                            string.pop();
+                        }
+                    }
                 } else {
                     string.push_str(&last_body);
                 }
             } else {
-                let (last_line, _) = last;
+                let (last_line, _, _) = last;
                 string.push_str(&last_line);
             }
         }
 
         let data = Sora::String(SoraString {
             data: string,
-            is_quoted: true,
             tag: detail.tag.end(self.position),
         });
         output_vec.push(data);
@@ -778,7 +814,7 @@ impl<'a> Parser<'a> {
 
         let p = self.position;
         error!(self,
-               ErrorDetail {
+               ErrorEntry {
                    kind: ErrorKind::UnclosedString,
                    position: (p - 1)..p,
                    fatal: false,
@@ -810,7 +846,7 @@ impl<'a> Parser<'a> {
 
         let p = self.position;
         error!(self,
-               ErrorDetail {
+               ErrorEntry {
                    position: (p - string.len())..p,
                    kind: ErrorKind::InvalidEscapeSequence(string),
                    fatal: false,
@@ -844,26 +880,8 @@ impl<'a> Parser<'a> {
         let (ref mut output_vec, _) = self.output;
         let data = Sora::String(SoraString {
             data: string,
-            is_quoted: false,
             tag: detail.tag.end(self.position),
         });
         output_vec.push(data);
-    }
-}
-
-pub fn is_blacklisted_whitespace(character: char) -> bool {
-    match character {
-        '\u{000B}' |
-        '\u{000C}' |
-        '\u{0085}' |
-        '\u{00A0}' |
-        '\u{1680}' |
-        '\u{2000}'...'\u{200A}' |
-        '\u{2028}' |
-        '\u{2029}' |
-        '\u{202F}' |
-        '\u{205F}' |
-        '\u{3000}' => true,
-        _ => false,
     }
 }

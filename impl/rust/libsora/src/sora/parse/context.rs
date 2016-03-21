@@ -1,12 +1,11 @@
-use super::super::*;
-use super::tag::*;
-use super::*;
-
-pub type OutputArray = (Vec<Sora<Tag>>, TagWriter<TagWriterStarted>);
+use super::super::tag::*;
+use super::tag_write::*;
 
 pub enum Context {
     Array(ArrayContext),
-    OpeningQuote(char, usize),
+    OpeningQuote(QuoteChar,
+                 /// length
+                 usize),
     QuotedString(QuotedStringContext),
     UnquotedString(UnquotedStringContext),
     Comment(CommentContext),
@@ -14,11 +13,11 @@ pub enum Context {
 
 pub enum ArrayContext {
     Normal,
-
+    CarriageReturn,
     NotSeparated,
 
-    // (length)
-    Slash(usize),
+    Slash(/// length
+          usize),
 }
 
 pub struct CommentContext {
@@ -27,18 +26,20 @@ pub struct CommentContext {
 }
 
 pub struct QuotedStringContext {
-    pub lines: Vec<(String, usize)>,
+    pub lines: Vec<(String, Option<NewLineChar>, usize)>,
     pub inline_context: QuotedStringInlineContext,
-    pub quote: char,
+    pub quote: QuoteChar,
     pub opening_quotes: usize,
     pub start_position: usize,
-    pub tag: TagWriter<TagWriterStarted>,
+    pub tag: TagWriter<StringTag>,
 }
 
 pub enum QuotedStringInlineContext {
     Indent,
+    CarriageReturn,
     Body,
-    Quotes(usize),
+    Quotes(/// length
+           usize),
     EscapeSequence(EscapeSequenceContext),
 }
 
@@ -50,12 +51,12 @@ pub enum UnquotedStringOperation {
 pub struct UnquotedStringContext {
     pub string: String,
     pub inline_context: UnquotedStringInlineContext,
-    pub tag: TagWriter<TagWriterStarted>,
+    pub tag: TagWriter<StringTag>,
 }
 
 pub enum UnquotedStringInlineContext {
-    // (is slash)
-    Body(bool),
+    Body(/// is slash
+         bool),
     EscapeSequence(EscapeSequenceContext),
 }
 

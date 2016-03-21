@@ -1,25 +1,23 @@
 use super::super::*;
-use super::*;
-
 use std::ops::Range;
 
 
 #[derive(Debug)]
 pub struct Error {
-    pub data: Option<SoraArray<Tag>>,
-    pub details: Vec<ErrorDetail>,
+    pub data: Option<SoraArray>,
+    pub entries: Vec<ErrorEntry>,
 }
 
 #[derive(Debug)]
-pub struct ErrorDetail {
+pub struct ErrorEntry {
     pub kind: ErrorKind,
     pub position: Range<usize>,
     pub fatal: bool,
 }
 
-impl ErrorDetail {
+impl ErrorEntry {
     pub fn new(kind: ErrorKind, position: Range<usize>, fatal: bool) -> Self {
-        ErrorDetail {
+        ErrorEntry {
             kind: kind,
             position: position,
             fatal: fatal,
