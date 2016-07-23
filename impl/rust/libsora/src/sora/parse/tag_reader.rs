@@ -3,11 +3,11 @@ use std::ops::Range;
 use std::mem::replace;
 use super::super::tag::*;
 
-pub struct TagWriter<State> {
+pub struct TagReader<State> {
     tag: Tag<State>,
 }
 
-impl TagWriter<StringTag> {
+impl TagReader<StringTag> {
     pub fn end(mut self, position: usize) -> Tag<StringTag> {
         if let Some(ref mut p) = self.tag.detail.position {
             p.end = position;
@@ -16,9 +16,9 @@ impl TagWriter<StringTag> {
     }
 }
 
-impl TagWriter<ArrayTag> {
+impl TagReader<ArrayTag> {
     pub fn new() -> Self {
-        TagWriter { tag: Tag::new().for_array() }
+        TagReader { tag: Tag::new().for_array() }
     }
 
     pub fn write_document(&mut self, config: &Config, character: char, position: usize) {
@@ -46,20 +46,24 @@ impl TagWriter<ArrayTag> {
         }
     }
 
-    pub fn pop_for_string(&mut self, config: &Config, position: usize) -> TagWriter<StringTag> {
+    pub fn pop_for_string(&mut self,
+                          config: &Config,
+                          position: usize,
+                          quote: QuoteKind)
+                          -> TagReader<StringTag> {
         let foot_tag = replace(&mut self.tag.detail.foot_tag, Tag::new());
-        let mut tag = foot_tag.for_string();
+        let mut tag = foot_tag.for_string(quote);
         tag.detail.position = self.start(config, position);
 
-        TagWriter { tag: tag }
+        TagReader { tag: tag }
     }
 
-    pub fn pop_for_array(&mut self, config: &Config, position: usize) -> TagWriter<ArrayTag> {
+    pub fn pop_for_array(&mut self, config: &Config, position: usize) -> TagReader<ArrayTag> {
         let foot_tag = replace(&mut self.tag.detail.foot_tag, Tag::new());
         let mut tag = foot_tag.for_array();
         tag.detail.position = self.start(config, position);
 
-        TagWriter { tag: tag }
+        TagReader { tag: tag }
     }
 
     pub fn end(mut self, position: usize) -> Tag<ArrayTag> {

@@ -1,0 +1,49 @@
+/// '''
+/// Standard Library of SoraIDL
+/// '''
+/// [Schema sora idl Idl]
+
+[Pacakge sora std]
+
+/// '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'
+[Alias Int64 [String]]
+
+/// '32 bit integer.'
+[Alias Int32 [String]]
+
+/// '16 bit integer.'
+[Alias Int16 [String]]
+
+/// '8 bit integer.'
+[Alias Int8 [String]]
+
+[Alias UInt64 [String]]
+[Alias UInt32 [String]]
+[Alias UInt16 [String]]
+[Alias UInt8 [String]]
+
+[Alias Float64 [String]]
+
+/// 'true or false.'
+[Union Boolean 
+    [True [Const true]]
+    [False [Const false]]
+]
+
+[Union Any
+    [String String]
+    [Array [Array [Any]]]
+]
+
+[Alias DateTime [String]]
+[Alias Date [String]]
+[Alias Time [String]]
+
+[Tuple [KeyValue [K] [V]]
+    [key [K]]
+    [value [V]]
+]
+
+[Alias [Map [K] [V]]
+    [Array [KeyValue [K] [V]]
+]

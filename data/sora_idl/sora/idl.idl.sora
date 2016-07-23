@@ -1,0 +1,60 @@
+/// """
+/// IDL for Sora Interface Description Language (SoraIDL)
+/// """
+/// [Schema sora idl Idl]
+
+[Pacakge sora]
+[Import sora Std]
+
+[Tuple Idl 
+    [package? [PackageDefine]]
+    [imports.. [ImportDefine]]
+    [typeDefines.. [TypeDefine]]
+]
+
+[Enum PackageDefine
+    [Package [package.. [Array [PathIdentifer]]]]
+]
+
+[Enum ImportDefine 
+    [Import [package.. [Array [PathIdentifer]]]]
+]
+
+[Enum TypeDefine
+    [Struct [name [TypeName]] [arguments.. [Argument]]]
+    [Enum [name [TypeName]] [constuctors.. [Array [EnumConstuctor]]]]
+    [Alias [name [TypeName]] [type [TypeReference]]]]
+    [Union [name [TypeName]] [elements.. [UnionElement]]]
+    [Tuple [name [TypeName]] [arguments.. [Argument]]]]
+]
+
+[Union TypeName
+    [NotGeneric [String]]
+    [Generic [GenericTypeName]]
+]
+
+[Tuple GenericTypeName
+    [name [String]]
+    [parameters.. [TypeParameterDefine]]
+]
+
+[Tuple TypeParameterDefine
+    [name [String]]
+    [constrain? [TypeDefine]]
+]
+
+[Tuple EnumConstuctor
+    [name [String]]]
+    [arguments.. [Argument]]
+]
+
+[Tuple TypeReference 
+    [type [String]] 
+    [parameters.. [TypeReference]]
+]
+
+[Tuple Argument 
+    [name [String]]
+    [type [TypeReference]]
+    [defaultValue? [Any]]
+]

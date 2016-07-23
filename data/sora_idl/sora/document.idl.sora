@@ -1,0 +1,13 @@
+/// """
+/// IDL for Sora Document Comment
+/// """
+/// [Schema sora idl Idl]
+
+[Pacakge sora]
+[Import sora Std]
+
+[Tuple Document
+    [package? [PackageDefine]]
+    [imports.. [ImportDefine]]
+    [typeDefines.. [TypeDefine]]
+]

@@ -14,7 +14,7 @@ Most of data serialization languages are too complex for many purposes.
 
 Sora is simple, but enough.
 
-# Examples
+# Syntax
 
 ## String
 
@@ -49,7 +49,7 @@ If you want to include special characters, whitespaces or blacklisted whitespace
     <tr>
         <td>
             <pre><code>
-"[abc, 'def']", ' "abc" '
+"[abc 'def']" ' "abc" '
             </code></pre>
         </td>
         <td>
@@ -67,7 +67,7 @@ The quotes number can be 3 or more.
     <tr>
         <td>
             <pre><code>
-"""a"b"c""", '''' 'abc' ''''
+"""a"b"c""" '''' 'abc' ''''
             </code></pre>
         </td>
         <td>
@@ -163,7 +163,7 @@ Escape sequences can be use in unquoted strings or quoted strings of double-quot
     <tr>
         <td>
             <pre><code>
-"Multi\r\nline", "\"", \u{305D}\u{3089}
+"Multi\r\nline" "\"" \u{305D}\u{3089}
             </code></pre>
         </td>
         <td>
@@ -181,7 +181,7 @@ In quoted strings of single-quotes, escape sequences are disabled.
     <tr>
         <td>
             <pre><code>
-'Single\r\nline', '\', '''\u{305D}\u{3089}'''
+'Single\r\nline' '\' '''\u{305D}\u{3089}'''
             </code></pre>
         </td>
         <td>
@@ -220,29 +220,9 @@ Below is the blacklist of whitespace characters. They could cause confusing beha
 
 ## Array
 
-### Comma separator 
-
-As you already seen, strings can be separated with comma (`,`).
-
-<table>
-    <tr><th>Sora</th><th>Json</th></tr>
-    <tr>
-        <td>
-            <pre><code>
-a,bc,def
-            </code></pre>
-        </td>
-        <td>
-            <pre><code>
-["a", "bc", "def"]
-            </code></pre>
-        </td>
-    </tr>
-</table>
-
 ### Whitespace separator, Newline separator
 
-Whitespaces(`` ``(#x20), `\t`(#x9)) and newlines(LF, CR) can be also use as separator.
+Whitespaces(`` ``(#x20), `\t`(#x9)) and newlines(LF, CR) are used as separator.
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -318,20 +298,20 @@ Sora skips unquated empty string.
     <tr>
         <td>
             <pre><code>
-,a,,b,
+a  b
 
 
-  ,,[  ,c,
-,[,],  ,]
+  [  c
+[]   ]
 
-,d
+d
 
 
             </code></pre>
         </td>
         <td>
             <pre><code>
-["a", "b", ["c", []], "d"]
+["a" "b" ["c" []] "d"]
             </code></pre>
         </td>
     </tr>
@@ -357,12 +337,12 @@ Multi-line comment is not supported.
 ///     '''
 ///     # Sample for document comment.
 ///
-///     This is comment for various tools (e.g. editor, document generation).'
+///     This is comment for various tools (e.g. editor, document generation).
 ///     '''
-///     [auther, shohei909]
-///     [version, 0.1]
-///     [license, "public domain"]
-///     [document_format, markdown]
+///     [auther shohei909]
+///     [version 0.1]
+///     [license "public domain"]
+///     [document_format markdown]
 /// ]
 
 /// 'first element'
@@ -399,7 +379,7 @@ Many test cases are prepared. You should check all of them.
 
 ## Version
 
-<!-- Current specfication version is `0.1` (draft). -->  
+<!-- Current specfication version is `0.2` (draft). -->  
 <!-- Current test cases version is `0.1.0`. -->
 
 ## Lisence 

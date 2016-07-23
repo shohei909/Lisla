@@ -184,7 +184,7 @@ impl<'a> Parser<'a> {
         }
 
         let context = match character {
-            ',' | ' ' | '\t' | '\n' => Context::Array(ArrayContext::Normal),
+            ' ' | '\t' | '\n' => Context::Array(ArrayContext::Normal),
             '\r' => Context::Array(ArrayContext::CarriageReturn),
 
             '[' => self.start_array(),
@@ -448,7 +448,7 @@ impl<'a> Parser<'a> {
             UnquotedStringOperation::Continue(UnquotedStringInlineContext::Body(false))
         } else {
             match character {
-                ',' | ' ' | '\t' | '\n' | '\r' | '[' | ']' => UnquotedStringOperation::End,
+                ' ' | '\t' | '\n' | '\r' | '[' | ']' => UnquotedStringOperation::End,
 
                 '/' => UnquotedStringOperation::Continue(UnquotedStringInlineContext::Body(true)),
 
