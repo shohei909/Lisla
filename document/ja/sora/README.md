@@ -22,7 +22,15 @@ Soraはシンプルです。ですが、十分な機能があります。
 
 ### クオートなしの文字列
 
-特殊な文字(`"'[]`)、改行文字(LF(#xA), CR(#xD))、空白文字(`` ``(#x20) or `\t`(#x9))、禁止空白文字、コメント構文(`//`)を含まない記述は、文字列と解釈されます。
+以下の特殊文字、構文を含まない記述は、文字列と解釈されます。
+
+* クオート(`"'`)
+* 大かっこ(`[]`)
+* 改行文字(LF(#xA), CR(#xD))
+* 空白文字(`` ``(#x20) or `\t`(#x9))
+* 禁止空白文字(後述)
+* コメント構文(`//`)
+
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -44,7 +52,7 @@ Soraはルートが配列です。ただ単に`abcd`と記述した場合、JSON
 
 ### クオートされた文字列
 
-文字列に特殊文字、空白文字、禁止空白文字を含めたい場合、ダブルクオート`"`またはシングルクオート`'`で、文字列を囲みます。
+文字列に特殊文字を含めたい場合、ダブルクオート`"`またはシングルクオート`'`で、文字列を囲みます。
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -89,12 +97,10 @@ Soraでは、クオートされた文字列で複数行文字列を使うこと�
 
 複数行文字列では、フォーマットのためのインデントや改行を使いやすくするため、特定の改行や空白文字が無視されます。
 
-* 文字列の最終行が空白から始まる場合、最初の行と空行を除くすべての行で先頭の同じ空白文字が削除されます。
+* 文字列の最終行が空白文字から始まる場合、最初の行と空行を除くすべての行で先頭の同じ空白文字が削除されます。
     * 最終行と削除対象の行の空白文字が一致しない場合、エラーです。
-* If the last line starts with white spaces, the same number white spaces at the start of each lines excepting the first line are ignored. 
-    * In this case each of these lines must starts with same white spaces sequence or is a empty line.
-* If the first line has only white spaces, the white spaces and first newline are ignored.  
-* If the last line has only white spaces, the white spaces and last newline are ignored.
+* 最初の行が空白文字のみからなる場合、その空白文字と、最初の改行は無視されます。
+* 最後の行が空白文字のみからなる場合、その空白文字と、最後の改行は無視されます。
 
 <table>
     <tr><th>Sora</th><th>Json</th></tr>
@@ -105,9 +111,9 @@ Soraでは、クオートされた文字列で複数行文字列を使うこと�
 Multi
 line
 "
-    '''''
+    '''''    
     Sora
-
+    
      is
 
       awesome.

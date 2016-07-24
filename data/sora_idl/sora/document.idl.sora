@@ -1,13 +1,18 @@
-/// """
-/// IDL for Sora Document Comment
-/// """
-/// [Schema sora idl Idl]
+/// 'IDL for Sora Document Comment'
+/// [License "public domain"]
+/// [Schema sora.idl.Idl]
 
 [Pacakge sora]
-[Import sora Std]
+[Import sora.standard]
 
-[Tuple Document
-    [package? [PackageDefine]]
-    [imports.. [ImportDefine]]
-    [typeDefines.. [TypeDefine]]
+[Tuple [Document [DocumentTag]]
+    [comment String]
+    [parameters.. DocumentTag]
+]
+
+[Enum DefaultFileTag
+    [License [license String]]
+    [Author [auther String]]
+    [Schema [schema SoraTypeRefarence]]
+    [DocumentType [documentType String]]
 ]

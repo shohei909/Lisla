@@ -1,60 +1,61 @@
-/// """
-/// IDL for Sora Interface Description Language (SoraIDL)
-/// """
-/// [Schema sora idl Idl]
+/// 'IDL for Sora Interface Description Language (Sora IDL)'
+/// [Schema sora.idl.Idl]
 
 [Pacakge sora]
-[Import sora Std]
+
+[Import sora.module]
+[Import sora.standard]
 
 [Tuple Idl 
-    [package? [PackageDefine]]
-    [imports.. [ImportDefine]]
-    [typeDefines.. [TypeDefine]]
+    [tags.. IdlTag]
+    [package? PackageDefine]
+    [imports.. ImportDefine]
+    [typeDefines.. TypeDefine]
+]
+
+[Enum IdlTag
+    [Overwrite]
 ]
 
 [Enum PackageDefine
-    [Package [package.. [Array [PathIdentifer]]]]
+    [Package [directory SoraDirectoryPath]]
 ]
 
 [Enum ImportDefine 
-    [Import [package.. [Array [PathIdentifer]]]]
+    [Import [file SoraFilePath]]
 ]
 
+/// [DocumentTag sora.idl.document.TypeDefineDocumentTag]
 [Enum TypeDefine
-    [Struct [name [TypeName]] [arguments.. [Argument]]]
-    [Enum [name [TypeName]] [constuctors.. [Array [EnumConstuctor]]]]
-    [Alias [name [TypeName]] [type [TypeReference]]]]
-    [Union [name [TypeName]] [elements.. [UnionElement]]]
-    [Tuple [name [TypeName]] [arguments.. [Argument]]]]
+    [Struct [name TypeName] [arguments.. Argument]]
+    [Enum [name TypeName] [constuctors.. [Array EnumConstuctor]]]
+    [Alias [name TypeName] [type SoraTypeReference]]
+    [Union [name TypeName] [elements.. UnionElement]]
+    [Tuple [name TypeName] [arguments.. Argument]]
 ]
 
 [Union TypeName
-    [NotGeneric [String]]
-    [Generic [GenericTypeName]]
+    [Primitive String]
+    [Generic GenericTypeName]
 ]
 
 [Tuple GenericTypeName
-    [name [String]]
-    [parameters.. [TypeParameterDefine]]
+    [name String]
+    [parameters.. TypeParameterDefine]]
 ]
 
 [Tuple TypeParameterDefine
-    [name [String]]
-    [constrain? [TypeDefine]]
+    [name String]
+    [constrain? TypeDefine]
 ]
 
 [Tuple EnumConstuctor
-    [name [String]]]
-    [arguments.. [Argument]]
-]
-
-[Tuple TypeReference 
-    [type [String]] 
-    [parameters.. [TypeReference]]
+    [name String]]
+    [arguments.. Argument]
 ]
 
 [Tuple Argument 
-    [name [String]]
-    [type [TypeReference]]
-    [defaultValue? [Any]]
+    [name String]
+    [type SoraTypeReference]
+    [defaultValue? Any]
 ]
