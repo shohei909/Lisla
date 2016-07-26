@@ -1,0 +1,2 @@
+Class: cases.ParseTest ..
+OK 2 tests, 0 failed, 2 success

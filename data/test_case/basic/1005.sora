@@ -5,7 +5,7 @@ not/comment
 /
 /notcomment
 // comment \n comment \r comment
-/ /[/]/_/\0/,/\u{2f}\u{2F}/\u{00002f}notcomment
+/ /[/]/_/\0/ /\u{2f}\u{2F}/\u{00002f}notcomment
 "// not comment"
 '// not comment
   // not comment
@@ -15,5 +15,5 @@ not/comment
 
 // Json
 ''''''''
-["test", "not/comment", "/", "/notcomment", "/", "/", ["/"], "/_/\u0000/", "/////notcomment", "// not comment", "// not comment\n// not comment\n// not comment", /]
+["test", "not/comment", "/", "/notcomment", "/", "/", ["/"], "/_/\u0000/", "/////notcomment", "// not comment", "// not comment\n// not comment\n// not comment", "/"]
 ''''''''

@@ -10,7 +10,8 @@ enum ParseErrorKind
     UnclosedArray;
     UnclosedString;
     ExtraClosingBracket;
-    TooManyClosingQuotes;
+    TooManyClosingQuotes(expected:Int, actural:Int);
+	TooManyClosingBracket;
     SeparatorRequired;
 	TooShortIndent;
 	UnmatchedIndentWhiteSpaces;

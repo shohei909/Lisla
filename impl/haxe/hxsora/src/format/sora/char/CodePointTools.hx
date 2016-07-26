@@ -15,7 +15,7 @@ class CodePointTools
 	public static inline var TAB:Int = 0x09;
 	public static inline var EXCLAMATION:Int = 0x21;
 	public static inline var SPACE:Int = 0x20;
-	public static inline var BACK_SLASH:Int = 0x1C;
+	public static inline var BACK_SLASH:Int = 0x5C;
 
 	public static inline function isWhitespace(codePoint:CodePoint):Bool
 	{

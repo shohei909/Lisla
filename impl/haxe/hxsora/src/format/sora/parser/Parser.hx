@@ -1,16 +1,13 @@
 package format.sora.parser;
 
-import format.sora.char.NewLineChar;
 import format.sora.data.Sora;
 import format.sora.data.SoraArray;
 import format.sora.data.SoraString;
 import format.sora.tag.Range;
 import format.sora.tag.Tag;
 import haxe.ds.Option;
-import haxe.io.StringInput;
 import unifill.CodePoint;
 import unifill.Exception;
-import unifill.InternalEncoding;
 using unifill.Unifill;
 using format.sora.char.NewLineCharTools;
 using format.sora.char.CodePointTools;
@@ -29,7 +26,7 @@ class Parser
 		this.config = config;
 		position = 0;
 		errors = [];
-		output = new OutputArray();
+		output = new OutputArray(0);
 		stack = [];
 		topContext = Context.Arr(ArrayContext.Normal(true, true));
 	}
@@ -85,17 +82,15 @@ class Parser
 			// Slash
 			// --------------------------
 			case [CodePointTools.SLASH, ArrayContext.Slash(isInHead, 2)]:
-				topContext = Context.Comment(CommentContext.Document(isInHead));
+				topContext = Context.Comment(new CommentDetail(CommentKind.Document(isInHead)));
 			
 			case [CodePointTools.SLASH, ArrayContext.Slash(isInHead, length)]:
 				topContext = Context.Arr(ArrayContext.Slash(isInHead, length + 1));
 				
-			case [CodePointTools.EXCLAMATION, ArrayContext.Slash(isInHead, 2)]:
-				topContext = Context.Comment(CommentContext.Keeping);
-				
 			case [_, ArrayContext.Slash(isInHead, 2)]:
-				topContext = Context.Comment(CommentContext.Normal);
-				process(codePoint);
+				var commentDetail = new CommentDetail(CommentKind.Normal);
+				topContext = Context.Comment(commentDetail);
+				processComment(codePoint, commentDetail);
 				
 			case [_, ArrayContext.Slash(isInHead, 1)]:
 				startUnquotedString(CodePoint.fromInt(CodePointTools.SLASH));
@@ -126,7 +121,7 @@ class Parser
 				}
 				else
 				{
-					error(ParseErrorKind.TooManyClosingQuotes);
+					error(ParseErrorKind.TooManyClosingBracket);
 				}
 				
 				topContext = Context.Arr(Normal(false, true));
@@ -139,14 +134,14 @@ class Parser
 				{
 					error(ParseErrorKind.SeparatorRequired);
 				}
-				topContext = Context.OpenningQuote(false, 0);
+				topContext = Context.OpenningQuote(false, 1);
 				
 			case [CodePointTools.SINGLE_QUOTE, ArrayContext.Normal(_, separated)]:
 				if (!separated)
 				{
 					error(ParseErrorKind.SeparatorRequired);
 				}
-				topContext = Context.OpenningQuote(true, 0);
+				topContext = Context.OpenningQuote(true, 1);
 				
 			// --------------------------
 			// Other, Normal
@@ -158,22 +153,52 @@ class Parser
 				}
 				else
 				{
+					if (!separated)
+					{
+						error(ParseErrorKind.SeparatorRequired);
+					}
 					startUnquotedString(codePoint);
 				}
 		}
 	}
 	
-	private inline function processComment(codePoint:CodePoint, commentContext:CommentContext):Void
+	private inline function processComment(codePoint:CodePoint, detail:CommentDetail):Void
 	{
-		switch (commentContext)
+		switch [codePoint.toInt(), detail.context]
 		{
-			case CommentContext.Normal:
+			case [CodePointTools.EXCLAMATION, CommentContext.Head]:
+				detail.keeping = true;
+				detail.context = CommentContext.Body;
+			
+			case [_, CommentContext.Head]:
+				detail.context = CommentContext.Body;
+				processComment(codePoint, detail);
+				
+			case [CodePointTools.LF, CommentContext.CarriageReturn | CommentContext.Body]:
+				writeComment(codePoint, detail);
+				endComment(detail);
+			
+			case [_, CommentContext.CarriageReturn]:
+				endComment(detail);
+				process(codePoint);
+			
+			case [CodePointTools.CR, CommentContext.Body]:
+				writeComment(codePoint, detail);
+				detail.context = CommentContext.CarriageReturn;
+			
+			case [_, CommentContext.Body]:
+				writeComment(codePoint, detail);
+		}
+	}
+	
+	public function writeComment(codePoint:CodePoint, detail:CommentDetail):Void
+	{
+		switch (detail.kind)
+		{
+			case CommentKind.Normal:
 				// TODO: format tag
 				
-			case CommentContext.Keeping:
-				// TODO: format tag
-				
-			case CommentContext.Document(isInHead):
+			case CommentKind.Document(isInHead):
 				if (isInHead)
 				{
 					output.footTag.writeDocument(config, codePoint, position - 1);
@@ -230,6 +255,7 @@ class Parser
 					if (detail.quoteCount <= length)
 					{
 						endClosedQuotedString(length, detail);
+						process(codePoint);
 					}
 					else
 					{
@@ -385,7 +411,7 @@ class Parser
 					0x30 | 0x31 | 0x32 | 0x33 | 0x34 | 0x35 | 0x36 | 0x37 | 0x38 | 0x39, // 0-9
 					EscapeSequenceContext.UnicodeBody(count, value)
 				]:
-				value = (value << 4) & (code - 0x30);
+				value = (value << 4) | (code - 0x30);
 				detail.context = EscapeSequenceContext.UnicodeBody(count + 1, value);
 				Option.None;
 				
@@ -393,7 +419,7 @@ class Parser
 					0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46, // A-F
 					EscapeSequenceContext.UnicodeBody(count, value)
 				]:
-				value = (value << 4) & (code - 0x41 + 11);
+				value = (value << 4) | (code - 0x41 + 10);
 				detail.context = EscapeSequenceContext.UnicodeBody(count + 1, value);
 				Option.None;
 				
@@ -401,12 +427,12 @@ class Parser
 					0x61 | 0x62 | 0x63 | 0x64 | 0x65 | 0x66, // a-f 
 					EscapeSequenceContext.UnicodeBody(count, value)
 				]:
-				value = (value << 4) & (code - 0x61 + 11);
+				value = (value << 4) | (code - 0x61 + 10);
 				detail.context = EscapeSequenceContext.UnicodeBody(count + 1, value);
 				Option.None;
 				
 			case [CodePointTools.CLOSEING_BRACE, EscapeSequenceContext.UnicodeBody(count, value)]:
-				if (count == 0 || 8 < count)
+				if (count == 0 || 6 < count)
 				{
 					error(ParseErrorKind.InvalidDigitUnicodeEscape, new Range(detail.startPosition, position));
 					Option.Some("");
@@ -436,7 +462,7 @@ class Parser
 	private inline function startArray():Void 
 	{
 		this.stack.push(output);
-		output = new OutputArray();
+		output = new OutputArray(position);
 		topContext = Context.Arr(Normal(false, true));
 	}
 
@@ -479,17 +505,24 @@ class Parser
 			}
 		}
 		
+		while (stack.length > 0)
+		{
+			var nextOutput = stack.pop();
+			error(ParseErrorKind.UnclosedArray, new Range(nextOutput.startPosition - 1, nextOutput.startPosition));
+			endArray(nextOutput);
+		}
+		
 		return output.end();
 	}
 	
-	private inline function endComment(context:CommentContext) 
+	private inline function endComment(detail:CommentDetail) 
 	{
-		switch (context)
+		switch (detail.kind)
 		{
-			case CommentContext.Document(isInHead):
+			case CommentKind.Document(isInHead):
 				topContext = Context.Arr(Normal(isInHead, true));
 			
-			case CommentContext.Normal | CommentContext.Keeping:
+			case CommentKind.Normal:
 				topContext = Context.Arr(Normal(false, true));
 		}
 	}
@@ -499,6 +532,8 @@ class Parser
 		var arr = new SoraArray(output.data, nextOutput.popTag());
 		
 		nextOutput.data.push(Sora.Arr(arr));
+		output = nextOutput;
+		
 		topContext = Context.Arr(Normal(false, true));
 	}
 	
@@ -506,9 +541,7 @@ class Parser
 	{
 		if (length == 2)
 		{
-			output.data.push(
-				Sora.Str(new SoraString("", output.popTag()))
-			);
+			output.data.push(Sora.Str(new SoraString("", output.popTag())));
 			topContext = Context.Arr(Normal(false, false));
 		}
 		else
@@ -554,7 +587,7 @@ class Parser
 	{
 		if (quoteCount > detail.quoteCount)
 		{
-			error(ParseErrorKind.TooManyClosingQuotes, new Range(position - quoteCount, position));
+			error(ParseErrorKind.TooManyClosingQuotes(detail.quoteCount, quoteCount), new Range(position - quoteCount, position));
 		}
 		
 		var string = "";
@@ -565,7 +598,7 @@ class Parser
 		if (iter.hasNext())
 		{
 			var firstLine = iter.next();
-			if (!firstLine.isWhite)
+			if (!firstLine.isWhite())
 			{
 				string += firstLine.content + firstLine.newLine;
 			}
@@ -588,13 +621,19 @@ class Parser
 				}
 				else
 				{
-					string += line.content.substr(lastIndent) + line.newLine;
+					string += line.content.substr(lastIndent);
+					if (iter.hasNext() || !lastLine.isWhite())
+					{
+						string += line.newLine;
+					}
 				}
 			}
+			
+			string += lastLine.content.substr(lastIndent);
 		}
 		else
 		{
-			string = lastLine.content.substr(lastIndent);
+			string = lastLine.content;
 		}
 		
 		var soraString = new SoraString(string, output.popTag());
@@ -651,7 +690,7 @@ private enum Context
 	OpenningQuote(singleQuoted:Bool, length:Int);
 	QuotedString(detail:QuotedStringDetail);
 	UnquotedString(detail:UnquotedStringDetail);
-	Comment(detail:CommentContext);
+	Comment(detail:CommentDetail);
 }
 
 private enum ArrayContext 
@@ -683,7 +722,6 @@ private class QuotedStringDetail
 	public inline function newLine(string:String, position:Int):Void 
 	{
 		currentLine.newLine = string;
-		currentLine.isWhite = context.equals(QuotedStringContext.Indent);
 		lines.push(currentLine);
 		currentLine = new QuotedStringLine(position);
 		context = QuotedStringContext.Indent;
@@ -718,7 +756,11 @@ private class QuotedStringLine
 	public var content:String;
 	public var indent:Int;
 	public var newLine:String;
-	public var isWhite:Bool;
+	
+	public function isWhite():Bool
+	{
+		return content.length == indent;
+	}
 	
 	public inline function new(startPosition:Int) 
 	{
@@ -777,33 +819,55 @@ private enum UnquotedStringContext
 	EscapeSequence(detail:EscapeSequenceDetail);
 }
 
-private enum CommentContext 
+private class CommentDetail
+{
+	public var keeping:Bool;
+	public var context:CommentContext;
+	public var kind(default, null):CommentKind;
+	
+	public inline function new (kind:CommentKind)
+	{
+		this.kind = kind;
+		this.keeping = false;
+		this.context = CommentContext.Head;
+	}
+}
+
+private enum CommentKind
 {
 	Normal;
-	Keeping;
 	Document(isInHead:Bool);
+}
+
+private enum CommentContext
+{
+	Head;
+	Body;
+	CarriageReturn;
 }
 
 private class OutputArray 
 {
+	public var startPosition(default, null):Int;
 	public var data:Array<Sora>;
 	public var footTag:Tag;
 	private var tag:Tag;
 	
-	public function new () 
+	public function new (startPosition:Int) 
 	{
+		this.startPosition = startPosition;
 		data = [];
 		footTag = new Tag();
 	}
 	
-	public function popTag():Tag
+	public inline function popTag():Tag
 	{
 		var oldTag = this.footTag;
 		this.footTag = new Tag();
 		return oldTag;
 	}
 	
-	public function end():SoraArray
+	public inline function end():SoraArray
 	{
 		return new SoraArray(data, tag);
 	}
