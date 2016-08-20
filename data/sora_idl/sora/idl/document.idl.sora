@@ -1,7 +1,0 @@
-/// 'Document tags for Sora IDL'
-/// [Schema sora.idl.Idl]
-/// [License "public domain"]
-
-[Enum TypeDefineDocumentTag
-    [DocumentTag [documentTag String]]
-]

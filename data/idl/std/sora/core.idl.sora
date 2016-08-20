@@ -1,0 +1,50 @@
+/// 'Basic types'
+/// [license "public domain"]
+/// [schema sora.idl.Idl]
+
+[package sora]
+
+/// '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'
+[alias Int64 String]
+
+/// '32 bit integer.'
+[alias Int32 String]
+
+/// '16 bit integer.'
+[alias Int16 String]
+
+/// '8 bit integer.'
+[alias Int8 String]
+
+[alias UInt64 String]
+[alias UInt32 String]
+[alias UInt16 String]
+[alias UInt8 String]
+
+[alias Float64 String]
+
+/// 'true or false.'
+[enum Boolean true false]
+
+[alias DateTime String]
+[alias Date String]
+[alias Time String]
+
+[tuple [KeyValue K V]
+    [key K]
+    [value V]
+]
+
+[alias [Map K V]
+    [Array [KeyValue K V]]
+]
+
+[tuple Unit]
+[tuple [Single T1]
+	[element1 T1]
+]
+
+[alias [Option T] [Array T]]
+
+[alias [Const [S String]] String]
+[alias [FixedArray [L Int]] String]

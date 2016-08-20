@@ -1,0 +1,17 @@
+#neko
+-neko bin/test.n
+-main TestIdl
+-cp test/idl
+-cp test/core
+-cp src/core
+-cp src/idl
+-lib nanotest
+-lib unifill
+
+--next
+-cmd neko "bin/test.n" 1>bin/report/idl/neko.txt
+
+--next
+-lib nanotest
+-D result_exit_code
+--macro nanotest.NanoTestRunner.readResult('bin/report/idl/neko.txt', ['test', 'src'], 'Neko')

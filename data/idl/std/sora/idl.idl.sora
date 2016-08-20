@@ -1,0 +1,98 @@
+/// 'IDL for Sora Interface Description Language (Sora IDL)'
+/// [schema sora.idl.Idl]
+
+[package sora]
+
+[import sora.core]
+
+/// [document_tag sora.idl.document.IdlDocumentTag]
+[tuple Idl
+    [header_tags.. HeaderTag]
+    [package_decleartions? PackageDecleartion [Package]]
+    [import_decleartions.. ImportDecleartion]
+    [type_definitions.. TypeDefinition]
+]
+
+[enum HeaderTag
+    overwrite
+]
+
+[enum PackageDecleartion
+    [package [package PackagePath]]
+]
+
+[enum ImportDecleartion
+    [import [module ModulePath]]
+]
+
+/// [document_tag sora.idl.document.TypeDefinitionDocumentTag]
+[enum TypeDefinition
+    [struct [name TypeNameDecleartion] [arguments.. Argument]]
+    [enum [name TypeNameDecleartion] [constuctors.. [Array EnumConstuctor]]]
+    [alias [name TypeNameDecleartion] [type TypeReference]]
+    [union [name TypeNameDecleartion] [elements.. UnionElement]]
+    [tuple [name TypeNameDecleartion] [arguments.. Argument]]
+]
+[union TypeNameDecleartion
+    [primitive TypeName]
+    [generic GenericTypeName]
+]
+[tuple GenericTypeName
+    [name TypeName]
+    [parameters.. TypeParameterDecleartion]
+]
+
+[union TypeParameterDecleartion
+    [type_name TypeName]
+    [dependent DependentTypeParameterDecleartion]
+]
+
+[tuple DependentTypeParameterDecleartion
+    [name TypeName]
+    [type TypeReference]
+]
+
+
+/// [document_tag sora.idl.document.ArgumentDocumentTag]
+[tuple Argument 
+    [name ArgumentName]
+    [type TypeReference]
+    [default_value? [Option Any] []]
+]
+[alias ArgumentName String]
+
+
+// [document_tag sora.idl.document.EnumConstructorDocumentTag]
+[union EnumConstuctor
+    [name EnumConstuctoName]
+    [parameterized ParametrizedEnumConstuctor]
+]
+
+[tuple ParametrizedEnumConstuctor
+    [name EnumConstuctoName]
+    [arguments.. Argument]
+]
+[alias EnumConstuctorName String]
+
+
+/// [document_tag sora.idl.document.UnionElementDocumentTag]
+[tuple UnionElement 
+    [name UnionElementName]
+    [type TypeReference]
+]
+[alias UnionElementName String]
+
+
+[alias PackagePath [String]]
+[alias ModulePath [String]]
+[alias TypePath [String]]
+
+[union TypeReference
+    [primitive TypePath]
+    [generic GenericTypeReference]
+]
+
+[tuple GenericTypeReference
+    [type_path TypePath] 
+    [parameters.. TypeReference]
+]

@@ -1,0 +1,5 @@
+-neko bin/generator.n
+-main sora.project.generator.Main
+-lib unifill
+-cp src
+-cp ../../src
