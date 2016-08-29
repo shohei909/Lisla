@@ -48,4 +48,9 @@ abstract PackagePath(Array<String>)
 	{
 		return this.join(".");
 	}
+	
+	public function toArray():Array<String>
+	{
+		return this;
+	}
 }

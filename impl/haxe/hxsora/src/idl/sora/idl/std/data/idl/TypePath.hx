@@ -4,35 +4,41 @@ import sora.core.ds.Result;
 
 class TypePath
 {
-	public var filePath(default, null):Option<ModulePath>;
-	public var typeName(default, null):TypeName;
-	
-	private function new(path:Array<String>)
+	public var modulePath:Option<ModulePath>;
+	public var typeName:TypeName;
+
+	public function new(modulePath:Option<ModulePath>, typeName:TypeName)
 	{
-		if (path.length == 0)
-		{
-			throw "Type path must not be empty.";
-		}
-		else if (path.length == 1)
-		{
-			filePath = Option.None;
-		}
-		else
-		{
-			filePath = Option.Some(new ModulePath(path.slice(0, path.length - 1)));
-		}
-		
-		var typeNameString = path[path.length - 1];	
-		typeName = new TypeName(typeNameString);
+		this.modulePath = modulePath;
+		this.typeName = typeName;
 	}
 	
 	public static function create(string:String):Result<TypePath, String>
 	{
-		var array = string.split(".");
-		
+		return createFromArray(string.split("."));
+	}
+	
+	public static function createFromArray(array:Array<String>):Result<TypePath, String>
+	{
+		if (array.length == 0)
+		{
+			return Result.Err("Type array must not be empty.");
+		}
 		return try 
 		{
-			Result.Ok(new TypePath(array));
+			var modulePath = if (array.length == 1)
+			{
+				Option.None;
+			}
+			else
+			{
+				Option.Some(new ModulePath(array.slice(0, array.length - 1)));
+			}
+			var typeNameString = array[array.length - 1];	
+			
+			Result.Ok(
+				new TypePath(modulePath, new TypeName(typeNameString))
+			);
 		}
 		catch (err:String)
 		{
@@ -42,13 +48,25 @@ class TypePath
 	
 	public function toString():String
 	{
-		return switch (filePath)
+		return switch (modulePath)
 		{
-			case Option.Some(_filePath):
-				_filePath.toString() + "." + typeName.toString();
+			case Option.Some(_modulePath):
+				_modulePath.toString() + "." + typeName.toString();
 				
 			case Option.None:
 				typeName.toString();
+		}
+	}
+	
+	public function isCoreType():Bool
+	{
+		return switch (modulePath)
+		{
+			case Option.None if (typeName.toString() == "String" || typeName.toString() == "Array"):
+				true;
+				
+			case _:
+				false;
 		}
 	}
 }

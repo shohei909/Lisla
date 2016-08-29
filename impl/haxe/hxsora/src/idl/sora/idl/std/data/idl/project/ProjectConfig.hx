@@ -9,12 +9,12 @@ class ProjectConfig
 	public var sourceConfig(default, null):SourceConfig;
 	public var outputConfig(default, null):OutputConfig;
 	
-	private function new(
+	public function new(
 		sourceConfig:SourceConfig, 
-		outputConfig:OutputConfig, 
+		outputConfig:OutputConfig
 	):Void
 	{
 		this.sourceConfig = sourceConfig;
-		this.dataOutputConfig = dataOutputConfig;
+		this.outputConfig = outputConfig;
 	}
 }

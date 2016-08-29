@@ -4,12 +4,12 @@ import sora.core.ds.Result;
 
 class ModulePath 
 {
-	public var directoryPath(default, null):PackagePath;
+	public var packagePath(default, null):PackagePath;
 	public var fileName(default, null):String;
 	
 	public function new(path:Array<String>)
 	{
-		directoryPath = new PackagePath(path.slice(0, path.length - 1));
+		packagePath = new PackagePath(path.slice(0, path.length - 1));
 		fileName = path[path.length - 1];
 		PackagePath.validateElement(fileName);
 	}
@@ -29,7 +29,12 @@ class ModulePath
 	
 	public function toString():String
 	{
-		var directoryString = directoryPath.toString();
+		var directoryString = packagePath.toString();
 		return if (directoryString.length == 0) fileName else directoryString + "." + fileName;
+	}
+	
+	public function toArray():Array<String>
+	{
+		return packagePath.toArray().concat([fileName]);
 	}
 }

@@ -4,7 +4,7 @@ import sora.core.ds.Result;
 import sora.idl.std.data.idl.PackagePath;
 import sora.idl.std.data.idl.TypeName;
 
-class TypePathPrefix
+class TypeGroupPath
 {
 	public var packagePath(default, null):PackagePath;
 	public var typeName(default, null):Option<TypeName>;
@@ -22,7 +22,7 @@ class TypePathPrefix
 			throw "Package name　and type name must not be empty.";
 		}
 		
-		typeName = switch (TypeName.create(typeNameString))
+		switch (TypeName.create(lastString))
 		{
 			case Result.Ok(t):
 				if (path.length < 2)
@@ -30,11 +30,24 @@ class TypePathPrefix
 					throw "Module name is required";
 				}
 				packagePath = new PackagePath(path.slice(0, path.length - 1));
-				Option.Some(t);
+				typeName = Option.Some(t);
 				
 			case Result.Err(_):
 				packagePath = new PackagePath(path);
-				Option.None;
+				typeName = Option.None;
+		}
+	}
+	
+	public static function create(string:String):Result<TypeGroupPath, String>
+	{
+		var array = string.split(".");
+		return try 
+		{
+			Result.Ok(new TypeGroupPath(array));
+		}
+		catch (err:String)
+		{
+			Result.Err(err);
 		}
 	}
 }

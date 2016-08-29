@@ -259,7 +259,7 @@ class Parser
 		}
 	}
 	
-	private inline function processQuotedString(codePoint:CodePoint, detail:QuotedStringDetail):Void
+	private function processQuotedString(codePoint:CodePoint, detail:QuotedStringDetail):Void
 	{
 		switch (detail.context) 
 		{
@@ -347,7 +347,7 @@ class Parser
 		}
 	}
 	
-	private inline function processUnquotedString(codePoint:CodePoint, detail:UnquotedStringDetail):Void
+	private function processUnquotedString(codePoint:CodePoint, detail:UnquotedStringDetail):Void
 	{
 		switch [codePoint.toInt(), detail.context]
 		{
@@ -412,7 +412,7 @@ class Parser
 		}
 	}
 
-	private inline function processEscapeSequence(codePoint:CodePoint, detail:EscapeSequenceDetail):Option<String>
+	private function processEscapeSequence(codePoint:CodePoint, detail:EscapeSequenceDetail):Option<String>
 	{
 		var code = codePoint.toInt();
 		
@@ -757,7 +757,7 @@ private class QuotedStringDetail
 	public var quoteCount:Int;
 	public var tag:UnsettledStringTag;
 	
-	public inline function new(singleQuoted:Bool, quoteCount:Int, tag:UnsettledStringTag) 
+	public function new(singleQuoted:Bool, quoteCount:Int, tag:UnsettledStringTag) 
 	{
 		this.singleQuoted = singleQuoted;
 		this.quoteCount = quoteCount;

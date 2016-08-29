@@ -1,13 +1,14 @@
 package sora.core.ds;
 import haxe.Constraints.IMap;
 
-class Set<T>
+@:generic
+class Set<T> 
 {
 	private var map:Map<T, Bool>;
 	
-	public inline function new()
+	public inline function new(map:Map<T, Bool>)
 	{
-		this = map;
+		this.map = map;
 	}
 	
 	public inline function set(element:T):Void
@@ -25,7 +26,7 @@ class Set<T>
 		return map.remove(element);
 	}
 	
-	public function iterator():Iterator<V> 
+	public function iterator():Iterator<T> 
 	{
 		return map.keys();
 	}

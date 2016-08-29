@@ -2,5 +2,5 @@ package sora.idl.std.data.idl;
 
 enum ImportDeclaration 
 {
-	Import(file:ModulePath);
+	Import(module:ModulePath);
 }

@@ -5,7 +5,6 @@ import nanotest.NanoTestRunner;
 
 /**
  * ...
- * 
  */
 class TestCore
 {

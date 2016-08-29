@@ -6,7 +6,7 @@ class SourcePosition
 	public var row(default, null):Int;
 	public var index(default, null):Int;
 	
-	public inline function new(line:Int, row:Int, index:Int) 
+	public function new(line:Int, row:Int, index:Int) 
 	{
 		this.line = line;
 		this.row = row;
