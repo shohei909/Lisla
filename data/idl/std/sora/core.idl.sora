@@ -1,6 +1,6 @@
 /// 'Basic types'
-/// [license "public domain"]
 /// [schema sora.idl.Idl]
+/// [license "public domain"]
 
 [package sora]
 

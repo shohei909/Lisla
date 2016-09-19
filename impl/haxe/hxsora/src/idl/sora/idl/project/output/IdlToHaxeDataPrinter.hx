@@ -26,7 +26,6 @@ class IdlToHaxeDataPrinter
 	private static function print(context:IdlToHaxePrintContext):Void
 	{
 		var targets = context.dataOutputConfig.targets;
-		trace(targets);
 		var types = switch (context.source.resolveGroups(targets))
 		{
 			case Result.Ok(_types):

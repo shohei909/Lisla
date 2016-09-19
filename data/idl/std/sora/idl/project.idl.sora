@@ -1,8 +1,0 @@
-/// 'IDL for Sora IDL Project File'
-/// [license "public domain"]
-/// [schema sora.idl.Idl]
-
-[package sora.idl]
-
-[import sora.core]
-[import sora.idl]

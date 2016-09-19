@@ -43,7 +43,7 @@ class DataOutputConfig
 			TypePathFilterTools.createPrefix("sora.core.UInt8", "sora.idl.std.data.core.SoraUInt8"),
 			TypePathFilterTools.createPrefix("sora.core.Map", "sora.idl.std.data.core.SoraMap"),
 			TypePathFilterTools.createPrefix("sora.core.Boolean", "sora.idl.std.data.core.SoraBoolean"),
-			TypePathFilterTools.createPrefix("sora.core.SoraFloat64", "sora.idl.std.data.core.SoraFloat64"),
+			TypePathFilterTools.createPrefix("sora.core.Float64", "sora.idl.std.data.core.SoraFloat64"),
 			TypePathFilterTools.createPrefix("sora.core.Date", "sora.idl.std.data.core.SoraDate"),
 			TypePathFilterTools.createPrefix("sora.core.Time", "sora.idl.std.data.core.SoraTime"),
 			TypePathFilterTools.createPrefix("sora.core.DateTime", "sora.idl.std.data.core.SoraDateTime"),

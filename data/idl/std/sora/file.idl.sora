@@ -1,0 +1,7 @@
+/// 'File API'
+/// [schema sora.idl.Idl]
+/// [license "public domain"]
+
+[package sora]
+
+[alias FilePath String]

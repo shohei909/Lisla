@@ -57,7 +57,7 @@
 [tuple Argument 
     [name ArgumentName]
     [type TypeReference]
-    [default_value? [Option Any] []]
+    [default_value [Option Any] []]
 ]
 [alias ArgumentName String]
 

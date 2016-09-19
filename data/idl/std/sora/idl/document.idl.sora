@@ -4,8 +4,10 @@
 
 [package sora.idl]
 
+[import sora.file]
+
 [enum IdlDocumentTag
-    [repath [path SoraFilePath]]
+    [repath [path FilePath]]
 ]
 
 [enum TypeDefinitionDocumentTag

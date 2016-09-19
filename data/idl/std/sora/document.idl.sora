@@ -7,12 +7,12 @@
 
 [tuple [Document DocumentTag]
     [comment String]
-    [parameters.. DocumentTag]
+    [tags{} DocumentTag]
 ]
 
-[enum DefaultFileTag
-    [license [license String]]
-    [author [auther String]]
-    [schema [schema SoraTypeRefarence]]
-    [document_type [document_type String]]
-]
+// [struct DefaultFileTag
+//     [license [license String]]
+//     [author [auther String]]
+//     [schema [schema TypeReference]]
+//     [document_type [document_type String]]
+// ]

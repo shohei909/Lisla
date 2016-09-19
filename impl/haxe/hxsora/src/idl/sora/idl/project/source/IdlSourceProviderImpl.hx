@@ -383,6 +383,11 @@ private class TypeGroupResolver
 				{
 					if (!currentPackage.directory.children.exists(childName))
 					{
+						if (StringTools.endsWith(childName, ".idl.sora"))
+						{
+							childName = childName.substr(0, childName.length - 9);
+						}
+						
 						var childPath = currentPath.concat([childName]);
 						var childElement = initPackage(childPath.join("/"));
 						currentPackage.directory.children[childName] = childElement;
@@ -515,6 +520,7 @@ private class UnshortenRunner
 				}
 				
 			case Option.None:
+				if (!path.isCoreType())
 				if (!path.isCoreType())
 				{
 					if (typeParameters.exists(path.typeName))
