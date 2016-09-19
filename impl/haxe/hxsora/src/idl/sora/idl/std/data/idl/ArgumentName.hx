@@ -1,6 +1,7 @@
 package sora.idl.std.data.idl;
 import sora.core.ds.Result;
-import sora.core.string.CaseTools;
+using sora.core.ds.ResultTools;
+using sora.core.string.IdentifierTools;
 using StringTools;
 
 class ArgumentName 
@@ -29,10 +30,9 @@ class ArgumentName
 		{
 			kind = Normal;
 		}
-		
-		if (name.length == 0)
+		if (!name.isSnakeCase())
 		{
-			throw "must not be empty.";
+			throw "argument name must be snake case name";
 		}
 		
 		this.name = name;
@@ -50,9 +50,9 @@ class ArgumentName
 		}
 	}
 	
-	public function toCamelCase():Result<String, String>
+	public function toVariableName():Result<String, String>
 	{
-		return CaseTools.toCamelCase(name);
+		return name.toCamelCase().map(IdentifierTools.escapeKeyword);
 	}
 }
 

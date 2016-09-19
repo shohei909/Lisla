@@ -42,7 +42,7 @@ class TypeDefinitionDesoralizer
 							case "union":
 								var arrayContext = new DesoralizeArrayContext(context, array, 1);
 								var name = arrayContext.read(TypeNameDeclarationDesoralizer.process).getOrThrow();
-								var elements = arrayContext.readRest(UnionElementDesoralizer.process).getOrThrow();
+								var elements = arrayContext.readRest(UnionConstructorDesoralizer.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Union.bind(name, elements));	
 							
 							case data:

@@ -17,7 +17,7 @@ class TypeNameDeclarationTools
 		}
 	}
 	
-	public static inline function getParameters(nameDeclaration:TypeNameDeclaration):Iterable<TypeParameterDeclaration>
+	public static inline function getParameters(nameDeclaration:TypeNameDeclaration):Array<TypeParameterDeclaration>
 	{
 		return switch (nameDeclaration)
 		{

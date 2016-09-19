@@ -18,6 +18,8 @@
     <class path="src" />
     <class path="..\..\src\core" />
     <class path="..\..\src\idl" />
+    <class path="..\..\generated" />
+    <class path="..\..\migration" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -26,7 +28,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="sora.idl.generator.Main" />
     <option enabledebug="False" />
-    <option additional="--times &#xA;-dce full" />
+    <option additional="-dce full" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

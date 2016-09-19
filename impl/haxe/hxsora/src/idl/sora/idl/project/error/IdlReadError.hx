@@ -21,8 +21,18 @@ class IdlReadError
 				
 			case IdlReadErrorKind.Desoralize(error):
 				error.toString();
+				
 			case IdlReadErrorKind.ModuleDupplicated(module, existingPath):
 				"Module " + module + " is dupplicated with " + existingPath;
+				
+			case IdlReadErrorKind.ArgumentNameDupplicated(name):
+				"Argument name " + name + " is dupplicated";
+				
+			case IdlReadErrorKind.TypeDependenceNameDupplicated(name):
+				"Type dependent name " + name + " is dupplicated";
+				
+			case IdlReadErrorKind.TypeParameterNameDupplicated(name):
+				"Type parameter name " + name + " is dupplicated";
 				
 			case IdlReadErrorKind.InvalidPackage(expected, actual):
 				"Package name " + expected + " is expected but " + actual;

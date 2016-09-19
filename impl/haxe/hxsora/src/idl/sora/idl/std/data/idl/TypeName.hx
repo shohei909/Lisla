@@ -1,6 +1,6 @@
 package sora.idl.std.data.idl;
 import sora.core.ds.Result;
-import sora.core.string.CaseTools;
+import sora.core.string.IdentifierTools;
 
 abstract TypeName(String) 
 {
@@ -29,11 +29,11 @@ abstract TypeName(String)
 	{
 		if (string.length == 0)
 		{
-			throw "TypeName must not be empty.";
+			throw "Type name must not be empty.";
 		}
 		else if (!headEReg.match(string.substr(0, 1)))
 		{
-			throw "Type name must start with lowercase alphabet.";
+			throw "Type name must start with uppercase alphabet.";
 		}
 		else if (!bodyEReg.match(string.substr(1)))
 		{

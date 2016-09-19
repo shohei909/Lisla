@@ -1,7 +1,7 @@
 package sora.idl.std.data.idl.project;
 import haxe.ds.Option;
 import sora.idl.std.data.idl.path.TypeGroupPath;
-import sora.idl.std.data.idl.path.TypeRenameFilter;
+import sora.idl.std.data.idl.path.TypePathFilter;
 import sora.idl.std.data.idl.project.DesoralizerOutputConfig;
 
 class OutputConfig
@@ -9,6 +9,7 @@ class OutputConfig
 	public var outputDirectory:String;
 	public var dataOutputConfig:DataOutputConfig;
 	public var desoralizerOutputConfig:Option<DesoralizerOutputConfig>;
+	public var indent:String;
 	
 	public function new(
 		outputDirectory:String,
@@ -19,5 +20,6 @@ class OutputConfig
 		this.outputDirectory = outputDirectory;
 		this.dataOutputConfig = dataOutputConfig;
 		this.desoralizerOutputConfig = if (desoralizerOutputConfig == null) Option.None else desoralizerOutputConfig;
+		this.indent = "    ";
 	}
 }

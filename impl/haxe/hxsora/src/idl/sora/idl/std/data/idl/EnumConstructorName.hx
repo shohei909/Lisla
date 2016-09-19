@@ -1,6 +1,6 @@
 package sora.idl.std.data.idl;
 import sora.core.ds.Result;
-import sora.core.string.CaseTools;
+import sora.core.string.IdentifierTools;
 
 abstract EnumConstructorName(String) 
 {
@@ -16,6 +16,6 @@ abstract EnumConstructorName(String)
 	
 	public function toPascalCase():Result<String, String>
 	{
-		return CaseTools.toPascalCase(this);
+		return IdentifierTools.toPascalCase(this);
 	}
 }

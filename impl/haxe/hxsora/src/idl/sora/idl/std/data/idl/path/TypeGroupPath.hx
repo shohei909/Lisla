@@ -3,6 +3,7 @@ import haxe.ds.Option;
 import sora.core.ds.Result;
 import sora.idl.std.data.idl.PackagePath;
 import sora.idl.std.data.idl.TypeName;
+import sora.idl.std.data.idl.TypePath;
 
 class TypeGroupPath
 {
@@ -48,6 +49,46 @@ class TypeGroupPath
 		catch (err:String)
 		{
 			Result.Err(err);
+		}
+	}
+	
+	public function filter(typePath:TypePath, dest:TypeGroupPath):Option<TypePath>
+	{
+		var typePathString = typePath.toString();
+		var groupString = toString();
+		return if (StringTools.startsWith(typePathString, groupString))
+		{
+			var localPath = typePathString.substr(groupString.length);
+			if (localPath == "" || StringTools.startsWith(localPath, "."))
+			{
+				switch (TypePath.create(dest.toString() + localPath))
+				{
+					case Result.Ok(data):
+						Option.Some(data);
+						
+					case Result.Err(_):
+						Option.None;
+				}
+			}
+			else
+			{
+				Option.None;
+			}
+		}
+		else
+		{
+			Option.None;
+		}
+	}
+	public function toString():String
+	{
+		return packagePath.toString() + switch (typeName)
+		{
+			case Option.Some(name):
+				"." + name.toString();
+				
+			case Option.None:
+				"";
 		}
 	}
 }

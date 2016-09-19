@@ -26,7 +26,7 @@ class TypeDefinitionTools
 		return TypeNameDeclarationTools.getName(getNameDeclaration(typeDefinition));
 	}
 	
-	static public function getTypeParameters(typeDefinition:TypeDefinition):TypeParameterDeclaration
+	public static function getTypeParameters(typeDefinition:TypeDefinition):Array<TypeParameterDeclaration>
 	{
 		return TypeNameDeclarationTools.getParameters(getNameDeclaration(typeDefinition));
 	}

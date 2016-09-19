@@ -31,7 +31,7 @@ class IdlDesoralizer
 				{
 					var arrayContext = new DesoralizeArrayContext(context, array, 0);
 					var headerTags = null; // arrayContext.readRest(HeaderTagDesoralizer.process).getOrThrow();
-					var packageDeclearations = arrayContext.read(PackageDeclarationDesoralizer.process).getOrThrow(); //
+					var packageDeclearations = arrayContext.read(PackageDeclarationDesoralizer.process).getOrThrow(); 
 					var importDeclearations = arrayContext.readRest(ImportDeclearationDesoralizer.process).getOrThrow();
 					var typeDefinitions = arrayContext.readRest(TypeDefinitionDesoralizer.process).getOrThrow();
 					arrayContext.close(Idl.new.bind(headerTags, packageDeclearations, importDeclearations, typeDefinitions));

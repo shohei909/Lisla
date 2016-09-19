@@ -1,6 +1,7 @@
 package sora.idl.std.data.idl;
 import haxe.ds.Option;
 import sora.core.ds.Result;
+import sora.idl.std.data.idl.path.TypeGroupPath;
 
 class TypePath
 {
@@ -67,6 +68,40 @@ class TypePath
 				
 			case _:
 				false;
+		}
+	}
+	
+	public function toHaxeTypePath():haxe.macro.Expr.TypePath
+	{
+		return switch (modulePath)
+		{
+			case Option.None if (typeName.toString() == "String"):
+				{
+					pack: ["sora", "core"],
+					name: "SoraString",
+					params: [],
+				}
+				
+			case Option.None if (typeName.toString() == "Array"):
+				{
+					pack: ["sora", "core"],
+					name: "SoraArray",
+					params: [],
+				}
+				
+			case Option.None:
+				{
+					pack: [],
+					name: typeName.toString(),
+					params: [],
+				}
+			
+			case Option.Some(pack):
+				{
+					pack: pack.toArray(),
+					name: typeName.toString(),
+					params: [],
+				}
 		}
 	}
 }

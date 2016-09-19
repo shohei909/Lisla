@@ -21,10 +21,10 @@ class TypeParameterDeclarationDesoralizer
 					
 				case Option.None:
 			}
-			switch (unionContext.read(DependentTypeParameterDeclarationDesoralizer.process).getOrThrow())
+			switch (unionContext.read(TypeDependenceDeclarationDesoralizer.process).getOrThrow())
 			{
 				case Option.Some(data):
-					return Result.Ok(TypeParameterDeclaration.Dependent(data));
+					return Result.Ok(TypeParameterDeclaration.Dependence(data));
 					
 				case Option.None:
 			}

@@ -23,10 +23,10 @@ class EnumConstructorDesoralizer
 					
 				case Option.None:
 			}
-			switch (unionContext.read(ParamerterizedEnumConstructorDesoralizer.process).getOrThrow())
+			switch (unionContext.read(ParameterizedEnumConstructorDesoralizer.process).getOrThrow())
 			{
 				case Option.Some(data):
-					return Result.Ok(EnumConstructor.Paramerterized(data));
+					return Result.Ok(EnumConstructor.Parameterized(data));
 					
 				case Option.None:
 			}

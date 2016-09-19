@@ -8,8 +8,8 @@
 /// [document_tag sora.idl.document.IdlDocumentTag]
 [tuple Idl
     [header_tags.. HeaderTag]
-    [package_decleartions? PackageDecleartion [Package]]
-    [import_decleartions.. ImportDecleartion]
+    [package_declaration PackageDeclaration [Package]]
+    [import_declarations.. ImportDeclaration]
     [type_definitions.. TypeDefinition]
 ]
 
@@ -17,40 +17,40 @@
     overwrite
 ]
 
-[enum PackageDecleartion
+[enum PackageDeclaration
     [package [package PackagePath]]
 ]
 
-[enum ImportDecleartion
+[enum ImportDeclaration
     [import [module ModulePath]]
 ]
 
 /// [document_tag sora.idl.document.TypeDefinitionDocumentTag]
 [enum TypeDefinition
-    [struct [name TypeNameDecleartion] [arguments.. Argument]]
-    [enum [name TypeNameDecleartion] [constuctors.. [Array EnumConstuctor]]]
-    [alias [name TypeNameDecleartion] [type TypeReference]]
-    [union [name TypeNameDecleartion] [elements.. UnionElement]]
-    [tuple [name TypeNameDecleartion] [arguments.. Argument]]
+    [struct [name TypeNameDeclaration] [arguments.. Argument]]
+    [enum [name TypeNameDeclaration] [constructors.. EnumConstructor]]
+    [alias [name TypeNameDeclaration] [type TypeReference]]
+    [union [name TypeNameDeclaration] [elements.. UnionConstructor]]
+    [tuple [name TypeNameDeclaration] [arguments.. Argument]]
 ]
-[union TypeNameDecleartion
+[union TypeNameDeclaration
     [primitive TypeName]
     [generic GenericTypeName]
 ]
 [tuple GenericTypeName
     [name TypeName]
-    [parameters.. TypeParameterDecleartion]
+    [parameters.. TypeParameterDeclaration]
 ]
-
-[union TypeParameterDecleartion
+[union TypeParameterDeclaration
     [type_name TypeName]
-    [dependent DependentTypeParameterDecleartion]
+    [dependence TypeDependenceDeclaration]
 ]
-
-[tuple DependentTypeParameterDecleartion
-    [name TypeName]
+[alias TypeName String]
+[tuple TypeDependenceDeclaration
+    [name TypeDependenceName]
     [type TypeReference]
 ]
+[alias TypeDependenceName String]
 
 
 /// [document_tag sora.idl.document.ArgumentDocumentTag]
@@ -63,24 +63,24 @@
 
 
 // [document_tag sora.idl.document.EnumConstructorDocumentTag]
-[union EnumConstuctor
-    [name EnumConstuctoName]
-    [parameterized ParametrizedEnumConstuctor]
+[union EnumConstructor
+    [primitive EnumConstructorName]
+    [parameterized ParameterizedEnumConstructor]
 ]
 
-[tuple ParametrizedEnumConstuctor
-    [name EnumConstuctoName]
+[tuple ParameterizedEnumConstructor
+    [name EnumConstructorName]
     [arguments.. Argument]
 ]
-[alias EnumConstuctorName String]
+[alias EnumConstructorName String]
 
 
-/// [document_tag sora.idl.document.UnionElementDocumentTag]
-[tuple UnionElement 
-    [name UnionElementName]
+/// [document_tag sora.idl.document.UnionConstructorDocumentTag]
+[tuple UnionConstructor 
+    [name UnionConstructorName]
     [type TypeReference]
 ]
-[alias UnionElementName String]
+[alias UnionConstructorName String]
 
 
 [alias PackagePath [String]]
