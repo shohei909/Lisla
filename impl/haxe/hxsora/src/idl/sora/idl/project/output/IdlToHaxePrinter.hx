@@ -1,6 +1,6 @@
 package sora.idl.project.output;
 import haxe.ds.Option;
-import sora.idl.project.IdlToHaxePrintContext;
+import sora.idl.project.output.IdlToHaxePrintContext;
 import sora.idl.project.io.IoProvider;
 import sora.idl.project.source.IdlSourceProviderImpl;
 import sora.idl.std.data.idl.project.OutputConfig;

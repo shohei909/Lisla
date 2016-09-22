@@ -11,9 +11,9 @@ class FilePathDesoralizer
 {
 	public static function process(context:DesoralizeContext):Result<ModulePath, DesoralizeError> 
 	{
-		return switch (context.sora)
+		return switch (StringDesoralizer.process(context))
 		{
-			case Sora.Str(string):
+			case Result.Ok(string):
 				switch (ModulePath.create(string.data))
 				{
 					case Result.Ok(data):
@@ -23,8 +23,8 @@ class FilePathDesoralizer
 						Result.Err(DesoralizeError.ofString(string, Option.None, DesoralizeErrorKind.Unknown(message)));
 				}
 				
-			case Sora.Arr(array):
-				Result.Err(DesoralizeError.ofSora(context.sora, DesoralizeErrorKind.CantBeArray));
+			case Result.Err(error):
+				Result.Err(error);
 		}
 	}
 }

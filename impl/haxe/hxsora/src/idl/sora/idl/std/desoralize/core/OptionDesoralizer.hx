@@ -1,4 +1,4 @@
-package sora.idl.std.desoralize.standard;
+package sora.idl.std.desoralize.core;
 import haxe.ds.Option;
 import sora.idl.desoralize.DesoralizeContext;
 import sora.idl.desoralize.DesoralizeError;

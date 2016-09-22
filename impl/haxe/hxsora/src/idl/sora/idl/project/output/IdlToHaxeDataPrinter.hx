@@ -1,7 +1,8 @@
 package sora.idl.project.output;
 
 import sora.core.ds.Result;
-import sora.idl.project.IdlToHaxePrintContext;
+import sora.idl.project.output.IdlToHaxePrintContext;
+import sora.idl.project.output.path.HaxeDataTypePath;
 import sora.idl.std.data.idl.TypePath;
 using sora.core.ds.ResultTools;
 
@@ -16,10 +17,9 @@ class IdlToHaxeDataPrinter
 	private static function recordPredefinedTypes(context:IdlToHaxePrintContext):Void
 	{
 		var predefinedTypes = context.dataOutputConfig.predefinedTypes;
-		for (key in predefinedTypes.keys())
+		for (type in predefinedTypes)
 		{
-			var path = TypePath.create(key);
-			context.interfaceRecord.add(path.getOrThrow(), predefinedTypes[key]);
+			context.interfaceStore.add(type.path, type);
 		}
 	}
 	
@@ -42,16 +42,15 @@ class IdlToHaxeDataPrinter
 		for (typePath in types.keys())
 		{
 			var config = context.dataOutputConfig;
-			var convertedPath:TypePath = config.applyFilters(typePath);
-			if (context.interfaceRecord.exists(convertedPath))
+			var convertedPath = config.toHaxeDataPath(typePath);
+			if (context.interfaceStore.exists(convertedPath))
 			{
 				continue;
 			}
 			
 			// context.interfaceRecord.add(convertedPath, );
 			
-			var convertedType = IdlToHaxeDataConverter.convertType(typePath, types[typePath], config);
-			
+			var convertedType = IdlToHaxeDataConverter.convertType(convertedPath, types[typePath], config);
 			context.printer.printType(convertedType);
 		}
 	}

@@ -1,8 +1,8 @@
-package sora.idl.project.output.record;
+package sora.idl.project.output.store;
 
 class HaxeDataClassInterface
 {
 	public function new() 
 	{
-	}	
+	}
 }

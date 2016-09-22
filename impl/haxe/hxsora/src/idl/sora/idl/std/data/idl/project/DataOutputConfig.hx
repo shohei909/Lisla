@@ -6,8 +6,14 @@ import haxe.macro.ExprTools;
 import haxe.macro.Type;
 import haxe.macro.Type.BaseType;
 import sora.core.Sora;
-import sora.idl.project.output.record.HaxeDataEnumInterface;
-import sora.idl.project.output.record.HaxeDataInterface;
+import sora.core.SoraArray;
+import sora.core.SoraString;
+import sora.idl.project.output.path.HaxeDataTypePath;
+import sora.idl.project.output.store.HaxeDataClassInterface;
+import sora.idl.project.output.store.HaxeDataEnumInterface;
+import sora.idl.project.output.store.HaxeDataInterface;
+import sora.idl.project.output.store.HaxeDataInterfaceKind;
+import sora.idl.std.data.idl.ModulePath;
 import sora.idl.std.data.idl.TypeName;
 import sora.idl.std.data.idl.TypePath;
 import sora.idl.std.data.idl.path.TypeGroupPath;
@@ -17,6 +23,7 @@ using sora.core.ds.ResultTools;
 using sora.idl.std.tools.idl.path.TypePathFilterTools;
 using haxe.macro.TypeTools;
 using haxe.macro.ComplexTypeTools;
+using sora.core.ds.OptionTools;
 
 class DataOutputConfig
 {
@@ -30,9 +37,11 @@ class DataOutputConfig
 		this.targets = targets;
 		this.filters = [	
 			TypePathFilterTools.createPrefix("sora", "sora.idl.std.data"),
+			TypePathFilterTools.createPrefix("Array", "sora.core.SoraArray"),
+			TypePathFilterTools.createPrefix("String", "sora.core.SoraString"),
+			TypePathFilterTools.createPrefix("sora.core.Any", "sora.core.Sora"),
 			TypePathFilterTools.createPrefix("sora.core.Option", "sora.idl.std.data.core.SoraOption"),
 			TypePathFilterTools.createPrefix("sora.core.Single", "sora.idl.std.data.core.SoraSingle"),
-			TypePathFilterTools.createPrefix("sora.core.Any", "sora.core.Sora"),
 			TypePathFilterTools.createPrefix("sora.core.Int64", "sora.idl.std.data.core.SoraInt64"),
 			TypePathFilterTools.createPrefix("sora.core.Int32", "sora.idl.std.data.core.SoraInt32"),
 			TypePathFilterTools.createPrefix("sora.core.Int16", "sora.idl.std.data.core.SoraInt16"),
@@ -52,6 +61,8 @@ class DataOutputConfig
 		predefinedTypes = new Map();
 		
 		this.addPredefinedType(Sora);
+		this.addPredefinedType(SoraArray);
+		this.addPredefinedType(SoraString);
 		this.addPredefinedType(ArgumentName);
 		this.addPredefinedType(EnumConstructorName);
 		this.addPredefinedType(ModulePath);
@@ -62,7 +73,7 @@ class DataOutputConfig
 		this.addPredefinedType(UnionConstructorName);
 	}
 	
-	public function applyFilters(typePath:TypePath):TypePath
+	public function toHaxeDataPath(typePath:TypePath):HaxeDataTypePath
 	{
 		var l = filters.length;
 		for (i in 0...l)
@@ -71,16 +82,17 @@ class DataOutputConfig
 			switch (filter.apply(typePath))
 			{
 				case Option.Some(convertedPath):
-					return convertedPath;
+					typePath = convertedPath;
+					break;
 					
 				case Option.None:
 			}
 		}
 		
-		return typePath;
+		return new HaxeDataTypePath(typePath);
 	}
 	
-	public function addPredefinedTypeDirectly(path:String, data:HaxeDataInterface):Void
+	public function addPredefinedTypeDirectly(path:String, data:sora.idl.project.output.store.HaxeDataInterface):Void
 	{
 		predefinedTypes[path] = data;
 	}
@@ -90,34 +102,45 @@ class DataOutputConfig
 	public macro function addPredefinedType(_this:Expr, expr:Expr):Expr
 	{
 		var type = Context.getType(ExprTools.toString(expr));
-		var typeName:String = type.toComplexType().toString();
+		var typePathString:String = type.toComplexType().toString();
+		var baseType:BaseType;
 		
 		var data:Expr = switch (type)
 		{
 			case TInst(ref, params):
-				addPredefinedClass(ref.get(), params);
+				addPredefinedClass(baseType = ref.get(), params);
 				
 			case TAbstract(ref, params):
-				addPredefinedClass(ref.get(), params);
+				addPredefinedClass(baseType = ref.get(), params);
 		
 			case TEnum(ref, params):
-				macro sora.idl.project.output.record.HaxeDataInterface.Enum(
-					new sora.idl.project.output.record.HaxeDataEnumInterface()
+				baseType = ref.get();
+				macro HaxeDataInterfaceKind.Enum(
+					new HaxeDataEnumInterface()
 				);
 						
 			case _: 
 				throw "unsupported type " + type;
 		}
 		
-		return macro $_this.addPredefinedTypeDirectly($v{typeName}, $data);
+		return macro $_this.addPredefinedTypeDirectly(
+			$v{typePathString}, 
+			new HaxeDataInterface(
+				new HaxeDataTypePath(
+					new TypePath(
+						Option.Some(new ModulePath($v{baseType.pack})), 
+						new TypeName($v{baseType.name})
+					)
+				),
+				$data
+			)
+		);
 	}
 	
 	#if macro
 	private static function addPredefinedClass(ref:BaseType, params:Array<Type>):Expr
 	{
-		return macro sora.idl.project.output.record.HaxeDataInterface.Class(
-			new sora.idl.project.output.record.HaxeDataClassInterface()
-		);
+		return macro HaxeDataInterfaceKind.Class(new HaxeDataClassInterface());
 	}
 	#end
 }

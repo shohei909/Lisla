@@ -52,6 +52,7 @@ class IdlSourceProviderImpl implements IdlSourceProvider
 		var result:Map<TypePath, TypeDefinition> = new Map();
 		for (target in targets)
 		{
+			trace(target.packagePath, target.typeName);
 			new TypeGroupResolver(this, result, errors, target);
 		}
 		
@@ -81,7 +82,14 @@ private class TypeGroupResolver
 		this.errors = errors;
 		this.groupPath = groupPath;
 		
-		var pathArray = groupPath.packagePath.toArray();
+		var pathArray = switch (groupPath.packagePath)
+		{
+			case Option.Some(path):
+				path.toArray();
+				
+			case Option.None:
+				return;
+		}
 		var packageElement = switch (getCacheWithPath(pathArray))
 		{
 			case Option.Some(data):

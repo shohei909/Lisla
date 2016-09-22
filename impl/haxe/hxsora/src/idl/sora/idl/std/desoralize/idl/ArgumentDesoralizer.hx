@@ -12,7 +12,7 @@ import sora.idl.std.data.idl.Argument;
 import sora.idl.std.data.core.SoraOption;
 import sora.idl.std.data.core.Unit;
 import sora.idl.std.desoralize.idl.TypeReferenceDesoralizer;
-import sora.idl.std.desoralize.standard.OptionDesoralizer;
+import sora.idl.std.desoralize.core.OptionDesoralizer;
 using sora.core.ds.ResultTools;
 
 class ArgumentDesoralizer

@@ -1,4 +1,4 @@
-package sora.idl.std.data.idl;
+	package sora.idl.std.data.idl;
 import sora.core.ds.Result;
 import sora.core.string.IdentifierTools;
 

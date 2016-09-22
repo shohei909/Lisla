@@ -1,4 +1,4 @@
-package sora.idl.std.desoralize.standard;
+package sora.idl.std.desoralize.core;
 import haxe.ds.Option;
 import sora.core.Sora;
 import sora.idl.desoralize.DesoralizeArrayContext;
@@ -6,11 +6,12 @@ import sora.idl.desoralize.DesoralizeContext;
 import sora.idl.desoralize.DesoralizeError;
 import sora.idl.desoralize.DesoralizeErrorKind;
 import sora.core.ds.Result;
-import sora.idl.std.data.core.Unit;
+import sora.idl.std.data.core.SoraSingle;
+using sora.core.ds.ResultTools;
 
-class UnitDesoralizer
+class SingleDesoralizer
 {
-	public static function process(context:DesoralizeContext):Result<Unit, DesoralizeError>
+	public static function process<T>(tProcess:DesoralizeContext->Result<T, DesoralizeError>, context:DesoralizeContext):Result<SoraSingle<T>, DesoralizeError> 	
 	{
 		return switch (context.sora)
 		{
@@ -21,12 +22,13 @@ class UnitDesoralizer
 				try
 				{
 					var arrayContext = new DesoralizeArrayContext(context, array, 0);
-					arrayContext.close(Unit.new);
+					var element1 = arrayContext.read(tProcess).getOrThrow();
+					arrayContext.close(SoraSingle.new.bind(element1));
 				}
 				catch (error:DesoralizeError)
 				{
 					Result.Err(error);
 				}
 		}
-	}	
+	}
 }

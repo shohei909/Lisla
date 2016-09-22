@@ -4,10 +4,11 @@ import sora.core.ds.Result;
 import sora.idl.std.data.idl.PackagePath;
 import sora.idl.std.data.idl.TypeName;
 import sora.idl.std.data.idl.TypePath;
+using sora.core.ds.OptionTools;
 
 class TypeGroupPath
 {
-	public var packagePath(default, null):PackagePath;
+	public var packagePath(default, null):Option<PackagePath>;
 	public var typeName(default, null):Option<TypeName>;
 	
 	public function new (path:Array<String>)
@@ -26,15 +27,19 @@ class TypeGroupPath
 		switch (TypeName.create(lastString))
 		{
 			case Result.Ok(t):
-				if (path.length < 2)
+				packagePath = if (path.length < 2)
 				{
-					throw "Module name is required";
+					Option.None;
 				}
-				packagePath = new PackagePath(path.slice(0, path.length - 1));
+				else
+				{
+					Option.Some(new PackagePath(path.slice(0, path.length - 1)));
+				}
+				
 				typeName = Option.Some(t);
 				
 			case Result.Err(_):
-				packagePath = new PackagePath(path);
+				packagePath = Option.Some(new PackagePath(path));
 				typeName = Option.None;
 		}
 	}
@@ -80,15 +85,23 @@ class TypeGroupPath
 			Option.None;
 		}
 	}
+	
 	public function toString():String
 	{
-		return packagePath.toString() + switch (typeName)
+		var str = switch [packagePath, typeName]
 		{
-			case Option.Some(name):
-				"." + name.toString();
+			case [Option.Some(pack), Option.Some(name)]:
+				pack.toString() + "." + name.toString();
 				
-			case Option.None:
+			case [Option.Some(pack), Option.None]:
+				pack.toString();
+				
+			case [Option.None, Option.Some(name)]:
+				name.toString();
+				
+			case [Option.None, Option.None]:
 				"";
 		}
+		return str;
 	}
 }

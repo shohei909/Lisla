@@ -39,7 +39,7 @@ class TypeParameterDeclarationTools
 					result.push(
 						{
 							name: dependence.name.toString(),
-							type: ComplexType.TPath(TypeReferenceTools.toHaxeTypePath(dependence.type, config)),
+							type: ComplexType.TPath(TypeReferenceTools.toMacroTypePath(dependence.type, config)),
 						}
 					);
 					

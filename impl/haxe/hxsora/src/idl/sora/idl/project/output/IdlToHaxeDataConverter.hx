@@ -4,15 +4,11 @@ import haxe.macro.Expr;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.Field;
 import haxe.macro.Expr.FieldType;
-import haxe.macro.Expr.Function;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeDefKind;
-import haxe.macro.Type.MethodKind;
-import haxe.macro.Type.VarAccess;
+import sora.idl.project.output.path.HaxeDataTypePath;
 import sora.idl.std.data.idl.Argument;
 import sora.idl.std.data.idl.EnumConstructor;
-import sora.idl.std.data.idl.TypeParameterDeclaration;
-import sora.idl.std.data.idl.TypePath;
 import sora.idl.std.data.idl.project.DataOutputConfig;
 import sora.idl.std.tools.idl.TypeDefinitionTools;
 import sora.idl.std.tools.idl.TypeParameterDeclarationTools;
@@ -26,10 +22,9 @@ using sora.idl.std.tools.idl.TypeReferenceTools;
 
 class IdlToHaxeDataConverter
 {
-	public static function convertType(path:TypePath, source:IdlTypeDefinition, config:DataOutputConfig):HaxeTypeDefinition
+	public static function convertType(path:HaxeDataTypePath, source:IdlTypeDefinition, config:DataOutputConfig):HaxeTypeDefinition
 	{
 		var fields:Array<Field> = [];
-		var convertedPath:TypePath = config.applyFilters(path);
 		var kind:TypeDefKind;
 		var name = TypeDefinitionTools.getName(source);
 		var params = TypeParameterDeclarationTools.toHaxeParams(TypeDefinitionTools.getTypeParameters(source));
@@ -84,7 +79,7 @@ class IdlToHaxeDataConverter
 				
 				
 			case IdlTypeDefinition.Alias(name, type):
-				var haxeType = ComplexType.TPath(type.toHaxeTypePath(config));
+				var haxeType = ComplexType.TPath(type.toMacroTypePath(config));
 				kind = TypeDefKind.TDAbstract(haxeType, [], [haxeType]);
 				fields.push(
 					createNew(
@@ -111,7 +106,7 @@ class IdlToHaxeDataConverter
 									args: [
 										{
 											name: constructor.name.toVariableName(),
-											type: ComplexType.TPath(constructor.type.toHaxeTypePath(config)),
+											type: ComplexType.TPath(constructor.type.toMacroTypePath(config)),
 										}
 									].concat(additionalFields),
 									ret: null,
@@ -133,8 +128,8 @@ class IdlToHaxeDataConverter
 		}
 		
 		return {
-			pack : convertedPath.modulePath.getOrThrow().toArray(),
-			name : convertedPath.typeName.toString(),
+			pack : path.getModuleArray(),
+			name : path.typeName.toString(),
 			params: params,
 			pos : null,
 			kind : kind,
@@ -147,7 +142,7 @@ class IdlToHaxeDataConverter
 		return [
 			for (argument in source)
 			{
-				var typePath = ComplexType.TPath(argument.type.toHaxeTypePath(config));
+				var typePath = ComplexType.TPath(argument.type.toMacroTypePath(config));
 				typePath = switch (argument.name.kind)
 				{
 					case Normal | Structure | Skippable:

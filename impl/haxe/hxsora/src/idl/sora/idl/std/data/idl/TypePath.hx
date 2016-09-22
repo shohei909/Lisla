@@ -71,37 +71,15 @@ class TypePath
 		}
 	}
 	
-	public function toHaxeTypePath():haxe.macro.Expr.TypePath
+	public function getModuleArray():Array<String>
 	{
 		return switch (modulePath)
 		{
-			case Option.None if (typeName.toString() == "String"):
-				{
-					pack: ["sora", "core"],
-					name: "SoraString",
-					params: [],
-				}
-				
-			case Option.None if (typeName.toString() == "Array"):
-				{
-					pack: ["sora", "core"],
-					name: "SoraArray",
-					params: [],
-				}
+			case Option.Some(_modulePath):
+				_modulePath.toArray();
 				
 			case Option.None:
-				{
-					pack: [],
-					name: typeName.toString(),
-					params: [],
-				}
-			
-			case Option.Some(pack):
-				{
-					pack: pack.toArray(),
-					name: typeName.toString(),
-					params: [],
-				}
+				[];
 		}
 	}
 }

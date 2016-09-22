@@ -56,5 +56,4 @@
 
 [alias [Const [string String]] String]
 [alias [FixedArray [length Int]] String]
-
-[alias Base64Binary String]
+[alias Binary String]
