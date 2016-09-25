@@ -1,0 +1,9 @@
+[package]
+name = "liblitll"
+version = "0.1.0"
+authors = ["shohei909 <909mmsphere@gmail.com>"]
+
+[dependencies]
+rustc-serialize = "0.3"
+
+[dev-dependencies]

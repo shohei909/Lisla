@@ -1,0 +1,19 @@
+// Litll
+''''''''
+"
+Multi
+line
+"
+    '''''    
+    Litll
+    
+     is
+
+      awesome.
+    '''''
+''''''''
+
+// Json
+''''''''
+["Multi\nline", "Litll\n\n is\n\n  awesome."]
+''''''''

@@ -1,0 +1,7 @@
+/// 'IDL for Bitll'
+/// [license "public domain"]
+/// [schema litll.idl.Idl]
+
+[package litll]
+
+[alias [VariableInt T] T]

@@ -1,4 +1,4 @@
-# Sora IDL
+# IDL on Litll 
 
-Sora IDL(Sora Interface Description Language)は、Soraのデータ構造を記述するためのスキーマ言語であり、それ自体がSoraで記述されています。
+IDL on Litll(Interface Description Language on Litll)は、Litllのデータ構造を記述するためのスキーマ言語であり、それ自体がLitllです。
 

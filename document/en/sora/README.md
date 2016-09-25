@@ -1,8 +1,8 @@
-# Sora is a human-readable data serialization language 
+# Litll is a human-readable data serialization language 
 
-Sora means "String OR Array". As it suggests, Sora only supports string and array data types.
+Litll means "String OR Array". As it suggests, Litll only supports string and array data types.
 
-So Sora is
+So Litll is
 * easy to learn,
 * easy to read,
 * easy to write,
@@ -12,7 +12,7 @@ YAML is easy to write but difficult to parse. JSON is relatively easy to parse, 
 
 Most of data serialization languages are too complex for many purposes.
 
-Sora is simple, but enough.
+Litll is simple, but enough.
 
 # Syntax
 
@@ -23,7 +23,7 @@ Sora is simple, but enough.
 If a description includes no special characters (`"'[],`), newline characters (LF(#xA), CR(#xD)), whitespaces (`` ``(#x20) or `\t`(#x9)), blacklisted whitespaces, or comment syntax (`//`), it is considered string.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -38,14 +38,14 @@ abcd
     </tr>
 </table>
 
-The root of Sora is array, so that single `abcd` corresponds to `["abcd"]` of JSON.
+The root of Litll is array, so that single `abcd` corresponds to `["abcd"]` of JSON.
 
 ### Quoted string
 
 If you want to include special characters, whitespaces or blacklisted whitespaces in string, you can enclose the string with double quotes `"` or  single quotes `'`.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -63,7 +63,7 @@ If you want to include special characters, whitespaces or blacklisted whitespace
 The quotes number can be 3 or more. 
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -82,7 +82,7 @@ The quotes number can be 3 or more.
 
 ### Multi-line string
 
-Sora supports multi-line quoted string syntax.
+Litll supports multi-line quoted string syntax.
 
 In multi-line string syntax, some whitespaces and newlines are ignored. 
 
@@ -92,7 +92,7 @@ In multi-line string syntax, some whitespaces and newlines are ignored.
 * If the last line has only white spaces, the white spaces and last newline are ignored.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -101,7 +101,7 @@ Multi
 line
 "
     '''''
-    Sora
+    Litll
 
      is
 
@@ -111,7 +111,7 @@ line
         </td>
         <td>
             <pre><code>
-["Multi\nline", "Sora\n\n is\n\n  awesome."]
+["Multi\nline", "Litll\n\n is\n\n  awesome."]
             </code></pre>
         </td>
     </tr>
@@ -119,7 +119,7 @@ line
 
 ## Escape sequences
 
-Sora also supports escape sequences:
+Litll also supports escape sequences:
 
 <table>
     <tr>
@@ -159,7 +159,7 @@ Sora also supports escape sequences:
 Escape sequences can be use in unquoted strings or quoted strings of double-quotes.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -177,7 +177,7 @@ Escape sequences can be use in unquoted strings or quoted strings of double-quot
 In quoted strings of single-quotes, escape sequences are disabled. 
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -194,7 +194,7 @@ In quoted strings of single-quotes, escape sequences are disabled.
 
 ### Blacklisted whitespaces
 
-Below is the blacklist of whitespace characters. They could cause confusing behaviors. So that, Sora prohibits the use of them in unquoted strings.
+Below is the blacklist of whitespace characters. They could cause confusing behaviors. So that, Litll prohibits the use of them in unquoted strings.
 
 * `U+000B` (VT, Vertical Tab)
 * `U+000C` (FF, From feed)
@@ -225,7 +225,7 @@ Below is the blacklist of whitespace characters. They could cause confusing beha
 Whitespaces(`` ``(#x20), `\t`(#x9)) and newlines(LF, CR) are used as separator.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -247,7 +247,7 @@ def
 Nested array starts with opening bracket `[` and ends with closing bracket `]`.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -274,7 +274,7 @@ Nested array starts with opening bracket `[` and ends with closing bracket `]`.
 You can omit separators after or before brackets.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -291,10 +291,10 @@ You can omit separators after or before brackets.
 
 ## Skipping 
 
-Sora skips unquated empty string.
+Litll skips unquated empty string.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -321,7 +321,7 @@ If you want to express empty string, use `""` or `''`.
 
 ## Comment
 
-Sora supports single line comment.
+Litll supports single line comment.
 
 ```
 // this is comment
@@ -349,12 +349,12 @@ Multi-line comment is not supported.
 aaa
 ```
 
-Document comment is also described with Sora. 
+Document comment is also described with Litll. 
 
 ### Keeping comment
 
 ```
-//! Comments start with ! are keeped when Sora is minified.
+//! Comments start with ! are keeped when Litll is minified.
 ///! 'Keeping document comments are also avarable.'
 ```
 
@@ -364,16 +364,16 @@ Supported encoding is UTF-8 (with or without BOM).
 
 ## Filename extension
 
-`.sora`
+`.litll`
 
 ## Implementation
 
 ### Rust
 
-- libsora : Official implementation. 
-- sorac   : CLI tools based on libsora.
+- liblitll : Official implementation. 
+- litllc   : CLI tools based on liblitll.
 
-## To implement new Sora parser.
+## To implement new Litll parser.
 
 Many test cases are prepared. You should check all of them.
 

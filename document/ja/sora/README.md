@@ -1,6 +1,6 @@
-# データ記述言語 Sora
+# データ記述言語 Litll
 
-Soraは、"String OR Array"の略で、この名前の通り、文字列と配列のみをサポートするデータ記述言語です。
+Litllは、"String OR Array"の略で、この名前の通り、文字列と配列のみをサポートするデータ記述言語です。
 
 このため、
 * 学ぶのが簡単で、
@@ -12,7 +12,7 @@ YAMLは記述はしやすいですがパースは難しいです。JSONは比較
 
 ほとんどのデータ記述言語は、ほとんどの目的に対して複雑すぎます。
 
-Soraはシンプルです。ですが、十分な機能があります。
+Litllはシンプルです。ですが、十分な機能があります。
 
 
 
@@ -33,7 +33,7 @@ Soraはシンプルです。ですが、十分な機能があります。
 
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -48,14 +48,14 @@ abcd
     </tr>
 </table>
 
-Soraはルートが配列です。ただ単に`abcd`と記述した場合、JSONの`["abcd"]`という記述と同じになります。
+Litllはルートが配列です。ただ単に`abcd`と記述した場合、JSONの`["abcd"]`という記述と同じになります。
 
 ### クオートされた文字列
 
 文字列に特殊文字を含めたい場合、ダブルクオート`"`またはシングルクオート`'`で、文字列を囲みます。
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -73,7 +73,7 @@ Soraはルートが配列です。ただ単に`abcd`と記述した場合、JSON
 クオートの数は、3つ以上でも構いません。
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -93,7 +93,7 @@ Soraはルートが配列です。ただ単に`abcd`と記述した場合、JSON
 
 ### 複数行文字列
 
-Soraでは、クオートされた文字列で複数行文字列を使うことができます。
+Litllでは、クオートされた文字列で複数行文字列を使うことができます。
 
 複数行文字列では、フォーマットのためのインデントや改行を使いやすくするため、特定の改行や空白文字が無視されます。
 
@@ -103,7 +103,7 @@ Soraでは、クオートされた文字列で複数行文字列を使うこと�
 * 最後の行が空白文字のみからなる場合、その空白文字と、最後の改行は無視されます。
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -112,7 +112,7 @@ Multi
 line
 "
     '''''    
-    Sora
+    Litll
     
      is
 
@@ -122,7 +122,7 @@ line
         </td>
         <td>
             <pre><code>
-["Multi\nline", "Sora\n\n is\n\n  awesome."]
+["Multi\nline", "Litll\n\n is\n\n  awesome."]
             </code></pre>
         </td>
     </tr>
@@ -130,7 +130,7 @@ line
 
 ## Escape sequences
 
-Sora also supports escape sequences:
+Litll also supports escape sequences:
 
 <table>
     <tr>
@@ -170,7 +170,7 @@ Sora also supports escape sequences:
 Escape sequences can be use in unquoted strings or quoted strings of double-quotes.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -188,7 +188,7 @@ Escape sequences can be use in unquoted strings or quoted strings of double-quot
 In quoted strings of single-quotes, escape sequences are disabled. 
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -205,7 +205,7 @@ In quoted strings of single-quotes, escape sequences are disabled.
 
 ### Blacklisted whitespaces
 
-Below is the blacklist of whitespace characters. They could cause confusing behaviors. So that, Sora prohibits the use of them in unquoted strings.
+Below is the blacklist of whitespace characters. They could cause confusing behaviors. So that, Litll prohibits the use of them in unquoted strings.
 
 * `U+000B` (VT, Vertical Tab)
 * `U+000C` (FF, From feed)
@@ -236,7 +236,7 @@ Below is the blacklist of whitespace characters. They could cause confusing beha
 Whitespaces(`` ``(#x20), `\t`(#x9)) and newlines(LF, CR) are used as separator.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -258,7 +258,7 @@ def
 Nested array starts with opening bracket `[` and ends with closing bracket `]`.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -285,7 +285,7 @@ Nested array starts with opening bracket `[` and ends with closing bracket `]`.
 You can omit separators after or before brackets.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -302,10 +302,10 @@ You can omit separators after or before brackets.
 
 ## Skipping 
 
-Sora skips unquated empty string.
+Litll skips unquated empty string.
 
 <table>
-    <tr><th>Sora</th><th>Json</th></tr>
+    <tr><th>Litll</th><th>Json</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -332,7 +332,7 @@ If you want to express empty string, use `""` or `''`.
 
 ## Comment
 
-Sora supports single line comment.
+Litll supports single line comment.
 
 ```
 // this is comment
@@ -360,12 +360,12 @@ Multi-line comment is not supported.
 aaa
 ```
 
-Document comment is also described with Sora. 
+Document comment is also described with Litll. 
 
 ### Keeping comment
 
 ```
-//! Comments start with ! are keeped when Sora is minified.
+//! Comments start with ! are keeped when Litll is minified.
 ///! 'Keeping document comments are also avarable.'
 ```
 
@@ -375,16 +375,16 @@ Supported encoding is UTF-8 (with or without BOM).
 
 ## Filename extension
 
-`.sora`
+`.litll`
 
 ## Implementation
 
 ### Rust
 
-- libsora : Official implementation. 
-- sorac   : CLI tools based on libsora.
+- liblitll : Official implementation. 
+- litllc   : CLI tools based on liblitll.
 
-## To implement new Sora parser.
+## To implement new Litll parser.
 
 Many test cases are prepared. You should check all of them.
 

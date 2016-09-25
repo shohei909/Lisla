@@ -1,0 +1,10 @@
+// Litll
+''''''''
+// this is comment
+string // this is also comment
+''''''''
+
+// Json
+''''''''
+["string"]
+''''''''

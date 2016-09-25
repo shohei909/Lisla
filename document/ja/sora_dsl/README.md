@@ -1,27 +1,27 @@
-# Sora DSL ツールキット
+# Litll DSL ツールキット
 
-Sora DSL ツールキットは、SoraベースのDSLを簡単に作成するためのツール群です。
+Litll DSL ツールキットは、LitllベースのDSLを簡単に作成するためのツール群です。
 
-Sora IDL(Soraインターフェイス記述言語)を使って、データ構造を記述するだけでDSLの作成が終わり、パーサ、バリデータ、シンタックスハイライタ、入力補完を手に入れることができます。
+Litll IDL(Litllインターフェイス記述言語)を使って、データ構造を記述するだけでDSLの作成が終わり、パーサ、バリデータ、シンタックスハイライタ、入力補完を手に入れることができます。
 
 
 # 構成
 
-Sora DSL ツールキットは以下のツールで構成されます。
+Litll DSL ツールキットは以下のツールで構成されます。
 
 ## Rust
 
-### libsora
-RustでSoraをあつかうためのライブラリです
+### liblitll
+RustでLitllをあつかうためのライブラリです
 
 #### 機能
-- [ ] Sora読み込み
-- [ ] Sora書き込み
+- [ ] Litll読み込み
+- [ ] Litll書き込み
 - [ ] フォーマット
 - [ ] ファイル圧縮(minify)
-- [ ] Sora Hash生成
+- [ ] Litll Hash生成
 
-- Sora IDL
+- Litll IDL
     - Rust出力
         - [ ] データ構造生成
         - オブジェクトマッピング
@@ -32,11 +32,11 @@ RustでSoraをあつかうためのライブラリです
         - [ ] コードジャンプ
         - [ ] 入力補完
 
-### sorac
-Soraのためのコマンドラインツール
+### litllc
+Litllのためのコマンドラインツール
 
 #### 機能
-- [ ] Sora → Json変換
+- [ ] Litll → Json変換
 - [ ] ファイル圧縮(minify)
 - [ ] フォーマット
 - [ ] バリデーション
@@ -47,33 +47,33 @@ Soraのためのコマンドラインツール
     - [ ] 入力補完
     - [ ] プラグインシステム
     - プラグイン
-        - [ ] Sora IDL サポート強化
+        - [ ] Litll IDL サポート強化
 
 ## Haxe
 
-### hxsora
-HaxeでSoraをあつかうためのライブラリです。
+### hxlitll
+HaxeでLitllをあつかうためのライブラリです。
 
 #### 機能
-- [ ] Sora読み込み
-- [ ] Sora書き込み
+- [ ] Litll読み込み
+- [ ] Litll書き込み
 - [ ] フォーマット
 - [ ] 圧縮(minify)
-- [ ] Sora Hash生成
+- [ ] Litll Hash生成
 
-- Sora IDL
+- Litll IDL
     - Haxe出力
         - [ ] データ構造生成
         - オブジェクトマッピング
             - [ ] データ構造生成
             - [ ] パーサー生成 
-    - [ ] Sora IDL出力
+    - [ ] Litll IDL出力
 
 
 ## エディタ
 
-### Sora VSCode Plugin
-Visual Studio Code上で、Soraを記述するためのプラグイン
+### Litll VSCode Plugin
+Visual Studio Code上で、Litllを記述するためのプラグイン
 
 #### 機能
 - [ ] フォーマット

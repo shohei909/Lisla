@@ -1,7 +1,0 @@
-/// 'IDL for Bora'
-/// [license "public domain"]
-/// [schema sora.idl.Idl]
-
-[package sora]
-
-[alias [VariableInt T] T]

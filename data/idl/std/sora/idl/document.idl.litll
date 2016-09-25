@@ -1,0 +1,25 @@
+/// 'Document tags for Litll IDL'
+/// [schema litll.idl.Idl]
+/// [license "public domain"]
+
+[package litll.idl]
+
+[import litll.file]
+
+[enum IdlDocumentTag
+    [repath [path FilePath]]
+]
+
+[enum TypeDefinitionDocumentTag
+    [document_tag [document_tag String]]
+    [rename [name String]]
+]
+
+[enum ArgumentDocumentTag
+    [rename [name String]]
+    [initial_value [initial_value String]]
+]
+
+[enum EnumConstuctorDocumentTag
+    [rename [name String]]
+]

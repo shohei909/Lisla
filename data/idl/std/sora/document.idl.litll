@@ -1,0 +1,18 @@
+/// 'IDL for Litll Document Comment'
+/// [license "public domain"]
+/// [schema litll.idl.Idl]
+
+[package litll]
+[import litll.core]
+
+[tuple [Document DocumentTag]
+    [comment String]
+    [tags{} DocumentTag]
+]
+
+// [struct DefaultFileTag
+//     [license [license String]]
+//     [author [auther String]]
+//     [schema [schema TypeReference]]
+//     [document_type [document_type String]]
+// ]

@@ -1,5 +1,5 @@
 # Specification
-## Sora
+## Litll
 - [x] overview
 - [ ] implemention guide line
 - [ ] test case
@@ -20,23 +20,19 @@
                 - [ ] auto complete
 - [ ] japanese
 
-## SoraIDL
+## IDL on Litll 
 - [ ] overview
 - [ ] schora standard library
-- [ ] schora for schora
-    - [ ] constraint
+    - [ ] basic
+    - [x] for IDL
+    - [ ] for Document
 - [ ] japanese
 
 ## Binary format
 Later
 
-## SoraIDL standard library
-- [ ] basic
-- [x] for IDL
-- [ ] for Document
-
 # Rust library
-## Sora
+## Litll
 - [ ] parse
     - [x] basic
     - [ ] document comment
@@ -46,14 +42,19 @@ Later
 - [ ] minify
 - [ ] object map
 - [ ] hash
-
-## SoraIDL
-- [ ] auto generate
-- [ ] lint
-- [ ] documment generate
-- [ ] auto complete
-- [ ] Schora To Rust
-- [ ] Rust To Schora
+- [ ] IDL on Litll
+    - [ ] code generation 
+        - [ ] data structure
+        - [ ] instance
+        - [ ] delitllfy
+        - [ ] litllfy
+        - [ ] debitllfy
+        - [ ] bitllfy
+    - [ ] lint
+    - [ ] documment generate
+    - [ ] auto complete
+    - [ ] Schora To Rust
+    - [ ] Rust To Schora
 
 # Rust CLI tool ()
 - [ ] help
@@ -63,11 +64,18 @@ Later
 - [ ] language server
 
 # Haxe library
-- [ ] parse
-    - [ ] basic
+- [x] parse
+    - [x] basic
     - [ ] document comment
 - [ ] write
 - [ ] format
 - [ ] syntax highlight
 - [ ] minify
-- [ ] object map
+- [ ] code generation
+    - [ ] code generation 
+        - [ ] data structure
+        - [ ] instance
+        - [ ] delitllfy
+        - [ ] litllfy
+        - [ ] debitllfy
+        - [ ] bitllfy
