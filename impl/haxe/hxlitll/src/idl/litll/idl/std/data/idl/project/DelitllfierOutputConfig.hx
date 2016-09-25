@@ -1,7 +1,7 @@
 package litll.idl.std.data.idl.project;
 import haxe.ds.Option;
 import litll.idl.project.output.path.HaxeDataTypePath;
-import litll.idl.project.output.path.HaxeLitllfierTypePath;
+import litll.idl.project.output.path.HaxeDelitllfierTypePath;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.path.TypeGroupPath;
@@ -11,7 +11,7 @@ using litll.core.ds.ResultTools;
 using litll.core.ds.OptionTools;
 using litll.idl.std.tools.idl.path.TypePathFilterTools;
 
-class LitllfierOutputConfig
+class DelitllfierOutputConfig
 {
 	public var targets:Array<TypeGroupPath>;
 	public var filters:Array<TypePathFilter>;
@@ -27,9 +27,9 @@ class LitllfierOutputConfig
 		].concat(filters);
 	}	
 	
-	public function toHaxeLitllfierPath(sourcePath:TypePath):HaxeLitllfierTypePath
+	public function toHaxeDelitllfierPath(sourcePath:TypePath):HaxeDelitllfierTypePath
 	{
-		var typePath = new TypePath(sourcePath.modulePath, new TypeName(sourcePath.typeName.toString() + "Litllfier"));
+		var typePath = new TypePath(sourcePath.modulePath, new TypeName(sourcePath.typeName.toString() + "Delitllfier"));
 		var l = filters.length;
 		for (i in 0...l)
 		{
@@ -44,6 +44,6 @@ class LitllfierOutputConfig
 			}
 		}
 		
-		return new HaxeLitllfierTypePath(typePath);
+		return new HaxeDelitllfierTypePath(typePath);
 	}
 }

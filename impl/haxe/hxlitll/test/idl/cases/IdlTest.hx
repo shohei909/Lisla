@@ -4,7 +4,7 @@ import TestCore;
 import file.FileTools;
 import litll.core.LitllArray;
 import litll.core.ds.Result;
-import litll.idl.std.delitllfy.idl.IdlDelitllfyr;
+import litll.idl.std.delitllfy.idl.IdlDelitllfier;
 import litll.core.parse.Parser;
 import sys.io.File;
 
@@ -27,7 +27,7 @@ class IdlTest extends LitllTestCase
 						continue;
 				}
 				
-				var idl = switch (IdlDelitllfyr.run(caseData))
+				var idl = switch (IdlDelitllfier.run(caseData))
 				{
 					case Result.Ok(data):
 						data;

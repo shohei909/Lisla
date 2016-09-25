@@ -5,6 +5,7 @@
 -cp test/core
 -cp src/core
 -cp src/idl
+-cp generated
 -lib nanotest
 -lib unifill
 

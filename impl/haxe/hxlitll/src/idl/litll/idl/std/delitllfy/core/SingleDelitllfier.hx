@@ -1,31 +1,31 @@
 package litll.idl.std.delitllfy.core;
 import haxe.ds.Option;
 import litll.core.Litll;
-import litll.idl.delitllfy.LitllArrayContext;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllErrorKind;
+import litll.idl.delitllfy.DelitllfyArrayContext;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.core.LitllSingle;
 using litll.core.ds.ResultTools;
 
-class SingleLitllfier
+class SingleDelitllfier
 {
-	public static function process<T>(tProcess:LitllContext->Result<T, LitllError>, context:LitllContext):Result<LitllSingle<T>, LitllError> 	
+	public static function process<T>(tProcess:DelitllfyContext->Result<T, DelitllfyError>, context:DelitllfyContext):Result<LitllSingle<T>, DelitllfyError> 	
 	{
 		return switch (context.litll)
 		{
 			case Litll.Str(string):
-				Result.Err(LitllError.ofString(string, Option.None, LitllErrorKind.CantBeString));
+				Result.Err(DelitllfyError.ofString(string, Option.None, DelitllfyErrorKind.CantBeString));
 				
 			case Litll.Arr(array):
 				try
 				{
-					var arrayContext = new LitllArrayContext(context, array, 0);
+					var arrayContext = new DelitllfyArrayContext(context, array, 0);
 					var element1 = arrayContext.read(tProcess).getOrThrow();
 					arrayContext.close(LitllSingle.new.bind(element1));
 				}
-				catch (error:LitllError)
+				catch (error:DelitllfyError)
 				{
 					Result.Err(error);
 				}

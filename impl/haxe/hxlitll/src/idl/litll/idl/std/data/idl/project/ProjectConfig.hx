@@ -1,7 +1,7 @@
 package litll.idl.std.data.idl.project;
 import haxe.ds.Option;
 import litll.idl.std.data.idl.project.OutputConfig;
-import litll.idl.std.data.idl.project.LitllfierOutputConfig;
+import litll.idl.std.data.idl.project.DelitllfierOutputConfig;
 import litll.idl.std.data.idl.project.SourceConfig;
 
 class ProjectConfig

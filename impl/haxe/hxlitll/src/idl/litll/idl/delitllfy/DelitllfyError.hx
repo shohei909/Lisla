@@ -6,14 +6,14 @@ import litll.core.LitllString;
 import litll.core.LitllTools;
 import litll.core.ds.SourceRange;
 
-class LitllError 
+class DelitllfyError 
 {
-	public var target(default, null):LitllErrorTarget;
-	public var kind(default, null):LitllErrorKind;
-	public var maybeCauses(default, null):Array<LitllError>;
-	public var followings(default, null):Array<LitllError>;
+	public var target(default, null):DelitllfyErrorTarget;
+	public var kind(default, null):DelitllfyErrorKind;
+	public var maybeCauses(default, null):Array<DelitllfyError>;
+	public var followings(default, null):Array<DelitllfyError>;
 	
-	public function new (target:LitllErrorTarget, kind:LitllErrorKind, maybeCauses:Array<LitllError>)
+	public function new (target:DelitllfyErrorTarget, kind:DelitllfyErrorKind, maybeCauses:Array<DelitllfyError>)
 	{
 		this.target = target;
 		this.kind = kind;
@@ -21,17 +21,17 @@ class LitllError
 		this.followings = [];
 	}
 	
-	public static function ofString(string:LitllString, range:Option<SourceRange>, kind:LitllErrorKind):LitllError
+	public static function ofString(string:LitllString, range:Option<SourceRange>, kind:DelitllfyErrorKind):DelitllfyError
 	{
-		return new LitllError(LitllErrorTarget.Str(string, range), kind, []);
+		return new DelitllfyError(DelitllfyErrorTarget.Str(string, range), kind, []);
 	}
 	
-	public static function ofArray(array:LitllArray, index:Int, kind:LitllErrorKind, maybeCauses:Array<LitllError>):LitllError
+	public static function ofArray(array:LitllArray, index:Int, kind:DelitllfyErrorKind, maybeCauses:Array<DelitllfyError>):DelitllfyError
 	{
-		return new LitllError(LitllErrorTarget.Arr(array, index), kind, maybeCauses);
+		return new DelitllfyError(DelitllfyErrorTarget.Arr(array, index), kind, maybeCauses);
 	}
 	
-	public static function ofLitll(litll:Litll, kind:LitllErrorKind):LitllError
+	public static function ofLitll(litll:Litll, kind:DelitllfyErrorKind):DelitllfyError
 	{
 		return switch (litll)
 		{
@@ -47,17 +47,17 @@ class LitllError
 	{
 		return switch (kind)
 		{
-			case LitllErrorKind.UnmatchedUnion | 
-				LitllErrorKind.UnmatchedEnumConstructor(_) | 
-				LitllErrorKind.UnmatchedConst(_) | 
-				LitllErrorKind.CantBeArray | 
-				LitllErrorKind.CantBeString |
-				LitllErrorKind.TooLongArray |
-				LitllErrorKind.EndOfArray |
-				LitllErrorKind.Recoverable(_):
+			case DelitllfyErrorKind.UnmatchedUnion | 
+				DelitllfyErrorKind.UnmatchedEnumConstructor(_) | 
+				DelitllfyErrorKind.UnmatchedConst(_) | 
+				DelitllfyErrorKind.CantBeArray | 
+				DelitllfyErrorKind.CantBeString |
+				DelitllfyErrorKind.TooLongArray |
+				DelitllfyErrorKind.EndOfArray |
+				DelitllfyErrorKind.Recoverable(_):
 				true;
 				
-			case LitllErrorKind.Unknown(_):
+			case DelitllfyErrorKind.Unknown(_):
 				false;
 		}
 	}
@@ -99,10 +99,10 @@ class LitllError
 	{
 		return switch (target)
 		{
-			case LitllErrorTarget.Str(str, Option.None):
+			case DelitllfyErrorTarget.Str(str, Option.None):
 				str.tag.position;
 				
-			case LitllErrorTarget.Str(str, Option.Some(range)):
+			case DelitllfyErrorTarget.Str(str, Option.Some(range)):
 				switch (str.tag.position)
 				{
 					case Option.Some(parentRange):
@@ -111,7 +111,7 @@ class LitllError
 					case Option.None:
 						Option.None;
 				}
-			case LitllErrorTarget.Arr(arr, index):
+			case DelitllfyErrorTarget.Arr(arr, index):
 				if (index < 0)
 				{
 					arr.tag.position;
@@ -131,31 +131,31 @@ class LitllError
 	{
 		return switch (kind)
 		{
-			case LitllErrorKind.UnmatchedUnion:
+			case DelitllfyErrorKind.UnmatchedUnion:
 				"unmatched union";
 				
-			case LitllErrorKind.UnmatchedEnumConstructor(actual, expected):
+			case DelitllfyErrorKind.UnmatchedEnumConstructor(actual, expected):
 				"unmatched enum constructor. '" + expected.join(" | ") + "' expected, but actual '" + actual + "'";
 				
-			case LitllErrorKind.UnmatchedConst(actual, expected):
+			case DelitllfyErrorKind.UnmatchedConst(actual, expected):
 				"unmatched const. '" + expected + "' expected, but actual '" + actual + "'";
 				
-			case LitllErrorKind.CantBeArray:
+			case DelitllfyErrorKind.CantBeArray:
 				"can't be array";
 				
-			case LitllErrorKind.CantBeString:
+			case DelitllfyErrorKind.CantBeString:
 				"can't be string";
 				
-			case LitllErrorKind.TooLongArray:
+			case DelitllfyErrorKind.TooLongArray:
 				"too long array";
 				
-			case LitllErrorKind.EndOfArray:
+			case DelitllfyErrorKind.EndOfArray:
 				"end of array";
 				
-			case LitllErrorKind.Recoverable(message):
+			case DelitllfyErrorKind.Recoverable(message):
 				message;
 				
-			case LitllErrorKind.Unknown(message):
+			case DelitllfyErrorKind.Unknown(message):
 				message;
 		}
 	}

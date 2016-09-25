@@ -14,7 +14,7 @@ class IdlToHaxePrinter
 		switch (context.delitllfierOutputConfig)
 		{
 			case Option.Some(delitllfierOutputConfig):
-				IdlToHaxeLitllfierPrinter.print(context, delitllfierOutputConfig);
+				IdlToHaxeDelitllfierPrinter.print(context, delitllfierOutputConfig);
 				
 			case Option.None:
 				// nothing to do...

@@ -1,16 +1,16 @@
 package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
 import litll.core.Litll;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllErrorKind;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 
-class TypePathLitllfier
+class TypePathDelitllfier
 {
-	public static function process(context:LitllContext):Result<TypePath, LitllError>  
+	public static function process(context:DelitllfyContext):Result<TypePath, DelitllfyError>  
 	{
 		return switch (context.litll)
 		{
@@ -21,11 +21,11 @@ class TypePathLitllfier
 						Result.Ok(data);
 					
 					case Result.Err(message):
-						Result.Err(LitllError.ofString(string, Option.None, LitllErrorKind.Unknown(message)));
+						Result.Err(DelitllfyError.ofString(string, Option.None, DelitllfyErrorKind.Unknown(message)));
 				}
 				
 			case Litll.Arr(array):
-				Result.Err(LitllError.ofLitll(context.litll, LitllErrorKind.CantBeArray));
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.CantBeArray));
 		}
 	}	
 }

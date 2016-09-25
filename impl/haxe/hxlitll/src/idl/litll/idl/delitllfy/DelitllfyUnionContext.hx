@@ -4,18 +4,18 @@ import litll.core.Litll;
 import litll.core.ds.Result;
 using Lambda;
 
-class LitllUnionContext
+class DelitllfyUnionContext
 {
-	private var parent:LitllContext;
-	private var maybeErrors:Array<LitllError>;
+	private var parent:DelitllfyContext;
+	private var maybeErrors:Array<DelitllfyError>;
 	
-	public inline function new (parent:LitllContext)
+	public inline function new (parent:DelitllfyContext)
 	{
 		this.parent = parent;
 		maybeErrors = [];
 	}
 	
-	public inline function read<T>(process:ProcessFunction<T>):Result<Option<T>, LitllError>
+	public inline function read<T>(process:ProcessFunction<T>):Result<Option<T>, DelitllfyError>
 	{
 		return switch (process(parent))
 		{
@@ -35,12 +35,12 @@ class LitllUnionContext
 		}
 	}
 	
-	public inline function close<T>():Result<T, LitllError>
+	public inline function close<T>():Result<T, DelitllfyError>
 	{
-		return createErrorResult(LitllError.ofLitll(parent.litll, LitllErrorKind.UnmatchedUnion));
+		return createErrorResult(DelitllfyError.ofLitll(parent.litll, DelitllfyErrorKind.UnmatchedUnion));
 	}
 	
-	private inline function createErrorResult<T>(error:LitllError):Result<T, LitllError>
+	private inline function createErrorResult<T>(error:DelitllfyError):Result<T, DelitllfyError>
 	{
 		maybeErrors.iter(error.maybeCauses.push);
 		maybeErrors = [];
@@ -49,4 +49,4 @@ class LitllUnionContext
 	}
 }
 
-private typedef ProcessFunction<T> = LitllContext->Result<T, LitllError>;
+private typedef ProcessFunction<T> = DelitllfyContext->Result<T, DelitllfyError>;

@@ -1,6 +1,6 @@
 package litll.idl.delitllfy;
 
-class LitllConfig
+class DelitllfyConfig
 {
 	public var persevering:Bool;
 	

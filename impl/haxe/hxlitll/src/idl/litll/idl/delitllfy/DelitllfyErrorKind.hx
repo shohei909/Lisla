@@ -1,6 +1,6 @@
 package litll.idl.delitllfy;
 
-enum LitllErrorKind
+enum DelitllfyErrorKind
 {
 	// Recoverable
 	CantBeArray;

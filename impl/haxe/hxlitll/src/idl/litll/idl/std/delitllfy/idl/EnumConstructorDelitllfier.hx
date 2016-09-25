@@ -1,29 +1,29 @@
 package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllUnionContext;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyUnionContext;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.TypeReference;
 using litll.core.ds.ResultTools;
 
-class EnumConstructorLitllfier
+class EnumConstructorDelitllfier
 {
 	
-	public static function process(context:LitllContext):Result<EnumConstructor, LitllError> 
+	public static function process(context:DelitllfyContext):Result<EnumConstructor, DelitllfyError> 
 	{
 		return try
 		{
-			var unionContext = new LitllUnionContext(context);
-			switch (unionContext.read(EnumConstructorNameLitllfier.process).getOrThrow())
+			var unionContext = new DelitllfyUnionContext(context);
+			switch (unionContext.read(EnumConstructorNameDelitllfier.process).getOrThrow())
 			{
 				case Option.Some(data):
 					return Result.Ok(EnumConstructor.Primitive(data));
 					
 				case Option.None:
 			}
-			switch (unionContext.read(ParameterizedEnumConstructorLitllfier.process).getOrThrow())
+			switch (unionContext.read(ParameterizedEnumConstructorDelitllfier.process).getOrThrow())
 			{
 				case Option.Some(data):
 					return Result.Ok(EnumConstructor.Parameterized(data));
@@ -32,7 +32,7 @@ class EnumConstructorLitllfier
 			}
 			unionContext.close();
 		}
-		catch (e:LitllError)
+		catch (e:DelitllfyError)
 		{
 			Result.Err(e);
 		}

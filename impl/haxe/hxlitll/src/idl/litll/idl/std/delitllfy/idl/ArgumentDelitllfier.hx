@@ -2,41 +2,41 @@ package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
 import litll.core.Litll;
 import litll.core.LitllArray;
-import litll.idl.delitllfy.LitllArrayContext;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllErrorKind;
-import litll.idl.delitllfy.Litllfier;
+import litll.idl.delitllfy.DelitllfyArrayContext;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
+import litll.idl.delitllfy.Delitllfier;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.core.LitllOption;
 import litll.idl.std.data.core.Unit;
-import litll.idl.std.delitllfy.idl.TypeReferenceLitllfier;
-import litll.idl.std.delitllfy.core.OptionLitllfier;
+import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
+import litll.idl.std.delitllfy.core.OptionDelitllfier;
 using litll.core.ds.ResultTools;
 
-class ArgumentLitllfier
+class ArgumentDelitllfier
 {
-	public static function process(context:LitllContext):Result<Argument, LitllError> 
+	public static function process(context:DelitllfyContext):Result<Argument, DelitllfyError> 
 	{
 		return switch (context.litll)
 		{
 			case Litll.Str(string):
-				Result.Err(LitllError.ofString(string, Option.None, LitllErrorKind.CantBeString));
+				Result.Err(DelitllfyError.ofString(string, Option.None, DelitllfyErrorKind.CantBeString));
 				
 			case Litll.Arr(array):
 				try
 				{
-					var arrayContext = new LitllArrayContext(context, array, 0);
-					var name = arrayContext.read(ArgumentNameLitllfier.process).getOrThrow();
-					var parameters = arrayContext.read(TypeReferenceLitllfier.process).getOrThrow();
+					var arrayContext = new DelitllfyArrayContext(context, array, 0);
+					var name = arrayContext.read(ArgumentNameDelitllfier.process).getOrThrow();
+					var parameters = arrayContext.read(TypeReferenceDelitllfier.process).getOrThrow();
 					var defaultValue = arrayContext.readWithDefault(
-						OptionLitllfier.process.bind(Litllfier.processLitll), 
+						OptionDelitllfier.process.bind(Delitllfier.processLitll), 
 						LitllOption.None(new Unit())
 					).getOrThrow();
 					arrayContext.close(Argument.new.bind(name, parameters, defaultValue));
 				}
-				catch (error:LitllError)
+				catch (error:DelitllfyError)
 				{
 					Result.Err(error);
 				}

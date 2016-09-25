@@ -1,15 +1,15 @@
 package litll.idl.project.output;
 import litll.core.ds.Result;
 import litll.idl.project.output.IdlToHaxePrintContext;
-import litll.idl.project.output.path.HaxeLitllfierTypePathPair;
+import litll.idl.project.output.path.HaxeDelitllfierTypePathPair;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.project.DataOutputConfig;
 import litll.idl.project.source.IdlSourceProviderImpl;
-import litll.idl.std.data.idl.project.LitllfierOutputConfig;
+import litll.idl.std.data.idl.project.DelitllfierOutputConfig;
 
-class IdlToHaxeLitllfierPrinter
+class IdlToHaxeDelitllfierPrinter
 {
-	public static function print(context:IdlToHaxePrintContext, config:LitllfierOutputConfig) :Void
+	public static function print(context:IdlToHaxePrintContext, config:DelitllfierOutputConfig) :Void
 	{
 		var types = switch (context.source.resolveGroups(config.targets))
 		{
@@ -26,8 +26,8 @@ class IdlToHaxeLitllfierPrinter
 		
 		for (typePath in types.keys())
 		{
-			var pathPair = HaxeLitllfierTypePathPair.create(typePath, context.dataOutputConfig, config);
-			var convertedType = IdlToHaxeLitllfierConverter.convertType(pathPair, types[typePath], context, config);
+			var pathPair = HaxeDelitllfierTypePathPair.create(typePath, context.dataOutputConfig, config);
+			var convertedType = IdlToHaxeDelitllfierConverter.convertType(pathPair, types[typePath], context, config);
 			context.printer.printType(convertedType);
 		}
 	}

@@ -2,13 +2,13 @@ package litll.idl.std.delitllfy;
 import litll.core.Litll;
 import litll.core.LitllString;
 import litll.core.ds.Result;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllErrorKind;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 
-class StringLitllfier
+class StringDelitllfier
 {
-	public static inline function process(context:LitllContext):Result<LitllString, LitllError> 
+	public static inline function process(context:DelitllfyContext):Result<LitllString, DelitllfyError> 
 	{
 		return switch (context.litll)
 		{
@@ -16,7 +16,7 @@ class StringLitllfier
 				Result.Ok(string);
 				
 			case Litll.Arr(array):
-				Result.Err(LitllError.ofLitll(context.litll, LitllErrorKind.CantBeArray));
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.CantBeArray));
 		}
 	}
 }

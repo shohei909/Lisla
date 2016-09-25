@@ -1,27 +1,27 @@
 package litll.idl.std.delitllfy.core;
 import haxe.ds.Option;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllUnionContext;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyUnionContext;
 import litll.core.ds.Result;
 import litll.idl.std.data.core.LitllOption;
 using litll.core.ds.ResultTools;
 
-class OptionLitllfier
+class OptionDelitllfier
 {
-	public static function process<T>(tProcess:LitllContext->Result<T, LitllError>, context:LitllContext):Result<LitllOption<T>, LitllError> 
+	public static function process<T>(tProcess:DelitllfyContext->Result<T, DelitllfyError>, context:DelitllfyContext):Result<LitllOption<T>, DelitllfyError> 
 	{
 		return try
 		{
-			var unionContext = new LitllUnionContext(context);
-			switch (unionContext.read(UnitLitllfier.process).getOrThrow())
+			var unionContext = new DelitllfyUnionContext(context);
+			switch (unionContext.read(UnitDelitllfier.process).getOrThrow())
 			{
 				case Option.Some(data):
 					return Result.Ok(LitllOption.None(data));
 					
 				case Option.None:
 			}
-			switch (unionContext.read(SingleLitllfier.process.bind(tProcess)).getOrThrow())
+			switch (unionContext.read(SingleDelitllfier.process.bind(tProcess)).getOrThrow())
 			{
 				case Option.Some(data):
 					return Result.Ok(LitllOption.Some(data));
@@ -30,7 +30,7 @@ class OptionLitllfier
 			}
 			unionContext.close();
 		}
-		catch (e:LitllError)
+		catch (e:DelitllfyError)
 		{
 			Result.Err(e);
 		}

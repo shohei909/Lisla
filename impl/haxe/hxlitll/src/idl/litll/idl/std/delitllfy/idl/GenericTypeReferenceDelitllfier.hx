@@ -1,32 +1,32 @@
 package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
 import litll.core.Litll;
-import litll.idl.delitllfy.LitllArrayContext;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllErrorKind;
+import litll.idl.delitllfy.DelitllfyArrayContext;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.GenericTypeReference;
 using litll.core.ds.ResultTools;
 
-class GenericTypeReferenceLitllfier
+class GenericTypeReferenceDelitllfier
 {
-	public static function process(context:LitllContext):Result<GenericTypeReference, LitllError> 
+	public static function process(context:DelitllfyContext):Result<GenericTypeReference, DelitllfyError> 
 	{
 		return switch (context.litll)
 		{
 			case Litll.Str(string):
-				Result.Err(LitllError.ofString(string, Option.None, LitllErrorKind.CantBeString));
+				Result.Err(DelitllfyError.ofString(string, Option.None, DelitllfyErrorKind.CantBeString));
 				
 			case Litll.Arr(array):
 				try
 				{
-					var arrayContext = new LitllArrayContext(context, array, 0);
-					var name = arrayContext.read(TypePathLitllfier.process).getOrThrow();
-					var parameters = arrayContext.readRest(TypeReferenceLitllfier.process).getOrThrow();
+					var arrayContext = new DelitllfyArrayContext(context, array, 0);
+					var name = arrayContext.read(TypePathDelitllfier.process).getOrThrow();
+					var parameters = arrayContext.readRest(TypeReferenceDelitllfier.process).getOrThrow();
 					arrayContext.close(GenericTypeReference.new.bind(name, parameters));
 				}
-				catch (error:LitllError)
+				catch (error:DelitllfyError)
 				{
 					Result.Err(error);
 				}

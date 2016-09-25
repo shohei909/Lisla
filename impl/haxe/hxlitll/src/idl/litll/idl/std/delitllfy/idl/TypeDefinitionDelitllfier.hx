@@ -1,16 +1,16 @@
 package litll.idl.std.delitllfy.idl;
 import litll.core.Litll;
-import litll.idl.delitllfy.LitllArrayContext;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllErrorKind;
+import litll.idl.delitllfy.DelitllfyArrayContext;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypeDefinition;
 using litll.core.ds.ResultTools;
 
-class TypeDefinitionLitllfier
+class TypeDefinitionDelitllfier
 {
-	public static function process(context:LitllContext):Result<TypeDefinition, LitllError> 
+	public static function process(context:DelitllfyContext):Result<TypeDefinition, DelitllfyError> 
 	{
 		var expected = ["[alias]", "[tuple]", "[enum]", "[union]"];
 		return switch (context.litll)
@@ -22,42 +22,42 @@ class TypeDefinitionLitllfier
 						switch (string.data)
 						{
 							case "alias":
-								var arrayContext = new LitllArrayContext(context, array, 1);
-								var name = arrayContext.read(TypeNameDeclarationLitllfier.process).getOrThrow();
-								var type = arrayContext.read(TypeReferenceLitllfier.process).getOrThrow();
+								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
+								var type = arrayContext.read(TypeReferenceDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Alias.bind(name, type));	
 							
 							case "tuple":
-								var arrayContext = new LitllArrayContext(context, array, 1);
-								var name = arrayContext.read(TypeNameDeclarationLitllfier.process).getOrThrow();
-								var type = arrayContext.readRest(ArgumentLitllfier.process).getOrThrow();
+								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
+								var type = arrayContext.readRest(ArgumentDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Tuple.bind(name, type));	
 							
 							case "enum":
-								var arrayContext = new LitllArrayContext(context, array, 1);
-								var name = arrayContext.read(TypeNameDeclarationLitllfier.process).getOrThrow();
-								var constructors = arrayContext.readRest(EnumConstructorLitllfier.process).getOrThrow();
+								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
+								var constructors = arrayContext.readRest(EnumConstructorDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Enum.bind(name, constructors));	
 							
 							case "union":
-								var arrayContext = new LitllArrayContext(context, array, 1);
-								var name = arrayContext.read(TypeNameDeclarationLitllfier.process).getOrThrow();
-								var elements = arrayContext.readRest(UnionConstructorLitllfier.process).getOrThrow();
+								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
+								var elements = arrayContext.readRest(UnionConstructorDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Union.bind(name, elements));	
 							
 							case data:
-								Result.Err(LitllError.ofArray(array, 0, LitllErrorKind.UnmatchedEnumConstructor("[" + data + "]", expected), []));
+								Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor("[" + data + "]", expected), []));
 						}
 						
 					case Litll.Arr(_):
-						Result.Err(LitllError.ofArray(array, 0, LitllErrorKind.UnmatchedEnumConstructor("[[..]]", expected), []));
+						Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor("[[..]]", expected), []));
 				}
 				
 			case Litll.Arr(_):
-				Result.Err(LitllError.ofLitll(context.litll, LitllErrorKind.UnmatchedEnumConstructor("[]", expected)));
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor("[]", expected)));
 				
 			case Litll.Str(data):
-				Result.Err(LitllError.ofLitll(context.litll, LitllErrorKind.UnmatchedEnumConstructor(data.data, expected)));
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor(data.data, expected)));
 		}
 	}
 }

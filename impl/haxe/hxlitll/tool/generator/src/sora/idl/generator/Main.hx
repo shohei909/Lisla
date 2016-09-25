@@ -5,7 +5,7 @@ import haxe.io.Path;
 import litll.idl.project.IdlProject;
 import litll.idl.std.data.idl.path.TypeGroupPath;
 import litll.idl.std.data.idl.project.DataOutputConfig;
-import litll.idl.std.data.idl.project.LitllfierOutputConfig;
+import litll.idl.std.data.idl.project.DelitllfierOutputConfig;
 import litll.idl.std.data.idl.project.OutputConfig;
 import litll.idl.std.data.idl.project.ProjectConfig;
 import litll.idl.std.data.idl.project.SourceConfig;
@@ -28,7 +28,7 @@ class Main
 					[]
 				),
 				Option.Some(
-					new LitllfierOutputConfig(
+					new DelitllfierOutputConfig(
 						[
 							TypeGroupPath.create("litll").getOrThrow(),
 						],

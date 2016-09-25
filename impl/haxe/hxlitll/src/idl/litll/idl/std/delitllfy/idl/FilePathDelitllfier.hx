@@ -1,17 +1,17 @@
 package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
 import litll.core.Litll;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllErrorKind;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.ModulePath;
 
-class FilePathLitllfier
+class FilePathDelitllfier
 {
-	public static function process(context:LitllContext):Result<ModulePath, LitllError> 
+	public static function process(context:DelitllfyContext):Result<ModulePath, DelitllfyError> 
 	{
-		return switch (StringLitllfier.process(context))
+		return switch (StringDelitllfier.process(context))
 		{
 			case Result.Ok(string):
 				switch (ModulePath.create(string.data))
@@ -20,7 +20,7 @@ class FilePathLitllfier
 						Result.Ok(data);
 					
 					case Result.Err(message):
-						Result.Err(LitllError.ofString(string, Option.None, LitllErrorKind.Unknown(message)));
+						Result.Err(DelitllfyError.ofString(string, Option.None, DelitllfyErrorKind.Unknown(message)));
 				}
 				
 			case Result.Err(error):

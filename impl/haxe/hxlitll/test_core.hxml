@@ -3,6 +3,7 @@
 -main TestCore
 -cp test/core
 -cp src/core
+
 -lib nanotest
 -lib unifill
 -D no_inline

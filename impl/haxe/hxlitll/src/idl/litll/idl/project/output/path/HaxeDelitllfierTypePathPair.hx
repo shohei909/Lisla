@@ -1,24 +1,24 @@
 package litll.idl.project.output.path;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.project.DataOutputConfig;
-import litll.idl.std.data.idl.project.LitllfierOutputConfig;
+import litll.idl.std.data.idl.project.DelitllfierOutputConfig;
 
-class HaxeLitllfierTypePathPair
+class HaxeDelitllfierTypePathPair
 {
-	public var delitllfierPath(default, null):HaxeLitllfierTypePath;
+	public var delitllfierPath(default, null):HaxeDelitllfierTypePath;
 	public var dataPath(default, null):HaxeDataTypePath;
 	
-	public function new(dataPath:HaxeDataTypePath, delitllfierPath:HaxeLitllfierTypePath) 
+	public function new(dataPath:HaxeDataTypePath, delitllfierPath:HaxeDelitllfierTypePath) 
 	{
 		this.dataPath = dataPath;
 		this.delitllfierPath = delitllfierPath;
 	}
 	
-	public static function create(typePath:TypePath, dataConfig:DataOutputConfig, delitllfierConfig:LitllfierOutputConfig):HaxeLitllfierTypePathPair
+	public static function create(typePath:TypePath, dataConfig:DataOutputConfig, delitllfierConfig:DelitllfierOutputConfig):HaxeDelitllfierTypePathPair
 	{
-		return new HaxeLitllfierTypePathPair(
+		return new HaxeDelitllfierTypePathPair(
 			dataConfig.toHaxeDataPath(typePath),
-			delitllfierConfig.toHaxeLitllfierPath(typePath)
+			delitllfierConfig.toHaxeDelitllfierPath(typePath)
 		);
 	}
 }

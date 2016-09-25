@@ -7,17 +7,17 @@ import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.TypeDefKind;
 import litll.core.Litll;
 import litll.core.ds.Result;
-import litll.idl.delitllfy.Litllfier;
+import litll.idl.delitllfy.Delitllfier;
 import litll.idl.project.output.IdlToHaxePrintContext;
 import litll.idl.project.output.path.HaxeDataTypePath;
-import litll.idl.project.output.path.HaxeLitllfierTypePath;
-import litll.idl.project.output.path.HaxeLitllfierTypePathPair;
+import litll.idl.project.output.path.HaxeDelitllfierTypePath;
+import litll.idl.project.output.path.HaxeDelitllfierTypePathPair;
 import litll.idl.project.source.IdlSourceProviderImpl;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.project.DataOutputConfig;
-import litll.idl.std.data.idl.project.LitllfierOutputConfig;
+import litll.idl.std.data.idl.project.DelitllfierOutputConfig;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
 import litll.idl.std.tools.idl.TypeParameterDeclarationTools;
 
@@ -27,23 +27,23 @@ using litll.core.ds.ResultTools;
 using litll.core.ds.OptionTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 
-class IdlToHaxeLitllfierConverter
+class IdlToHaxeDelitllfierConverter
 {
-	private var config:LitllfierOutputConfig;
+	private var config:DelitllfierOutputConfig;
 	private var context:IdlToHaxeConvertContext;
 	
-	private function new (context:IdlToHaxeConvertContext, config:LitllfierOutputConfig)
+	private function new (context:IdlToHaxeConvertContext, config:DelitllfierOutputConfig)
 	{
 		this.context = context;
 		this.config = config;
 	}
 	
-	public static function convertType(pathPair:HaxeLitllfierTypePathPair, source:IdlTypeDefinition, context:IdlToHaxeConvertContext, config:LitllfierOutputConfig):HaxeTypeDefinition
+	public static function convertType(pathPair:HaxeDelitllfierTypePathPair, source:IdlTypeDefinition, context:IdlToHaxeConvertContext, config:DelitllfierOutputConfig):HaxeTypeDefinition
 	{
-		return new IdlToHaxeLitllfierConverter(context, config).run(pathPair, source);
+		return new IdlToHaxeDelitllfierConverter(context, config).run(pathPair, source);
 	}
 	
-	private function run(pathPair:HaxeLitllfierTypePathPair, source:IdlTypeDefinition):HaxeTypeDefinition
+	private function run(pathPair:HaxeDelitllfierTypePathPair, source:IdlTypeDefinition):HaxeTypeDefinition
 	{
 		var processExpr = macro null;
 		switch (source)
@@ -71,7 +71,7 @@ class IdlToHaxeLitllfierConverter
 							args: [
 								{
 									name: "context",
-									type: (macro : litll.idl.delitllfy.LitllContext)
+									type: (macro : litll.idl.delitllfy.DelitllfyContext)
 								}
 							],
 							ret: null,
@@ -85,9 +85,9 @@ class IdlToHaxeLitllfierConverter
 		}
 	}	
 	
-	private function createPathPair(typePath:TypePath):HaxeLitllfierTypePathPair
+	private function createPathPair(typePath:TypePath):HaxeDelitllfierTypePathPair
 	{
-		return HaxeLitllfierTypePathPair.create(typePath, context.dataOutputConfig, config);
+		return HaxeDelitllfierTypePathPair.create(typePath, context.dataOutputConfig, config);
 	}
 	
 	private static function createAliasExpr(sourcePath:HaxeDataTypePath, destType:TypeReference):Expr 

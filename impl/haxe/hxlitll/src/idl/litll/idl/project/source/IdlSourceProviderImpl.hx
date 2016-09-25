@@ -19,7 +19,7 @@ import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.path.TypeGroupPath;
 import litll.idl.std.data.idl.project.SourceConfig;
-import litll.idl.std.delitllfy.idl.IdlLitllfier;
+import litll.idl.std.delitllfy.idl.IdlDelitllfier;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
 import sys.FileSystem;
 import sys.io.File;
@@ -232,7 +232,7 @@ private class TypeGroupResolver
 					_litllArray;
 			}
 			
-			var idl = switch (IdlLitllfier.run(litllArray))
+			var idl = switch (IdlDelitllfier.run(litllArray))
 			{
 				case Result.Ok(_idl):
 					_idl;

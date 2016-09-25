@@ -1,27 +1,27 @@
 package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllUnionContext;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyUnionContext;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypeNameDeclaration;
 using litll.core.ds.ResultTools;
 
-class TypeNameDeclarationLitllfier
+class TypeNameDeclarationDelitllfier
 {
-	public static function process(context:LitllContext):Result<TypeNameDeclaration, LitllError> 
+	public static function process(context:DelitllfyContext):Result<TypeNameDeclaration, DelitllfyError> 
 	{
 		return try
 		{
-			var unionContext = new LitllUnionContext(context);
-			switch (unionContext.read(TypeNameLitllfier.process).getOrThrow())
+			var unionContext = new DelitllfyUnionContext(context);
+			switch (unionContext.read(TypeNameDelitllfier.process).getOrThrow())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeNameDeclaration.Primitive(data));
 					
 				case Option.None:
 			}
-			switch (unionContext.read(GenericTypeNameLitllfier.process).getOrThrow())
+			switch (unionContext.read(GenericTypeNameDelitllfier.process).getOrThrow())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeNameDeclaration.Generic(data));
@@ -30,7 +30,7 @@ class TypeNameDeclarationLitllfier
 			}
 			unionContext.close();
 		}
-		catch (e:LitllError)
+		catch (e:DelitllfyError)
 		{
 			Result.Err(e);
 		}

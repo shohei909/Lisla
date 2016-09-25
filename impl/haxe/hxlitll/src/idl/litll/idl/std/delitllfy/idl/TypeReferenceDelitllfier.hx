@@ -1,29 +1,29 @@
 package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllUnionContext;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyUnionContext;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypeReference;
-import litll.idl.std.delitllfy.idl.GenericTypeReferenceLitllfier;
-import litll.idl.std.delitllfy.idl.TypePathLitllfier;
+import litll.idl.std.delitllfy.idl.GenericTypeReferenceDelitllfier;
+import litll.idl.std.delitllfy.idl.TypePathDelitllfier;
 using litll.core.ds.ResultTools;
 
-class TypeReferenceLitllfier
+class TypeReferenceDelitllfier
 {
-	public static function process(context:LitllContext):Result<TypeReference, LitllError> 
+	public static function process(context:DelitllfyContext):Result<TypeReference, DelitllfyError> 
 	{
 		return try
 		{
-			var unionContext = new LitllUnionContext(context);
-			switch (unionContext.read(TypePathLitllfier.process).getOrThrow())
+			var unionContext = new DelitllfyUnionContext(context);
+			switch (unionContext.read(TypePathDelitllfier.process).getOrThrow())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeReference.Primitive(data));
 					
 				case Option.None:
 			}
-			switch (unionContext.read(GenericTypeReferenceLitllfier.process).getOrThrow())
+			switch (unionContext.read(GenericTypeReferenceDelitllfier.process).getOrThrow())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeReference.Generic(data));
@@ -32,7 +32,7 @@ class TypeReferenceLitllfier
 			}
 			unionContext.close();
 		}
-		catch (e:LitllError)
+		catch (e:DelitllfyError)
 		{
 			Result.Err(e);
 		}

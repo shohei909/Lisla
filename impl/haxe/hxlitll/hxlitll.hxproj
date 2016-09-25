@@ -19,6 +19,7 @@
     <class path="test\core" />
     <class path="src\core" />
     <class path="src\idl" />
+    <class path="generated" />
   </classpaths>
   <!-- Build options -->
   <build>

@@ -1,14 +1,14 @@
 package litll.idl.std.delitllfy.idl;
 import litll.core.Litll;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllErrorKind;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.EnumConstructorName;
 
-class EnumConstructorNameLitllfier
+class EnumConstructorNameDelitllfier
 {
-	public static function process(context:LitllContext):Result<EnumConstructorName, LitllError> 	
+	public static function process(context:DelitllfyContext):Result<EnumConstructorName, DelitllfyError> 	
 	{
 		return switch (context.litll)
 		{
@@ -16,7 +16,7 @@ class EnumConstructorNameLitllfier
 				Result.Ok(new EnumConstructorName(string.data));
 			
 			case Litll.Arr(array):
-				Result.Err(LitllError.ofLitll(context.litll, LitllErrorKind.CantBeArray));
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.CantBeArray));
 		}
 	}
 }

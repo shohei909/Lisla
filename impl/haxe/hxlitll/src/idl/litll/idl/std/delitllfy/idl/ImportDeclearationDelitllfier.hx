@@ -1,16 +1,16 @@
 package litll.idl.std.delitllfy.idl;
 import litll.core.Litll;
-import litll.idl.delitllfy.LitllArrayContext;
-import litll.idl.delitllfy.LitllContext;
-import litll.idl.delitllfy.LitllError;
-import litll.idl.delitllfy.LitllErrorKind;
+import litll.idl.delitllfy.DelitllfyArrayContext;
+import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.ImportDeclaration;
 using litll.core.ds.ResultTools;
 
-class ImportDeclearationLitllfier
+class ImportDeclearationDelitllfier
 {
-	public static function process(context:LitllContext):Result<ImportDeclaration, LitllError> 
+	public static function process(context:DelitllfyContext):Result<ImportDeclaration, DelitllfyError> 
 	{
 		var expected = ["[import]"];
 		return switch (context.litll)
@@ -22,23 +22,23 @@ class ImportDeclearationLitllfier
 						switch (string.data)
 						{
 							case "import":
-								var arrayContext = new LitllArrayContext(context, array, 1);
-								var file = arrayContext.read(FilePathLitllfier.process).getOrThrow();
+								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var file = arrayContext.read(FilePathDelitllfier.process).getOrThrow();
 								arrayContext.close(ImportDeclaration.Import.bind(file));	
 								
 							case data:
-								Result.Err(LitllError.ofArray(array, 0, LitllErrorKind.UnmatchedEnumConstructor("[" + data + "]", expected), []));
+								Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor("[" + data + "]", expected), []));
 						}
 						
 					case Litll.Arr(_):
-						Result.Err(LitllError.ofArray(array, 0, LitllErrorKind.UnmatchedEnumConstructor("[[..]]", expected), []));
+						Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor("[[..]]", expected), []));
 				}
 				
 			case Litll.Arr(_):
-				Result.Err(LitllError.ofLitll(context.litll, LitllErrorKind.UnmatchedEnumConstructor("[]", expected)));
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor("[]", expected)));
 				
 			case Litll.Str(data):
-				Result.Err(LitllError.ofLitll(context.litll, LitllErrorKind.UnmatchedEnumConstructor(data.data, expected)));
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor(data.data, expected)));
 		}
 	}	
 }

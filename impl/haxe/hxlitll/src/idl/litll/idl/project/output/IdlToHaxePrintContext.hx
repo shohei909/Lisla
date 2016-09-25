@@ -8,7 +8,7 @@ import litll.idl.project.output.store.HaxeDataInterfaceStore;
 import litll.idl.project.source.IdlSourceProvider;
 import litll.idl.project.source.IdlSourceProviderImpl;
 import litll.idl.std.data.idl.project.DataOutputConfig;
-import litll.idl.std.data.idl.project.LitllfierOutputConfig;
+import litll.idl.std.data.idl.project.DelitllfierOutputConfig;
 import litll.idl.std.data.idl.project.OutputConfig;
 import litll.idl.std.data.idl.project.ProjectConfig;
 
@@ -21,14 +21,14 @@ class IdlToHaxePrintContext implements IdlToHaxeConvertContext
 	public var dataOutputConfig(default, null):DataOutputConfig;
 	public var interfaceStore(default, null):HaxeDataInterfaceStore;
 	
-	public var delitllfierOutputConfig(default, null):Option<LitllfierOutputConfig>;
+	public var delitllfierOutputConfig(default, null):Option<DelitllfierOutputConfig>;
 	
 	public function new(
 		source:IdlSourceProvider,
 		io:IoProvider,
 		printer:HaxePrinter,
 		dataOutputConfig:DataOutputConfig,
-		delitllfierOutputConfig:Option<LitllfierOutputConfig>
+		delitllfierOutputConfig:Option<DelitllfierOutputConfig>
 	)
 	{
 		this.delitllfierOutputConfig = delitllfierOutputConfig;

@@ -6,16 +6,16 @@ import litll.core.LitllArray;
 import litll.core.ds.Result;
 using Lambda;
 
-class LitllArrayContext
+class DelitllfyArrayContext
 {
-	private var parent:LitllContext;
+	private var parent:DelitllfyContext;
 	private var array:LitllArray;
 	private var index:Int;
 	
-	private var error:Option<LitllError>;
-	private var maybeErrors:Array<LitllError>;
+	private var error:Option<DelitllfyError>;
+	private var maybeErrors:Array<DelitllfyError>;
 	
-	public inline function new (parent:LitllContext, array:LitllArray, index:Int)
+	public inline function new (parent:DelitllfyContext, array:LitllArray, index:Int)
 	{
 		this.parent = parent;
 		this.array = array;
@@ -25,7 +25,7 @@ class LitllArrayContext
 		maybeErrors = [];
 	}
 	
-	public function readRest<T>(process:ProcessFunction<T>):Result<Array<T>, LitllError> 
+	public function readRest<T>(process:ProcessFunction<T>):Result<Array<T>, DelitllfyError> 
 	{
 		var result = [];
 		
@@ -54,7 +54,7 @@ class LitllArrayContext
 		return Result.Ok(result);
 	}
 	
-	public inline function readWithDefault<T>(process:ProcessFunction<T>, defaultValue:T):Result<T, LitllError>
+	public inline function readWithDefault<T>(process:ProcessFunction<T>, defaultValue:T):Result<T, DelitllfyError>
 	{
 		return switch (readData(process))
 		{
@@ -75,7 +75,7 @@ class LitllArrayContext
 		}
 	}
 	
-	public inline function read<T>(process:ProcessFunction<T>):Result<T, LitllError>
+	public inline function read<T>(process:ProcessFunction<T>):Result<T, DelitllfyError>
 	{
 		return switch (readData(process))
 		{
@@ -87,7 +87,7 @@ class LitllArrayContext
 		}
 	}
 	
-	private function createErrorResult<T>(error:LitllError):Result<T, LitllError>
+	private function createErrorResult<T>(error:DelitllfyError):Result<T, DelitllfyError>
 	{
 		maybeErrors.iter(error.maybeCauses.push);
 		maybeErrors = [];
@@ -104,16 +104,16 @@ class LitllArrayContext
 	}
 
 	
-	private inline function readData<T>(process:ProcessFunction<T>):Result<T, LitllError>
+	private inline function readData<T>(process:ProcessFunction<T>):Result<T, DelitllfyError>
 	{
 		index++;
 		
 		if (array.data.length < index)
 		{
-			return Result.Err(createError(LitllErrorKind.EndOfArray));
+			return Result.Err(createError(DelitllfyErrorKind.EndOfArray));
 		}
 		
-		var context = new LitllContext(Option.Some(this), array.data[index - 1], parent.config);
+		var context = new DelitllfyContext(Option.Some(this), array.data[index - 1], parent.config);
 		return switch (process(context))
 		{
 			case Result.Err(childError):
@@ -124,11 +124,11 @@ class LitllArrayContext
 		}
 	}
 
-	public inline function close<T>(create:Void->T):Result<T, LitllError>
+	public inline function close<T>(create:Void->T):Result<T, DelitllfyError>
 	{
 		if (index < array.data.length)
 		{
-			addFatalError(createError(LitllErrorKind.TooLongArray));
+			addFatalError(createError(DelitllfyErrorKind.TooLongArray));
 		}
 		
 		return switch (error)
@@ -141,14 +141,14 @@ class LitllArrayContext
 		}
 	}
 	
-	private function createError(kind:LitllErrorKind):LitllError
+	private function createError(kind:DelitllfyErrorKind):DelitllfyError
 	{
-		var e = LitllError.ofArray(array, index, kind, maybeErrors);
+		var e = DelitllfyError.ofArray(array, index, kind, maybeErrors);
 		maybeErrors = [];
 		return e;
 	}
 	
-	public function addFatalError(nextError:LitllError):Void
+	public function addFatalError(nextError:DelitllfyError):Void
 	{
 		switch (error)
 		{
@@ -161,4 +161,4 @@ class LitllArrayContext
 	}
 }
 
-private typedef ProcessFunction<T> = LitllContext->Result<T, LitllError>;
+private typedef ProcessFunction<T> = DelitllfyContext->Result<T, DelitllfyError>;
