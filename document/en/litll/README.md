@@ -1,36 +1,26 @@
-# データ記述言語 Litll
+# Litll is a human-readable data serialization language 
 
-Litllは、"String OR Array"の略で、この名前の通り、文字列と配列のみをサポートするデータ記述言語です。
+Litll is data serialization language that only supports string and array data types.
 
-このため、
-* 学ぶのが簡単で、
-* 読むのが簡単で、
-* 記述するのも簡単で、
-* パースするのも簡単です。
+So Litll is
+* easy to learn,
+* easy to read,
+* easy to write,
+* and easy to parse.
 
-YAMLは記述はしやすいですがパースは難しいです。JSONは比較的パースは楽ですが、記述は大変です。 
+YAML is easy to write but difficult to parse. JSON is relatively easy to parse, but difficult to write. 
 
-ほとんどのデータ記述言語は、ほとんどの目的に対して複雑すぎます。
+Most of data serialization languages are too complex for many purposes.
 
-Litllはシンプルです。ですが、十分な機能があります。
+Litll is simple, but enough.
 
+# Syntax
 
+## String
 
-# 構文
+### Unquoted string
 
-## 文字列
-
-### クオートなしの文字列
-
-以下の特殊文字、構文を含まない記述は、文字列と解釈されます。
-
-* クオート(`"'`)
-* 大かっこ(`[]`)
-* 改行文字(LF(#xA), CR(#xD))
-* 空白文字(`` ``(#x20) or `\t`(#x9))
-* 禁止空白文字(後述)
-* コメント構文(`//`)
-
+If a description includes no special characters (`"'[],`), newline characters (LF(#xA), CR(#xD)), whitespaces (`` ``(#x20) or `\t`(#x9)), blacklisted whitespaces, or comment syntax (`//`), it is considered string.
 
 <table>
     <tr><th>Litll</th><th>Json</th></tr>
@@ -48,11 +38,11 @@ abcd
     </tr>
 </table>
 
-Litllはルートが配列です。ただ単に`abcd`と記述した場合、JSONの`["abcd"]`という記述と同じになります。
+The root of Litll is array, so that single `abcd` corresponds to `["abcd"]` of JSON.
 
-### クオートされた文字列
+### Quoted string
 
-文字列に特殊文字を含めたい場合、ダブルクオート`"`またはシングルクオート`'`で、文字列を囲みます。
+If you want to include special characters, whitespaces or blacklisted whitespaces in string, you can enclose the string with double quotes `"` or  single quotes `'`.
 
 <table>
     <tr><th>Litll</th><th>Json</th></tr>
@@ -70,7 +60,7 @@ Litllはルートが配列です。ただ単に`abcd`と記述した場合、JSO
     </tr>
 </table>
 
-クオートの数は、3つ以上でも構いません。
+The quotes number can be 3 or more. 
 
 <table>
     <tr><th>Litll</th><th>Json</th></tr>
@@ -88,19 +78,18 @@ Litllはルートが配列です。ただ単に`abcd`と記述した場合、JSO
     </tr>
 </table>
 
-クオート2つで囲むことはできません。`""`や`''`は空白文字列の意味になります。
+2 quotes can not be use, because `""` and `''` mean an empty string.
 
+### Multi-line string
 
-### 複数行文字列
+Litll supports multi-line quoted string syntax.
 
-Litllでは、クオートされた文字列で複数行文字列を使うことができます。
+In multi-line string syntax, some whitespaces and newlines are ignored. 
 
-複数行文字列では、フォーマットのためのインデントや改行を使いやすくするため、特定の改行や空白文字が無視されます。
-
-* 文字列の最終行が空白文字から始まる場合、最初の行と空行を除くすべての行で先頭の同じ空白文字が削除されます。
-    * 最終行と削除対象の行の空白文字が一致しない場合、エラーです。
-* 最初の行が空白文字のみからなる場合、その空白文字と、最初の改行は無視されます。
-* 最後の行が空白文字のみからなる場合、その空白文字と、最後の改行は無視されます。
+* If the last line starts with white spaces, the same number white spaces at the start of each lines excepting the first line are ignored. 
+    * In this case each of these lines must starts with same white spaces sequence or is a empty line.
+* If the first line has only white spaces, the white spaces and first newline are ignored.  
+* If the last line has only white spaces, the white spaces and last newline are ignored.
 
 <table>
     <tr><th>Litll</th><th>Json</th></tr>
@@ -111,9 +100,9 @@ Litllでは、クオートされた文字列で複数行文字列を使うこと
 Multi
 line
 "
-    '''''    
+    '''''
     Litll
-    
+
      is
 
       awesome.
