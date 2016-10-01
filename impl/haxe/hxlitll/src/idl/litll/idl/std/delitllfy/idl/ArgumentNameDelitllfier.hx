@@ -7,6 +7,7 @@ import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.delitllfy.idl.ArgumentNameDelitllfier;
 
 class ArgumentNameDelitllfier
 {

@@ -26,13 +26,8 @@ abstract TypeDependenceName(String)
 		}
 	}
 	
-	public function toString():String
+	public function toVariableName():String
 	{
-		return this;
-	}
-	
-	public function toPascalCase():String
-	{
-		return IdentifierTools.toPascalCase(this).getOrThrow();
+		return "dependance" + IdentifierTools.toPascalCase(this).getOrThrow();
 	}
 }

@@ -7,6 +7,9 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.UnionConstructor;
+import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
+import litll.idl.std.delitllfy.idl.UnionConstructorDelitllfier;
+import litll.idl.std.delitllfy.idl.UnionConstructorNameDelitllfier;
 using litll.core.ds.ResultTools;
 
 class UnionConstructorDelitllfier

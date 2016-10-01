@@ -5,6 +5,7 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.EnumConstructorName;
+import litll.idl.std.delitllfy.idl.EnumConstructorNameDelitllfier;
 
 class EnumConstructorNameDelitllfier
 {

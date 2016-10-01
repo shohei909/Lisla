@@ -3,7 +3,7 @@ import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeParamDecl;
 import litll.idl.std.data.idl.TypeParameterDeclaration;
-import litll.idl.std.data.idl.project.DataOutputConfig;
+import litll.idl.std.data.idl.haxe.DataOutputConfig;
 
 class TypeParameterDeclarationTools
 {
@@ -38,7 +38,7 @@ class TypeParameterDeclarationTools
 				case TypeParameterDeclaration.Dependence(dependence):
 					result.push(
 						{
-							name: dependence.name.toString(),
+							name: dependence.name.toVariableName(),
 							type: ComplexType.TPath(TypeReferenceTools.toMacroTypePath(dependence.type, config)),
 						}
 					);

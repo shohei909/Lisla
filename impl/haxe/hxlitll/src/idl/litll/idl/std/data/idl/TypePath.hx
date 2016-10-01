@@ -59,6 +59,18 @@ class TypePath
 		}
 	}
 	
+	public function toArray():Array<String>
+	{
+		return switch (modulePath)
+		{
+			case Option.Some(_modulePath):
+				_modulePath.toArray().concat([typeName.toString()]);
+				
+			case Option.None:
+				[typeName.toString()];
+		}
+	}
+	
 	public function isCoreType():Bool
 	{
 		return switch (modulePath)

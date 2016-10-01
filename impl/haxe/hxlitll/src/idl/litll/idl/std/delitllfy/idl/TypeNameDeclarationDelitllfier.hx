@@ -5,6 +5,9 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyUnionContext;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypeNameDeclaration;
+import litll.idl.std.delitllfy.idl.GenericTypeNameDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeNameDeclarationDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeNameDelitllfier;
 using litll.core.ds.ResultTools;
 
 class TypeNameDeclarationDelitllfier

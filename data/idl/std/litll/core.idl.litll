@@ -46,7 +46,7 @@
 
 [union Any
     [str String]
-    [arr Array]
+    [arr [Array Any]]
 ]
 
 [union [Option T]

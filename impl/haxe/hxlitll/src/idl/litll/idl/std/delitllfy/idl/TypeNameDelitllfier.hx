@@ -6,6 +6,7 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.delitllfy.idl.TypeNameDelitllfier;
 
 class TypeNameDelitllfier
 {

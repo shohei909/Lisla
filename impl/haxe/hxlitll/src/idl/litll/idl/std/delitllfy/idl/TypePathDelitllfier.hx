@@ -7,6 +7,7 @@ import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.delitllfy.idl.TypePathDelitllfier;
 
 class TypePathDelitllfier
 {

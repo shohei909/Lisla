@@ -6,5 +6,6 @@ class DelitllfyConfig
 	
 	public function new() 
 	{
+		persevering = false;
 	}
 }

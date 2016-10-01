@@ -6,6 +6,12 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypeDefinition;
+import litll.idl.std.delitllfy.idl.ArgumentDelitllfier;
+import litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeDefinitionDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeNameDeclarationDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
+import litll.idl.std.delitllfy.idl.UnionConstructorDelitllfier;
 using litll.core.ds.ResultTools;
 
 class TypeDefinitionDelitllfier

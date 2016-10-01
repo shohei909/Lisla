@@ -11,6 +11,8 @@ import litll.core.ds.Result;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.core.LitllOption;
 import litll.idl.std.data.core.Unit;
+import litll.idl.std.delitllfy.idl.ArgumentDelitllfier;
+import litll.idl.std.delitllfy.idl.ArgumentNameDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
 import litll.idl.std.delitllfy.core.OptionDelitllfier;
 using litll.core.ds.ResultTools;

@@ -1,7 +1,7 @@
 package litll.idl.project.output;
 import litll.idl.project.output.store.HaxeDataInterfaceStore;
 import litll.idl.project.source.IdlSourceProvider;
-import litll.idl.std.data.idl.project.DataOutputConfig;
+import litll.idl.std.data.idl.haxe.DataOutputConfig;
 
 interface IdlToHaxeConvertContext
 {

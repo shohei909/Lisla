@@ -7,6 +7,7 @@ import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.delitllfy.idl.GenericTypeReferenceDelitllfier;
 import litll.idl.std.delitllfy.idl.TypePathDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
 using litll.core.ds.ResultTools;
 
 class TypeReferenceDelitllfier

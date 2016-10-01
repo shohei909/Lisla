@@ -7,6 +7,9 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.GenericTypeReference;
+import litll.idl.std.delitllfy.idl.GenericTypeReferenceDelitllfier;
+import litll.idl.std.delitllfy.idl.TypePathDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
 using litll.core.ds.ResultTools;
 
 class GenericTypeReferenceDelitllfier
@@ -23,7 +26,7 @@ class GenericTypeReferenceDelitllfier
 				{
 					var arrayContext = new DelitllfyArrayContext(context, array, 0);
 					var name = arrayContext.read(TypePathDelitllfier.process).getOrThrow();
-					var parameters = arrayContext.readRest(TypeReferenceDelitllfier.process).getOrThrow();
+					var parameters = arrayContext.readRest(TypeReferenceParameterDelitllfier.process).getOrThrow();
 					arrayContext.close(GenericTypeReference.new.bind(name, parameters));
 				}
 				catch (error:DelitllfyError)

@@ -1,5 +1,6 @@
 package litll.idl.std.tools.idl;
 import litll.idl.std.data.idl.TypeDefinition;
+import litll.idl.std.data.idl.TypeDependenceDeclaration;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeNameDeclaration;
 import litll.idl.std.data.idl.TypeParameterDeclaration;

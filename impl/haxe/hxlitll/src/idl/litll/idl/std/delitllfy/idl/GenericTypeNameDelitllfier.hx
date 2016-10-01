@@ -7,6 +7,9 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.GenericTypeName;
+import litll.idl.std.delitllfy.idl.GenericTypeNameDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeNameDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeParameterDeclarationDelitllfier;
 using litll.core.ds.ResultTools;
 
 class GenericTypeNameDelitllfier

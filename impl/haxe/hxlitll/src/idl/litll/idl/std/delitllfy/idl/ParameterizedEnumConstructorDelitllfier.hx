@@ -7,6 +7,9 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.ParameterizedEnumConstructor;
+import litll.idl.std.delitllfy.idl.ArgumentDelitllfier;
+import litll.idl.std.delitllfy.idl.EnumConstructorNameDelitllfier;
+import litll.idl.std.delitllfy.idl.ParameterizedEnumConstructorDelitllfier;
 using litll.core.ds.ResultTools;
 
 class ParameterizedEnumConstructorDelitllfier

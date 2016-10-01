@@ -11,11 +11,15 @@ import litll.idl.std.data.idl.TypePath;
 enum IdlReadErrorKind
 {
 	Parse(error:ParseError);
-	Litll(error:DelitllfyError);
+	Delitll(error:DelitllfyError);
 	ModuleDupplicated(module:ModulePath, existingPath:String);
-	InvalidPackage(expected:PackagePath, actual:PackagePath);
 	TypeNotFound(path:TypePath);
+	TypeNameDupplicated(path:TypePath);
+	InvalidPackage(expected:PackagePath, actual:PackagePath);
+	ModuleNotFound(module:ModulePath);
 	TypeParameterNameDupplicated(name:TypeName);
 	TypeDependenceNameDupplicated(name:TypeDependenceName);
 	ArgumentNameDupplicated(name:String);
+	InvalidTypeParameterLength(path:TypePath, expected:Int, actual:Int);
 }
+

@@ -4,11 +4,11 @@ import haxe.ds.Option;
 import haxe.io.Path;
 import litll.idl.project.IdlProject;
 import litll.idl.std.data.idl.path.TypeGroupPath;
-import litll.idl.std.data.idl.project.DataOutputConfig;
-import litll.idl.std.data.idl.project.DelitllfierOutputConfig;
-import litll.idl.std.data.idl.project.OutputConfig;
-import litll.idl.std.data.idl.project.ProjectConfig;
-import litll.idl.std.data.idl.project.SourceConfig;
+import litll.idl.std.data.idl.haxe.DataOutputConfig;
+import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
+import litll.idl.std.data.idl.haxe.OutputConfig;
+import litll.idl.std.data.idl.haxe.ProjectConfig;
+import litll.idl.std.data.idl.haxe.SourceConfig;
 import sys.FileSystem;
 using litll.core.ds.ResultTools;
 class Main 

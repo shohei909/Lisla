@@ -2,8 +2,8 @@
 package litll.idl.std.data.idl;
 class GenericTypeReference {
     public var typePath : litll.idl.std.data.idl.TypePath;
-    public var parameters : Array<litll.idl.std.data.idl.TypeReference>;
-    public function new(typePath:litll.idl.std.data.idl.TypePath, parameters:Array<litll.idl.std.data.idl.TypeReference>) {
+    public var parameters : Array<litll.idl.std.data.idl.TypeReferenceParameter>;
+    public function new(typePath:litll.idl.std.data.idl.TypePath, parameters:Array<litll.idl.std.data.idl.TypeReferenceParameter>) {
         this.typePath = typePath;
         this.parameters = parameters;
     }

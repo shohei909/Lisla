@@ -6,6 +6,9 @@ import litll.idl.delitllfy.DelitllfyUnionContext;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier;
+import litll.idl.std.delitllfy.idl.EnumConstructorNameDelitllfier;
+import litll.idl.std.delitllfy.idl.ParameterizedEnumConstructorDelitllfier;
 using litll.core.ds.ResultTools;
 
 class EnumConstructorDelitllfier

@@ -11,11 +11,13 @@ import litll.idl.delitllfy.Delitllfier;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.Idl;
 import litll.idl.std.delitllfy.idl.IdlDelitllfier;
+import litll.idl.std.delitllfy.idl.PackageDeclarationDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeDefinitionDelitllfier;
 using litll.core.ds.ResultTools;
 
 class IdlDelitllfier
 {
-	public static function run(litll:LitllArray, ?config:DelitllfyConfig):Result<Idl, DelitllfyError>
+	public static function run(litll:LitllArray, config:DelitllfyConfig):Result<Idl, DelitllfyError>
 	{
 		return Delitllfier.run(IdlDelitllfier.process, litll, config);
 	}

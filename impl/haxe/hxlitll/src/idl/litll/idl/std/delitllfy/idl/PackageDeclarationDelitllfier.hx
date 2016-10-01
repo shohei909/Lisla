@@ -7,6 +7,7 @@ import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.core.ds.Result;
 import litll.idl.std.data.idl.Idl;
+import litll.idl.std.delitllfy.idl.PackageDeclarationDelitllfier;
 using litll.core.ds.ResultTools;
 
 class PackageDeclarationDelitllfier

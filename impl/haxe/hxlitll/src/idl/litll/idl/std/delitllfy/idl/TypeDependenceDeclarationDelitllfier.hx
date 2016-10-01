@@ -7,6 +7,9 @@ import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.idl.std.data.idl.TypeDependenceDeclaration;
+import litll.idl.std.delitllfy.idl.TypeDependenceDeclarationDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeDependenceNameDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
 using litll.core.ds.ResultTools;
 
 class TypeDependenceDeclarationDelitllfier
