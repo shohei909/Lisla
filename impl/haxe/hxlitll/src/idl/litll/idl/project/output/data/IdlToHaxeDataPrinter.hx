@@ -36,7 +36,7 @@ class IdlToHaxeDataPrinter
 			case Result.Err(errors):
 				for (error in errors)
 				{
-					Sys.stderr().writeString("Error: " + error.toString() + "\n");
+					context.io.printErrorLine(error.toString() + "\n");
 				}
 				return ProcessResult.Failure;
 		}

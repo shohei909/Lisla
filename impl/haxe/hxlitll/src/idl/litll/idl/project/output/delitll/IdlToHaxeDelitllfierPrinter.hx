@@ -17,7 +17,7 @@ class IdlToHaxeDelitllfierPrinter
 			case Result.Err(errors):
 				for (error in errors)
 				{
-					Sys.println(error.toString());
+					context.io.printErrorLine(error.toString());
 				}
 				return ProcessResult.Failure;
 		}

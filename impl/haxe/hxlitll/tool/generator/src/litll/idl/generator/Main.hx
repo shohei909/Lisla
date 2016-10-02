@@ -11,12 +11,12 @@ import litll.idl.std.data.idl.haxe.ProjectConfig;
 import litll.idl.std.data.idl.haxe.SourceConfig;
 import sys.FileSystem;
 using litll.core.ds.ResultTools;
+
 class Main 
 {
 	public static function main():Void
 	{
 		remove("../../migration/litll");
-		
 		var config = new ProjectConfig(
 			new SourceConfig([], []),
 			new OutputConfig(
@@ -38,10 +38,10 @@ class Main
 			)
 		);
 		
-		IdlProject.run(
-			"../../../../../data/idl", 
-			config
-		);
+		if (IdlProject.run("../../../../../data/idl", config))
+		{
+			Sys.exit(1);
+		}
 	}
 	
 	public static function remove(file:String):Void 
