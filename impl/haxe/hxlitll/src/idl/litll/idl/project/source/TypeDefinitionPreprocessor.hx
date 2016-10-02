@@ -74,7 +74,7 @@ class TypeDefinitionPreprocessor
 	{
 		switch (target)
 		{
-			case TypeDefinition.Alias(_, type):
+			case TypeDefinition.Newtype(_, type):
 				processTypeReference(type);
 				
 			case TypeDefinition.Enum(_, constructors):

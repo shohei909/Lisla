@@ -18,7 +18,7 @@ class TypeDefinitionDelitllfier
 {
 	public static function process(context:DelitllfyContext):Result<TypeDefinition, DelitllfyError> 
 	{
-		var expected = ["[alias]", "[tuple]", "[enum]", "[union]"];
+		var expected = ["[newtype]", "[tuple]", "[enum]", "[union]"];
 		return switch (context.litll)
 		{
 			case Litll.Arr(array) if (array.data.length > 0):
@@ -27,11 +27,11 @@ class TypeDefinitionDelitllfier
 					case Litll.Str(string):
 						switch (string.data)
 						{
-							case "alias":
+							case "newtype":
 								var arrayContext = new DelitllfyArrayContext(context, array, 1);
 								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
 								var type = arrayContext.read(TypeReferenceDelitllfier.process).getOrThrow();
-								arrayContext.close(TypeDefinition.Alias.bind(name, type));	
+								arrayContext.close(TypeDefinition.Newtype.bind(name, type));	
 							
 							case "tuple":
 								var arrayContext = new DelitllfyArrayContext(context, array, 1);

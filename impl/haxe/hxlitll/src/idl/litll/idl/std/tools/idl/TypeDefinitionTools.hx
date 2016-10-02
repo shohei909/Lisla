@@ -14,7 +14,7 @@ class TypeDefinitionTools
 			case 
 				Struct(name, _) |
 				Enum(name, _) |
-				Alias(name, _) |
+				Newtype(name, _) |
 				Union(name, _) |
 				Tuple(name, _):
 					

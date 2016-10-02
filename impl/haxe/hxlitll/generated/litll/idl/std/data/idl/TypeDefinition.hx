@@ -3,7 +3,7 @@ package litll.idl.std.data.idl;
 enum TypeDefinition {
     Struct(name:litll.idl.std.data.idl.TypeNameDeclaration, arguments:Array<litll.idl.std.data.idl.Argument>);
     Enum(name:litll.idl.std.data.idl.TypeNameDeclaration, constructors:Array<litll.idl.std.data.idl.EnumConstructor>);
-    Alias(name:litll.idl.std.data.idl.TypeNameDeclaration, type:litll.idl.std.data.idl.TypeReference);
+    Newtype(name:litll.idl.std.data.idl.TypeNameDeclaration, type:litll.idl.std.data.idl.TypeReference);
     Union(name:litll.idl.std.data.idl.TypeNameDeclaration, elements:Array<litll.idl.std.data.idl.UnionConstructor>);
     Tuple(name:litll.idl.std.data.idl.TypeNameDeclaration, arguments:Array<litll.idl.std.data.idl.Argument>);
 }

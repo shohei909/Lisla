@@ -50,8 +50,8 @@ class IdlToHaxeDelitllfierConverter
 		
 		var processExpr = switch (source)
 		{
-			case IdlTypeDefinition.Alias(name, destType):
-				createAliasExpr(pathPair.dataPath, destType);
+			case IdlTypeDefinition.Newtype(name, destType):
+				createNewtypeExpr(pathPair.dataPath, destType);
 				
 			case IdlTypeDefinition.Struct(name, arguments):
 				macro null;
@@ -110,7 +110,7 @@ class IdlToHaxeDelitllfierConverter
 		}
 	}
 	
-	private function createAliasExpr(sourcePath:HaxeDataTypePath, destType:TypeReference):Expr 
+	private function createNewtypeExpr(sourcePath:HaxeDataTypePath, destType:TypeReference):Expr 
 	{
 		return createProcessCall((macro context), destType);
 	}

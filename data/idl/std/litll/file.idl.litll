@@ -4,4 +4,4 @@
 
 [package litll]
 
-[alias FilePath String]
+[newtype FilePath String]

@@ -4,4 +4,4 @@
 
 [package litll]
 
-[alias [VariableInt T] T]
+[newtype [VariableInt T] T]

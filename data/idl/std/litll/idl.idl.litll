@@ -29,7 +29,7 @@
 [enum TypeDefinition
     [struct [name TypeNameDeclaration] [arguments.. Argument]]
     [enum [name TypeNameDeclaration] [constructors.. EnumConstructor]]
-    [alias [name TypeNameDeclaration] [type TypeReference]]
+    [newtype [name TypeNameDeclaration] [type TypeReference]]
     [union [name TypeNameDeclaration] [elements.. UnionConstructor]]
     [tuple [name TypeNameDeclaration] [arguments.. Argument]]
 ]
@@ -45,12 +45,12 @@
     [type_name TypeName]
     [dependence TypeDependenceDeclaration]
 ]
-[alias TypeName String]
+[newtype TypeName String]
 [tuple TypeDependenceDeclaration
     [name TypeDependenceName]
     [type TypeReference]
 ]
-[alias TypeDependenceName String]
+[newtype TypeDependenceName String]
 
 
 /// [document_tag litll.idl.document.ArgumentDocumentTag]
@@ -59,7 +59,7 @@
     [type TypeReference]
     [default_value [Option Any] []]
 ]
-[alias ArgumentName String]
+[newtype ArgumentName String]
 
 
 // [document_tag litll.idl.document.EnumConstructorDocumentTag]
@@ -72,7 +72,7 @@
     [name EnumConstructorName]
     [arguments.. Argument]
 ]
-[alias EnumConstructorName String]
+[newtype EnumConstructorName String]
 
 
 /// [document_tag litll.idl.document.UnionConstructorDocumentTag]
@@ -80,11 +80,11 @@
     [name UnionConstructorName]
     [type TypeReference]
 ]
-[alias UnionConstructorName String]
+[newtype UnionConstructorName String]
 
-[alias PackagePath String]
-[alias ModulePath String]
-[alias TypePath String]
+[newtype PackagePath String]
+[newtype ModulePath String]
+[newtype TypePath String]
 
 [union TypeReference
     [primitive TypePath]
@@ -96,4 +96,4 @@
     [parameters.. TypeReferenceParameter]
 ]
 
-[alias TypeReferenceParameter Any]
+[newtype TypeReferenceParameter Any]

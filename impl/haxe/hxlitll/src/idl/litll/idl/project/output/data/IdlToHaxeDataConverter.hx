@@ -78,7 +78,7 @@ class IdlToHaxeDataConverter
 				}
 				
 				
-			case IdlTypeDefinition.Alias(name, type):
+			case IdlTypeDefinition.Newtype(name, type):
 				var haxeType = ComplexType.TPath(type.toMacroTypePath(config));
 				kind = TypeDefKind.TDAbstract(haxeType, [], [haxeType]);
 				fields.push(

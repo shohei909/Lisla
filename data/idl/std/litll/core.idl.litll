@@ -5,37 +5,37 @@
 [package litll]
 
 /// '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'
-[alias Int64 String]
+[newtype Int64 String]
 
 /// '32 bit integer.'
-[alias Int32 String]
+[newtype Int32 String]
 
 /// '16 bit integer.'
-[alias Int16 String]
+[newtype Int16 String]
 
 /// '8 bit integer.'
-[alias Int8 String]
+[newtype Int8 String]
 
-[alias UInt64 String]
-[alias UInt32 String]
-[alias UInt16 String]
-[alias UInt8 String]
+[newtype UInt64 String]
+[newtype UInt32 String]
+[newtype UInt16 String]
+[newtype UInt8 String]
 
-[alias Float64 String]
+[newtype Float64 String]
 
 /// 'true or false.'
 [enum Boolean true false]
 
-[alias DateTime String]
-[alias Date String]
-[alias Time String]
+[newtype DateTime String]
+[newtype Date String]
+[newtype Time String]
 
 [tuple [KeyValue K V]
     [key K]
     [value V]
 ]
 
-[alias [Map K V]
+[newtype [Map K V]
     [Array [KeyValue K V]]
 ]
 
@@ -54,6 +54,6 @@
     [some [Single T]]
 ]
 
-[alias [Const [string String]] String]
-[alias [FixedArray [length Int]] String]
-[alias Binary String]
+[newtype [Const [string String]] String]
+[newtype [FixedArray [length Int]] String]
+[newtype Binary String]
