@@ -17,14 +17,14 @@ class TypeReferenceDelitllfier
 		return try
 		{
 			var unionContext = new DelitllfyUnionContext(context);
-			switch (unionContext.read(TypePathDelitllfier.process).getOrThrow())
+			switch (unionContext.read(TypePathDelitllfier.process).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeReference.Primitive(data));
 					
 				case Option.None:
 			}
-			switch (unionContext.read(GenericTypeReferenceDelitllfier.process).getOrThrow())
+			switch (unionContext.read(GenericTypeReferenceDelitllfier.process).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeReference.Generic(data));

@@ -1,20 +1,29 @@
 package litll.idl.project.output.delitll;
 
+import haxe.ds.Option;
 import haxe.macro.Expr;
 import haxe.macro.Expr.Access;
 import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.TypeDefKind;
+import litll.core.ds.Result;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.exception.IdlException;
+import litll.idl.project.error.IdlReadError;
 import litll.idl.project.output.data.HaxeDataTypePath;
+import litll.idl.project.output.data.store.HaxeDataConstructorKind;
 import litll.idl.project.output.delitll.HaxeDelitllfierTypePathPair;
+import litll.idl.project.output.instance.LitllToHaxeInstanceConverter;
+import litll.idl.std.data.idl.GenericTypeReference;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.data.idl.TypeReferenceParameterKind;
 import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
 
 import haxe.macro.Expr.TypeDefinition in HaxeTypeDefinition;
 import litll.idl.std.data.idl.TypeDefinition in IdlTypeDefinition;
 
 using litll.core.ds.ResultTools;
-using litll.core.ds.OptionTools;
+using litll.core.ds.MaybeTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 using litll.idl.std.tools.idl.TypeDefinitionTools;
 using litll.idl.std.tools.idl.TypeParameterDeclarationTools;
@@ -37,21 +46,22 @@ class IdlToHaxeDelitllfierConverter
 	
 	private function run(pathPair:HaxeDelitllfierTypePathPair, source:IdlTypeDefinition):HaxeTypeDefinition
 	{
+		var params = TypeParameterDeclarationTools.toHaxeParams(TypeDefinitionTools.getTypeParameters(source));
 		var args = [
 			{
 				name: "context",
 				type: (macro : litll.idl.delitllfy.DelitllfyContext)
 			}
 		];
-		for (dependence in source.getTypeParameters().toHaxeDependences(context.dataOutputConfig))
+		for (arg in source.getTypeParameters().toHaxeDelitllfierArgs(context.dataOutputConfig))
 		{
-			args.push(dependence);
+			args.push(arg);
 		}
 		
 		var processExpr = switch (source)
 		{
 			case IdlTypeDefinition.Newtype(name, destType):
-				createNewtypeExpr(pathPair.dataPath, destType);
+				createNewtypeExpr(pathPair.dataPath, destType.generalize());
 				
 			case IdlTypeDefinition.Struct(name, arguments):
 				macro null;
@@ -63,7 +73,12 @@ class IdlToHaxeDelitllfierConverter
 				macro null;
 		}
 		
-		
+		var dataTypePath = ComplexType.TPath(
+			{
+				pack : pathPair.dataPath.getModuleArray(),
+				name : pathPair.dataPath.typeName.toString(),
+			}
+		);
 		return {
 			pack : pathPair.delitllfierPath.getModuleArray(),
 			name : pathPair.delitllfierPath.typeName.toString(),
@@ -76,8 +91,9 @@ class IdlToHaxeDelitllfierConverter
 					kind : FieldType.FFun(
 						{
 							args: args,
-							ret: null,	
+							ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.delitllfy.DelitllfyError>,
 							expr: processExpr,
+							params : params,
 						}
 					),
 					access: [Access.APublic, Access.AStatic],
@@ -92,26 +108,75 @@ class IdlToHaxeDelitllfierConverter
 		return HaxeDelitllfierTypePathPair.create(typePath, context.dataOutputConfig, config);
 	}
 	
-	private function createProcessCall(contextExpr:Expr, destType:TypeReference):Expr
+	private function createNewtypeExpr(sourcePath:HaxeDataTypePath, destType:GenericTypeReference):Expr 
 	{
-		return switch (destType)
-		{
-			case TypeReference.Primitive(primitive):
-				var path = primitive.toArray();
-				macro $p{path}.process($contextExpr);
-				
-			case TypeReference.Generic(generic):
-				var path = generic.typePath.toArray();
-				var args = [contextExpr];
-				for (parameters in generic.parameters)
-				{
-				}
-				macro $p{path}.process($a{args});
+		var callExpr = createProcessCallExpr((macro context), destType);
+		var instantiationExpr = createInstantiationExpr((macro data), destType);
+		
+		return macro {
+			return switch ($callExpr)
+			{
+				case Result.Ok(data):
+					$instantiationExpr;
+					
+				case Result.Err(error):
+					Result.Err(error);
+			}
 		}
 	}
 	
-	private function createNewtypeExpr(sourcePath:HaxeDataTypePath, destType:TypeReference):Expr 
+	private function createProcessCallExpr(contextExpr:Expr, destType:GenericTypeReference):Expr
 	{
-		return createProcessCall((macro context), destType);
+		var data = createProcessFunc(destType);
+		return macro $p{data.path}.process($a{[contextExpr].concat(data.args)});
+	}
+	
+	private function createProcessFuncExpr(type:GenericTypeReference):Expr
+	{
+		var data = createProcessFunc(type);
+		return if (data.args.length == 0)
+		{
+			macro $p{data.path}.process;
+		}
+		else
+		{
+			var underscore = macro _;
+			macro $p{data.path}.process.bind($a{[underscore].concat(data.args)});
+		}
+	}
+	
+	private inline function createProcessFunc(type:GenericTypeReference):{path:Array<String>, args:Array<Expr>}
+	{
+		return {
+			path: config.toHaxeDelitllfierPath(type.typePath).toArray(),
+			args: [
+				for (parameter in type.parameters)
+				{
+					switch (parameter.processedValue.getOrThrow(IdlException.new.bind("must be processed")))
+					{	
+						case TypeReferenceParameterKind.Type(type):
+							createProcessFuncExpr(type.generalize());
+							
+						case TypeReferenceParameterKind.Dependence(type):
+							LitllToHaxeInstanceConverter.convertType(parameter.value, type, context); 
+					}
+				}
+			]
+		}
+	}
+	
+	private function createInstantiationExpr(dataExpr:Expr, destType:GenericTypeReference):Expr
+	{
+		var haxePath = context.dataOutputConfig.toHaxeDataPath(destType.typePath);
+		var classInterface = context.interfaceStore.getDataClassInterface(haxePath).getOrThrow(IdlException.new.bind("class " + haxePath.toString() + " not found"));
+		
+		return switch (classInterface.delitllfier)
+		{
+			case HaxeDataConstructorKind.Direct(name):
+				macro null;
+				
+			case HaxeDataConstructorKind.Result(name, err):
+				macro null;
+		}
 	}
 }

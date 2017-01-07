@@ -1,12 +1,11 @@
 package litll.idl.project.source;
-import haxe.ds.Option;
-import litll.core.ds.Set;
-import litll.idl.std.data.idl.TypeName;
+import litll.core.ds.Maybe;
 import litll.idl.std.data.idl.TypeDefinition;
+import litll.idl.std.data.idl.TypeName;
 
 enum ModuleState 
 {
 	Unloaded;
-	Loading(typeNames:Map<TypeName, TypeDefinition>);
-	Loaded(typeNames:Option<Map<TypeName, TypeDefinition>>);
+	Loading(typeNames:Map<String, TypeDefinition>);
+	Loaded(typeNames:Maybe<Map<String, TypeDefinition>>);
 }

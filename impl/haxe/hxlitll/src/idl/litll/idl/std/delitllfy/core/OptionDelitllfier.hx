@@ -14,14 +14,14 @@ class OptionDelitllfier
 		return try
 		{
 			var unionContext = new DelitllfyUnionContext(context);
-			switch (unionContext.read(UnitDelitllfier.process).getOrThrow())
+			switch (unionContext.read(UnitDelitllfier.process).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(LitllOption.None(data));
 					
 				case Option.None:
 			}
-			switch (unionContext.read(SingleDelitllfier.process.bind(tProcess)).getOrThrow())
+			switch (unionContext.read(SingleDelitllfier.process.bind(tProcess)).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(LitllOption.Some(data));

@@ -8,11 +8,14 @@ import haxe.macro.Type.BaseType;
 import litll.core.Litll;
 import litll.core.LitllArray;
 import litll.core.LitllString;
+import litll.core.ds.Maybe;
 import litll.idl.project.output.data.HaxeDataTypePath;
-import litll.idl.project.output.store.HaxeDataClassInterface;
-import litll.idl.project.output.store.HaxeDataEnumInterface;
-import litll.idl.project.output.store.HaxeDataInterface;
-import litll.idl.project.output.store.HaxeDataInterfaceKind;
+import litll.idl.project.output.data.store.HaxeDataClassConstructorErrorKind;
+import litll.idl.project.output.data.store.HaxeDataConstructorKind;
+import litll.idl.project.output.data.store.HaxeDataClassInterface;
+import litll.idl.project.output.data.store.HaxeDataEnumInterface;
+import litll.idl.project.output.data.store.HaxeDataInterface;
+import litll.idl.project.output.data.store.HaxeDataInterfaceKind;
 import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
@@ -24,7 +27,7 @@ using litll.core.ds.ResultTools;
 using litll.idl.std.tools.idl.path.TypePathFilterTools;
 using haxe.macro.TypeTools;
 using haxe.macro.ComplexTypeTools;
-using litll.core.ds.OptionTools;
+using litll.core.ds.MaybeTools;
 
 class DataOutputConfig
 {
@@ -81,7 +84,7 @@ class DataOutputConfig
 		for (i in 0...l)
 		{
 			var filter = filters[l - i - 1];
-			switch (filter.apply(typePath))
+			switch (filter.apply(typePath).toOption())
 			{
 				case Option.Some(convertedPath):
 					typePath = convertedPath;
@@ -94,7 +97,7 @@ class DataOutputConfig
 		return new HaxeDataTypePath(typePath);
 	}
 	
-	public function addPredefinedTypeDirectly(path:String, data:litll.idl.project.output.store.HaxeDataInterface):Void
+	public function addPredefinedTypeDirectly(path:String, data:litll.idl.project.output.data.store.HaxeDataInterface):Void
 	{
 		predefinedTypes[path] = data;
 	}
@@ -104,16 +107,19 @@ class DataOutputConfig
 	public macro function addPredefinedType(_this:Expr, expr:Expr):Expr
 	{
 		var type = Context.getType(ExprTools.toString(expr));
-		var typePathString:String = type.toComplexType().toString();
-		var baseType:BaseType;
 		
+		var baseType:BaseType;
 		var data:Expr = switch (type)
 		{
 			case TInst(ref, params):
-				addPredefinedClass(baseType = ref.get(), params);
+				var classType = ref.get();
+				baseType = classType;
+				addPredefinedClass(type, classType, params);
 				
 			case TAbstract(ref, params):
-				addPredefinedClass(baseType = ref.get(), params);
+				var classType = ref.get().impl.get();
+				baseType = ref.get();
+				addPredefinedClass(type, classType, params);
 		
 			case TEnum(ref, params):
 				baseType = ref.get();
@@ -125,13 +131,14 @@ class DataOutputConfig
 				throw "unsupported type " + type;
 		}
 		
+		var typePathString:String = baseType.pack.concat([baseType.name]).join(".");
 		return macro $_this.addPredefinedTypeDirectly(
 			$v{typePathString}, 
 			new HaxeDataInterface(
 				new HaxeDataTypePath(
 					new TypePath(
-						Option.Some(new ModulePath($v{baseType.pack})), 
-						new TypeName($v{baseType.name})
+						Maybe.some(new ModulePath($v{baseType.pack})), 
+						new TypeName(new LitllString($v{baseType.name}))
 					)
 				),
 				$data
@@ -139,10 +146,89 @@ class DataOutputConfig
 		);
 	}
 	
+	
 	#if macro
-	private static function addPredefinedClass(ref:BaseType, params:Array<Type>):Expr
+	private static function addPredefinedClass(type:Type, ref:ClassType, params:Array<Type>):Expr
 	{
-		return macro HaxeDataInterfaceKind.Class(new HaxeDataClassInterface());
+		var fields = ref.statics.get();
+		var createFunc = Maybe.none();
+		for (field in fields)
+		{
+			if (field.meta.has(":litllNew"))
+			{
+				createFunc = Maybe.some(field);
+				break;
+			}
+		}
+		
+		var expr = switch (createFunc.toOption())
+		{
+			case Option.Some(field):
+				switch (field.type)
+				{
+					case Type.TFun(_, ret):
+						var complexType = ret.toComplexType(); 
+						var typePath = complexType.toString();
+						var selfPath = type.toComplexType().toString();
+						if (typePath.split("<")[0] == "litll.core.ds.Result")
+						{
+							switch (complexType)
+							{
+								case ComplexType.TPath(path):
+									switch (path.params)
+									{
+										case [TPType(ok), TPType(err)]:
+											if (ok.toString() != selfPath)
+											{
+												Context.error("litllNew requires Result<Self, _>", field.pos);
+											}
+											else
+											{
+												var errorKind = switch (err.toString())
+												{
+													case "String":
+														macro HaxeDataClassConstructorErrorKind.String;
+												
+													case "litll.idl.delitllfy.DelitllfyErrorKind":
+														macro HaxeDataClassConstructorErrorKind.DelitllfyErrorKind;
+														
+													case _:
+														Context.error("Error type must be String or litll.idl.delitllfy.DelitllfyErrorKind", field.pos);
+														return null;
+												}
+												
+												macro HaxeDataConstructorKind.Result($v{field.name}, $errorKind);	
+											}
+										case _:
+											Context.error("Result type parameters are invalid", field.pos);
+											null;
+									}
+									
+								case _:
+									Context.error("Result type parameters are invalid", field.pos);
+							}
+						}
+						else if (typePath == selfPath)
+						{
+							macro HaxeDataConstructorKind.Direct($v{field.name});
+						}
+						else
+						{
+							Context.error("litllNew return type must be Result or Self", field.pos);
+							null;
+						}
+					case _:
+						Context.error("litllNew must be function", field.pos);
+						null;
+				}
+				
+			case Option.None:
+				macro HaxeDataConstructorKind.Direct("new");
+		}
+		
+		return macro HaxeDataInterfaceKind.Class(
+			new HaxeDataClassInterface($expr)
+		);
 	}
 	#end
 }

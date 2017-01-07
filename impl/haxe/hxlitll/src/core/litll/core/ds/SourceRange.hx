@@ -26,7 +26,7 @@ class SourceRange
 		var lowPosition = map.getOuterPositionOf(low);
 		var highPosition = map.getOuterPositionOf(high);
 		
-		return lowPosition.toString() + ":" + highPosition.toString();
+		return lowPosition.toString() + "-" + highPosition.toString();
 	}
 	
 	public function concat(child:SourceRange):SourceRange 

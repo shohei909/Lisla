@@ -19,14 +19,14 @@ class EnumConstructorDelitllfier
 		return try
 		{
 			var unionContext = new DelitllfyUnionContext(context);
-			switch (unionContext.read(EnumConstructorNameDelitllfier.process).getOrThrow())
+			switch (unionContext.read(EnumConstructorNameDelitllfier.process).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(EnumConstructor.Primitive(data));
 					
 				case Option.None:
 			}
-			switch (unionContext.read(ParameterizedEnumConstructorDelitllfier.process).getOrThrow())
+			switch (unionContext.read(ParameterizedEnumConstructorDelitllfier.process).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(EnumConstructor.Parameterized(data));

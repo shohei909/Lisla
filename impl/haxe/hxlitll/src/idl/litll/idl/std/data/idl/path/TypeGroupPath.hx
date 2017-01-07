@@ -1,18 +1,24 @@
 package litll.idl.std.data.idl.path;
 import haxe.ds.Option;
+import litll.core.LitllString;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
+import litll.core.tag.StringTag;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.idl.std.data.idl.PackagePath;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
-using litll.core.ds.OptionTools;
+using litll.core.ds.MaybeTools;
 
 class TypeGroupPath
 {
-	public var packagePath(default, null):Option<PackagePath>;
-	public var typeName(default, null):Option<TypeName>;
+	public var packagePath(default, null):Maybe<PackagePath>;
+	public var typeName(default, null):Maybe<TypeName>;
+	public var tag(default, null):Maybe<StringTag>;
 	
-	public function new (path:Array<String>)
+	public function new (path:Array<String>, ?tag:Maybe<StringTag>)
 	{
+		this.tag = tag;
 		if (path.length == 0)
 		{
 			throw "Type group path must not be empty.";
@@ -24,32 +30,45 @@ class TypeGroupPath
 			throw "Package name　and type name must not be empty.";
 		}
 		
-		switch (TypeName.create(lastString))
+		switch (TypeName.create(lastString, tag))
 		{
 			case Result.Ok(t):
 				packagePath = if (path.length < 2)
 				{
-					Option.None;
+					Maybe.none();
 				}
 				else
 				{
-					Option.Some(new PackagePath(path.slice(0, path.length - 1)));
+					Maybe.some(new PackagePath(path.slice(0, path.length - 1), tag));
 				}
 				
-				typeName = Option.Some(t);
+				typeName = Maybe.some(t);
 				
 			case Result.Err(_):
-				packagePath = Option.Some(new PackagePath(path));
-				typeName = Option.None;
+				packagePath = Maybe.some(new PackagePath(path, tag));
+				typeName = Maybe.none();
 		}
 	}
 	
-	public static function create(string:String):Result<TypeGroupPath, String>
+	@:delitllfy
+	public static function delitllfy(string:LitllString):Result<TypeGroupPath, DelitllfyErrorKind>
+	{
+		return switch (create(string.data, string.tag))
+		{
+			case Result.Ok(data):
+				Result.Ok(data);
+				
+			case Result.Err(err):
+				Result.Err(DelitllfyErrorKind.Fatal(err));
+		}
+	}
+	
+	public static function create(string:String, ?tag:Maybe<StringTag>):Result<TypeGroupPath, String>
 	{
 		var array = string.split(".");
 		return try 
 		{
-			Result.Ok(new TypeGroupPath(array));
+			Result.Ok(new TypeGroupPath(array, tag));
 		}
 		catch (err:String)
 		{
@@ -57,7 +76,7 @@ class TypeGroupPath
 		}
 	}
 	
-	public function filter(typePath:TypePath, dest:TypeGroupPath):Option<TypePath>
+	public function filter(typePath:TypePath, dest:TypeGroupPath):Maybe<TypePath>
 	{
 		var typePathString = typePath.toString();
 		var groupString = toString();
@@ -69,26 +88,26 @@ class TypeGroupPath
 				switch (TypePath.create(dest.toString() + localPath))
 				{
 					case Result.Ok(data):
-						Option.Some(data);
+						Maybe.some(data);
 						
 					case Result.Err(_):
-						Option.None;
+						Maybe.none();
 				}
 			}
 			else
 			{
-				Option.None;
+				Maybe.none();
 			}
 		}
 		else
 		{
-			Option.None;
+			Maybe.none();
 		}
 	}
 	
 	public function toString():String
 	{
-		var str = switch [packagePath, typeName]
+		var str = switch [packagePath.toOption(), typeName.toOption()]
 		{
 			case [Option.Some(pack), Option.Some(name)]:
 				pack.toString() + "." + name.toString();

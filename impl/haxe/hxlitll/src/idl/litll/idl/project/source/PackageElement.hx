@@ -1,6 +1,7 @@
 package litll.idl.project.source;
 
 import haxe.ds.Option;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.ds.Set;
 import litll.idl.project.error.IdlReadErrorKind;
@@ -20,6 +21,7 @@ import unifill.Exception;
 
 using litll.idl.project.source.ModuleStateTools;
 using litll.core.ds.MapTools;
+using litll.core.ds.ResultTools;
 
 class PackageElement
 {
@@ -40,16 +42,16 @@ class PackageElement
 	{
 		if (!root.reader.moduleExists(directory.path))
 		{
-			module = ModuleState.Loaded(Option.None);
+			module = ModuleState.Loaded(Maybe.none());
 		}
 	}
 	
 	
-	public function getElement(pathArray:Array<String>):Option<PackageElement>
+	public function getElement(pathArray:Array<String>):Maybe<PackageElement>
 	{
 		if (pathArray.length == 0)
 		{
-			return Option.Some(this);
+			return Maybe.some(this);
 		}
 		
 		var head = pathArray[0];
@@ -61,7 +63,7 @@ class PackageElement
 		{
 			if (directory.loaded)
 			{
-				return Option.None;
+				return Maybe.none();
 			}
 			else
 			{
@@ -75,9 +77,12 @@ class PackageElement
 		return new ModulePath(directory.path);
 	}
 	
-	public function getTypePath(typeName:TypeName):TypePath
+	public function getTypePath(typeName:String):TypePath
 	{
-		return new TypePath(Option.Some(getModulePath()), typeName);
+		return new TypePath(
+            Maybe.some(getModulePath()), 
+            litll.idl.std.data.idl.TypeName.create(typeName).getOrThrow()
+        );
 	}
 	
 	public function loadChildren():Void
@@ -90,10 +95,10 @@ class PackageElement
 	{
 		if (module.isParseStarted()) return;
 		
-		var idl = switch (readIdl())
+		var idl = switch (readIdl().toOption())
 		{
 			case Option.None:
-				module = Loaded(Option.None);
+				module = Loaded(Maybe.none());
 				return;
 				
 			case Option.Some(data):
@@ -103,7 +108,7 @@ class PackageElement
 		var typeMap = getTypeMap(idl.data.typeDefinitions, idl.file);
 		module = Loading(typeMap);
 		IdlPreprocessor.run(this, idl);
-		module = Loaded(Option.Some(typeMap));
+		module = Loaded(Maybe.some(typeMap));
 	}
 	
 	public function hasModule():Bool
@@ -111,7 +116,7 @@ class PackageElement
 		return switch (module)
 		{
 			case ModuleState.Loaded(data):
-				data.match(Option.Some(_));
+				data.isSome();
 				
 			case ModuleState.Loading(set):
 				true;
@@ -121,7 +126,7 @@ class PackageElement
 				switch (module)
 				{
 					case ModuleState.Loaded(data):
-						data.match(Option.Some(_));
+						data.isSome();
 						
 					case ModuleState.Unloaded | ModuleState.Loading(_): 
 						throw new SourceException("must be loaded");
@@ -129,20 +134,21 @@ class PackageElement
 		}
 	}
 	
-	private function getTypeMap(types:Array<TypeDefinition>, filePath:String):Map<TypeName, TypeDefinition>
+	private function getTypeMap(types:Array<TypeDefinition>, filePath:String):Map<String, TypeDefinition>
 	{
-		var typeMap = new Map<TypeName, TypeDefinition>();
+		var typeMap:Map<String, TypeDefinition> = new Map<String, TypeDefinition>();
+        
 		for (type in types)
 		{
 			var name = TypeDefinitionTools.getName(type);
-			if (typeMap.exists(name))
+			if (typeMap.exists(name.toString()))
 			{
-				var path = new TypePath(Option.Some(getModulePath()), name);
+				var path = new TypePath(Maybe.some(getModulePath()), name);
 				root.addError(filePath, IdlReadErrorKind.TypeNameDupplicated(path));
 			}
 			else
 			{
-				typeMap.set(name, type);
+				typeMap.set(name.toString(), type);
 			}
 		}
 		
@@ -156,10 +162,13 @@ class PackageElement
 		
 		return switch (module)
 		{
-			case ModuleState.Loaded(Option.Some(data)) | ModuleState.Loading(data):
-				data.getOption(typeName);
+			case ModuleState.Loaded(_.toOption() => Option.Some(data)):
+				data.getMaybe(typeName.toString()).toOption();
 				
-			case ModuleState.Loaded(Option.None):
+            case ModuleState.Loading(data):
+                data.getMaybe(typeName.toString()).toOption();
+                
+			case ModuleState.Loaded(_):
 				Option.None;
 			
 			case ModuleState.Unloaded:
@@ -168,16 +177,20 @@ class PackageElement
 	}
 	
 	
-	private function readIdl():Option<LoadedIdl>
+	private function readIdl():Maybe<LoadedIdl>
 	{
-		var loadedIdl:Option<LoadedIdl> = Option.None;
+		var loadedIdl:Maybe<LoadedIdl> = Maybe.none();
 		var localPath = directory.path.join("/");
 		
 		return switch (root.reader.readModule(directory.path))
 		{
-			case Result.Err(error):
-				root.addError(error.filePath, error.errorKind);
-				Option.None;
+			case Result.Err(errors):
+                for (error in errors)
+                {
+                    root.addError(error.filePath, error.errorKind);
+                }
+                
+				Maybe.none();
 				
 			case Result.Ok(idl):
 				idl;
@@ -207,16 +220,9 @@ class PackageElement
 	
 	public function hasType(typeName:TypeName):Bool
 	{
-		inline function exists(data:Option<Map<TypeName, TypeDefinition>>):Bool
+		inline function exists(data:Maybe<Map<String, TypeDefinition>>):Bool
 		{
-			return switch (data)
-			{
-				case Option.Some(map):
-					map.exists(typeName);
-					
-				case Option.None:
-					false;
-			}
+			return data.map(function (map) return map.exists(typeName.toString())).getOrElse(false);
 		}
 		
 		return switch (module)
@@ -225,7 +231,7 @@ class PackageElement
 				exists(data);
 				
 			case ModuleState.Loading(set):
-				set.exists(typeName);
+				set.exists(typeName.toString());
 				
 			case ModuleState.Unloaded:
 				loadModule();
@@ -240,24 +246,30 @@ class PackageElement
 		}
 	}
 	
-	public function fetchChildren(output:Map<TypePath, TypeDefinition>):Void
+	public function fetchChildren(output:Map<String, TypeDefinition>):Void
 	{
 		fetchModule(output);
 		directory.fetchChildren(output);
 	}
 	
-	public function fetchModule(output:Map<TypePath, TypeDefinition>):Void
+	public function fetchModule(output:Map<String, TypeDefinition>):Void
 	{
 		loadModule();
 		switch (module)
 		{
-			case ModuleState.Loaded(Option.None):
-				
-			case ModuleState.Loaded(Option.Some(data)) | ModuleState.Loading(data):
+			case ModuleState.Loaded(_.toOption() => Option.Some(data)):
+                for (key in data.keys())
+				{
+					output[getTypePath(key).toString()] = data[key];
+				}
+                
+            case ModuleState.Loading(data):
 				for (key in data.keys())
 				{
-					output[getTypePath(key)] = data[key];
+					output[getTypePath(key).toString()] = data[key];
 				}
+				
+			case ModuleState.Loaded(_):
 				
 			case ModuleState.Unloaded: 
 				throw new SourceException("must be loaded");

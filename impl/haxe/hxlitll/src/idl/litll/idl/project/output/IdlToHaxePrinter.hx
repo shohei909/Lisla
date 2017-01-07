@@ -11,7 +11,7 @@ class IdlToHaxePrinter
 	{
 		if (IdlToHaxeDataPrinter.run(context)) return ProcessResult.Failure;
 		
-		switch (context.delitllfierOutputConfig)
+		switch (context.delitllfierOutputConfig.toOption())
 		{
 			case Option.Some(delitllfierOutputConfig):
 				if (IdlToHaxeDelitllfierPrinter.print(context, delitllfierOutputConfig)) return ProcessResult.Failure;

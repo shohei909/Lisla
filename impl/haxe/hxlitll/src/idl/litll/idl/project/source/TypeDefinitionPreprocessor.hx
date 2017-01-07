@@ -1,9 +1,11 @@
 package litll.idl.project.source;
 
 import haxe.ds.Option;
+import litll.core.Litll;
+import litll.core.LitllString;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.ds.Set;
-import litll.idl.delitllfy.Delitllfier;
 import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.project.error.IdlReadErrorKind;
 import litll.idl.std.data.idl.Argument;
@@ -23,7 +25,7 @@ class TypeDefinitionPreprocessor
 {
 	private var parent:IdlPreprocessor;
 	private var target:TypeDefinition;
-	private var typeParameters:Set<TypeName>;
+	private var typeParameters:Map<String, TypeName>;
 	
 	public static function run(parent:IdlPreprocessor, target:TypeDefinition):Void
 	{
@@ -40,31 +42,31 @@ class TypeDefinitionPreprocessor
 	
 	private function processTypeParameters():Void
 	{
-		var typeDependences = new Set<TypeDependenceName>(new Map());
-		this.typeParameters = new Set<TypeName>(new Map());
+		var typeDependences = new Map<String, TypeDependenceName>();
+		this.typeParameters = new Map<String, TypeName>();
 		
 		for (typeParameter in target.getTypeParameters())
 		{
 			switch (typeParameter)
 			{
 				case TypeParameterDeclaration.TypeName(typeName):
-					if (typeParameters.exists(typeName))
+                    if (typeParameters.exists(typeName.toString()))
 					{
 						addError(IdlReadErrorKind.TypeParameterNameDupplicated(typeName));
 					}
 					else
 					{
-						typeParameters.set(typeName);
+						typeParameters.set(typeName.toString(), typeName);
 					}
 					
 				case TypeParameterDeclaration.Dependence(dependence):
-					if (typeDependences.exists(dependence.name))
+					if (typeDependences.exists(dependence.name.toString()))
 					{
 						addError(IdlReadErrorKind.TypeDependenceNameDupplicated(dependence.name));
 					}
 					else
 					{
-						typeDependences.set(dependence.name);
+						typeDependences.set(dependence.name.toString(), dependence.name);
 					}
 			}
 		}
@@ -113,7 +115,7 @@ class TypeDefinitionPreprocessor
 		{
 			if (usedNames.exists(argument.name.name))
 			{
-				addError(IdlReadErrorKind.ArgumentNameDupplicated(argument.name.name));
+				addError(IdlReadErrorKind.ArgumentNameDupplicated(argument.name));
 			}
 			else
 			{
@@ -137,10 +139,10 @@ class TypeDefinitionPreprocessor
 				parameters = generic.parameters;
 		}
 		
-		switch (path.modulePath)
+		switch (path.modulePath.toOption())
 		{
 			case Option.Some(modulePath):
-				switch (parent.element.root.getElement(modulePath.toArray()))
+				switch (parent.element.root.getElement(modulePath.toArray()).toOption())
 				{
 					case Option.Some(referredElement):
 						switch (referredElement.getType(path.typeName))
@@ -149,6 +151,7 @@ class TypeDefinitionPreprocessor
 								processTypeReferenceParameters(path, type.getTypeParameters(), parameters);
 								
 							case Option.None:
+                                trace(path);
 								addError(IdlReadErrorKind.TypeNotFound(path));
 						}
 						
@@ -161,12 +164,13 @@ class TypeDefinitionPreprocessor
 				{
 					processTypeReferenceParameters(
 						path, 
-						[TypeParameterDeclaration.TypeName(new TypeName("T"))], 
+						[TypeParameterDeclaration.TypeName(new TypeName(new LitllString("T")))], 
 						parameters
 					);
 					return;
 				}
-				if (path.isCoreType() || typeParameters.exists(path.typeName)) 
+                
+				if (path.isCoreType() || typeParameters.exists(path.typeName.toString())) 
 				{
 					if (parameters.length != 0)
 					{
@@ -181,7 +185,7 @@ class TypeDefinitionPreprocessor
 					{
 						case Option.Some(type):
 							var module = importedElement.getModulePath();
-							path.modulePath = Option.Some(module);
+							path.modulePath = Maybe.some(module);
 							processTypeReferenceParameters(path, type.getTypeParameters(), parameters);
 							break;
 							
@@ -189,7 +193,7 @@ class TypeDefinitionPreprocessor
 					}
 				}
 				
-				if (path.modulePath.match(Option.None))
+				if (path.modulePath.isNone())
 				{
 					addError(IdlReadErrorKind.TypeNotFound(path));
 				}
@@ -217,7 +221,7 @@ class TypeDefinitionPreprocessor
 					TypeReferenceParameterKind.Dependence(dependence.type);
 					
 				case TypeParameterDeclaration.TypeName(_):
-					var context = new DelitllfyContext(Option.None, referenceParameter.value, parent.element.root.reader.config);
+					var context = new DelitllfyContext(referenceParameter.value, parent.element.root.reader.config);
 					switch (TypeReferenceDelitllfier.process(context))
 					{
 						case Result.Ok(reference):
@@ -230,7 +234,7 @@ class TypeDefinitionPreprocessor
 					}
 			}
 			
-			referenceParameter.processedValue = Option.Some(processedValue);
+			referenceParameter.processedValue = Maybe.some(processedValue);
 		}
 	}
 	

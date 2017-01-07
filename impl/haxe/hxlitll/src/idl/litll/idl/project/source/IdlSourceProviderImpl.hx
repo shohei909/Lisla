@@ -24,7 +24,7 @@ class IdlSourceProviderImpl implements IdlSourceProvider
 		root = new RootPackageElement(reader);
 	}
 	
-	public function resolveGroups(targets:Array<TypeGroupPath>):Result<Map<TypePath, TypeDefinition>, Array<IdlReadError>>
+	public function resolveGroups(targets:Array<TypeGroupPath>):Result<Map<String, TypeDefinition>, Array<IdlReadError>>
 	{
 		var map = new Map();
 		root.fetchGroups(map, targets);

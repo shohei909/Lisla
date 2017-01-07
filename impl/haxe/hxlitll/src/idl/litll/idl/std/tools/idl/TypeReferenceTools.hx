@@ -5,6 +5,7 @@ import haxe.macro.Expr.TypeParam;
 import litll.idl.exception.IdlException;
 import litll.idl.project.output.IdlToHaxeConvertContext;
 import litll.idl.project.output.data.HaxeDataTypePath;
+import litll.idl.std.data.idl.GenericTypeReference;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
@@ -29,19 +30,28 @@ class TypeReferenceTools
 				
 				for (parameter in generic.parameters)
 				{
-					switch (parameter.processedValue)
+					switch (parameter.processedValue.getOrThrow(IdlException.new.bind("Type reference " + generic.typePath.toString() + " must be processed")))
 					{
-						case Option.None:
-							throw new IdlException("Type reference " + generic.typePath.toString() + " must be processed");
-							
-						case Option.Some(TypeReferenceParameterKind.Type(type)):
+						case TypeReferenceParameterKind.Type(type):
 							result.params.push(TypeParam.TPType(ComplexType.TPath(toMacroTypePath(type, config))));
 						
-						case Option.Some(TypeReferenceParameterKind.Dependence(_)):
+						case TypeReferenceParameterKind.Dependence(_):
 					}
 				}
 				
 				result;
+		}
+	}
+	
+	public static function generalize(type:TypeReference):GenericTypeReference
+	{
+		return switch (type)
+		{
+			case TypeReference.Primitive(primitive):
+				new GenericTypeReference(primitive, []);
+				
+			case TypeReference.Generic(generic):
+				generic;
 		}
 	}
 }

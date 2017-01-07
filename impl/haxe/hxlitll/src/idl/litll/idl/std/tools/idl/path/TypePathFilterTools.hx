@@ -1,5 +1,5 @@
 package litll.idl.std.tools.idl.path;
-import haxe.ds.Option;
+import litll.core.ds.Maybe;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.path.TypeGroupPath;
 import litll.idl.std.data.idl.path.TypePathFilter;
@@ -7,7 +7,7 @@ using litll.core.ds.ResultTools;
 
 class TypePathFilterTools
 {
-	public static inline function apply(filter:TypePathFilter, path:TypePath):Option<TypePath>
+	public static inline function apply(filter:TypePathFilter, path:TypePath):Maybe<TypePath>
 	{
 		return switch (filter)
 		{

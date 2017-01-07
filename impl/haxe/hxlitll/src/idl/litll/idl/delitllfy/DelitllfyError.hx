@@ -4,6 +4,7 @@ import litll.core.Litll;
 import litll.core.LitllArray;
 import litll.core.LitllString;
 import litll.core.LitllTools;
+import litll.core.ds.Maybe;
 import litll.core.ds.SourceRange;
 
 class DelitllfyError 
@@ -12,7 +13,7 @@ class DelitllfyError
 	public var kind(default, null):DelitllfyErrorKind;
 	public var maybeCauses(default, null):Array<DelitllfyError>;
 	public var followings(default, null):Array<DelitllfyError>;
-	
+    
 	public function new (target:DelitllfyErrorTarget, kind:DelitllfyErrorKind, maybeCauses:Array<DelitllfyError>)
 	{
 		this.target = target;
@@ -21,12 +22,12 @@ class DelitllfyError
 		this.followings = [];
 	}
 	
-	public static function ofString(string:LitllString, range:Option<SourceRange>, kind:DelitllfyErrorKind):DelitllfyError
+	public static function ofString(string:LitllString, range:Maybe<SourceRange>, kind:DelitllfyErrorKind):DelitllfyError
 	{
 		return new DelitllfyError(DelitllfyErrorTarget.Str(string, range), kind, []);
 	}
 	
-	public static function ofArray(array:LitllArray, index:Int, kind:DelitllfyErrorKind, maybeCauses:Array<DelitllfyError>):DelitllfyError
+	public static function ofArray(array:LitllArray<Litll>, index:Int, kind:DelitllfyErrorKind, maybeCauses:Array<DelitllfyError>):DelitllfyError
 	{
 		return new DelitllfyError(DelitllfyErrorTarget.Arr(array, index), kind, maybeCauses);
 	}
@@ -36,7 +37,7 @@ class DelitllfyError
 		return switch (litll)
 		{
 			case Litll.Str(string):
-				ofString(string, Option.None, kind);
+				ofString(string, Maybe.none(), kind);
 				
 			case Litll.Arr(array):
 				ofArray(array, -1, kind, []);
@@ -57,7 +58,7 @@ class DelitllfyError
 				DelitllfyErrorKind.Recoverable(_):
 				true;
 				
-			case DelitllfyErrorKind.Unknown(_):
+			case DelitllfyErrorKind.Fatal(_):
 				false;
 		}
 	}
@@ -77,14 +78,7 @@ class DelitllfyError
 		
 		var str = if (warning) "Warning" else "Error";
 		
-		switch (getRange())
-		{
-			case Option.Some(range):
-				str += ":" + range.toString();
-				
-			case Option.None:
-		}
-		
+		getRange().iter(function (range) str += ":" + range.toString());
 		array.push(str + ": " + getKindString());
 		
 		for (following in followings)
@@ -95,22 +89,21 @@ class DelitllfyError
 		return array;
 	}
 	
-	private function getRange():Option<SourceRange>
+	public function getRange():Maybe<SourceRange>
 	{
 		return switch (target)
 		{
-			case DelitllfyErrorTarget.Str(str, Option.None):
-				str.tag.position;
-				
-			case DelitllfyErrorTarget.Str(str, Option.Some(range)):
-				switch (str.tag.position)
+			case DelitllfyErrorTarget.Str(str, maybeRange):
+				var maybeParentRange = str.tag.flatMap(function (t) return t.position);
+				switch (maybeRange.toOption())
 				{
-					case Option.Some(parentRange):
-						Option.Some(parentRange.concat(range));
-					
 					case Option.None:
-						Option.None;
+						maybeParentRange;
+						
+					case Option.Some(range):
+						maybeParentRange.flatMap(function (parentRange) return parentRange.concat(range));
 				}
+				
 			case DelitllfyErrorTarget.Arr(arr, index):
 				if (index < 0)
 				{
@@ -122,7 +115,7 @@ class DelitllfyError
 				}
 				else
 				{
-					LitllTools.getTag(arr.data[index]).position;
+					LitllTools.getTag(arr.data[index]).flatMap(function (tag) return tag.position);
 				}
 		}
 	}
@@ -155,7 +148,7 @@ class DelitllfyError
 			case DelitllfyErrorKind.Recoverable(message):
 				message;
 				
-			case DelitllfyErrorKind.Unknown(message):
+			case DelitllfyErrorKind.Fatal(message):
 				message;
 		}
 	}

@@ -1,30 +1,55 @@
-	package litll.idl.std.data.idl;
+package litll.idl.std.data.idl;
+import litll.core.LitllString;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.string.IdentifierTools;
+import litll.core.tag.StringTag;
+import litll.idl.delitllfy.DelitllfyError;
+import litll.idl.delitllfy.DelitllfyErrorKind;
+using litll.core.ds.ResultTools;
 
-abstract TypeName(String) 
+@:forward(tag)
+abstract TypeName(LitllString)
 {
 	private static var headEReg:EReg = ~/[A-Z]/;
 	private static var bodyEReg:EReg = ~/[0-9a-zA-Z]*/;
 	
-	public function new (string:String) 
+	public var tag(get, never):Maybe<StringTag>; 
+	private function get_tag():Maybe<StringTag>
 	{
-		validate(string);
+		return this.tag;
+	}
+	
+	public function new (string:LitllString) 
+	{
+		validate(string.data);
 		this = string;
 	}
 	
-	public static function create(string:String):Result<TypeName, String>
+	@:delitllfy
+	public static function delitllfy(string:LitllString):Result<TypeName, DelitllfyErrorKind>
 	{
-		return try 
+		return try
 		{
 			Result.Ok(new TypeName(string));
+		}
+		catch (err:String)
+		{
+			Result.Err(DelitllfyErrorKind.Fatal(err));
+		}
+	}
+	
+	public static function create(string:String, ?tag:Maybe<StringTag>):Result<TypeName, String>
+	{
+		return try
+		{
+			Result.Ok(new TypeName(new LitllString(string, tag)));
 		}
 		catch (err:String)
 		{
 			Result.Err(err);
 		}
 	}
-	
 	public static function validate(string:String):Void
 	{
 		if (string.length == 0)
@@ -43,6 +68,16 @@ abstract TypeName(String)
 	
 	public function toString():String
 	{
-		return this;
+		return this.data;
+	}
+	
+	public function toVariableName():String
+	{
+		return IdentifierTools.toCamelCase(this.data).getOrThrow() + "Process";
+	}
+	
+	public function map(func:String->String):TypeName
+	{
+		return new TypeName(new LitllString(func(this.data), this.tag));
 	}
 }

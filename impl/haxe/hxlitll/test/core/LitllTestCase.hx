@@ -7,7 +7,7 @@ import nanotest.NanoTestCase;
 
 class LitllTestCase extends NanoTestCase
 {
-	private function assertLitllArray(litll:LitllArray, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
+	private function assertLitllArray(litll:LitllArray<Litll>, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
 	{
 		if (!Std.is(json, Array))
 		{

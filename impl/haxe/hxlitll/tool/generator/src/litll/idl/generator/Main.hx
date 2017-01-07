@@ -2,6 +2,7 @@ package litll.idl.generator;
 
 import haxe.ds.Option;
 import haxe.io.Path;
+import litll.core.ds.Maybe;
 import litll.idl.project.IdlProject;
 import litll.idl.std.data.idl.path.TypeGroupPath;
 import litll.idl.std.data.idl.haxe.DataOutputConfig;
@@ -27,7 +28,7 @@ class Main
 					],
 					[]
 				),
-				Option.Some(
+				Maybe.some(
 					new DelitllfierOutputConfig(
 						[
 							TypeGroupPath.create("litll").getOrThrow(),

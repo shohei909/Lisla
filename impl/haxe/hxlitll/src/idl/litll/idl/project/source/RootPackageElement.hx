@@ -1,12 +1,13 @@
 package litll.idl.project.source;
 import haxe.ds.Option;
+import litll.core.ds.Maybe;
 import litll.idl.delitllfy.DelitllfyConfig;
 import litll.idl.project.error.IdlReadError;
 import litll.idl.project.error.IdlReadErrorKind;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.path.TypeGroupPath;
-using litll.core.ds.OptionTools;
+using litll.core.ds.MaybeTools;
 
 class RootPackageElement extends PackageElement
 {
@@ -22,7 +23,7 @@ class RootPackageElement extends PackageElement
 	
 	public function loadGroup(groupPath:TypeGroupPath):Void
 	{
-		var pathArray = switch (groupPath.packagePath)
+		var pathArray = switch (groupPath.packagePath.toOption())
 		{
 			case Option.Some(path):
 				path.toArray();
@@ -31,7 +32,7 @@ class RootPackageElement extends PackageElement
 				[];
 		}
 		
-		var packageElement = switch (getElement(pathArray))
+		var packageElement = switch (getElement(pathArray).toOption())
 		{
 			case Option.Some(data):
 				data;
@@ -40,13 +41,13 @@ class RootPackageElement extends PackageElement
 				return;
 		}
 		
-		switch (groupPath.typeName)
+		if (groupPath.typeName.isSome())
 		{
-			case Option.Some(_):
-				loadModule();
-				
-			case Option.None:
-				loadChildren();
+			loadModule();
+		}
+		else
+		{
+			loadChildren();
 		}
 	}
 
@@ -55,14 +56,14 @@ class RootPackageElement extends PackageElement
 		errors.push(new IdlReadError(filePath, kind));
 	}
 	
-	public function fetchGroups(output:Map<TypePath, TypeDefinition>, targets:Array<TypeGroupPath>):Void
+	public function fetchGroups(output:Map<String, TypeDefinition>, targets:Array<TypeGroupPath>):Void
 	{
 		for (target in targets)
 		{
-			var element:PackageElement = switch (target.packagePath)
+			var element:PackageElement = switch (target.packagePath.toOption())
 			{
 				case Option.Some(path):
-					switch (getElement(path.toArray()))
+					switch (getElement(path.toArray()).toOption())
 					{
 						case Option.Some(element):
 							element;
@@ -75,14 +76,14 @@ class RootPackageElement extends PackageElement
 					this;
 			}
 			
-			switch (target.typeName)
+			switch (target.typeName.toOption())
 			{
 				case Option.Some(typeName):
 					switch (element.getType(typeName))
 					{
 						case Option.Some(type):
-							var path = new TypePath(Option.Some(element.getModulePath()), typeName);
-							output[path] = type;
+							var path = new TypePath(Maybe.some(element.getModulePath()), typeName, typeName.tag);
+							output[path.toString()] = type;
 						
 						case Option.None:
 					}

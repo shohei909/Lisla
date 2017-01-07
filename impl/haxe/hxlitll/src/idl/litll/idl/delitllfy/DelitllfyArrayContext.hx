@@ -3,25 +3,26 @@ package litll.idl.delitllfy;
 import haxe.ds.Option;
 import litll.core.Litll;
 import litll.core.LitllArray;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 using Lambda;
 
 class DelitllfyArrayContext
 {
-	private var parent:DelitllfyContext;
-	private var array:LitllArray;
+	private var array:LitllArray<Litll>;
 	private var index:Int;
 	
-	private var error:Option<DelitllfyError>;
+	private var error:Maybe<DelitllfyError>;
 	private var maybeErrors:Array<DelitllfyError>;
+	private var config:DelitllfyConfig;
 	
-	public inline function new (parent:DelitllfyContext, array:LitllArray, index:Int)
+	public inline function new (array:LitllArray<Litll>, index:Int, config:DelitllfyConfig)
 	{
-		this.parent = parent;
+		this.config = config;
 		this.array = array;
 		this.index = index;
 		
-		error = Option.None;
+		error = Maybe.none();
 		maybeErrors = [];
 	}
 	
@@ -92,7 +93,7 @@ class DelitllfyArrayContext
 		maybeErrors.iter(error.maybeCauses.push);
 		maybeErrors = [];
 		
-		return if (parent.config.persevering)
+		return if (config.persevering)
 		{
 			addFatalError(error);
 			Result.Ok(null);
@@ -113,7 +114,7 @@ class DelitllfyArrayContext
 			return Result.Err(createError(DelitllfyErrorKind.EndOfArray));
 		}
 		
-		var context = new DelitllfyContext(Option.Some(this), array.data[index - 1], parent.config);
+		var context = new DelitllfyContext(array.data[index - 1], config);
 		return switch (process(context))
 		{
 			case Result.Err(childError):
@@ -131,7 +132,7 @@ class DelitllfyArrayContext
 			addFatalError(createError(DelitllfyErrorKind.TooLongArray));
 		}
 		
-		return switch (error)
+		return switch (error.toOption())
 		{
 			case Option.Some(error):
 				Result.Err(error);
@@ -150,13 +151,13 @@ class DelitllfyArrayContext
 	
 	public function addFatalError(nextError:DelitllfyError):Void
 	{
-		switch (error)
+		switch (error.toOption())
 		{
 			case Option.Some(_error):
 				_error.followings.push(nextError);
 				
 			case Option.None:
-				error = Option.Some(nextError);
+				error = Maybe.some(nextError);
 		}
 	}
 }

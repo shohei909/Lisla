@@ -16,32 +16,56 @@
 /// '8 bit integer.'
 [newtype Int8 String]
 
+/// 'unsigned 64 bit integer'
 [newtype UInt64 String]
+
+/// 'unsigned 32 bit integer'
 [newtype UInt32 String]
+
+/// 'unsigned 16 bit integer'
 [newtype UInt16 String]
+
+/// 'unsigned 8 bit integer'
 [newtype UInt8 String]
 
+/// '''
+/// 64 bit floating point number
+/// example: '1.1', '.1', '1.', '1.e+2', 100E0100
+/// '''
 [newtype Float64 String]
 
 /// 'true or false.'
 [enum Boolean true false]
 
+/// '''
+/// YYYY-MM-DD_HH:MM:SS(.fraction) 
+/// The range is '1000-01-01 00:00:00.000000' to '9999-12-31 23:59:59.999999'
+/// '''
 [newtype DateTime String]
+
+/// '''
+/// YYYY-MM-DD
+/// The range is '1000-01-01' to '9999-12-31'
+/// '''
 [newtype Date String]
+
+/// '''
+/// HH:MM:SS[.fraction]
+/// The range is '00:00:00.000000' to '23:59:59.999999'
+/// '''
 [newtype Time String]
-
-[tuple [KeyValue K V]
-    [key K]
-    [value V]
-]
-
-[newtype [Map K V]
-    [Array [KeyValue K V]]
-]
 
 [tuple Unit]
 [tuple [Single T1]
     [element1 T1]
+]
+[tuple [Pair K V]
+    [element1 K]
+    [element2 V]
+]
+
+[newtype [Map K V]
+    [Array [Pair K V]]
 ]
 
 [union Any
@@ -56,4 +80,6 @@
 
 [newtype [Const [string String]] String]
 [newtype [FixedArray [length Int]] String]
+
 [newtype Binary String]
+[newtype BigInt String]

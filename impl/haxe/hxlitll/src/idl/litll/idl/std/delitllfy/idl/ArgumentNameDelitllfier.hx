@@ -1,6 +1,7 @@
 package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
 import litll.core.Litll;
+import litll.core.ds.Maybe;
 import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
@@ -16,13 +17,13 @@ class ArgumentNameDelitllfier
 		return switch (context.litll)
 		{
 			case Litll.Str(string):
-				switch (ArgumentName.create(string.data))
+				switch (ArgumentName.delitllfy(string))
 				{
 					case Result.Ok(data):
 						Result.Ok(data);
 					
-					case Result.Err(message):
-						Result.Err(DelitllfyError.ofString(string, Option.None, DelitllfyErrorKind.Unknown(message)));
+					case Result.Err(err):
+						Result.Err(DelitllfyError.ofString(string, Maybe.none(), err));
 				}
 				
 			case Litll.Arr(array):

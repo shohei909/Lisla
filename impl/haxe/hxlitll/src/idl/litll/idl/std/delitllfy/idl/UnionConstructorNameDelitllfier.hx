@@ -1,6 +1,7 @@
 package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
 import litll.core.Litll;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
@@ -21,7 +22,7 @@ class UnionConstructorNameDelitllfier
 						Result.Ok(data);
 					
 					case Result.Err(message):
-						Result.Err(DelitllfyError.ofString(string, Option.None, DelitllfyErrorKind.Unknown(message)));
+						Result.Err(DelitllfyError.ofString(string, Maybe.none(), DelitllfyErrorKind.Fatal(message)));
 				}
 			case Litll.Arr(array):
 				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.CantBeArray));

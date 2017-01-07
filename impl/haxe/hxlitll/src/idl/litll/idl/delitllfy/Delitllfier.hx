@@ -6,14 +6,14 @@ import litll.core.ds.Result;
 
 class Delitllfier
 {
-	public static function run<T>(process:DelitllfyContext->Result<T, DelitllfyError>, litll:LitllArray, ?config:DelitllfyConfig):Result<T, DelitllfyError>
+	public static function run<T>(process:DelitllfyContext->Result<T, DelitllfyError>, litll:LitllArray<Litll>, ?config:DelitllfyConfig):Result<T, DelitllfyError>
 	{
 		if (config == null)
 		{
 			config = new DelitllfyConfig();
 		}
 		
-		var context = new DelitllfyContext(Option.None, Litll.Arr(litll), config);
+		var context = new DelitllfyContext(Litll.Arr(litll), config);
 		return process(context);
 	}
 	

@@ -17,14 +17,14 @@ class TypeParameterDeclarationDelitllfier
 		return try
 		{
 			var unionContext = new DelitllfyUnionContext(context);
-			switch (unionContext.read(TypeNameDelitllfier.process).getOrThrow())
+			switch (unionContext.read(TypeNameDelitllfier.process).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeParameterDeclaration.TypeName(data));
 					
 				case Option.None:
 			}
-			switch (unionContext.read(TypeDependenceDeclarationDelitllfier.process).getOrThrow())
+			switch (unionContext.read(TypeDependenceDeclarationDelitllfier.process).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeParameterDeclaration.Dependence(data));

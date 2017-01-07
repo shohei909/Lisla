@@ -36,21 +36,22 @@ class IdlToHaxeDataPrinter
 			case Result.Err(errors):
 				for (error in errors)
 				{
-					context.io.printErrorLine(error.toString() + "\n");
+					context.io.printErrorLine(error.toString());
 				}
 				return ProcessResult.Failure;
 		}
 		
-		for (typePath in types.keys())
+		for (key in types.keys())
 		{
 			var config = context.dataOutputConfig;
+            var typePath = TypePath.create(key).getOrThrow();
 			var convertedPath = config.toHaxeDataPath(typePath);
 			if (context.interfaceStore.exists(convertedPath))
 			{
 				continue;
 			}
 			
-			var convertedType = IdlToHaxeDataConverter.convertType(convertedPath, types[typePath], config);
+			var convertedType = IdlToHaxeDataConverter.convertType(convertedPath, types[key], config);
 			context.printer.printType(convertedType);
 		}
 		

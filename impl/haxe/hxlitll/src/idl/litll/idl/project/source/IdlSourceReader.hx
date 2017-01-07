@@ -1,6 +1,7 @@
 package litll.idl.project.source;
 import haxe.ds.Option;
 import haxe.io.Path;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.parse.Parser;
 import litll.idl.delitllfy.DelitllfyConfig;
@@ -54,17 +55,18 @@ class IdlSourceReader
 		return false;
 	}
 	
-	public function readModule(path:Array<String>):Result<Option<LoadedIdl>, IdlReadError>
+	public function readModule(path:Array<String>):Result<Maybe<LoadedIdl>, Array<IdlReadError>>
 	{
-		var loadedIdl:Option<LoadedIdl> = Option.None;
+		var loadedIdl:Maybe<LoadedIdl> = Maybe.none();
 		var localPath = Path.join(path);
-		
+		var errors = [];
+        
 		for (base in directories)
 		{
 			var filePath = base + "/" + localPath + ".idl.litll";
-			inline function errorResult(kind:IdlReadErrorKind):Result<Option<LoadedIdl>, IdlReadError>
+			inline function errorResult(kind:IdlReadErrorKind):Void
 			{
-				return Result.Err(new IdlReadError(filePath, kind));
+				errors.push(new IdlReadError(filePath, kind));
 			}
 			
 			if (FileSystem.exists(filePath) && !FileSystem.isDirectory(filePath))
@@ -82,20 +84,27 @@ class IdlSourceReader
 								errorResult(IdlReadErrorKind.Delitll(error));
 								
 							case Result.Ok(idl):
-								switch (loadedIdl)
+								switch (loadedIdl.toOption())
 								{
 									case Option.Some(prevIdl):
 										errorResult(IdlReadErrorKind.ModuleDupplicated(new ModulePath(path), prevIdl.file));
 										
 									case Option.None:
-										loadedIdl = Option.Some(new LoadedIdl(idl, filePath));
+										loadedIdl = Maybe.some(new LoadedIdl(idl, filePath));
 								}
 						}
 				}
 			}
 		}
 		
-		return Result.Ok(loadedIdl);
+        return if (errors.length > 0)
+        {
+            Result.Err(errors);
+        }
+        else
+        {
+            Result.Ok(loadedIdl);
+        }
 	}
 	
 	public function getChildren(path:Array<String>):Array<String>

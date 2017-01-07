@@ -36,4 +36,9 @@ class HaxeTypePath
 	{
 		return path.getModuleArray();
 	}
+	
+	public function toArray() :Array<String>
+	{
+		return path.toArray();
+	}
 }

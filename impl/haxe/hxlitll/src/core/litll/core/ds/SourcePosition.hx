@@ -16,6 +16,6 @@ class SourcePosition
 	
 	public inline function toString():String
 	{
-		return line + "," + row + "(" + index + ")";
+		return "line:" + line + ":" + row + "(" + index + ")";
 	}
 }

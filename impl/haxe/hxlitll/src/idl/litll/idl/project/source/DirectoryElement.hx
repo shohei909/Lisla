@@ -46,7 +46,7 @@ class DirectoryElement
 		loaded = true;
 	}
 	
-	public function fetchChildren(output:Map<TypePath, TypeDefinition>):Void 
+	public function fetchChildren(output:Map<String, TypeDefinition>):Void 
 	{
 		loadChildren();
 		for (child in children)

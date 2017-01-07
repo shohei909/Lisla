@@ -58,7 +58,7 @@ class IdlPreprocessor
 			switch (importTarget)
 			{
 				case ImportDeclaration.Import(module):
-					switch (element.root.getElement(module.toArray()))
+					switch (element.root.getElement(module.toArray()).toOption())
 					{
 						case Option.Some(element) if (element.hasModule()):
 							importedElements.push(element);

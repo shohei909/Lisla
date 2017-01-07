@@ -8,7 +8,7 @@ import litll.idl.std.data.idl.path.TypeGroupPath;
 import litll.idl.std.data.idl.path.TypePathFilter;
 
 using litll.core.ds.ResultTools;
-using litll.core.ds.OptionTools;
+using litll.core.ds.MaybeTools;
 using litll.idl.std.tools.idl.path.TypePathFilterTools;
 
 class DelitllfierOutputConfig
@@ -29,12 +29,17 @@ class DelitllfierOutputConfig
 	
 	public function toHaxeDelitllfierPath(sourcePath:TypePath):HaxeDelitllfierTypePath
 	{
-		var typePath = new TypePath(sourcePath.modulePath, new TypeName(sourcePath.typeName.toString() + "Delitllfier"));
+		var typePath = new TypePath(
+			sourcePath.modulePath, 
+			sourcePath.typeName.map(function (name) return name + "Delitllfier"),
+			sourcePath.tag
+		);
+		
 		var l = filters.length;
 		for (i in 0...l)
 		{
 			var filter = filters[l - i - 1];
-			switch (filter.apply(typePath))
+			switch (filter.apply(typePath).toOption())
 			{
 				case Option.Some(convertedPath):
 					typePath = convertedPath;

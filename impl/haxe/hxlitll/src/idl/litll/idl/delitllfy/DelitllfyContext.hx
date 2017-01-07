@@ -6,13 +6,11 @@ import litll.idl.delitllfy.DelitllfyConfig;
 
 class DelitllfyContext
 {
-	public var parent(default, null):Option<DelitllfyArrayContext>;
 	public var litll(default, null):Litll;
 	public var config(default, null):DelitllfyConfig;
 	
-	public inline function new(parent:Option<DelitllfyArrayContext>, litll:Litll, config:DelitllfyConfig)
+	public inline function new(litll:Litll, config:DelitllfyConfig)
 	{
-		this.parent = parent;
 		this.litll = litll;
 		this.config = config;
 	}

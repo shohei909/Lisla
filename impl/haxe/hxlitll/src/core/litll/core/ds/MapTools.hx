@@ -3,15 +3,15 @@ import haxe.ds.Option;
 
 class MapTools
 {
-	public static inline function getOption<T, U>(map:Map<T, U>, key:T):Option<U>
+	public static inline function getMaybe<T, U>(map:Map<T, U>, key:T):Maybe<U>
 	{
 		return if (map.exists(key))
 		{
-			Option.Some(map[key]);
+			Maybe.some(map[key]);
 		}
 		else
 		{
-			Option.None;
+			Maybe.none();
 		}
 	}	
 }

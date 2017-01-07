@@ -24,7 +24,7 @@ class PackageDeclarationDelitllfier
 						switch (string.data)
 						{
 							case "package":
-								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var arrayContext = new DelitllfyArrayContext(array, 1, context.config);
 								var directory = arrayContext.read(DirectoryPathDelitllfier.process).getOrThrow();
 								arrayContext.close(PackageDeclaration.Package.bind(directory));	
 							case data:

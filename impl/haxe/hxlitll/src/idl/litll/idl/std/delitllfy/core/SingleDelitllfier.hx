@@ -1,6 +1,7 @@
 package litll.idl.std.delitllfy.core;
 import haxe.ds.Option;
 import litll.core.Litll;
+import litll.core.ds.Maybe;
 import litll.idl.delitllfy.DelitllfyArrayContext;
 import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
@@ -16,12 +17,12 @@ class SingleDelitllfier
 		return switch (context.litll)
 		{
 			case Litll.Str(string):
-				Result.Err(DelitllfyError.ofString(string, Option.None, DelitllfyErrorKind.CantBeString));
+				Result.Err(DelitllfyError.ofString(string, Maybe.none(), DelitllfyErrorKind.CantBeString));
 				
 			case Litll.Arr(array):
 				try
 				{
-					var arrayContext = new DelitllfyArrayContext(context, array, 0);
+					var arrayContext = new DelitllfyArrayContext(array, 0, context.config);
 					var element1 = arrayContext.read(tProcess).getOrThrow();
 					arrayContext.close(LitllSingle.new.bind(element1));
 				}

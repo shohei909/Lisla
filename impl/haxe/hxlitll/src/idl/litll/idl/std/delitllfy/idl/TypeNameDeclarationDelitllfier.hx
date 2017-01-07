@@ -17,14 +17,14 @@ class TypeNameDeclarationDelitllfier
 		return try
 		{
 			var unionContext = new DelitllfyUnionContext(context);
-			switch (unionContext.read(TypeNameDelitllfier.process).getOrThrow())
+			switch (unionContext.read(TypeNameDelitllfier.process).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeNameDeclaration.Primitive(data));
 					
 				case Option.None:
 			}
-			switch (unionContext.read(GenericTypeNameDelitllfier.process).getOrThrow())
+			switch (unionContext.read(GenericTypeNameDelitllfier.process).getOrThrow().toOption())
 			{
 				case Option.Some(data):
 					return Result.Ok(TypeNameDeclaration.Generic(data));

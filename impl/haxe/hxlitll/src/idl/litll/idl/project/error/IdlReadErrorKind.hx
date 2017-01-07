@@ -19,7 +19,7 @@ enum IdlReadErrorKind
 	ModuleNotFound(module:ModulePath);
 	TypeParameterNameDupplicated(name:TypeName);
 	TypeDependenceNameDupplicated(name:TypeDependenceName);
-	ArgumentNameDupplicated(name:String);
+	ArgumentNameDupplicated(name:ArgumentName);
 	InvalidTypeParameterLength(path:TypePath, expected:Int, actual:Int);
 }
 

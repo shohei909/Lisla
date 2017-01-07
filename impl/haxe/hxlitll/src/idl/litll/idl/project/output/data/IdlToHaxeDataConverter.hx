@@ -16,7 +16,7 @@ import litll.idl.std.tools.idl.TypeParameterDeclarationTools;
 import haxe.macro.Expr.TypeDefinition in HaxeTypeDefinition;
 import litll.idl.std.data.idl.TypeDefinition in IdlTypeDefinition;
 
-using litll.core.ds.OptionTools;
+using litll.core.ds.MaybeTools;
 using litll.core.ds.ResultTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 

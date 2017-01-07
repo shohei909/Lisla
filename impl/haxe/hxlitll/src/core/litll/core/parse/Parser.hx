@@ -2,6 +2,7 @@ package litll.core.parse;
 
 import haxe.ds.Option;
 import litll.core.LitllArray;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.ds.SourceMap;
 import litll.core.ds.SourceRange;
@@ -43,7 +44,7 @@ class Parser
 		topContext = Context.Arr(ArrayContext.Normal(true, true));
 	}
 	
-	public static function run(string:String, ?config:ParserConfig):Result<LitllArray, ParseError> 
+	public static function run(string:String, ?config:ParserConfig):Result<LitllArray<Litll>, ParseError> 
 	{
 		if (config == null) 
 		{
@@ -264,15 +265,13 @@ class Parser
 		switch (detail.context) 
 		{
 			case QuotedStringContext.EscapeSequence(escapeSequence):
-				switch (processEscapeSequence(codePoint, escapeSequence))
-				{
-					case Option.Some(string):
+				processEscapeSequence(codePoint, escapeSequence).iter(
+					function (string)
+					{
 						detail.currentLine.content += string;
 						detail.context = QuotedStringContext.Body;
-						
-					case Option.None:
-						// nothing to do
-				}
+					}
+				);
 			
 			case QuotedStringContext.CarriageReturn:
 				switch (codePoint.toInt())
@@ -371,15 +370,13 @@ class Parser
 			// EscapeSequence
 			// --------------------------
 			case [_, UnquotedStringContext.EscapeSequence(context)]:
-				switch (processEscapeSequence(codePoint, context))
-				{
-					case Option.None:
-						// do nothing.
-					
-					case Option.Some(unescapedCodePoint):
+				processEscapeSequence(codePoint, context).iter(
+					function (unescapedCodePoint):Void
+					{
 						detail.string += unescapedCodePoint.toString();
 						detail.context = UnquotedStringContext.Body(false);
-				}
+					}
+				);
 				
 			case [CodePointTools.BACK_SLASH, UnquotedStringContext.Body(false)]:
 				detail.context = UnquotedStringContext.EscapeSequence(new EscapeSequenceDetail(position));
@@ -412,40 +409,40 @@ class Parser
 		}
 	}
 
-	private function processEscapeSequence(codePoint:CodePoint, detail:EscapeSequenceDetail):Option<String>
+	private function processEscapeSequence(codePoint:CodePoint, detail:EscapeSequenceDetail):Maybe<String>
 	{
 		var code = codePoint.toInt();
 		
 		return switch [code, detail.context]
 		{
 			case [CodePointTools.BACK_SLASH, EscapeSequenceContext.Head]:
-				Option.Some("\\");
+				Maybe.some("\\");
 			
 			case [CodePointTools.SINGLE_QUOTE, EscapeSequenceContext.Head]:
-				Option.Some("\'");
+				Maybe.some("\'");
 				
 			case [CodePointTools.DOUBLE_QUOTE, EscapeSequenceContext.Head]:
-				Option.Some("\"");
+				Maybe.some("\"");
 				
 			case [0x30, EscapeSequenceContext.Head]:
-				Option.Some(String.fromCharCode(0));
+				Maybe.some(String.fromCharCode(0));
 				
 			case [0x6E, EscapeSequenceContext.Head]:
-				Option.Some("\n");
+				Maybe.some("\n");
 				
 			case [0x72, EscapeSequenceContext.Head]:
-				Option.Some("\r");
+				Maybe.some("\r");
 				
 			case [0x74, EscapeSequenceContext.Head]:
-				Option.Some("\t");
+				Maybe.some("\t");
 				
 			case [0x75, EscapeSequenceContext.Head]:
 				detail.context = EscapeSequenceContext.UnicodeHead;
-				Option.None;
+				Maybe.none();
 				
 			case [CodePointTools.OPENNING_BRACE, EscapeSequenceContext.UnicodeHead]:
 				detail.context = EscapeSequenceContext.UnicodeBody(0, 0);
-				Option.None;
+				Maybe.none();
 				
 			case [
 					0x30 | 0x31 | 0x32 | 0x33 | 0x34 | 0x35 | 0x36 | 0x37 | 0x38 | 0x39, // 0-9
@@ -453,7 +450,7 @@ class Parser
 				]:
 				value = (value << 4) | (code - 0x30);
 				detail.context = EscapeSequenceContext.UnicodeBody(count + 1, value);
-				Option.None;
+				Maybe.none();
 				
 			case [
 					0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46, // A-F
@@ -461,7 +458,7 @@ class Parser
 				]:
 				value = (value << 4) | (code - 0x41 + 10);
 				detail.context = EscapeSequenceContext.UnicodeBody(count + 1, value);
-				Option.None;
+				Maybe.none();
 				
 			case [
 					0x61 | 0x62 | 0x63 | 0x64 | 0x65 | 0x66, // a-f 
@@ -469,30 +466,30 @@ class Parser
 				]:
 				value = (value << 4) | (code - 0x61 + 10);
 				detail.context = EscapeSequenceContext.UnicodeBody(count + 1, value);
-				Option.None;
+				Maybe.none();
 				
 			case [CodePointTools.CLOSEING_BRACE, EscapeSequenceContext.UnicodeBody(count, value)]:
 				if (count == 0 || 6 < count)
 				{
 					error(ParseErrorKind.InvalidDigitUnicodeEscape, new SourceRange(sourceMap, detail.startPosition, position));
-					Option.Some("");
+					Maybe.some("");
 				}
 				else
 				{
 					try 
 					{
-						Option.Some(CodePoint.fromInt(value).toString());
+						Maybe.some(CodePoint.fromInt(value).toString());
 					}
 					catch (e:Exception)
 					{
 						error(ParseErrorKind.InvalidUnicode);
-						Option.None;
+						Maybe.none();
 					}
 				}
 			
 			case [_, _]:
 				error(ParseErrorKind.InvalidEscapeSequence, new SourceRange(sourceMap, detail.startPosition, position));
-				Option.None;
+				Maybe.none();
 		}
 	}
 	
@@ -517,7 +514,7 @@ class Parser
 	// =============================
 	// End
 	// =============================
-	public inline function end():Result<LitllArray, ParseError> 
+	public inline function end():Result<LitllArray<Litll>, ParseError> 
 	{
 		position += 1;
 		
@@ -555,7 +552,7 @@ class Parser
 		var data = output.end(position);
 		return if (errors.length > 0)
 		{
-			Result.Err(new ParseError(Option.Some(data), errors));
+			Result.Err(new ParseError(Maybe.some(data), errors));
 		}
 		else
 		{
@@ -577,7 +574,7 @@ class Parser
 	
 	private inline function endArray(nextOutput:OutputArray):Void
 	{
-		var arr = new LitllArray(output.data, nextOutput.tag.settle(position));
+		var arr = new LitllArray<Litll>(output.data, nextOutput.tag.settle(position));
 		
 		nextOutput.data.push(Litll.Arr(arr));
 		output = nextOutput;
@@ -726,7 +723,7 @@ class Parser
 		
 		if (!config.persevering)
 		{
-			throw new ParseError(Option.None, errors);
+			throw new ParseError(Maybe.none(), errors);
 		}
 	}
 }
@@ -924,9 +921,9 @@ private class OutputArray
 		return popTag().toArrayTag(position);
 	}
 	
-	public inline function end(position:Int):LitllArray
+	public inline function end(position:Int):LitllArray<Litll>
 	{
-		return new LitllArray(data, tag.settle(position));
+		return new LitllArray<Litll>(data, tag.settle(position));
 	}
 	
 }

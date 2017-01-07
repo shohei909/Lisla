@@ -22,7 +22,7 @@ class ImportDeclearationDelitllfier
 						switch (string.data)
 						{
 							case "import":
-								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var arrayContext = new DelitllfyArrayContext(array, 1, context.config);
 								var file = arrayContext.read(FilePathDelitllfier.process).getOrThrow();
 								arrayContext.close(ImportDeclaration.Import.bind(file));	
 								

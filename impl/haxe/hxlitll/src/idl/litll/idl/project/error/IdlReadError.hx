@@ -1,5 +1,10 @@
 package litll.idl.project.error;
+import litll.core.ds.Maybe;
+import litll.core.ds.SourceRange;
+import litll.core.tag.StringTag;
+import litll.core.tag.Tag;
 import litll.idl.std.data.idl.TypePath;
+using litll.core.ds.MaybeTools;
 
 class IdlReadError
 {
@@ -14,7 +19,7 @@ class IdlReadError
 	
 	public function toString():String
 	{
-		return filePath + ":" + switch (errorKind)
+		return filePath + ": " + switch (errorKind)
 		{
 			case IdlReadErrorKind.Parse(error):
 				error.toString();
@@ -26,29 +31,39 @@ class IdlReadError
 				"Module " + module.toString() + " is dupplicated with " + existingPath.toString();
 				
 			case IdlReadErrorKind.TypeNameDupplicated(typePath):
-				"Type " + typePath.toString() + " is dupplicated";
+				getRangeStringFromTag(typePath.tag.upCast()) + "Type " + typePath.toString() + " is dupplicated";
 				
 			case IdlReadErrorKind.ArgumentNameDupplicated(name):
-				"Argument name " + name + " is dupplicated";
+				getRangeStringFromTag(name.tag.upCast()) + "Argument name " + name + " is dupplicated";
 				
 			case IdlReadErrorKind.TypeDependenceNameDupplicated(name):
-				"Type dependent name " + name + " is dupplicated";
+				getRangeStringFromTag(name.tag.upCast()) + "Type dependent name " + name + " is dupplicated";
 				
 			case IdlReadErrorKind.TypeParameterNameDupplicated(name):
-				"Type parameter name " + name + " is dupplicated";
+				getRangeStringFromTag(name.tag.upCast()) + "Type parameter name " + name + " is dupplicated";
 				
 			case IdlReadErrorKind.InvalidPackage(expected, actual):
-				"Package name " + expected + " is expected but " + actual;
+				getRangeStringFromTag(actual.tag.upCast()) + "Package name " + expected + " is expected but " + actual;
 				
 			case IdlReadErrorKind.TypeNotFound(path):
-				"Type " + path.toString() + " is not found";
+				getRangeStringFromTag(path.tag.upCast()) + "Type " + path.toString() + " is not found";
 				
 			case IdlReadErrorKind.ModuleNotFound(path):
-				"Module " + path.toString() + " is not found";
+				getRangeStringFromTag(path.tag.upCast()) + "Module " + path.toString() + " is not found";
 				
 			case IdlReadErrorKind.InvalidTypeParameterLength(path, expected, actual):
-				"Type " + path.toString() + " parameter length is " + expected + " expected but actual " + actual;
+				getRangeStringFromTag(path.tag.upCast()) + "Type " + path.toString() + " parameter length is " + expected + " expected but actual " + actual;
 				
 		}
 	}
+    
+    private function getRangeStringFromTag(tag:Maybe<Tag>):String
+    {
+        return getRangeString(tag.flatMap(function (t) return t.position));
+    }
+    
+    private function getRangeString(range:Maybe<SourceRange>):String
+    {
+        return range.map(function (r) return r.toString() + ": ").getOrElse("");
+    }
 }

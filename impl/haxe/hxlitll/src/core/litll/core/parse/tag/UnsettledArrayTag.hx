@@ -1,4 +1,5 @@
 package litll.core.parse.tag;
+import litll.core.ds.Maybe;
 import unifill.CodePoint;
 import haxe.ds.Option;
 import litll.core.ds.SourceRange;
@@ -19,7 +20,7 @@ class UnsettledArrayTag
 	public function settle(position:Int):ArrayTag
 	{
 		var tag = new ArrayTag();
-		tag.position = Option.Some(new SourceRange(leadingTag.sourceMap, startPosition, position));
+		tag.position = Maybe.some(new SourceRange(leadingTag.sourceMap, startPosition, position));
 		return tag;
 	}
 	

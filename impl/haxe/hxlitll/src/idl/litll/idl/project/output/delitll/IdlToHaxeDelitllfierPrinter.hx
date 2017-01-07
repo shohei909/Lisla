@@ -3,7 +3,9 @@ import litll.core.ds.Result;
 import litll.idl.ds.ProcessResult;
 import litll.idl.project.output.IdlToHaxePrintContext;
 import litll.idl.project.output.delitll.HaxeDelitllfierTypePathPair;
+import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
+using litll.core.ds.ResultTools;
 
 class IdlToHaxeDelitllfierPrinter
 {
@@ -22,10 +24,11 @@ class IdlToHaxeDelitllfierPrinter
 				return ProcessResult.Failure;
 		}
 		
-		for (typePath in types.keys())
+		for (key in types.keys())
 		{
+            var typePath = TypePath.create(key).getOrThrow();
 			var pathPair = HaxeDelitllfierTypePathPair.create(typePath, context.dataOutputConfig, config);
-			var convertedType = IdlToHaxeDelitllfierConverter.convertType(pathPair, types[typePath], context, config);
+			var convertedType = IdlToHaxeDelitllfierConverter.convertType(pathPair, types[key], context, config);
 			context.printer.printType(convertedType);
 		}
 		

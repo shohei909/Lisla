@@ -1,4 +1,4 @@
-package litll.idl.project.output.store;
+package litll.idl.project.output.data.store;
 import litll.idl.project.output.data.HaxeDataTypePath;
 
 class HaxeDataInterface

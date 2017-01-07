@@ -2,13 +2,14 @@ package litll.idl.std.delitllfy;
 import litll.core.Litll;
 import litll.core.LitllArray;
 import litll.core.ds.Result;
+import litll.idl.delitllfy.DelitllfyArrayContext;
 import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 
 class ArrayDelitllfier
 {
-	public function process(context:DelitllfyContext):Result<LitllArray, DelitllfyError> 
+	public function process<T>(context:DelitllfyContext, tProcess:DelitllfyContext->Result<T, DelitllfyError>):Result<LitllArray<T>, DelitllfyError> 
 	{
 		return switch (context.litll)
 		{
@@ -16,7 +17,20 @@ class ArrayDelitllfier
 				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.CantBeString));
 				
 			case Litll.Arr(array):
-				Result.Ok(array);
+				var data = [];
+				for (litll in array.data)
+				{
+					var tContext = new DelitllfyContext(litll, context.config);
+					switch (tProcess(tContext))
+					{
+						case Result.Err(error):
+							Result.Err(error);
+						
+						case Result.Ok(o):
+							data.push(o);
+					}
+				}
+				Result.Ok(new LitllArray(data, array.tag));
 		}
 	}
 }

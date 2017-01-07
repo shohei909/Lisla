@@ -8,4 +8,5 @@ class HaxeDelitllfierTypePath extends HaxeDataTypePath
 	{
 		super(path);
 	}
+	
 }

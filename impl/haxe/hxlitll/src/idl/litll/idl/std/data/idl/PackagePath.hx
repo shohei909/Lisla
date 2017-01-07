@@ -1,18 +1,26 @@
 package litll.idl.std.data.idl;
+import litll.core.LitllString;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
+import litll.core.tag.StringTag;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 
-abstract PackagePath(Array<String>)
+class PackagePath
 {
 	private static var headEReg:EReg = ~/[a-z]/;
 	private static var bodyEReg:EReg = ~/[0-9a-z_]*/;
 	
-	public function new(directories:Array<String>)
+	public var path:Array<String>;
+	public var tag:Maybe<StringTag>;
+	
+	public function new(path:Array<String>, ?tag:Maybe<StringTag>)
 	{
-		for (directory in directories)
+		this.tag = tag;
+		for (segment in path)
 		{
-			validateElement(directory);
+			validateElement(segment);
 		}
-		this = directories;
+        this.path = path;
 	}
 	
 	public static function validateElement(string:String):Void
@@ -23,20 +31,33 @@ abstract PackagePath(Array<String>)
 		}
 		else if (!headEReg.match(string.substr(0, 1)))
 		{
-			throw "Package name must start with lowercase alphabet.";
+			throw "Package name must start with lowercase alphabet: " + string;
 		}
 		else if (!bodyEReg.match(string.substr(1)))
 		{
-			throw "Lowercase alphabets, numbers and underscore is only allowed in package name.";
+			throw "Lowercase alphabets, numbers and underscore is only allowed in package name: " + string;
 		}
 	}
 	
-	public static function create(string:String):Result<PackagePath, String>
+	@:delitllfy
+	public static function delitllfy(string:LitllString):Result<PackagePath, DelitllfyErrorKind>
+	{
+		return switch (create(string.data, string.tag))
+		{
+			case Result.Ok(data):
+				Result.Ok(data);
+				
+			case Result.Err(err):
+				Result.Err(DelitllfyErrorKind.Fatal(err));
+		}
+	}
+	
+	public static function create(string:String, ?tag:Maybe<StringTag>):Result<PackagePath, String>
 	{
 		var array = string.split(".");
 		return try 
 		{
-			Result.Ok(new PackagePath(array));
+			Result.Ok(new PackagePath(array, tag));
 		}
 		catch (err:String)
 		{
@@ -46,11 +67,11 @@ abstract PackagePath(Array<String>)
 	
 	public function toString():String
 	{
-		return this.join(".");
+		return this.path.join(".");
 	}
 	
 	public function toArray():Array<String>
 	{
-		return this;
+		return this.path;
 	}
 }

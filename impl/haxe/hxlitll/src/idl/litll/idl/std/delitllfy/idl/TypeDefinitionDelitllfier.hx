@@ -28,25 +28,25 @@ class TypeDefinitionDelitllfier
 						switch (string.data)
 						{
 							case "newtype":
-								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var arrayContext = new DelitllfyArrayContext(array, 1, context.config);
 								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
 								var type = arrayContext.read(TypeReferenceDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Newtype.bind(name, type));	
 							
 							case "tuple":
-								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var arrayContext = new DelitllfyArrayContext(array, 1, context.config);
 								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
 								var type = arrayContext.readRest(ArgumentDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Tuple.bind(name, type));	
 							
 							case "enum":
-								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var arrayContext = new DelitllfyArrayContext(array, 1, context.config);
 								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
 								var constructors = arrayContext.readRest(EnumConstructorDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Enum.bind(name, constructors));	
 							
 							case "union":
-								var arrayContext = new DelitllfyArrayContext(context, array, 1);
+								var arrayContext = new DelitllfyArrayContext(array, 1, context.config);
 								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
 								var elements = arrayContext.readRest(UnionConstructorDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Union.bind(name, elements));	

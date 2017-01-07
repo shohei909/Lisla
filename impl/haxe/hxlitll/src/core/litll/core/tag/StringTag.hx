@@ -1,4 +1,5 @@
 package litll.core.tag;
+import litll.core.ds.Maybe;
 import litll.core.ds.SourceMap;
 import litll.core.ds.SourceRange;
 import litll.core.tag.entry.StringFormatTagEntry;
@@ -9,15 +10,15 @@ import haxe.ds.Option;
 
 class StringTag extends Tag
 {
-	public var format:Option<StringFormatTagEntry>;
-	public var stringKind:Option<StringKind>;
-	public var innerMap:Option<SourceMap>;
+	public var format:Maybe<StringFormatTagEntry>;
+	public var stringKind:Maybe<StringKind>;
+	public var innerMap:Maybe<SourceMap>;
 	
 	public function new() 
 	{
 		super();
-		format = Option.None;
-		innerMap = Option.None;
-		stringKind = Option.None;
+		format = Maybe.none();
+		innerMap = Maybe.none();
+		stringKind = Maybe.none();
 	}
 }

@@ -13,5 +13,5 @@ enum DelitllfyErrorKind
 	Recoverable(message:String);
 	
 	// NotRecoverable
-	Unknown(message:String);
+	Fatal(message:String);
 }

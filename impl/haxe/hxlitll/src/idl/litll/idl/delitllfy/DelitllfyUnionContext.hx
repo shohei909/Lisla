@@ -1,6 +1,7 @@
 package litll.idl.delitllfy;
 import haxe.ds.Option;
 import litll.core.Litll;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 using Lambda;
 
@@ -15,18 +16,18 @@ class DelitllfyUnionContext
 		maybeErrors = [];
 	}
 	
-	public inline function read<T>(process:ProcessFunction<T>):Result<Option<T>, DelitllfyError>
+	public inline function read<T>(process:ProcessFunction<T>):Result<Maybe<T>, DelitllfyError>
 	{
 		return switch (process(parent))
 		{
 			case Result.Ok(data):
-				Result.Ok(Option.Some(data));
+				Result.Ok(Maybe.some(data));
 		
 			case Result.Err(error):
 				if (error.recoverable())
 				{
 					maybeErrors.push(error);
-					Result.Ok(Option.None);
+					Result.Ok(Maybe.none());
 				}
 				else
 				{
