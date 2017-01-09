@@ -5,6 +5,10 @@ import litll.idl.ds.ProcessResult;
 import litll.idl.project.output.IdlToHaxePrintContext;
 import litll.idl.project.output.data.IdlToHaxeDataConverter;
 import litll.idl.project.output.data.HaxeDataTypePath;
+import litll.idl.project.output.data.store.HaxeDataClassInterface;
+import litll.idl.project.output.data.store.HaxeDataConstructorKind;
+import litll.idl.project.output.data.store.HaxeDataInterface;
+import litll.idl.project.output.data.store.HaxeDataInterfaceKind;
 import litll.idl.std.data.idl.TypePath;
 using litll.core.ds.ResultTools;
 
@@ -53,6 +57,18 @@ class IdlToHaxeDataPrinter
 			
 			var convertedType = IdlToHaxeDataConverter.convertType(convertedPath, types[key], config);
 			context.printer.printType(convertedType);
+            
+            context.interfaceStore.add(
+                convertedPath, 
+                new HaxeDataInterface(
+                    convertedPath, 
+                    HaxeDataInterfaceKind.Class(
+                        new HaxeDataClassInterface(
+                            HaxeDataConstructorKind.New
+                        )
+                    )
+                )
+            );
 		}
 		
 		return ProcessResult.Success;

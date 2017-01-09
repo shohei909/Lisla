@@ -20,13 +20,13 @@ class HaxeDataInterfaceStore
 	
 	public inline function add(typePath:HaxeDataTypePath, data:HaxeDataInterface):Void
 	{
-		map.set(typePath.toString(), data);
+        map.set(typePath.toString(), data);
 	}
 	
 	public function getDataClassInterface(typePath:HaxeDataTypePath):Maybe<HaxeDataClassInterface> 
 	{
 		var str = typePath.toString();
-		return if (map.exists(str))
+        return if (map.exists(str))
 		{
 			switch (map.get(str).kind)
 			{

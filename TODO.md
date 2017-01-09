@@ -2,7 +2,7 @@
 ## Litll
 - [x] overview
 - [ ] implemention guide line
-- [ ] test case
+- [p] test case
     - [x] basic
         - [x] sample
         - [x] corner
@@ -22,18 +22,19 @@
 
 ## IDL on Litll 
 - [ ] overview
-- [ ] schora standard library
-    - [ ] basic
+- [x] standard library
+    - [x] basic
     - [x] for IDL
     - [ ] for Document
+- [ ] test case
 - [ ] japanese
 
-## Binary format
+## Binary format(Bitll)
 Later
 
 # Rust library
 ## Litll
-- [ ] parse
+- [p] parse
     - [x] basic
     - [ ] document comment
 - [ ] write
@@ -64,18 +65,18 @@ Later
 - [ ] language server
 
 # Haxe library
-- [x] parse
+- [p] parse
     - [x] basic
     - [ ] document comment
 - [ ] write
 - [ ] format
 - [ ] syntax highlight
 - [ ] minify
-- [ ] code generation
-    - [ ] code generation 
-        - [ ] data structure
+- [p] code generation
+    - [p] code generation 
+        - [p] data structure
         - [ ] instance
-        - [ ] delitllfy
+        - [p] delitllfy
         - [ ] litllfy
         - [ ] debitllfy
         - [ ] bitllfy

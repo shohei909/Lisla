@@ -151,7 +151,6 @@ class TypeDefinitionPreprocessor
 								processTypeReferenceParameters(path, type.getTypeParameters(), parameters);
 								
 							case Option.None:
-                                trace(path);
 								addError(IdlReadErrorKind.TypeNotFound(path));
 						}
 						

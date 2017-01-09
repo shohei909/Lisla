@@ -125,6 +125,7 @@ class DelitllfyArrayContext
 		}
 	}
 
+    @:deprecated
 	public inline function close<T>(create:Void->T):Result<T, DelitllfyError>
 	{
 		if (index < array.data.length)
@@ -139,6 +140,23 @@ class DelitllfyArrayContext
 			
 			case Option.None:
 				Result.Ok(create());
+		}
+	}
+
+	public inline function closeWithResult<T>(create:Void->Result<T, DelitllfyError>):Result<T, DelitllfyError>
+	{
+		if (index < array.data.length)
+		{
+			addFatalError(createError(DelitllfyErrorKind.TooLongArray));
+		}
+		
+		return switch (error.toOption())
+		{
+			case Option.Some(error):
+				Result.Err(error);
+			
+			case Option.None:
+				create();
 		}
 	}
 	

@@ -19,8 +19,8 @@
     <class path="src" />
     <class path="..\..\src\core" />
     <class path="..\..\src\idl" />
-    <class path="..\..\generated" />
     <class path="..\..\migration" />
+    <class path="..\..\generated" />
   </classpaths>
   <!-- Build options -->
   <build>

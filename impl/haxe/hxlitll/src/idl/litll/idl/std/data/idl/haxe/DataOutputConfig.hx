@@ -10,9 +10,9 @@ import litll.core.LitllArray;
 import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.idl.project.output.data.HaxeDataTypePath;
-import litll.idl.project.output.data.store.HaxeDataClassConstructorErrorKind;
-import litll.idl.project.output.data.store.HaxeDataConstructorKind;
 import litll.idl.project.output.data.store.HaxeDataClassInterface;
+import litll.idl.project.output.data.store.HaxeDataConstructorKind;
+import litll.idl.project.output.data.store.HaxeDataConstructorReturnKind;
 import litll.idl.project.output.data.store.HaxeDataEnumInterface;
 import litll.idl.project.output.data.store.HaxeDataInterface;
 import litll.idl.project.output.data.store.HaxeDataInterfaceKind;
@@ -154,7 +154,7 @@ class DataOutputConfig
 		var createFunc = Maybe.none();
 		for (field in fields)
 		{
-			if (field.meta.has(":litllNew"))
+			if (field.meta.has(":delitllfy"))
 			{
 				createFunc = Maybe.some(field);
 				break;
@@ -164,71 +164,76 @@ class DataOutputConfig
 		var expr = switch (createFunc.toOption())
 		{
 			case Option.Some(field):
-				switch (field.type)
-				{
-					case Type.TFun(_, ret):
-						var complexType = ret.toComplexType(); 
-						var typePath = complexType.toString();
-						var selfPath = type.toComplexType().toString();
-						if (typePath.split("<")[0] == "litll.core.ds.Result")
-						{
-							switch (complexType)
-							{
-								case ComplexType.TPath(path):
-									switch (path.params)
-									{
-										case [TPType(ok), TPType(err)]:
-											if (ok.toString() != selfPath)
-											{
-												Context.error("litllNew requires Result<Self, _>", field.pos);
-											}
-											else
-											{
-												var errorKind = switch (err.toString())
-												{
-													case "String":
-														macro HaxeDataClassConstructorErrorKind.String;
-												
-													case "litll.idl.delitllfy.DelitllfyErrorKind":
-														macro HaxeDataClassConstructorErrorKind.DelitllfyErrorKind;
-														
-													case _:
-														Context.error("Error type must be String or litll.idl.delitllfy.DelitllfyErrorKind", field.pos);
-														return null;
-												}
-												
-												macro HaxeDataConstructorKind.Result($v{field.name}, $errorKind);	
-											}
-										case _:
-											Context.error("Result type parameters are invalid", field.pos);
-											null;
-									}
-									
-								case _:
-									Context.error("Result type parameters are invalid", field.pos);
-							}
-						}
-						else if (typePath == selfPath)
-						{
-							macro HaxeDataConstructorKind.Direct($v{field.name});
-						}
-						else
-						{
-							Context.error("litllNew return type must be Result or Self", field.pos);
-							null;
-						}
-					case _:
-						Context.error("litllNew must be function", field.pos);
-						null;
-				}
+				resolveDelitllfy(type, field.type, field);
 				
 			case Option.None:
-				macro HaxeDataConstructorKind.Direct("new");
+				macro HaxeDataConstructorKind.New;
 		}
 		
 		return macro HaxeDataInterfaceKind.Class(
 			new HaxeDataClassInterface($expr)
 		);
 	}
+    
+    private static function resolveDelitllfy(selfType:Type, type:Type, field:ClassField):Expr
+    {
+        return switch (type)
+        {
+            case Type.TFun(_, ret):
+                var complexType = ret.toComplexType(); 
+                var typePath = complexType.toString();
+                var selfPath = selfType.toComplexType().toString();
+                
+                if (typePath.split("<")[0] == "litll.core.ds.Result")
+                {
+                    switch (complexType)
+                    {
+                        case ComplexType.TPath(path):
+                            switch (path.params)
+                            {
+                                case [TPType(ok), TPType(err)]:
+                                    if (ok.toString() != selfPath)
+                                    {
+                                        Context.error("@:delitllfy function requires Result<" + selfPath + ", DelitllfyErrorKind>", field.pos);
+                                    }
+                                    else
+                                    {
+                                        switch (err.toString())
+                                        {
+                                            case "litll.idl.delitllfy.DelitllfyErrorKind":
+                                                macro HaxeDataConstructorKind.Function($v{field.name}, HaxeDataConstructorReturnKind.Result);	
+                                                
+                                            case _:
+                                                Context.error("Error type must be litll.idl.delitllfy.DelitllfyErrorKind", field.pos);
+                                                return null;
+                                        }
+                                    }
+                                case _:
+                                    Context.error("Result type parameters are invalid", field.pos);
+                                    null;
+                            }
+                            
+                        case _:
+                            Context.error("Result type parameters are invalid", field.pos);
+                    }
+                }
+                else if (typePath == selfPath)
+                {
+                    macro HaxeDataConstructorKind.Function($v{field.name}, HaxeDataConstructorReturnKind.Direct);
+                }
+                else
+                {
+                    Context.error("@:delitllfy function return type must be Result<" + selfPath + ", DelitllfyErrorKind> or " + selfPath, field.pos);
+                    null;
+                }
+                
+            case TLazy(func):
+                resolveDelitllfy(selfType, func(), field);
+                
+            case _:
+                Context.error("@:delitllfy function must be function:", field.pos);
+                null;
+        }
+    }
 	#end
 }

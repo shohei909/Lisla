@@ -1,20 +1,23 @@
 package litll.idl.std.data.idl;
+import litll.core.LitllString;
 import litll.core.ds.Result;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 using litll.core.string.IdentifierTools;
 using litll.core.ds.ResultTools;
 
-abstract UnionConstructorName(String) 
+abstract UnionConstructorName(LitllString) 
 {
-	public function new (string:String) 
+	public function new (string:LitllString) 
 	{
-		if (!IdentifierTools.isSnakeCase(string))
+		if (!IdentifierTools.isSnakeCase(string.data))
 		{
 			throw "UnionConstructorName must be snake case";
 		}
 		this = string;
 	}
 	
-	public static function create(string:String):Result<UnionConstructorName, String>
+	@:delitllfy
+	public static function delitllfy(string:LitllString):Result<UnionConstructorName, DelitllfyErrorKind>
 	{
 		return try 
 		{
@@ -22,22 +25,22 @@ abstract UnionConstructorName(String)
 		}
 		catch (err:String)
 		{
-			Result.Err(err);
+			Result.Err(DelitllfyErrorKind.Fatal(err));
 		}
 	}
 	
 	public function toString():String
 	{
-		return this;
+		return this.data;
 	}
 
 	public function toPascalCase():String
 	{
-		return IdentifierTools.toPascalCase(this).getOrThrow();
+		return IdentifierTools.toPascalCase(this.data).getOrThrow();
 	}
 	
 	public function toVariableName():String
 	{
-		return this.toCamelCase().getOrThrow().escapeKeyword();
+		return this.data.toCamelCase().getOrThrow().escapeKeyword();
 	}
 }

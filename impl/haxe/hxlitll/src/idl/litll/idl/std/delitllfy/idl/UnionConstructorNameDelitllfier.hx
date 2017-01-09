@@ -16,13 +16,13 @@ class UnionConstructorNameDelitllfier
 		return switch (context.litll)
 		{
 			case Litll.Str(string):
-				switch(UnionConstructorName.create(string.data))
+				switch(UnionConstructorName.delitllfy(string))
 				{
 					case Result.Ok(data):
 						Result.Ok(data);
 					
-					case Result.Err(message):
-						Result.Err(DelitllfyError.ofString(string, Maybe.none(), DelitllfyErrorKind.Fatal(message)));
+					case Result.Err(kind):
+						Result.Err(DelitllfyError.ofString(string, Maybe.none(), kind));
 				}
 			case Litll.Arr(array):
 				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.CantBeArray));

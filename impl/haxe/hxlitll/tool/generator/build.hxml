@@ -3,7 +3,7 @@
 -cp src
 -cp ../../src/core
 -cp ../../src/idl
--cp ../../generated
 -cp ../../migration
+-cp ../../generated
 -dce full
 -neko bin/generator.n

@@ -51,7 +51,19 @@ class TypeReferenceTools
 				new GenericTypeReference(primitive, []);
 				
 			case TypeReference.Generic(generic):
-				generic;
+    			generic;
 		}
 	}
+    
+    public static function getName(type:TypeReference):String
+    {
+		return switch (type)
+		{
+			case TypeReference.Primitive(primitive):
+				primitive.toString();
+				
+			case TypeReference.Generic(generic):
+    			generic.typePath.toString();
+		}
+    }
 }

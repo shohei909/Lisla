@@ -1,32 +1,29 @@
-# Sora DSL ツールキット
+# Litll DSL ツールキット
 
-Sora DSL ツールキットは、SoraベースのDSLを簡単に作成するためのツール群です。
+Litll DSL ツールキットは、LitllベースのDSLを簡単に作成するためのツール群です。
 
-SoraIDL(Soraインターフェイス記述言語)を使って、データ構造を記述するだけでDSLの作成が終わり、パーサ、バリデータ、シンタックスハイライタ、入力補完を手に入れることができます。
+IDL on Litll を使ってデータ構造を記述するだけでDSLの作成が終わり、パーサ、バリデータ、シンタックスハイライタ、入力補完を手に入れることができます。
 
-# 機能
 
-Sora DSL ツールキットは、以下の機能
+# 構成
 
-* SoraIDLから、RustまたはHaxeのデータ構造を出力。
-* 
+Litll DSL ツールキットは以下のツールで構成されます。
 
-# ツールキット
-
-Sora DSL ツールキット
 
 ## Rust
 
-### libsora
-RustでSoraをあつかうためのライブラリです
+### liblitll
+RustでLitllをあつかうためのライブラリです
 
 #### 機能
-- [ ] 読み込み
-- [ ] 書き込み
+- [ｘ] Litll読み込み
+- [ ] Litll書き込み
 - [ ] フォーマット
+- [ ] データ正規化
+- [ ] Hash生成
 - [ ] ファイル圧縮(minify)
 
-- Sora IDL
+- Litll IDL
     - Rust出力
         - [ ] データ構造生成
         - オブジェクトマッピング
@@ -37,59 +34,54 @@ RustでSoraをあつかうためのライブラリです
         - [ ] コードジャンプ
         - [ ] 入力補完
 
-### sorac
-Soraのためのコマンドラインツール
+### litllc
+Litllのためのコマンドラインツール
 
 #### 機能
+- [ ] Litll → Json変換
+- [ ] ファイル圧縮(minify)
+- [ ] フォーマット
+- [ ] バリデーション
 
+- 言語サーバー
+    - [ ] シンタックスハイライト
+    - [ ] コードジャンプ
+    - [ ] 入力補完
+    - [ ] プラグインシステム
+    - プラグイン
+        - [ ] Litll IDL サポート強化
+
+- IDL on Litll
+    - 標準ライブラリ
 
 ## Haxe
 
-### hxsora
-HaxeでSoraをあつかうためのライブラリです。
+### hxlitll
+HaxeでLitllをあつかうためのライブラリです。
 
 #### 機能
+- [x] Litll読み込み
+- [ ] Litll書き込み
+- [ ] データ正規化
+- [ ] Hash生成
+
+- Litll IDL
+    - Litll → Haxe 出力
+        - [x] データ構造
+        - [ ] 逆Litll化
+        - [ ] Litll化
+        - [ ] 逆Bitll化
+        - [ ] Bitll化
+    - [ ] Haxe → Litll 出力
 
 ## エディタ
 
-### Sora VSCode Plugin
-Visual Studio Code上で、Soraを記述するためのプラグイン
+### Litll VSCode Plugin
+Visual Studio Code上で、Litllを記述するためのプラグイン
 
 #### 機能
-
-# Rust library
-## Sora
-- [ ] parse
-    - [x] basic
-    - [ ] document comment
-- [ ] write
-- [ ] format
-- [ ] syntax highlight
-- [ ] minify
-- [ ] object map
-- [ ] hash
-
-## SoraIDL
-- [ ] auto generate
-- [ ] lint
-- [ ] documment generate
-- [ ] auto complete
-- [ ] Schora To Rust
-- [ ] Rust To Schora
-
-# Rust CLI tool ()
-- [ ] help
-- [ ] first impliment
-- [ ] installer
-    - [ ] windows 
-- [ ] language server
-
-# Haxe library
-- [ ] parse
-    - [ ] basic
-    - [ ] document comment
-- [ ] write
-- [ ] format
-- [ ] syntax highlight
-- [ ] minify
-- [ ] object map
+- [ ] フォーマット
+- [ ] シンタックスハイライト
+- [ ] バリデーション
+- [ ] コードジャンプ
+- [ ] 入力補完

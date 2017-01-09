@@ -11,6 +11,8 @@ import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.haxe.DataOutputConfig;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
+import litll.idl.std.tools.idl.TypeDependenceDeclarationTools;
+import litll.idl.std.tools.idl.TypeNameTools;
 import litll.idl.std.tools.idl.TypeParameterDeclarationTools;
 
 import haxe.macro.Expr.TypeDefinition in HaxeTypeDefinition;
@@ -27,8 +29,9 @@ class IdlToHaxeDataConverter
 		var fields:Array<Field> = [];
 		var kind:TypeDefKind;
 		var name = TypeDefinitionTools.getName(source);
-		var params = TypeParameterDeclarationTools.toHaxeParams(TypeDefinitionTools.getTypeParameters(source));
-		var additionalFields = TypeParameterDeclarationTools.toHaxeDependences(TypeDefinitionTools.getTypeParameters(source), config);
+        var collection = TypeParameterDeclarationTools.collect(TypeDefinitionTools.getTypeParameters(source));
+		var params = TypeNameTools.toHaxeParamDecls(collection.parameters);
+		var additionalFields = TypeDependenceDeclarationTools.toHaxeDependences(collection.dependences, config);
 	
 		switch (source)
 		{

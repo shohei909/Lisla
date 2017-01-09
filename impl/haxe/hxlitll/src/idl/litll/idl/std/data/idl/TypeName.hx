@@ -73,8 +73,13 @@ abstract TypeName(LitllString)
 	
 	public function toVariableName():String
 	{
-		return IdentifierTools.toCamelCase(this.data).getOrThrow() + "Process";
+		return IdentifierTools.toCamelCase(this.data).getOrThrow();
 	}
+    
+    public function toProcessFunctionName():String
+    {
+        return toVariableName() + "Process";
+    }
 	
 	public function map(func:String->String):TypeName
 	{
