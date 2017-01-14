@@ -83,7 +83,7 @@ def
         </td>
         <td>
             <pre><code>
-["a", "b", "c", "d"]
+["a", "b", "c", "def"]
             </code></pre>
         </td>
     </tr>
