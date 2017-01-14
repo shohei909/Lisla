@@ -1,7 +1,5 @@
 # Specification
 ## Litll
-- [x] overview
-- [ ] implemention guide line
 - [p] test case
     - [x] basic
         - [x] sample
@@ -18,7 +16,11 @@
                 - [ ] minify
                 - [ ] format
                 - [ ] auto complete
-- [ ] japanese
+- [p] english
+    - [p] overview
+    - [ ] implemention guide line
+- [p] japanese
+    - [x] overview
 
 ## IDL on Litll 
 - [ ] overview

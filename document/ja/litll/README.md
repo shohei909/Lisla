@@ -352,7 +352,6 @@ string // this is also comment
 /// これは様々なツール(エディタやドキュメント生成など)向けのコメントです。
 /// """
 /// [auther shohei909]
-/// [version 0.1]
 /// [license "public domain"]
 /// [document_format markdown]
 
@@ -367,8 +366,8 @@ aaa
 `//!`と`///!`は`minify`によって除去されないコメントを意味します。
 
 ```
-//! Comments start with ! are keeped when Litll is minified.
-///! 'Keeping document comments are also avarable.'
+//! 「!」で始まるコメントはLitllがminifyされる際に除去されません
+///! '保護されたドキュメントコメントも利用可能です'
 ```
 
 ## エンコード
