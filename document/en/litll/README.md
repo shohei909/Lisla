@@ -78,7 +78,7 @@ The quotes number can be 3 or more.
     </tr>
 </table>
 
-2 quotes can not be use, because `""` and `''` mean an empty string.
+2 quotes can not be used, because `""` and `''` mean an empty string.
 
 ### Multi-line string
 
@@ -311,7 +311,7 @@ d
         </td>
         <td>
             <pre><code>
-["a" "b" ["c" []] "d"]
+["a", "b", ["c", []], "d"]
             </code></pre>
         </td>
     </tr>
@@ -323,6 +323,8 @@ If you want to express empty string, use `""` or `''`.
 
 Litll supports single line comment.
 
+Single line comment
+
 ```
 // this is comment
 string // this is also comment
@@ -333,17 +335,15 @@ Multi-line comment is not supported.
 ### Document comment
 
 ```
-/// [document
-///     '''
-///     # Sample for document comment.
-///
-///     This is comment for various tools (e.g. editor, document generation).
-///     '''
-///     [auther shohei909]
-///     [version 0.1]
-///     [license "public domain"]
-///     [document_format markdown]
-/// ]
+/// '''
+/// # Sample for document comment.
+/// 
+/// This is comment for various tools (e.g. editor, document generation).
+/// '''
+/// [auther shohei909]
+/// [version 0.1]
+/// [license "public domain"]
+/// [document_format markdown]
 
 /// 'first element'
 aaa
