@@ -1,4 +1,5 @@
 package litll.idl.delitllfy;
+import litll.core.Litll;
 
 enum DelitllfyErrorKind
 {
@@ -6,8 +7,7 @@ enum DelitllfyErrorKind
 	CantBeArray;
 	CantBeString;
 	UnmatchedConst(actual:String, expected:String);
-	UnmatchedEnumConstructor(actural:String, expected:Array<String>);
-	UnmatchedUnion;
+	UnmatchedEnumConstructor(expected:Array<String>);
 	EndOfArray;
 	TooLongArray;
 	Recoverable(message:String);

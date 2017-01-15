@@ -48,8 +48,7 @@ class DelitllfyError
 	{
 		return switch (kind)
 		{
-			case DelitllfyErrorKind.UnmatchedUnion | 
-				DelitllfyErrorKind.UnmatchedEnumConstructor(_) | 
+			case DelitllfyErrorKind.UnmatchedEnumConstructor(_) | 
 				DelitllfyErrorKind.UnmatchedConst(_) | 
 				DelitllfyErrorKind.CantBeArray | 
 				DelitllfyErrorKind.CantBeString |
@@ -124,11 +123,8 @@ class DelitllfyError
 	{
 		return switch (kind)
 		{
-			case DelitllfyErrorKind.UnmatchedUnion:
-				"unmatched union";
-				
-			case DelitllfyErrorKind.UnmatchedEnumConstructor(actual, expected):
-				"unmatched enum constructor. '" + expected.join(" | ") + "' expected, but actual '" + actual + "'";
+			case DelitllfyErrorKind.UnmatchedEnumConstructor(expected):
+				"unmatched enum constructor. '" + expected.join(" | ") + "' expected";
 				
 			case DelitllfyErrorKind.UnmatchedConst(actual, expected):
 				"unmatched const. '" + expected + "' expected, but actual '" + actual + "'";

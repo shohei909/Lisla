@@ -28,18 +28,15 @@ class PackageDeclarationDelitllfier
 								var directory = arrayContext.read(DirectoryPathDelitllfier.process).getOrThrow();
 								arrayContext.close(PackageDeclaration.Package.bind(directory));	
 							case data:
-								Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor("[" + data + "]", expected), []));
+								Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor(expected), []));
 						}
 						
 					case Litll.Arr(_):
-						Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor("[[..]]", expected), []));
+						Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor(expected), []));
 				}
 				
-			case Litll.Arr(_):
-				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor("[]", expected)));
-				
-			case Litll.Str(data):
-				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor(data.data, expected)));
+			case data:
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor(expected)));
 		}
 	}
 }

@@ -1,9 +1,11 @@
 package litll.idl.std.delitllfy.idl;
 import haxe.ds.Option;
+import litll.core.Litll;
+import litll.idl.delitllfy.DelitllfyArrayContext;
 import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
-import litll.idl.delitllfy.DelitllfyUnionContext;
 import litll.core.ds.Result;
+import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.delitllfy.idl.GenericTypeReferenceDelitllfier;
 import litll.idl.std.delitllfy.idl.TypePathDelitllfier;
@@ -14,28 +16,21 @@ class TypeReferenceDelitllfier
 {
 	public static function process(context:DelitllfyContext):Result<TypeReference, DelitllfyError> 
 	{
-		return try
+		var expected = ["primitive", "enum"];
+		return switch (context.litll)
 		{
-			var unionContext = new DelitllfyUnionContext(context);
-			switch (unionContext.read(TypePathDelitllfier.process).getOrThrow().toOption())
-			{
-				case Option.Some(data):
-					return Result.Ok(TypeReference.Primitive(data));
-					
-				case Option.None:
-			}
-			switch (unionContext.read(GenericTypeReferenceDelitllfier.process).getOrThrow().toOption())
-			{
-				case Option.Some(data):
-					return Result.Ok(TypeReference.Generic(data));
-					
-				case Option.None:
-			}
-			unionContext.close();
-		}
-		catch (e:DelitllfyError)
-		{
-			Result.Err(e);
+			case Litll.Arr(array) if (array.data.length >= 1):
+                var arrayContext = new DelitllfyArrayContext(array, 0, context.config);
+                var name = arrayContext.read(TypePathDelitllfier.process).getOrThrow();
+                var parameters = arrayContext.readRest(TypeReferenceParameterDelitllfier.process).getOrThrow();
+				Result.Ok(TypeReference.Generic(name, parameters));
+                
+			case Litll.Str(data):
+                var data = TypePathDelitllfier.process(context).getOrThrow();
+                Result.Ok(TypeReference.Primitive(data));
+                
+			case _:
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor(expected)));
 		}
 	}
 }

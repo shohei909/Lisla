@@ -74,7 +74,6 @@ class DataOutputConfig
 		this.addPredefinedType(TypeName);
 		this.addPredefinedType(TypePath);
 		this.addPredefinedType(TypeDependenceName);
-		this.addPredefinedType(UnionConstructorName);
 		this.addPredefinedType(TypeReferenceParameter);
 	}
 	

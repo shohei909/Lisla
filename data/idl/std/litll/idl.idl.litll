@@ -27,31 +27,26 @@
 
 /// [document_tag litll.idl.document.TypeDefinitionDocumentTag]
 [enum TypeDefinition
-    [struct [name TypeNameDeclaration] [arguments.. Argument]]
-    [enum [name TypeNameDeclaration] [constructors.. EnumConstructor]]
     [newtype [name TypeNameDeclaration] [type TypeReference]]
-    [union [name TypeNameDeclaration] [elements.. UnionConstructor]]
-    [tuple [name TypeNameDeclaration] [arguments.. Argument]]
+    [tuple [name TypeNameDeclaration] [arguments.. TupleArgument]]
+    [enum [name TypeNameDeclaration] [constructors.. EnumConstructor]]
+    [struct [name TypeNameDeclaration] [arguments.. Argument]]
 ]
-[union TypeNameDeclaration
-    [primitive TypeName]
-    [generic GenericTypeName]
+[enum TypeNameDeclaration
+    [[primitive unfold] [name TypeName]]
+    [[generic tuple] [name TypeName] [parameters.. TypeParameterDeclaration]]
 ]
-[tuple GenericTypeName
-    [name TypeName]
-    [parameters.. TypeParameterDeclaration]
-]
-[union TypeParameterDeclaration
-    [type_name TypeName]
-    [dependence TypeDependenceDeclaration]
+[enum TypeParameterDeclaration
+    [[type_name unfold] [type_name TypeName]]
+    [[dependence tuple] [name TypeDependenceName] [type TypeReference]]
 ]
 [newtype TypeName String]
-[tuple TypeDependenceDeclaration
-    [name TypeDependenceName]
-    [type TypeReference]
-]
 [newtype TypeDependenceName String]
 
+[enum TupleArgument
+    [[label unfold] [constant String]]
+    [[data unfold] [argument Argument]]
+]
 
 /// [document_tag litll.idl.document.ArgumentDocumentTag]
 [tuple Argument 
@@ -61,39 +56,29 @@
 ]
 [newtype ArgumentName String]
 
-
 // [document_tag litll.idl.document.EnumConstructorDocumentTag]
-[union EnumConstructor
-    [primitive EnumConstructorName]
-    [parameterized ParameterizedEnumConstructor]
+[enum EnumConstructor
+    [[primitive unfold] [name EnumConstructorName]]
+    [[parameterized tuple] [name EnumConstructorHeader] [arguments.. TupleArgument]]
 ]
 
-[tuple ParameterizedEnumConstructor
-    [name EnumConstructorName]
-    [arguments.. Argument]
-]
 [newtype EnumConstructorName String]
-
-
-/// [document_tag litll.idl.document.UnionConstructorDocumentTag]
-[tuple UnionConstructor 
-    [name UnionConstructorName]
-    [type TypeReference]
+[enum EnumConstructorHeader
+    [[basic unfold] [name EnumConstructorName]]
+    [[special tuple] [name EnumConstructorName] [condition EnumConstructorCondition]]
 ]
-[newtype UnionConstructorName String]
+[enum EnumConstructorCondition
+    unfold
+    tuple
+]
 
 [newtype PackagePath String]
 [newtype ModulePath String]
 [newtype TypePath String]
 
-[union TypeReference
-    [primitive TypePath]
-    [generic GenericTypeReference]
-]
-
-[tuple GenericTypeReference
-    [type_path TypePath] 
-    [parameters.. TypeReferenceParameter]
+[enum TypeReference
+    [[primitive unfold] [type_path TypePath]]
+    [[generic tuple] [type_path TypePath] [parameters.. TypeReferenceParameter]]
 ]
 
 [newtype TypeReferenceParameter Any]

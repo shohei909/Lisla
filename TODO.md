@@ -23,13 +23,15 @@
     - [x] overview
 
 ## IDL on Litll 
-- [ ] overview
 - [x] standard library
     - [x] basic
     - [x] for IDL
     - [ ] for Document
 - [ ] test case
+- [ ] english
+    - [ ] overview
 - [ ] japanese
+    - [ ] overview
 
 ## Binary format(Bitll)
 Later
@@ -74,7 +76,7 @@ Later
 - [ ] format
 - [ ] syntax highlight
 - [ ] minify
-- [p] code generation
+- [p] IDL on Litll
     - [p] code generation 
         - [p] data structure
         - [ ] instance

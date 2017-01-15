@@ -2,5 +2,5 @@
 package litll.idl.std.data.idl;
 enum TypeNameDeclaration {
     Primitive(primitive:litll.idl.std.data.idl.TypeName);
-    Generic(generic:litll.idl.std.data.idl.GenericTypeName);
+    Generic(name:litll.idl.std.data.idl.TypeName, parameters : Array<litll.idl.std.data.idl.TypeParameterDeclaration>);
 }

@@ -6,29 +6,28 @@ import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.idl.std.data.idl.EnumConstructor;
-import litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier;
-import litll.idl.std.delitllfy.idl.EnumConstructorNameDelitllfier;
+import litll.idl.std.data.idl.EnumConstructorHeader;
 using litll.core.ds.ResultTools;
 
-class EnumConstructorDelitllfier
+class EnumConstructorHeaderDelitllfier 
 {
-	public static function process(context:DelitllfyContext):Result<EnumConstructor, DelitllfyError> 
-	{
+    public static function process(context:DelitllfyContext):Result<EnumConstructorHeader, DelitllfyError>
+    {
 		var expected = ["primitive", "parameterized"];
 		return switch (context.litll)
 		{
-			case Litll.Arr(array) if (array.data.length >= 1):
+			case Litll.Arr(array) if (array.data.length == 2):
                 var arrayContext = new DelitllfyArrayContext(array, 0, context.config);
-                var header = arrayContext.read(EnumConstructorHeaderDelitllfier.process).getOrThrow();
-                var parameters = arrayContext.readRest(TupleArgumentDelitllfier.process).getOrThrow();
-				Result.Ok(EnumConstructor.Parameterized(header, parameters));
+                var data = arrayContext.read(EnumConstructorNameDelitllfier.process).getOrThrow();
+                var condition = arrayContext.read(EnumConstuctorConditionDelitllfier.process).getOrThrow();
+				Result.Ok(EnumConstructorHeader.Special(data, condition));
                 
 			case Litll.Str(data):
                 var data = EnumConstructorNameDelitllfier.process(context).getOrThrow();
-                Result.Ok(EnumConstructor.Primitive(data));
+                Result.Ok(EnumConstructorHeader.Basic(data));
                 
 			case data:
 				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor(expected)));
 		}
-	}
+    }
 }

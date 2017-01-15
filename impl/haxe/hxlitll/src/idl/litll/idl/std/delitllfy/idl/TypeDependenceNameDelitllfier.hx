@@ -7,7 +7,6 @@ import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.idl.std.data.idl.TypeDependenceName;
-import litll.idl.std.data.idl.UnionConstructorName;
 import litll.idl.std.delitllfy.idl.TypeDependenceNameDelitllfier;
 
 class TypeDependenceNameDelitllfier

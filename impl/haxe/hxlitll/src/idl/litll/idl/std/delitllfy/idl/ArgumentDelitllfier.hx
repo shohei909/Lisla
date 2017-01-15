@@ -35,7 +35,7 @@ class ArgumentDelitllfier
 					var parameters = arrayContext.read(TypeReferenceDelitllfier.process).getOrThrow();
 					var defaultValue = arrayContext.readWithDefault(
 						OptionDelitllfier.process.bind(Delitllfier.processLitll), 
-						LitllOption.None(new Unit())
+						LitllOption.None
 					).getOrThrow();
 					arrayContext.close(Argument.new.bind(name, parameters, defaultValue));
 				}

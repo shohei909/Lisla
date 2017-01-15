@@ -9,7 +9,7 @@ import litll.idl.delitllfy.DelitllfyErrorKind;
 
 class ArrayDelitllfier
 {
-	public function process<T>(context:DelitllfyContext, tProcess:DelitllfyContext->Result<T, DelitllfyError>):Result<LitllArray<T>, DelitllfyError> 
+	public static function process<T>(context:DelitllfyContext, tProcess:DelitllfyContext->Result<T, DelitllfyError>):Result<LitllArray<T>, DelitllfyError> 
 	{
 		return switch (context.litll)
 		{

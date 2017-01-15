@@ -9,6 +9,7 @@ import haxe.macro.Expr.TypeDefKind;
 import litll.idl.project.output.data.HaxeDataTypePath;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.EnumConstructor;
+import litll.idl.std.data.idl.TupleArgument;
 import litll.idl.std.data.idl.haxe.DataOutputConfig;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
 import litll.idl.std.tools.idl.TypeDependenceDeclarationTools;
@@ -21,6 +22,7 @@ import litll.idl.std.data.idl.TypeDefinition in IdlTypeDefinition;
 using litll.core.ds.MaybeTools;
 using litll.core.ds.ResultTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
+using litll.idl.std.tools.idl.EnumConstructorHeaderTools;
 
 class IdlToHaxeDataConverter
 {
@@ -52,9 +54,9 @@ class IdlToHaxeDataConverter
 							name = primitive.toPascalCase().getOrThrow();
 							arguments = [];
 							
-						case Parameterized(paramerterized):
-							name = paramerterized.name.toPascalCase().getOrThrow();
-							arguments = convertArguments(paramerterized.arguments, config);
+						case EnumConstructor.Parameterized(header, _arguments):
+							name = header.getHeaderName().toPascalCase().getOrThrow();
+							arguments = convertTupleArguments(_arguments, config);
 					}
 					
 					arguments = arguments.concat(additionalFields);
@@ -96,37 +98,11 @@ class IdlToHaxeDataConverter
 					)
 				);
 				
-				
-			case IdlTypeDefinition.Union(name, constructors):
-				kind = TypeDefKind.TDEnum;
-				for (constructor in constructors)
-				{
-					fields.push(
-						{
-							name: constructor.name.toPascalCase(),
-							kind: FieldType.FFun(
-								{
-									args: [
-										{
-											name: constructor.name.toVariableName(),
-											type: ComplexType.TPath(constructor.type.toMacroTypePath(config)),
-										}
-									].concat(additionalFields),
-									ret: null,
-									expr: null,
-								}
-							),
-							pos : null,
-						}
-					);
-				}
-				
-				
 			case IdlTypeDefinition.Tuple(name, arguments):
 				kind = TypeDefKind.TDClass(null, null, false);
 				setupBasicFields(
 					fields, 
-					convertArguments(arguments, config).concat(additionalFields)
+					convertTupleArguments(arguments, config).concat(additionalFields)
 				);
 		}
 		
@@ -140,34 +116,50 @@ class IdlToHaxeDataConverter
 		}
 	}
 	
+	private static function convertArgument(argument:Argument, config:DataOutputConfig):FunctionArg
+	{
+        var typePath = ComplexType.TPath(argument.type.toMacroTypePath(config));
+        typePath = switch (argument.name.kind)
+        {
+            case Normal | Structure | Skippable:
+                typePath;
+                
+            case Rest:
+                ComplexType.TPath(
+                    {
+                        pack : [],
+                        name : "Array",
+                        params : [TypeParam.TPType(typePath)],
+                        sub : null
+                    }
+                );
+        }
+				
+		return {
+            name: argument.name.toVariableName().getOrThrow(),
+            type: typePath,
+        };
+	}
 	private static function convertArguments(source:Array<Argument>, config:DataOutputConfig):Array<FunctionArg>
 	{
-		return [
-			for (argument in source)
-			{
-				var typePath = ComplexType.TPath(argument.type.toMacroTypePath(config));
-				typePath = switch (argument.name.kind)
-				{
-					case Normal | Structure | Skippable:
-						typePath;
-						
-					case Rest:
-						ComplexType.TPath(
-							{
-								pack : [],
-								name : "Array",
-								params : [TypeParam.TPType(typePath)],
-								sub : null
-							}
-						);
-				}
-				
-				{
-					name: argument.name.toVariableName().getOrThrow(),
-					type: typePath,
-				}
-			}
-		];
+		return [for (argument in source) convertArgument(argument, config)];
+	}
+    
+	private static function convertTupleArguments(source:Array<TupleArgument>, config:DataOutputConfig):Array<FunctionArg>
+	{
+        var args = [];
+        for (argument in source)
+        {
+            switch (argument)
+            {
+                case TupleArgument.Data(argument):
+                    args.push(convertArgument(argument, config));
+                    
+                case TupleArgument.Label(_):
+            }
+        }
+        
+        return args;
 	}
 	
 	private static function setupBasicFields(fields:Array<Field>, arguments:Array<FunctionArg>):Void

@@ -2,5 +2,5 @@
 package litll.idl.std.data.idl;
 enum TypeParameterDeclaration {
     TypeName(typeName:litll.idl.std.data.idl.TypeName);
-    Dependence(dependence:litll.idl.std.data.idl.TypeDependenceDeclaration);
+    Dependence(dependence:litll.idl.std.data.idl.TypeDependenceName, type:litll.idl.std.data.idl.TypeReference);
 }

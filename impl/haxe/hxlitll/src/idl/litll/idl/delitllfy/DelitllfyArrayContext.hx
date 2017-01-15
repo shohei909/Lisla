@@ -88,6 +88,11 @@ class DelitllfyArrayContext
 		}
 	}
 	
+    public function skip():Void
+    {
+		index++;
+    }
+    
 	private function createErrorResult<T>(error:DelitllfyError):Result<T, DelitllfyError>
 	{
 		maybeErrors.iter(error.maybeCauses.push);

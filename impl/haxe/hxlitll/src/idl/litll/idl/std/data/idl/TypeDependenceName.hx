@@ -51,6 +51,6 @@ abstract TypeDependenceName(LitllString)
     
 	public function toVariableName():String
 	{
-		return "dependance" + IdentifierTools.toPascalCase(this.data).getOrThrow();
+		return "dependence" + IdentifierTools.toPascalCase(this.data).getOrThrow();
 	}
 }

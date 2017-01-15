@@ -11,14 +11,13 @@ import litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeDefinitionDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeNameDeclarationDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
-import litll.idl.std.delitllfy.idl.UnionConstructorDelitllfier;
 using litll.core.ds.ResultTools;
 
 class TypeDefinitionDelitllfier
 {
 	public static function process(context:DelitllfyContext):Result<TypeDefinition, DelitllfyError> 
 	{
-		var expected = ["[newtype]", "[tuple]", "[enum]", "[union]"];
+		var expected = ["[newtype]", "[tuple]", "[enum]"];
 		return switch (context.litll)
 		{
 			case Litll.Arr(array) if (array.data.length > 0):
@@ -36,7 +35,7 @@ class TypeDefinitionDelitllfier
 							case "tuple":
 								var arrayContext = new DelitllfyArrayContext(array, 1, context.config);
 								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
-								var type = arrayContext.readRest(ArgumentDelitllfier.process).getOrThrow();
+								var type = arrayContext.readRest(TupleArgumentDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Tuple.bind(name, type));	
 							
 							case "enum":
@@ -44,26 +43,17 @@ class TypeDefinitionDelitllfier
 								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
 								var constructors = arrayContext.readRest(EnumConstructorDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Enum.bind(name, constructors));	
-							
-							case "union":
-								var arrayContext = new DelitllfyArrayContext(array, 1, context.config);
-								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
-								var elements = arrayContext.readRest(UnionConstructorDelitllfier.process).getOrThrow();
-								arrayContext.close(TypeDefinition.Union.bind(name, elements));	
-							
+														
 							case data:
-								Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor("[" + data + "]", expected), []));
+								Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor(expected), []));
 						}
 						
 					case Litll.Arr(_):
-						Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor("[[..]]", expected), []));
+						Result.Err(DelitllfyError.ofArray(array, 0, DelitllfyErrorKind.UnmatchedEnumConstructor(expected), []));
 				}
 				
-			case Litll.Arr(_):
-				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor("[]", expected)));
-				
-			case Litll.Str(data):
-				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor(data.data, expected)));
+			case data:
+				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.UnmatchedEnumConstructor(expected)));
 		}
 	}
 }

@@ -16,6 +16,6 @@ class ParseError
 	
 	public function toString():String
 	{
-		return entries.join("\n");
+		return [for (entry in entries) entry.toString()].join("\n");
 	}
 }

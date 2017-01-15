@@ -10,6 +10,7 @@ import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.project.error.IdlReadErrorKind;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.EnumConstructor;
+import litll.idl.std.data.idl.TupleArgument;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeDependenceName;
 import litll.idl.std.data.idl.TypeName;
@@ -59,14 +60,14 @@ class TypeDefinitionPreprocessor
 						typeParameters.set(typeName.toString(), typeName);
 					}
 					
-				case TypeParameterDeclaration.Dependence(dependence):
-					if (typeDependences.exists(dependence.name.toString()))
+				case TypeParameterDeclaration.Dependence(name, type):
+					if (typeDependences.exists(name.toString()))
 					{
-						addError(IdlReadErrorKind.TypeDependenceNameDupplicated(dependence.name));
+						addError(IdlReadErrorKind.TypeDependenceNameDupplicated(name));
 					}
 					else
 					{
-						typeDependences.set(dependence.name.toString(), dependence.name);
+						typeDependences.set(name.toString(), name);
 					}
 			}
 		}
@@ -85,14 +86,11 @@ class TypeDefinitionPreprocessor
 					processEnumConstuctors(constructor);
 				}
 				
-			case TypeDefinition.Struct(_, arguments) | TypeDefinition.Tuple(_, arguments):
-				processArguments(arguments);
-				
-			case TypeDefinition.Union(_, elements):
-				for (element in elements)
-				{
-					processTypeReference(element.type);
-				}
+			case TypeDefinition.Struct(_, arguments):
+                processArguments(arguments);
+                
+            case TypeDefinition.Tuple(_, arguments):
+				processTupleArguments(arguments);
 		}
 	}
 	
@@ -103,27 +101,51 @@ class TypeDefinitionPreprocessor
 			case EnumConstructor.Primitive(_):
 				constructor;
 				
-			case EnumConstructor.Parameterized(parameter):
-				processArguments(parameter.arguments);
+			case EnumConstructor.Parameterized(header, arguments):
+				processTupleArguments(arguments);
 		}
 	}
 	
-	private function processArguments(arguments:Array<Argument>) 
+	private function processTupleArguments(arguments:Array<TupleArgument>):Void
 	{
 		var usedNames = new Set<String>(new Map());
 		for (argument in arguments)
 		{
-			if (usedNames.exists(argument.name.name))
-			{
-				addError(IdlReadErrorKind.ArgumentNameDupplicated(argument.name));
-			}
-			else
-			{
-				usedNames.set(argument.name.name);
-				processTypeReference(argument.type);
-			}
+            switch (argument)
+            {
+                case TupleArgument.Label(_):
+                    // Nothing to do.
+                
+                case TupleArgument.Data(argument):
+                    if (usedNames.exists(argument.name.name))
+                    {
+                        addError(IdlReadErrorKind.ArgumentNameDupplicated(argument.name));
+                    }
+                    else
+                    {
+                        usedNames.set(argument.name.name);
+                        processTypeReference(argument.type);
+                    }
+            }
 		}
 	}
+    
+    private function processArguments(arguments:Array<Argument>):Void
+    {
+        var usedNames = new Set<String>(new Map());
+        for (argument in arguments)
+		{
+            if (usedNames.exists(argument.name.name))
+            {
+                addError(IdlReadErrorKind.ArgumentNameDupplicated(argument.name));
+            }
+            else
+            {
+                usedNames.set(argument.name.name);
+                processTypeReference(argument.type);
+            }
+        }
+    }
 	
 	private function processTypeReference(type:TypeReference):Void
 	{
@@ -134,9 +156,9 @@ class TypeDefinitionPreprocessor
 				path = p;
 				parameters = [];
 				
-			case TypeReference.Generic(generic):
-				path = generic.typePath;
-				parameters = generic.parameters;
+			case TypeReference.Generic(typePath, _parameters):
+				path = typePath;
+				parameters = _parameters;
 		}
 		
 		switch (path.modulePath.toOption())
@@ -216,8 +238,8 @@ class TypeDefinitionPreprocessor
 			var referenceParameter = iter.next();
 			var processedValue = switch (definitionParameter)
 			{
-				case TypeParameterDeclaration.Dependence(dependence):
-					TypeReferenceParameterKind.Dependence(dependence.type);
+				case TypeParameterDeclaration.Dependence(_, type):
+					TypeReferenceParameterKind.Dependence(type);
 					
 				case TypeParameterDeclaration.TypeName(_):
 					var context = new DelitllfyContext(referenceParameter.value, parent.element.root.reader.config);

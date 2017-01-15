@@ -5,6 +5,7 @@ import haxe.macro.Expr;
 import haxe.macro.Expr.Access;
 import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.TypeDefKind;
+import litll.core.LitllString;
 import litll.core.ds.Result;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.exception.IdlException;
@@ -15,8 +16,11 @@ import litll.idl.project.output.delitll.HaxeDelitllfierTypePathPair;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.ArgumentName.ArgumentKind;
 import litll.idl.std.data.idl.EnumConstructor;
+import litll.idl.std.data.idl.EnumConstructorCondition;
+import litll.idl.std.data.idl.EnumConstructorHeader;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.GenericTypeReference;
+import litll.idl.std.data.idl.TupleArgument;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
@@ -69,10 +73,6 @@ class IdlToHaxeDelitllfierConverter
 				parameters = name.getParameters().collect();
                 createEnumExpr(pathPair.dataPath, parameters, constructors);
 				
-			case IdlTypeDefinition.Union(name, constructors):
-				parameters = name.getParameters().collect();
-				macro null;
-                
 			case IdlTypeDefinition.Struct(name, arguments):
 				parameters = name.getParameters().collect();
 				macro null;
@@ -129,65 +129,81 @@ class IdlToHaxeDelitllfierConverter
     // ==============================================================
     // common
     // ==============================================================
-    private function createClassInstantiationExpr(contextExpr:Expr, instantiationArgments:Array<Expr>, sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection):Expr
+    private function createClassInstantiationExpr(contextExpr:Expr, argumentDeclarations:Array<Expr>, argumentReferences:Array<Expr>, sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection):Expr
     {
         var classInterface = context.interfaceStore.getDataClassInterface(sourcePath).getOrThrow(IdlException.new.bind("class " + sourcePath.toString() + " not found"));
-        for (dependance in parameters.dependences)
+        for (dependence in parameters.dependences)
         {
-            instantiationArgments.push(macro $i{dependance.name.toVariableName()});
+            argumentReferences.push(macro $i{dependence.name.toVariableName()});
         }
         
         return switch (classInterface.delitllfier)
         {
             case HaxeDataConstructorKind.New:
                 var sourceTypePath = sourcePath.toMacroPath();
-                macro {
-                    var instance = new $sourceTypePath($a{instantiationArgments});
-                    litll.core.ds.Result.Ok(instance);
-                }
+                var blockBody = argumentDeclarations.concat(
+                    [
+                        (macro var instance = new $sourceTypePath($a{argumentReferences})),
+                        (macro litll.core.ds.Result.Ok(instance)),
+                    ]
+                );
+                macro { $a{blockBody} }
                 
             case HaxeDataConstructorKind.Function(name, HaxeDataConstructorReturnKind.Direct):
-                macro {
-                    var instance = $i{sourcePath.toString()}.$name($a{instantiationArgments});
-                    litll.core.ds.Result.Ok(instance);
-                }
+                var blockBody = argumentDeclarations.concat(
+                    [
+                        (macro var instance = $i{sourcePath.toString()}.$name($a{argumentReferences})),
+                        (macro litll.core.ds.Result.Ok(instance)),
+                    ]
+                );
+                macro { $a{blockBody} }
                 
             case HaxeDataConstructorKind.Function(name, HaxeDataConstructorReturnKind.Result):
-                macro {
-                    switch ($i{sourcePath.toString()}.$name($a{instantiationArgments}))
-                    {
-                        case litll.core.ds.Result.Ok(ok):
-                            litll.core.ds.Result.Ok(ok);
-                            
-                        case litll.core.ds.Result.Err(err):
-                            litll.core.ds.Result.Err(
-                                litll.idl.delitllfy.DelitllfyError.ofLitll(
-                                    $contextExpr.litll, 
-                                    err
-                                )
-                            );
-                    }
-                }
+                var blockBody = argumentDeclarations.concat(
+                    [
+                        macro switch ($i{sourcePath.toString()}.$name($a{argumentReferences}))
+                        {
+                            case litll.core.ds.Result.Ok(ok):
+                                litll.core.ds.Result.Ok(ok);
+                                
+                            case litll.core.ds.Result.Err(err):
+                                litll.core.ds.Result.Err(
+                                    litll.idl.delitllfy.DelitllfyError.ofLitll(
+                                        $contextExpr.litll, 
+                                        err
+                                    )
+                                );
+                        }
+                    ]
+                );
+                macro { $a{blockBody} }
+                
         }
 	}
     
-    private function createEnumInstantiationExpr(instantiationArgments:Array<Expr>, sourcePath:HaxeDataTypePath, name:EnumConstructorName, parameters:TypeParameterDeclarationCollection):Expr 
+    private function createEnumInstantiationExpr(argumentDeclaration:Array<Expr>, argumentReferences:Array<Expr>, sourcePath:HaxeDataTypePath, name:EnumConstructorName, parameters:TypeParameterDeclarationCollection):Expr 
     {
-        for (dependance in parameters.dependences)
+        for (dependence in parameters.dependences)
         {
-            instantiationArgments.push(macro $i{dependance.name.toVariableName()});
+            argumentReferences.push(macro $i{dependence.name.toVariableName()});
         }
         
         var sourceTypePath = sourcePath.toString();
         var constructorName = name.toPascalCase().getOrThrow();
         
-        return if (instantiationArgments.length == 0)
+        return if (argumentReferences.length == 0)
         {
             macro litll.core.ds.Result.Ok($i{sourceTypePath}.$constructorName);
         }
         else
         {
-            macro litll.core.ds.Result.Ok($i{sourceTypePath}.$constructorName($a{instantiationArgments}));
+            var blockBody = argumentDeclaration.concat(
+                [
+                    (macro litll.core.ds.Result.Ok($i{sourceTypePath}.$constructorName($a{argumentReferences})))
+                ]
+            );
+            
+            macro { $a{blockBody} }
         }
     }
 	private function createProcessCallExpr(contextExpr:Expr, parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
@@ -244,19 +260,19 @@ class IdlToHaxeDelitllfierConverter
             var expr = switch (parameter.processedValue.getOrThrow(IdlException.new.bind("parameter must be processed")))
             {
                 case TypeReferenceParameterKind.Type(type):
-                    var typeName = type.getName() + "Delitllfier";
+                    var typeName = config.toHaxeDelitllfierPath(type.getTypePath()).toString();
                     switch (type)
                     {
                         case TypeReference.Primitive(primitive):
                             macro $i{typeName}.process;
                             
-                        case TypeReference.Generic(generic):
-                            var childParametersExpr = [macro _].concat(createParmetersExpr(generic.parameters));
+                        case TypeReference.Generic(typePath, parameters):
+                            var childParametersExpr = [macro _].concat(createParmetersExpr(parameters));
                             macro $i{typeName}.process.bind($a{childParametersExpr});
                     }
                     
                 case TypeReferenceParameterKind.Dependence(value):
-                    // TODO: instantiate dependance value
+                    // TODO: instantiate dependence value
                     macro null;
             }
             
@@ -271,7 +287,7 @@ class IdlToHaxeDelitllfierConverter
     private function createNewtypeExpr(sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr 
 	{
 		var callExpr = createProcessCallExpr((macro context), parameters, destType);
-		var instantiationExpr = createClassInstantiationExpr((macro context), [(macro data)], sourcePath, parameters);
+		var instantiationExpr = createClassInstantiationExpr((macro context), [], [(macro data)], sourcePath, parameters);
 		
 		return macro {
 			return switch ($callExpr)
@@ -288,10 +304,10 @@ class IdlToHaxeDelitllfierConverter
     // ==============================================================
     // tuple
     // ==============================================================
-    private function createTupleExpr(sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection, arguments:Array<Argument>):Expr 
+    private function createTupleExpr(sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection, arguments:Array<TupleArgument>):Expr 
 	{
         var instantiationArguments = createTupleInstantiationArguments(parameters, arguments);
-		var instantiationExpr = createClassInstantiationExpr((macro context), instantiationArguments, sourcePath, parameters);
+		var instantiationExpr = createClassInstantiationExpr((macro context), instantiationArguments.declarations, instantiationArguments.references, sourcePath, parameters);
         
         return macro {
             return switch (context.litll)
@@ -318,35 +334,50 @@ class IdlToHaxeDelitllfierConverter
             }
 		}
 	}
-    private function createTupleInstantiationArguments(parameters:TypeParameterDeclarationCollection, arguments:Array<Argument>):Array<Expr>
+    
+    private function createTupleInstantiationArguments(parameters:TypeParameterDeclarationCollection, arguments:Array<TupleArgument>):{ declarations:Array<Expr>, references:Array<Expr> }
     {
-        var result = [];
+        var declarations = [];
+        var references = [];
+        
         for (argument in arguments)
         {
-            var processFunc = createProcessFuncExpr(parameters, argument.type.generalize());
-            
-            // TODO: defatult value
-            var expr = switch (argument.name.kind)
+            switch (argument)
             {
-                case ArgumentKind.Normal:
-                    macro litll.core.ds.ResultTools.getOrThrow(arrayContext.read($processFunc)); 
+                case TupleArgument.Data(data):
+                    var processFunc = createProcessFuncExpr(parameters, data.type.generalize());
                     
-                case ArgumentKind.Rest:
-                    macro litll.core.ds.ResultTools.getOrThrow(arrayContext.readRest($processFunc)); 
+                    // TODO: defatult value
+                    var expr = switch (data.name.kind)
+                    {
+                        case ArgumentKind.Normal:
+                            macro litll.core.ds.ResultTools.getOrThrow(arrayContext.read($processFunc)); 
+                            
+                        case ArgumentKind.Rest:
+                            macro litll.core.ds.ResultTools.getOrThrow(arrayContext.readRest($processFunc)); 
+                            
+                        case ArgumentKind.Skippable:
+                            // TODO:
+                            macro null;
+                            
+                        case ArgumentKind.Structure:
+                            // TODO:
+                            macro null;
+                    }
                     
-                case ArgumentKind.Skippable:
-                    // TODO:
-                    macro null;
+                    var name = "arg" + references.length;
+                    declarations.push(macro var $name = $expr);
+                    references.push(macro $i{name});
                     
-                case ArgumentKind.Structure:
-                    // TODO:
-                    macro null;
+                case TupleArgument.Label(data):
+                    declarations.push(macro arrayContext.skip());
             }
-            
-            result.push(expr);
         }
         
-        return result;
+        return {
+            declarations : declarations,
+            references : references
+        }
     }
     
     // ==============================================================
@@ -355,8 +386,35 @@ class IdlToHaxeDelitllfierConverter
     private function createEnumExpr(sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection, constructors:Array<EnumConstructor>):Expr 
 	{
         var targetList:Array<Expr> = [];
-        var arrayCases:Array<Case> = [];
-        var stringCases:Array<Case> = [];
+        var cases:Array<Case> = [];
+        
+        inline function addTarget(string:String):Void
+        {
+            targetList.push(
+                {
+                    expr: ExprDef.EConst(Constant.CString(string)),
+                    pos: null,
+                }
+            );
+        }
+        inline function addTupleCase(name:EnumConstructorName, arguments:Array<TupleArgument>):Void
+        {
+            var string = name.toString();
+            addTarget(string);
+            
+            var instantiationArguments = createTupleInstantiationArguments(parameters, arguments);
+            var instantiationExpr = createEnumInstantiationExpr(instantiationArguments.declarations, instantiationArguments.references, sourcePath, name, parameters);
+            
+            var caseData = {
+                values: [macro litll.core.Litll.Arr(array)],
+                expr: macro  {
+                    var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
+                    arrayContext.closeWithResult(function () return $instantiationExpr);
+                }
+            };
+            
+            cases.push(caseData);
+        }
         
         for (constructor in constructors)
         {
@@ -364,128 +422,55 @@ class IdlToHaxeDelitllfierConverter
             {
                 case EnumConstructor.Primitive(name):
                     var string = name.toString();
-                    targetList.push(
+                    addTarget(string);
+                    
+                    var instantiationExpr = createEnumInstantiationExpr([], [], sourcePath, name, parameters);
+                    var stringExpr:Expr = {
+                        expr: ExprDef.EConst(Constant.CString(string)),
+                        pos: null,
+                    };
+                    cases.push(
                         {
-                            expr: ExprDef.EConst(Constant.CString(string)),
-                            pos: null,
-                        }
-                    );
-                    var instantiationExpr = createEnumInstantiationExpr([], sourcePath, name, parameters);
-                    stringCases.push(
-                        {
-                            values : [
-                                {
-                                    expr: ExprDef.EConst(Constant.CString(string)),
-                                    pos: null,
-                                }
-                            ],
+                            values: [macro litll.core.Litll.Str(data)],
+                            guard: (macro data.data == $stringExpr),
                             expr: macro $instantiationExpr,
                         }
                     );
                     
-                case EnumConstructor.Parameterized(data):
-                    var string = data.name.toString();
-                    targetList.push(
-                        {
-                            expr: ExprDef.EConst(Constant.CString("[" + string + "]")),
-                            pos: null,
-                        }
-                    );
+                case EnumConstructor.Parameterized(EnumConstructorHeader.Basic(name), arguments):
+                    var label = TupleArgument.Label(new LitllString(name.toString(), name.tag));
+                    addTupleCase(name, [label].concat(arguments));
                     
-                    var instantiationArguments = createTupleInstantiationArguments(parameters, data.arguments);
-                    var instantiationExpr = createEnumInstantiationExpr(instantiationArguments, sourcePath, data.name, parameters);
-                    arrayCases.push(
-                        {
-                            values : [
-                                {
-                                    expr: ExprDef.EConst(Constant.CString(string)),
-                                    pos: null,
-                                }
-                            ],
-                            expr: macro  {
-                                var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 1, context.config);
-                                arrayContext.closeWithResult(function () return $instantiationExpr);
-                            }
-                        }
-                    );
+                case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Tuple), arguments):
+                    addTupleCase(name, arguments);
+                    
+                case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Unfold), arguments):
+                    addTupleCase(name, arguments);
             }
         }
         
-        arrayCases.push(
+        cases.push(
             {
                 // case data:
                 values : [macro data],
                 expr: macro litll.core.ds.Result.Err(
                     litll.idl.delitllfy.DelitllfyError.ofLitll(
                         context.litll, 
-                        litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumConstructor(data, expected)
-                    )
-                )
-            }
-        );
-        stringCases.push(
-            {
-                // case data:
-                values : [macro data],
-                expr: macro litll.core.ds.Result.Err(
-                    litll.idl.delitllfy.DelitllfyError.ofLitll(
-                        context.litll, 
-                        litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumConstructor(data, expected)
+                        litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumConstructor([$a{targetList}])
                     )
                 )
             }
         );
         
-        var arraySwitch:Expr = {
+        var switchExpr = {
             expr: ExprDef.ESwitch(
-                macro string.data,
-                arrayCases,
-                null
-            ),
-            pos: null
-        };
-        var stringSwitch:Expr = {
-            expr: ExprDef.ESwitch(
-                macro string.data,
-                stringCases,
+                macro context.litll,
+                cases,
                 null
             ),
             pos: null
         };
         
-        return macro 
-        {
-            var expected = $a{targetList};
-            return switch (context.litll)
-            {
-                case litll.core.Litll.Arr(array) if (array.data.length > 0):
-                    switch (array.data[0])
-                    {
-                        case litll.core.Litll.Str(string):
-                            $arraySwitch;
-                            
-                        case litll.core.Litll.Arr(_):
-                            litll.core.ds.Result.Err(
-                                litll.idl.delitllfy.DelitllfyError.ofArray(
-                                    array, 
-                                    0, 
-                                    litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumConstructor("[[..]]", expected), 
-                                    []
-                                )
-                            );
-                    }
-                    
-                case litll.core.Litll.Arr(_):
-                    litll.core.ds.Result.Err(
-                        litll.idl.delitllfy.DelitllfyError.ofLitll(
-                            context.litll, 
-                            litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumConstructor("[]", expected)
-                        )
-                    );
-                    
-                case litll.core.Litll.Str(string):
-                    $stringSwitch;
-            }
-        }
+        return macro return $switchExpr;
 	}
 }

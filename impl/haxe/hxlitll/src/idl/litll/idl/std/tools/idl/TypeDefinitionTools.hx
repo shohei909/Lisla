@@ -14,7 +14,6 @@ class TypeDefinitionTools
 				Struct(name, _) |
 				Enum(name, _) |
 				Newtype(name, _) |
-				Union(name, _) |
 				Tuple(name, _):
 					
 				name;

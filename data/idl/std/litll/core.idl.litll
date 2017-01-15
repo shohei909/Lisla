@@ -55,10 +55,6 @@
 /// '''
 [newtype Time String]
 
-[tuple Unit]
-[tuple [Single T1]
-    [element1 T1]
-]
 [tuple [Pair K V]
     [element1 K]
     [element2 V]
@@ -68,18 +64,22 @@
     [Array [Pair K V]]
 ]
 
-[union Any
-    [str String]
-    [arr [Array Any]]
+[enum Any
+    [[str unfold] [data String]]
+    [[arr unfold] [data [Array Any]]]
 ]
 
-[union [Option T]
-    [none [Const none]]
-    [some [Single T]]
+[enum [Option T]
+    [[none tuple]]
+    [[some tuple] [data T]]
 ]
 
-[newtype [Const [string String]] String]
-[newtype [FixedArray [length Int]] String]
+[newtype [Const [string String]] 
+    String
+]
+[newtype [FixedArray T [length Int]]
+    [Array T]
+]
 
 [newtype Binary String]
 [newtype BigInt String]

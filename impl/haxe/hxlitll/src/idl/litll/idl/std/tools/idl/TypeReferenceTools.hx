@@ -25,12 +25,12 @@ class TypeReferenceTools
 			case TypeReference.Primitive(typePath):
 				toHaxeDataPath(typePath).toMacroPath();
 				
-			case TypeReference.Generic(generic):
-				var result = toHaxeDataPath(generic.typePath).toMacroPath();
+			case TypeReference.Generic(typePath, parameters):
+				var result = toHaxeDataPath(typePath).toMacroPath();
 				
-				for (parameter in generic.parameters)
+				for (parameter in parameters)
 				{
-					switch (parameter.processedValue.getOrThrow(IdlException.new.bind("Type reference " + generic.typePath.toString() + " must be processed")))
+					switch (parameter.processedValue.getOrThrow(IdlException.new.bind("Type reference " + typePath.toString() + " must be processed")))
 					{
 						case TypeReferenceParameterKind.Type(type):
 							result.params.push(TypeParam.TPType(ComplexType.TPath(toMacroTypePath(type, config))));
@@ -42,7 +42,19 @@ class TypeReferenceTools
 				result;
 		}
 	}
-	
+    
+	public static function getTypePath(type:TypeReference):TypePath
+    {
+		return switch (type)
+		{
+			case TypeReference.Primitive(primitive):
+				primitive;
+				
+			case TypeReference.Generic(typePath, _):
+    			typePath;
+		}
+    }
+    
 	public static function generalize(type:TypeReference):GenericTypeReference
 	{
 		return switch (type)
@@ -50,8 +62,8 @@ class TypeReferenceTools
 			case TypeReference.Primitive(primitive):
 				new GenericTypeReference(primitive, []);
 				
-			case TypeReference.Generic(generic):
-    			generic;
+			case TypeReference.Generic(name, parameters):
+    			new GenericTypeReference(name, parameters);
 		}
 	}
     
@@ -62,8 +74,8 @@ class TypeReferenceTools
 			case TypeReference.Primitive(primitive):
 				primitive.toString();
 				
-			case TypeReference.Generic(generic):
-    			generic.typePath.toString();
+			case TypeReference.Generic(typePath, _):
+    			typePath.toString();
 		}
     }
 }

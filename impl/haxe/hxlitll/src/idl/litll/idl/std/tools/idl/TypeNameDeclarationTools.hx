@@ -12,8 +12,8 @@ class TypeNameDeclarationTools
 			case Primitive(typeName):
 				typeName;
 				
-			case Generic(generic):
-				generic.name;
+			case Generic(name, _):
+				name;
 		}
 	}
 	
@@ -24,8 +24,8 @@ class TypeNameDeclarationTools
 			case Primitive(_):
 				[];
 				
-			case Generic(generic):
-				generic.parameters;
+			case Generic(_, parameters):
+				parameters;
 		}
 	}
 }

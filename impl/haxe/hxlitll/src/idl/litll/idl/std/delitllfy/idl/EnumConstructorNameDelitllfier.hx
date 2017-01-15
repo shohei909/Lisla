@@ -14,7 +14,7 @@ class EnumConstructorNameDelitllfier
 		return switch (context.litll)
 		{
 			case Litll.Str(string):
-				Result.Ok(new EnumConstructorName(string.data));
+				Result.Ok(new EnumConstructorName(string));
 			
 			case Litll.Arr(array):
 				Result.Err(DelitllfyError.ofLitll(context.litll, DelitllfyErrorKind.CantBeArray));

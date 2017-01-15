@@ -4,5 +4,5 @@ import litll.core.LitllArray;
 enum Litll 
 {
 	Arr(data:LitllArray<Litll>);
-	Str(data:LitllString);
+    Str(data:LitllString);
 }
