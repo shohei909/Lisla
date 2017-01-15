@@ -88,9 +88,19 @@ class DelitllfyArrayContext
 		}
 	}
 	
-    public function skip():Void
+    
+    public function readLabel(string:String):Result<Bool, DelitllfyError>
     {
-		index++;
+        index++;
+        
+        return switch (array.data[index - 1])
+        {
+            case Litll.Str(data) if (data.data == string):
+                Result.Ok(true);
+                
+            case _:
+                createErrorResult(DelitllfyError.ofLitll(array.data[index - 1], DelitllfyErrorKind.UnmatchedEnumLabel(string)));
+        }
     }
     
 	private function createErrorResult<T>(error:DelitllfyError):Result<T, DelitllfyError>
@@ -183,6 +193,7 @@ class DelitllfyArrayContext
 				error = Maybe.some(nextError);
 		}
 	}
+    
 }
 
 private typedef ProcessFunction<T> = DelitllfyContext->Result<T, DelitllfyError>;

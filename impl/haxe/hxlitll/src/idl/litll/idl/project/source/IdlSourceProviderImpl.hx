@@ -1,9 +1,12 @@
 package litll.idl.project.source;
+import haxe.ds.Option;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.idl.delitllfy.DelitllfyConfig;
 import litll.idl.project.error.IdlReadError;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.path.TypeGroupPath;
 import litll.idl.std.data.idl.haxe.SourceConfig;
 
@@ -38,4 +41,25 @@ class IdlSourceProviderImpl implements IdlSourceProvider
 			Result.Ok(map);
 		}
 	}
+    
+    public function resolveTypePath(path:TypePath):Maybe<TypeDefinition>
+    {
+        var element:PackageElement = switch (path.modulePath.toOption())
+        {
+            case Option.Some(array):
+                switch (root.getElement(array.toArray()).toOption())
+                {
+                    case Option.None:
+                        return Maybe.none();
+                        
+                    case Option.Some(element):
+                        element;
+                }
+                
+            case Option.None:
+                root;
+        }
+        
+        return element.getType(path.typeName);
+    }
 }

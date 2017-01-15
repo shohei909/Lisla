@@ -8,6 +8,7 @@ enum DelitllfyErrorKind
 	CantBeString;
 	UnmatchedConst(actual:String, expected:String);
 	UnmatchedEnumConstructor(expected:Array<String>);
+	UnmatchedEnumLabel(expected:String);
 	EndOfArray;
 	TooLongArray;
 	Recoverable(message:String);

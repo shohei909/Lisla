@@ -29,7 +29,7 @@ class ArgumentName
 		else if (name.endsWith("{}"))
 		{
 			name = name.substr(0, name.length - 2);
-			kind = Structure;
+			kind = Unfold;
 		}
 		else
 		{
@@ -77,6 +77,7 @@ enum ArgumentKind
 {
 	Normal;
 	Skippable;
-	Structure;
 	Rest;
+	Unfold;
 }
+

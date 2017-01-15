@@ -26,6 +26,7 @@ import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
+import litll.idl.std.data.idl.UnfoldedTypeDefinition;
 import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
 import litll.idl.std.tools.idl.TypeNameTools;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
@@ -321,10 +322,10 @@ class IdlToHaxeDelitllfierConverter
                         )
                     );
                     
-                case litll.core.Litll.Arr(array):
+                case litll.core.Litll.Arr(data):
                     try
                     {
-                        var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
+                        var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
                         arrayContext.closeWithResult(function () return $instantiationExpr);
                     }
                     catch (error:litll.idl.delitllfy.DelitllfyError)
@@ -360,7 +361,7 @@ class IdlToHaxeDelitllfierConverter
                             // TODO:
                             macro null;
                             
-                        case ArgumentKind.Structure:
+                        case ArgumentKind.Unfold:
                             // TODO:
                             macro null;
                     }
@@ -370,7 +371,11 @@ class IdlToHaxeDelitllfierConverter
                     references.push(macro $i{name});
                     
                 case TupleArgument.Label(data):
-                    declarations.push(macro arrayContext.skip());
+                    var value = {
+                        expr: ExprDef.EConst(Constant.CString(data.data)),
+                        pos: null,
+                    }
+                    declarations.push(macro arrayContext.readLabel($value));
             }
         }
         
@@ -397,6 +402,20 @@ class IdlToHaxeDelitllfierConverter
                 }
             );
         }
+        inline function _addTupleCase(instantiationExpr:Expr, arguments:Array<TupleArgument>):Void
+        {
+            var guardConditions = createGuardConditions(arguments);
+            var caseData = {
+                values: [macro litll.core.Litll.Arr(data)],
+                guard: if (guardConditions.length == 0) null else createOrExpr(guardConditions),
+                expr: macro  {
+                    var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+                    arrayContext.closeWithResult(function () return $instantiationExpr);
+                }
+            };
+            
+            cases.push(caseData);
+        }
         inline function addTupleCase(name:EnumConstructorName, arguments:Array<TupleArgument>):Void
         {
             var string = name.toString();
@@ -404,16 +423,98 @@ class IdlToHaxeDelitllfierConverter
             
             var instantiationArguments = createTupleInstantiationArguments(parameters, arguments);
             var instantiationExpr = createEnumInstantiationExpr(instantiationArguments.declarations, instantiationArguments.references, sourcePath, name, parameters);
-            
-            var caseData = {
-                values: [macro litll.core.Litll.Arr(array)],
-                expr: macro  {
-                    var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
-                    arrayContext.closeWithResult(function () return $instantiationExpr);
-                }
+            _addTupleCase(instantiationExpr, arguments);
+        }
+        inline function _addPrimitiveCase(instantiationExpr:Expr, label:String):Void
+        {
+            var stringExpr:Expr = {
+                expr: ExprDef.EConst(Constant.CString(label)),
+                pos: null,
             };
+            cases.push(
+                {
+                    values: [macro litll.core.Litll.Str(data)],
+                    guard: (macro data.data == $stringExpr),
+                    expr: instantiationExpr,
+                }
+            );
+        }
+        inline function addPrimitiveCase(name:EnumConstructorName, label:String):Void
+        {
+            var string = name.toString();
+            addTarget(string);
             
-            cases.push(caseData);
+            var instantiationExpr = createEnumInstantiationExpr([], [], sourcePath, name, parameters);
+            _addPrimitiveCase(instantiationExpr, label);
+        }
+        function _addUnfoldCase(instantiationExpr:Expr, type:TypeReference):Void
+        {
+            switch (type.unfold(context.source))
+            {
+                case UnfoldedTypeDefinition.Arr(_):
+                    cases.push(
+                        {
+                            values: [macro litll.core.Litll.Arr(_)],
+                            expr: instantiationExpr,
+                        }
+                    );
+                    
+                case UnfoldedTypeDefinition.Str:
+                    cases.push(
+                        {
+                            values: [macro litll.core.Litll.Str(_)],
+                            expr: instantiationExpr,
+                        }
+                    );
+                    
+                case UnfoldedTypeDefinition.Tuple(arguments):
+                    _addTupleCase(instantiationExpr, arguments);
+                    
+                case UnfoldedTypeDefinition.Enum(constructors):
+                    for (constructor in constructors)
+                    {
+                        switch (constructor)
+                        {
+                            case EnumConstructor.Primitive(name):
+                                _addPrimitiveCase(instantiationExpr, name.toString());
+                                
+                            case EnumConstructor.Parameterized(EnumConstructorHeader.Basic(name), arguments):
+                                var label = TupleArgument.Label(new LitllString(name.toString(), name.tag));
+                                _addTupleCase(instantiationExpr, [label].concat(arguments));
+                                
+                            case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Tuple), arguments):
+                                _addTupleCase(instantiationExpr, arguments);
+                                
+                            case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Unfold), arguments):
+                                if (arguments.length != 1)
+                                {
+                                    throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
+                                }
+                                
+                                switch (arguments[0])
+                                {
+                                    case TupleArgument.Data(argument):
+                                        _addUnfoldCase(instantiationExpr, argument.type);
+                                        
+                                    case TupleArgument.Label(litllString):
+                                        _addPrimitiveCase(instantiationExpr, litllString.data);
+                                }
+                        }
+                    }
+                    
+                case UnfoldedTypeDefinition.Struct(_):
+                    throw new IdlException("struct " + sourcePath.toString() + " can't be unfold");
+            }
+        }
+        inline function addUnfoldCase(name:EnumConstructorName, type:TypeReference):Void
+        {
+            var callExpr = createProcessCallExpr((macro context), parameters, type.generalize());
+            var instantiationExpr = createEnumInstantiationExpr(
+                [], 
+                [macro litll.core.ds.ResultTools.getOrThrow($callExpr)], 
+                sourcePath, name, parameters
+            );
+            _addUnfoldCase(instantiationExpr, type);
         }
         
         for (constructor in constructors)
@@ -421,21 +522,7 @@ class IdlToHaxeDelitllfierConverter
             switch (constructor)
             {
                 case EnumConstructor.Primitive(name):
-                    var string = name.toString();
-                    addTarget(string);
-                    
-                    var instantiationExpr = createEnumInstantiationExpr([], [], sourcePath, name, parameters);
-                    var stringExpr:Expr = {
-                        expr: ExprDef.EConst(Constant.CString(string)),
-                        pos: null,
-                    };
-                    cases.push(
-                        {
-                            values: [macro litll.core.Litll.Str(data)],
-                            guard: (macro data.data == $stringExpr),
-                            expr: macro $instantiationExpr,
-                        }
-                    );
+                    addPrimitiveCase(name, name.toString());
                     
                 case EnumConstructor.Parameterized(EnumConstructorHeader.Basic(name), arguments):
                     var label = TupleArgument.Label(new LitllString(name.toString(), name.tag));
@@ -445,7 +532,19 @@ class IdlToHaxeDelitllfierConverter
                     addTupleCase(name, arguments);
                     
                 case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Unfold), arguments):
-                    addTupleCase(name, arguments);
+                    if (arguments.length != 1)
+                    {
+                        throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
+                    }
+                    
+                    switch (arguments[0])
+                    {
+                        case TupleArgument.Data(argument):
+                            addUnfoldCase(name, argument.type);
+                            
+                        case TupleArgument.Label(litllString):
+                            addPrimitiveCase(name, litllString.data);
+                    }
             }
         }
         
@@ -473,4 +572,77 @@ class IdlToHaxeDelitllfierConverter
         
         return macro return $switchExpr;
 	}
+    
+    private function createGuardConditions(arguments:Array<TupleArgument>):Array<Expr>
+    {
+        var result = [];
+        var min:Int = 0;
+        var more:Bool = false;
+        
+        for (argument in arguments)
+        {
+            switch (argument)
+            {
+                case TupleArgument.Label(value):
+                    if (!more)
+                    {
+                        var string = {
+                            expr: ExprDef.EConst(Constant.CString(value.data)),
+                            pos: null,
+                        }
+                        var index = {
+                            expr: ExprDef.EConst(Constant.CInt(Std.string(min))),
+                            pos: null,
+                        }
+                        result.push(macro data.data[$index].match(litll.core.Litll.Str(_.data => $string)));
+                    }
+                    min++;
+                    
+                case TupleArgument.Data(argument):
+                    switch (argument.name.kind)
+                    {
+                        case ArgumentKind.Normal:
+                            min++;
+                            
+                        case ArgumentKind.Rest | ArgumentKind.Skippable:
+                            more = true;
+                            
+                        case ArgumentKind.Unfold:
+                            argument.type;
+                    }
+            }
+        }
+        
+        var value = {
+            expr: ExprDef.EConst(Constant.CInt(Std.string(min))),
+            pos: null,
+        }
+        if (more)
+        {
+            result.unshift(macro data.length >= $value);
+        }
+        else
+        {
+            result.unshift(macro data.length == $value);
+        }
+        
+        return result;
+    }
+    
+    private static function createOrExpr(exprs:Array<Expr>):Expr 
+    {
+        return if (exprs.length == 0)
+        {
+            macro true;
+        }
+        else if (exprs.length == 1)
+        {
+            exprs[0];
+        }
+        else
+        {
+            expr: ExprDef.EBinop(Binop.OpBoolOr, exprs[0], createOrExpr(exprs.slice(1))),
+            pos: null
+        };
+    }
 }

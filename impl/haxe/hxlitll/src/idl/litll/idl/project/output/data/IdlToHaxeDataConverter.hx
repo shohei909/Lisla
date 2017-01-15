@@ -30,7 +30,7 @@ class IdlToHaxeDataConverter
 	{
 		var fields:Array<Field> = [];
 		var kind:TypeDefKind;
-		var name = TypeDefinitionTools.getName(source);
+		var name = TypeDefinitionTools.getTypeName(source);
         var collection = TypeParameterDeclarationTools.collect(TypeDefinitionTools.getTypeParameters(source));
 		var params = TypeNameTools.toHaxeParamDecls(collection.parameters);
 		var additionalFields = TypeDependenceDeclarationTools.toHaxeDependences(collection.dependences, config);
@@ -121,7 +121,7 @@ class IdlToHaxeDataConverter
         var typePath = ComplexType.TPath(argument.type.toMacroTypePath(config));
         typePath = switch (argument.name.kind)
         {
-            case Normal | Structure | Skippable:
+            case Normal | Unfold | Skippable:
                 typePath;
                 
             case Rest:

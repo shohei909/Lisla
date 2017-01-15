@@ -5,11 +5,27 @@ import haxe.macro.Expr.TypeParam;
 import litll.idl.exception.IdlException;
 import litll.idl.project.output.IdlToHaxeConvertContext;
 import litll.idl.project.output.data.HaxeDataTypePath;
+import litll.idl.project.output.data.store.HaxeDataInterfaceStore;
+import litll.idl.project.source.IdlSourceProvider;
+import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.GenericTypeReference;
+import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.data.idl.TypeParameterDeclaration;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
+import litll.idl.std.data.idl.UnfoldedTypeDefinition;
 import litll.idl.std.data.idl.haxe.DataOutputConfig;
+import litll.idl.std.data.idl.TypeDefinition;
+
+using litll.idl.std.tools.idl.TypeDefinitionTools;
+using litll.idl.std.tools.idl.TypeParameterDeclarationTools;
+using litll.idl.std.tools.idl.TupleArgumentTools;
+using litll.idl.std.tools.idl.ArgumentTools;
+using litll.idl.std.tools.idl.EnumConstructorTools;
+using litll.idl.std.tools.idl.TypeReferenceParameterTools;
+using litll.idl.std.tools.idl.TypeReferenceTools;
 
 class TypeReferenceTools
 {
@@ -77,5 +93,105 @@ class TypeReferenceTools
 			case TypeReference.Generic(typePath, _):
     			typePath.toString();
 		}
+    }
+    
+    public static function unfold(type:TypeReference, source:IdlSourceProvider):UnfoldedTypeDefinition
+    {
+        var generic = generalize(type);
+        var referenceParameters = generic.parameters.getTypeParameters();
+        
+        switch (type)
+        {
+            case TypeReference.Primitive(typePath):
+                var name = typePath.toString();
+                if (name == "String")
+                {
+                    return UnfoldedTypeDefinition.Str;
+                }
+            
+            case TypeReference.Generic(typePath, parameters):
+                var name = typePath.toString();
+                if (name == "Array" && parameters.length == 1)
+                {
+                    switch (parameters[0].processedValue.toOption())
+                    {
+                        case Option.Some(TypeReferenceParameterKind.Type(_)):
+                            return UnfoldedTypeDefinition.Arr(referenceParameters[0]);
+                            
+                        case _:
+                    }
+                }
+                
+            case _:
+        }
+        
+        return switch (source.resolveTypePath(generic.typePath).toOption())
+        {
+            case Option.Some(definition):
+                var definitionParameters = definition.getTypeParameters().collect().parameters;
+                var parameterContext = new Map<String, TypeReference>();
+                if (referenceParameters.length != definitionParameters.length)
+                {
+                    throw new IdlException("invalid type parameter length.");
+                }
+                
+                var parameterContext = new Map();
+                for (i in 0...definitionParameters.length)
+                {
+                    var referenceParameter:TypeReference = referenceParameters[i];
+                    var definitionParameter:TypeName = definitionParameters[i];
+                    
+                    parameterContext[definitionParameter.toString()] = referenceParameter;
+                }
+                
+                switch (definition)
+                {
+                    case TypeDefinition.Enum(_, constuctors):
+                        UnfoldedTypeDefinition.Enum(
+                            [for (el in constuctors) el.resolveGenericType(parameterContext)]
+                        );
+                        
+                    case TypeDefinition.Tuple(_, arguments):
+                        UnfoldedTypeDefinition.Tuple(
+                            [for (el in arguments) el.resolveGenericType(parameterContext)]
+                        );
+                        
+                    case TypeDefinition.Struct(_, arguments):
+                        UnfoldedTypeDefinition.Struct(
+                            [for (el in arguments) el.resolveGenericType(parameterContext)]
+                        );
+                        
+                    case TypeDefinition.Newtype(_, type):
+                        unfold(resolveGenericType(type, parameterContext), source);
+                }
+                
+            case Option.None:
+                throw new IdlException(generic.typePath.toString() + " can't be resolve.");
+        }
+    }
+    
+    
+    public static function resolveGenericType(type:TypeReference, parameterContext:Map<String, TypeReference>):TypeReference
+    {
+        return switch (type)
+        {
+            case TypeReference.Primitive(typePath):
+                if (parameterContext.exists(typePath.toString()))
+                {
+                    parameterContext[typePath.toString()];
+                }
+                else
+                {
+                    type;
+                }
+                
+            case TypeReference.Generic(typePath, parameters):
+                TypeReference.Generic(
+                    typePath, 
+                    [
+                        for (parameter in parameters) TypeReferenceParameterTools.resolveGenericType(parameter, parameterContext)
+                    ]
+                );
+        }
     }
 }

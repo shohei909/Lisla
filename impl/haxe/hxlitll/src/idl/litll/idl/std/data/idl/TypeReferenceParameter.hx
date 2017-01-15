@@ -14,4 +14,10 @@ class TypeReferenceParameter
         this.value = value;
 		this.processedValue = Maybe.none();
     }
+    
+    public function toString():String
+    {
+        // TODO: write litll
+        return Std.string(value);
+    }
 }

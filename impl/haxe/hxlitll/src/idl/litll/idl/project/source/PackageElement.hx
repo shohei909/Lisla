@@ -140,7 +140,7 @@ class PackageElement
         
 		for (type in types)
 		{
-			var name = TypeDefinitionTools.getName(type);
+			var name = TypeDefinitionTools.getTypeName(type);
 			if (typeMap.exists(name.toString()))
 			{
 				var path = new TypePath(Maybe.some(getModulePath()), name);
@@ -156,20 +156,20 @@ class PackageElement
 	}
 	
 	
-	public function getType(typeName:TypeName):Option<TypeDefinition>
+	public function getType(typeName:TypeName):Maybe<TypeDefinition>
 	{
 		loadModule();
 		
 		return switch (module)
 		{
 			case ModuleState.Loaded(_.toOption() => Option.Some(data)):
-				data.getMaybe(typeName.toString()).toOption();
+				data.getMaybe(typeName.toString());
 				
             case ModuleState.Loading(data):
-                data.getMaybe(typeName.toString()).toOption();
+                data.getMaybe(typeName.toString());
                 
 			case ModuleState.Loaded(_):
-				Option.None;
+				Maybe.none();
 			
 			case ModuleState.Unloaded:
 				throw new SourceException("must be loaded");

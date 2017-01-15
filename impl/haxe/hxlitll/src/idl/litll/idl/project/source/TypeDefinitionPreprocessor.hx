@@ -167,7 +167,7 @@ class TypeDefinitionPreprocessor
 				switch (parent.element.root.getElement(modulePath.toArray()).toOption())
 				{
 					case Option.Some(referredElement):
-						switch (referredElement.getType(path.typeName))
+						switch (referredElement.getType(path.typeName).toOption())
 						{
 							case Option.Some(type):
 								processTypeReferenceParameters(path, type.getTypeParameters(), parameters);
@@ -202,7 +202,7 @@ class TypeDefinitionPreprocessor
 				
 				for (importedElement in parent.importedElements)
 				{
-					switch (importedElement.getType(path.typeName))
+					switch (importedElement.getType(path.typeName).toOption())
 					{
 						case Option.Some(type):
 							var module = importedElement.getModulePath();

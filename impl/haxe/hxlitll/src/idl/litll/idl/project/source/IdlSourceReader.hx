@@ -4,6 +4,7 @@ import haxe.io.Path;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.parse.Parser;
+import litll.idl.delitllfy.Delitllfier;
 import litll.idl.delitllfy.DelitllfyConfig;
 import litll.idl.project.error.IdlReadError;
 import litll.idl.project.error.IdlReadErrorKind;
@@ -78,8 +79,8 @@ class IdlSourceReader
 						errorResult(IdlReadErrorKind.Parse(error));
 						
 					case Result.Ok(litllArray):
-						switch (IdlDelitllfier.run(litllArray, config))
-						{
+						switch (Delitllfier.run(IdlDelitllfier.process, litllArray, config))
+                        {
 							case Result.Err(error):
 								errorResult(IdlReadErrorKind.Delitll(error));
 								

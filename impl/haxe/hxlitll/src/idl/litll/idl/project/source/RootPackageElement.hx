@@ -79,7 +79,7 @@ class RootPackageElement extends PackageElement
 			switch (target.typeName.toOption())
 			{
 				case Option.Some(typeName):
-					switch (element.getType(typeName))
+					switch (element.getType(typeName).toOption())
 					{
 						case Option.Some(type):
 							var path = new TypePath(Maybe.some(element.getModulePath()), typeName, typeName.tag);

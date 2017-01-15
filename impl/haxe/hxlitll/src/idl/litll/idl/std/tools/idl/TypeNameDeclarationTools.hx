@@ -5,7 +5,7 @@ import litll.idl.std.data.idl.TypeParameterDeclaration;
 
 class TypeNameDeclarationTools
 {
-	public static function getName(nameDeclaration:TypeNameDeclaration):TypeName
+	public static function getTypeName(nameDeclaration:TypeNameDeclaration):TypeName
 	{
 		return switch (nameDeclaration)
 		{

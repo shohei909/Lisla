@@ -50,6 +50,7 @@ class DelitllfyError
 		{
 			case DelitllfyErrorKind.UnmatchedEnumConstructor(_) | 
 				DelitllfyErrorKind.UnmatchedConst(_) | 
+				DelitllfyErrorKind.UnmatchedEnumLabel(_) | 
 				DelitllfyErrorKind.CantBeArray | 
 				DelitllfyErrorKind.CantBeString |
 				DelitllfyErrorKind.TooLongArray |
@@ -128,6 +129,9 @@ class DelitllfyError
 				
 			case DelitllfyErrorKind.UnmatchedConst(actual, expected):
 				"unmatched const. '" + expected + "' expected, but actual '" + actual + "'";
+				
+			case DelitllfyErrorKind.UnmatchedEnumLabel(expected):
+				"unmatched enum label. '" + expected + "' expected";
 				
 			case DelitllfyErrorKind.CantBeArray:
 				"can't be array";

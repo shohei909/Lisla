@@ -8,6 +8,12 @@ class LitllArray<T>
 	public var data:Array<T>;
 	public var tag:ArrayTag;
 	
+    public var length(get, never):Int;
+    private function get_length():Int
+    {
+        return data.length;
+    }
+    
 	public function new (data:Array<T>, ?tag:ArrayTag):Void 
 	{
 		this.data = data;
