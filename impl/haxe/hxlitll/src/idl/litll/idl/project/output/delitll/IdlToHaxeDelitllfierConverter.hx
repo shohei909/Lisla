@@ -323,14 +323,15 @@ class IdlToHaxeDelitllfierConverter
                     );
                     
                 case litll.core.Litll.Arr(data):
-                    try
+                    var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+                    var data = $instantiationExpr;
+                    switch (arrayContext.closeOrError())
                     {
-                        var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
-                        arrayContext.closeWithResult(function () return $instantiationExpr);
-                    }
-                    catch (error:litll.idl.delitllfy.DelitllfyError)
-                    {
-                        litll.core.ds.Result.Err(error);
+                        case haxe.ds.Option.None:
+                            data;
+                            
+                        case haxe.ds.Option.Some(error):
+                            litll.core.ds.Result.Err(error);
                     }
             }
 		}
@@ -349,21 +350,26 @@ class IdlToHaxeDelitllfierConverter
                     var processFunc = createProcessFuncExpr(parameters, data.type.generalize());
                     
                     // TODO: defatult value
-                    var expr = switch (data.name.kind)
+                    var expr = switch [data.name.kind, data.defaultValue]
                     {
-                        case ArgumentKind.Normal:
-                            macro litll.core.ds.ResultTools.getOrThrow(arrayContext.read($processFunc)); 
+                        case [ArgumentKind.Normal, Option.Some(value)]:
+                            createGetOrReturnExpr(macro arrayContext.readWithDefault($processFunc, null));
                             
-                        case ArgumentKind.Rest:
-                            macro litll.core.ds.ResultTools.getOrThrow(arrayContext.readRest($processFunc)); 
+                        case [ArgumentKind.Normal, Option.None]:
+                            createGetOrReturnExpr(macro arrayContext.read($processFunc));
                             
-                        case ArgumentKind.Skippable:
+                        case [ArgumentKind.Rest, Option.None]:
+                            createGetOrReturnExpr(macro arrayContext.readRest($processFunc)); 
+                            
+                        case [ArgumentKind.Optional, Option.None]:
+                            createGetOrReturnExpr(macro arrayContext.readOptional($processFunc)); 
+                            
+                        case [ArgumentKind.Unfold, Option.None]:
                             // TODO:
                             macro null;
                             
-                        case ArgumentKind.Unfold:
-                            // TODO:
-                            macro null;
+                        case [_, Option.Some(_)]:
+                            throw new IdlException("unsupported default value kind");
                     }
                     
                     var name = "arg" + references.length;
@@ -382,6 +388,15 @@ class IdlToHaxeDelitllfierConverter
         return {
             declarations : declarations,
             references : references
+        }
+    }
+    
+    private static function createGetOrReturnExpr(expr:Expr):Expr
+    {
+        return macro switch ($expr)
+        {
+            case litll.core.ds.Result.Ok(data): data;
+            case litll.core.ds.Result.Err(error): return litll.core.ds.Result.Err(error);
         }
     }
     
@@ -407,10 +422,18 @@ class IdlToHaxeDelitllfierConverter
             var guardConditions = createGuardConditions(arguments);
             var caseData = {
                 values: [macro litll.core.Litll.Arr(data)],
-                guard: if (guardConditions.length == 0) null else createOrExpr(guardConditions),
+                guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
                 expr: macro  {
                     var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
-                    arrayContext.closeWithResult(function () return $instantiationExpr);
+                    var data = $instantiationExpr;
+                    switch (arrayContext.closeOrError())
+                    {
+                        case haxe.ds.Option.None:
+                            data;
+                            
+                        case haxe.ds.Option.Some(error):
+                            litll.core.ds.Result.Err(error);
+                    }
                 }
             };
             
@@ -468,7 +491,14 @@ class IdlToHaxeDelitllfierConverter
                     );
                     
                 case UnfoldedTypeDefinition.Tuple(arguments):
-                    _addTupleCase(instantiationExpr, arguments);
+                    var guardConditions = createGuardConditions(arguments);
+                    cases.push(
+                        {
+                            values: [macro litll.core.Litll.Arr(data)],
+                            guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
+                            expr: instantiationExpr,
+                        }
+                    );
                     
                 case UnfoldedTypeDefinition.Enum(constructors):
                     for (constructor in constructors)
@@ -480,10 +510,24 @@ class IdlToHaxeDelitllfierConverter
                                 
                             case EnumConstructor.Parameterized(EnumConstructorHeader.Basic(name), arguments):
                                 var label = TupleArgument.Label(new LitllString(name.toString(), name.tag));
-                                _addTupleCase(instantiationExpr, [label].concat(arguments));
+                                var guardConditions = createGuardConditions(arguments);
+                                cases.push(
+                                    {
+                                        values: [macro litll.core.Litll.Arr(data)],
+                                        guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
+                                        expr: instantiationExpr,
+                                    }
+                                );
                                 
                             case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Tuple), arguments):
-                                _addTupleCase(instantiationExpr, arguments);
+                                var guardConditions = createGuardConditions(arguments);
+                                cases.push(
+                                    {
+                                        values: [macro litll.core.Litll.Arr(data)],
+                                        guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
+                                        expr: instantiationExpr,
+                                    }
+                                );
                                 
                             case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Unfold), arguments):
                                 if (arguments.length != 1)
@@ -511,7 +555,7 @@ class IdlToHaxeDelitllfierConverter
             var callExpr = createProcessCallExpr((macro context), parameters, type.generalize());
             var instantiationExpr = createEnumInstantiationExpr(
                 [], 
-                [macro litll.core.ds.ResultTools.getOrThrow($callExpr)], 
+                [createGetOrReturnExpr(callExpr)], 
                 sourcePath, name, parameters
             );
             _addUnfoldCase(instantiationExpr, type);
@@ -604,7 +648,7 @@ class IdlToHaxeDelitllfierConverter
                         case ArgumentKind.Normal:
                             min++;
                             
-                        case ArgumentKind.Rest | ArgumentKind.Skippable:
+                        case ArgumentKind.Rest | ArgumentKind.Optional:
                             more = true;
                             
                         case ArgumentKind.Unfold:
@@ -629,7 +673,7 @@ class IdlToHaxeDelitllfierConverter
         return result;
     }
     
-    private static function createOrExpr(exprs:Array<Expr>):Expr 
+    private static function createAndExpr(exprs:Array<Expr>):Expr 
     {
         return if (exprs.length == 0)
         {
@@ -641,7 +685,7 @@ class IdlToHaxeDelitllfierConverter
         }
         else
         {
-            expr: ExprDef.EBinop(Binop.OpBoolOr, exprs[0], createOrExpr(exprs.slice(1))),
+            expr: ExprDef.EBinop(Binop.OpBoolAnd, exprs[0], createAndExpr(exprs.slice(1))),
             pos: null
         };
     }

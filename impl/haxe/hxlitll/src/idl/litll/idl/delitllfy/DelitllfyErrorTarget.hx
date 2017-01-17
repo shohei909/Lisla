@@ -10,4 +10,4 @@ enum DelitllfyErrorTarget
 {
 	Str(string:LitllString, range:Maybe<SourceRange>);
 	Arr(array:LitllArray<Litll>, index:Int);
-}
+}   

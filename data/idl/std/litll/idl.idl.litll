@@ -8,7 +8,7 @@
 /// [document_tag litll.idl.document.IdlDocumentTag]
 [tuple Idl
     [header_tags.. HeaderTag]
-    [package_declaration PackageDeclaration [Package]]
+    [package_declaration PackageDeclaration]
     [import_declarations.. ImportDeclaration]
     [type_definitions.. TypeDefinition]
 ]
@@ -52,7 +52,7 @@
 [tuple Argument 
     [name ArgumentName]
     [type TypeReference]
-    [default_value [Option Any] []]
+    [default_value? Any]
 ]
 [newtype ArgumentName String]
 

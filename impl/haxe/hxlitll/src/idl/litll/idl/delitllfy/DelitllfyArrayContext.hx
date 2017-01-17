@@ -1,5 +1,6 @@
 package litll.idl.delitllfy;
 
+import haxe.PosInfos;
 import haxe.ds.Option;
 import litll.core.Litll;
 import litll.core.LitllArray;
@@ -10,7 +11,7 @@ using Lambda;
 class DelitllfyArrayContext
 {
 	private var array:LitllArray<Litll>;
-	private var index:Int;
+	public var index:Int;
 	
 	private var error:Maybe<DelitllfyError>;
 	private var maybeErrors:Array<DelitllfyError>;
@@ -55,6 +56,29 @@ class DelitllfyArrayContext
 		return Result.Ok(result);
 	}
 	
+    
+    public function readOptional<T>(process:ProcessFunction<T>):Result<Option<T>, DelitllfyError>
+    {
+        return switch (readData(process))
+        {
+            case Result.Ok(data):
+                Result.Ok(Option.Some(data));
+                
+            case Result.Err(error):
+                index--;
+                
+                if (error.recoverable())
+                {
+                    maybeErrors.push(error);
+                    Result.Ok(Option.None);
+                }
+                else
+                {
+                    return createErrorResult(error);
+                }
+        }
+    }
+    
 	public inline function readWithDefault<T>(process:ProcessFunction<T>, defaultValue:T):Result<T, DelitllfyError>
 	{
 		return switch (readData(process))
@@ -158,21 +182,14 @@ class DelitllfyArrayContext
 		}
 	}
 
-	public inline function closeWithResult<T>(create:Void->Result<T, DelitllfyError>):Result<T, DelitllfyError>
+	public inline function closeOrError<T>(?posInfos:PosInfos):Option<DelitllfyError>
 	{
 		if (index < array.data.length)
 		{
 			addFatalError(createError(DelitllfyErrorKind.TooLongArray));
 		}
 		
-		return switch (error.toOption())
-		{
-			case Option.Some(error):
-				Result.Err(error);
-			
-			case Option.None:
-				create();
-		}
+		return error.toOption();
 	}
 	
 	private function createError(kind:DelitllfyErrorKind):DelitllfyError

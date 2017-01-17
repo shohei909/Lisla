@@ -8,6 +8,7 @@ import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeDefKind;
 import litll.idl.project.output.data.HaxeDataTypePath;
 import litll.idl.std.data.idl.Argument;
+import litll.idl.std.data.idl.ArgumentName.ArgumentKind;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.TupleArgument;
 import litll.idl.std.data.idl.haxe.DataOutputConfig;
@@ -121,10 +122,20 @@ class IdlToHaxeDataConverter
         var typePath = ComplexType.TPath(argument.type.toMacroTypePath(config));
         typePath = switch (argument.name.kind)
         {
-            case Normal | Unfold | Skippable:
+            case ArgumentKind.Normal | ArgumentKind.Unfold:
                 typePath;
                 
-            case Rest:
+            case ArgumentKind.Optional:
+                ComplexType.TPath(
+                    {
+                        pack : ["haxe", "ds"],
+                        name : "Option",
+                        params : [TypeParam.TPType(typePath)],
+                        sub : null
+                    }
+                );
+                
+            case ArgumentKind.Rest:
                 ComplexType.TPath(
                     {
                         pack : [],

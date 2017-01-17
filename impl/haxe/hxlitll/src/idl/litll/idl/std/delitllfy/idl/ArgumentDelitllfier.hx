@@ -33,10 +33,7 @@ class ArgumentDelitllfier
 					var arrayContext = new DelitllfyArrayContext(array, 0, context.config);
 					var name = arrayContext.read(ArgumentNameDelitllfier.process).getOrThrow();
 					var parameters = arrayContext.read(TypeReferenceDelitllfier.process).getOrThrow();
-					var defaultValue = arrayContext.readWithDefault(
-						OptionDelitllfier.process.bind(Delitllfier.processLitll), 
-						LitllOption.None
-					).getOrThrow();
+					var defaultValue = arrayContext.readOptional(Delitllfier.processLitll).getOrThrow();
 					arrayContext.close(Argument.new.bind(name, parameters, defaultValue));
 				}
 				catch (error:DelitllfyError)

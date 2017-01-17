@@ -19,21 +19,21 @@ class ArgumentName
 		if (name.endsWith(".."))
 		{
 			name = name.substr(0, name.length - 2);
-			kind = Rest;
+			kind = ArgumentKind.Rest;
 		}
 		else if (name.endsWith("?"))
 		{
 			name = name.substr(0, name.length - 1);
-			kind = Skippable;
+			kind = ArgumentKind.Optional;
 		}
 		else if (name.endsWith("{}"))
 		{
 			name = name.substr(0, name.length - 2);
-			kind = Unfold;
+			kind = ArgumentKind.Unfold;
 		}
 		else
 		{
-			kind = Normal;
+			kind = ArgumentKind.Normal;
 		}
 		if (!name.isSnakeCase())
 		{
@@ -76,7 +76,7 @@ class ArgumentName
 enum ArgumentKind
 {
 	Normal;
-	Skippable;
+	Optional;
 	Rest;
 	Unfold;
 }
