@@ -5,8 +5,10 @@ import litll.idl.delitllfy.DelitllfyArrayContext;
 import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.std.data.idl.TypeParameterDeclaration;
+import litll.idl.std.delitllfy.idl.TypeDependenceNameDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeNameDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeParameterDeclarationDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
 using litll.core.ds.ResultTools;
 
 class TypeParameterDeclarationDelitllfier

@@ -55,9 +55,9 @@ class IdlToHaxeDataConverter
 							name = primitive.toPascalCase().getOrThrow();
 							arguments = [];
 							
-						case EnumConstructor.Parameterized(header, _arguments):
-							name = header.getHeaderName().toPascalCase().getOrThrow();
-							arguments = convertTupleArguments(_arguments, config);
+						case EnumConstructor.Parameterized(constructor):
+							name = constructor.header.getHeaderName().toPascalCase().getOrThrow();
+							arguments = convertTupleArguments(constructor.arguments, config);
 					}
 					
 					arguments = arguments.concat(additionalFields);

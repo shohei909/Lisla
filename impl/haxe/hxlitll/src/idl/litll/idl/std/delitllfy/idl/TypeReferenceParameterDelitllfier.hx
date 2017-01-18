@@ -6,6 +6,7 @@ import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.idl.std.data.idl.TypeReferenceParameter;
+import litll.idl.std.delitllfy.idl.TypeReferenceParameterDelitllfier;
 
 class TypeReferenceParameterDelitllfier
 {

@@ -1,4 +1,7 @@
 package litll.idl.std.data.idl;
+import litll.idl.std.data.idl.Argument;
+import litll.idl.std.data.idl.EnumConstructor;
+import litll.idl.std.data.idl.TupleArgument;
 
 enum UnfoldedTypeDefinition
 {

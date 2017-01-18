@@ -9,6 +9,7 @@ import litll.core.ds.Result;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.idl.std.data.core.LitllOption;
 import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.delitllfy.core.OptionDelitllfier;
 import litll.idl.std.delitllfy.idl.TypePathDelitllfier;
 using litll.core.ds.ResultTools;
 

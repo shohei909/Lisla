@@ -1,7 +1,6 @@
 /// 'Basic types'
 /// [schema litll.idl.Idl]
 /// [license "public domain"]
-
 [package litll]
 
 /// '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'

@@ -8,6 +8,7 @@ import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.delitllfy.idl.ArgumentDelitllfier;
 import litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier;
+import litll.idl.std.delitllfy.idl.TupleArgumentDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeDefinitionDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeNameDeclarationDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;

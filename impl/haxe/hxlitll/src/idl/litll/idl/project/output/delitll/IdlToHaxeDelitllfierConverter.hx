@@ -267,8 +267,8 @@ class IdlToHaxeDelitllfierConverter
                         case TypeReference.Primitive(primitive):
                             macro $i{typeName}.process;
                             
-                        case TypeReference.Generic(typePath, parameters):
-                            var childParametersExpr = [macro _].concat(createParmetersExpr(parameters));
+                        case TypeReference.Generic(generic):
+                            var childParametersExpr = [macro _].concat(createParmetersExpr(generic.parameters));
                             macro $i{typeName}.process.bind($a{childParametersExpr});
                     }
                     
@@ -507,42 +507,52 @@ class IdlToHaxeDelitllfierConverter
                         {
                             case EnumConstructor.Primitive(name):
                                 _addPrimitiveCase(instantiationExpr, name.toString());
-                                
-                            case EnumConstructor.Parameterized(EnumConstructorHeader.Basic(name), arguments):
-                                var label = TupleArgument.Label(new LitllString(name.toString(), name.tag));
-                                var guardConditions = createGuardConditions(arguments);
-                                cases.push(
+                                    
+                        case EnumConstructor.Parameterized(parameterized):
+                            var arguments = parameterized.arguments;
+                            switch (parameterized.header)
+                            {
+                                case EnumConstructorHeader.Primitive(name):
+                                    var label = TupleArgument.Label(new LitllString(name.toString(), name.tag));
+                                    var guardConditions = createGuardConditions(arguments);
+                                    cases.push(
+                                        {
+                                            values: [macro litll.core.Litll.Arr(data)],
+                                            guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
+                                            expr: instantiationExpr,
+                                        }
+                                    );
+                                    
+                                case EnumConstructorHeader.Declarative(header):
+                                    var name = header.name;
+                                    switch (header.condition)
                                     {
-                                        values: [macro litll.core.Litll.Arr(data)],
-                                        guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
-                                        expr: instantiationExpr,
+                                        case EnumConstructorCondition.Tuple:
+                                            var guardConditions = createGuardConditions(arguments);
+                                            cases.push(
+                                                {
+                                                    values: [macro litll.core.Litll.Arr(data)],
+                                                    guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
+                                                    expr: instantiationExpr,
+                                                }
+                                            );
+                                    
+                                        case EnumConstructorCondition.Unfold:
+                                            if (arguments.length != 1)
+                                            {
+                                                throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
+                                            }
+                                            
+                                            switch (arguments[0])
+                                            {
+                                                case TupleArgument.Data(argument):
+                                                    _addUnfoldCase(instantiationExpr, argument.type);
+                                                    
+                                                case TupleArgument.Label(litllString):
+                                                    _addPrimitiveCase(instantiationExpr, litllString.data);
+                                            }
                                     }
-                                );
-                                
-                            case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Tuple), arguments):
-                                var guardConditions = createGuardConditions(arguments);
-                                cases.push(
-                                    {
-                                        values: [macro litll.core.Litll.Arr(data)],
-                                        guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
-                                        expr: instantiationExpr,
-                                    }
-                                );
-                                
-                            case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Unfold), arguments):
-                                if (arguments.length != 1)
-                                {
-                                    throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
-                                }
-                                
-                                switch (arguments[0])
-                                {
-                                    case TupleArgument.Data(argument):
-                                        _addUnfoldCase(instantiationExpr, argument.type);
-                                        
-                                    case TupleArgument.Label(litllString):
-                                        _addPrimitiveCase(instantiationExpr, litllString.data);
-                                }
+                            }
                         }
                     }
                     
@@ -550,6 +560,7 @@ class IdlToHaxeDelitllfierConverter
                     throw new IdlException("struct " + sourcePath.toString() + " can't be unfold");
             }
         }
+        
         inline function addUnfoldCase(name:EnumConstructorName, type:TypeReference):Void
         {
             var callExpr = createProcessCallExpr((macro context), parameters, type.generalize());
@@ -568,26 +579,36 @@ class IdlToHaxeDelitllfierConverter
                 case EnumConstructor.Primitive(name):
                     addPrimitiveCase(name, name.toString());
                     
-                case EnumConstructor.Parameterized(EnumConstructorHeader.Basic(name), arguments):
-                    var label = TupleArgument.Label(new LitllString(name.toString(), name.tag));
-                    addTupleCase(name, [label].concat(arguments));
-                    
-                case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Tuple), arguments):
-                    addTupleCase(name, arguments);
-                    
-                case EnumConstructor.Parameterized(EnumConstructorHeader.Special(name, EnumConstructorCondition.Unfold), arguments):
-                    if (arguments.length != 1)
+                case EnumConstructor.Parameterized(parameterized):
+                    var arguments = parameterized.arguments;
+                    switch (parameterized.header)
                     {
-                        throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
-                    }
+                        case EnumConstructorHeader.Primitive(name):
+                            var label = TupleArgument.Label(new LitllString(name.toString(), name.tag));
+                            addTupleCase(name, [label].concat(arguments));
                     
-                    switch (arguments[0])
-                    {
-                        case TupleArgument.Data(argument):
-                            addUnfoldCase(name, argument.type);
-                            
-                        case TupleArgument.Label(litllString):
-                            addPrimitiveCase(name, litllString.data);
+                        case EnumConstructorHeader.Declarative(header):
+                            var name = header.name;
+                            switch (header.condition)
+                            {
+                                case EnumConstructorCondition.Tuple:
+                                    addTupleCase(name, arguments);
+                                    
+                                case EnumConstructorCondition.Unfold:
+                                    if (arguments.length != 1)
+                                    {
+                                        throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
+                                    }
+                                    
+                                    switch (arguments[0])
+                                    {
+                                        case TupleArgument.Data(argument):
+                                            addUnfoldCase(name, argument.type);
+                                            
+                                        case TupleArgument.Label(litllString):
+                                            addPrimitiveCase(name, litllString.data);
+                                    }
+                            }
                     }
             }
         }

@@ -6,6 +6,8 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.idl.std.data.idl.TupleArgument;
 import litll.idl.std.data.idl.EnumConstructorName;
+import litll.idl.std.delitllfy.idl.ArgumentDelitllfier;
+import litll.idl.std.delitllfy.idl.TupleArgumentDelitllfier;
 using litll.core.ds.ResultTools;
 
 class TupleArgumentDelitllfier

@@ -8,11 +8,11 @@ class EnumConstructorHeaderTools
     {
         return switch (header)
         {
-            case EnumConstructorHeader.Basic(name):
+            case EnumConstructorHeader.Primitive(name):
                 name;
                 
-            case EnumConstructorHeader.Special(name, _):
-                name;
+            case EnumConstructorHeader.Declarative(declarative):
+                declarative.name;
         }
     }   
 }

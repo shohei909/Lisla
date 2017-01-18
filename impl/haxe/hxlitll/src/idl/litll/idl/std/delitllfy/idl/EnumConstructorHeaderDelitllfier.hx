@@ -7,6 +7,8 @@ import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorHeader;
+import litll.idl.std.delitllfy.idl.EnumConstructorHeaderDelitllfier;
+import litll.idl.std.delitllfy.idl.EnumConstructorNameDelitllfier;
 using litll.core.ds.ResultTools;
 
 class EnumConstructorHeaderDelitllfier 

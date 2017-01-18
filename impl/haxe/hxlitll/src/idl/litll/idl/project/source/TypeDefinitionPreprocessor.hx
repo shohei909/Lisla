@@ -60,7 +60,8 @@ class TypeDefinitionPreprocessor
 						typeParameters.set(typeName.toString(), typeName);
 					}
 					
-				case TypeParameterDeclaration.Dependence(name, type):
+				case TypeParameterDeclaration.Dependence(dependence):
+                    var name = dependence.name;
 					if (typeDependences.exists(name.toString()))
 					{
 						addError(IdlReadErrorKind.TypeDependenceNameDupplicated(name));
@@ -101,8 +102,8 @@ class TypeDefinitionPreprocessor
 			case EnumConstructor.Primitive(_):
 				constructor;
 				
-			case EnumConstructor.Parameterized(header, arguments):
-				processTupleArguments(arguments);
+			case EnumConstructor.Parameterized(parameterized):
+				processTupleArguments(parameterized.arguments);
 		}
 	}
 	
@@ -156,9 +157,9 @@ class TypeDefinitionPreprocessor
 				path = p;
 				parameters = [];
 				
-			case TypeReference.Generic(typePath, _parameters):
-				path = typePath;
-				parameters = _parameters;
+			case TypeReference.Generic(genericType):
+				path = genericType.typePath;
+				parameters = genericType.parameters;
 		}
 		
 		switch (path.modulePath.toOption())
@@ -238,8 +239,8 @@ class TypeDefinitionPreprocessor
 			var referenceParameter = iter.next();
 			var processedValue = switch (definitionParameter)
 			{
-				case TypeParameterDeclaration.Dependence(_, type):
-					TypeReferenceParameterKind.Dependence(type);
+				case TypeParameterDeclaration.Dependence(dependence):
+					TypeReferenceParameterKind.Dependence(dependence.type);
 					
 				case TypeParameterDeclaration.TypeName(_):
 					var context = new DelitllfyContext(referenceParameter.value, parent.element.root.reader.config);

@@ -2,5 +2,5 @@
 package litll.idl.std.data.idl;
 enum TypeReference {
     Primitive(typePath:litll.idl.std.data.idl.TypePath);
-    Generic(typePath:litll.idl.std.data.idl.TypePath, parameters:Array<TypeReferenceParameter>);
+    Generic(type:litll.idl.std.data.idl.GenericTypeReference);
 }

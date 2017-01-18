@@ -41,12 +41,12 @@ class TypeReferenceTools
 			case TypeReference.Primitive(typePath):
 				toHaxeDataPath(typePath).toMacroPath();
 				
-			case TypeReference.Generic(typePath, parameters):
-				var result = toHaxeDataPath(typePath).toMacroPath();
+			case TypeReference.Generic(generic):
+				var result = toHaxeDataPath(generic.typePath).toMacroPath();
 				
-				for (parameter in parameters)
+				for (parameter in generic.parameters)
 				{
-					switch (parameter.processedValue.getOrThrow(IdlException.new.bind("Type reference " + typePath.toString() + " must be processed")))
+					switch (parameter.processedValue.getOrThrow(IdlException.new.bind("Type reference " + generic.typePath.toString() + " must be processed")))
 					{
 						case TypeReferenceParameterKind.Type(type):
 							result.params.push(TypeParam.TPType(ComplexType.TPath(toMacroTypePath(type, config))));
@@ -66,8 +66,8 @@ class TypeReferenceTools
 			case TypeReference.Primitive(primitive):
 				primitive;
 				
-			case TypeReference.Generic(typePath, _):
-    			typePath;
+			case TypeReference.Generic(generic):
+    			generic.typePath;
 		}
     }
     
@@ -78,8 +78,8 @@ class TypeReferenceTools
 			case TypeReference.Primitive(primitive):
 				new GenericTypeReference(primitive, []);
 				
-			case TypeReference.Generic(name, parameters):
-    			new GenericTypeReference(name, parameters);
+			case TypeReference.Generic(generic):
+    			generic;
 		}
 	}
     
@@ -90,8 +90,8 @@ class TypeReferenceTools
 			case TypeReference.Primitive(primitive):
 				primitive.toString();
 				
-			case TypeReference.Generic(typePath, _):
-    			typePath.toString();
+			case TypeReference.Generic(generic):
+    			generic.typePath.toString();
 		}
     }
     
@@ -109,11 +109,11 @@ class TypeReferenceTools
                     return UnfoldedTypeDefinition.Str;
                 }
             
-            case TypeReference.Generic(typePath, parameters):
-                var name = typePath.toString();
-                if (name == "Array" && parameters.length == 1)
+            case TypeReference.Generic(generic):
+                var name = generic.typePath.toString();
+                if (name == "Array" && generic.parameters.length == 1)
                 {
-                    switch (parameters[0].processedValue.toOption())
+                    switch (generic.parameters[0].processedValue.toOption())
                     {
                         case Option.Some(TypeReferenceParameterKind.Type(_)):
                             return UnfoldedTypeDefinition.Arr(referenceParameters[0]);
@@ -185,12 +185,14 @@ class TypeReferenceTools
                     type;
                 }
                 
-            case TypeReference.Generic(typePath, parameters):
+            case TypeReference.Generic(generic):
                 TypeReference.Generic(
-                    typePath, 
-                    [
-                        for (parameter in parameters) TypeReferenceParameterTools.resolveGenericType(parameter, parameterContext)
-                    ]
+                    new GenericTypeReference(
+                        generic.typePath, 
+                        [
+                            for (parameter in generic.parameters) TypeReferenceParameterTools.resolveGenericType(parameter, parameterContext)
+                        ]
+                    )
                 );
         }
     }

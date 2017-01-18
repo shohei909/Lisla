@@ -2,5 +2,5 @@
 package litll.idl.std.data.core;
 enum LitllOption<T> {
     None;
-    Some(some:T);
+    Some(data:T);
 }

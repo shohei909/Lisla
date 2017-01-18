@@ -11,6 +11,7 @@ import litll.idl.std.data.idl.GenericTypeReference;
 import litll.idl.std.delitllfy.idl.GenericTypeReferenceDelitllfier;
 import litll.idl.std.delitllfy.idl.TypePathDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeReferenceParameterDelitllfier;
 using litll.core.ds.ResultTools;
 
 class GenericTypeReferenceDelitllfier

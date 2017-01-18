@@ -11,6 +11,7 @@ import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.delitllfy.idl.GenericTypeNameDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeNameDeclarationDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeNameDelitllfier;
+import litll.idl.std.delitllfy.idl.TypeParameterDeclarationDelitllfier;
 using litll.core.ds.ResultTools;
 
 class TypeNameDeclarationDelitllfier

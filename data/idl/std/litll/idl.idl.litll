@@ -1,20 +1,13 @@
 /// 'IDL for Litll Interface Description Language (Litll IDL)'
 /// [schema litll.idl.Idl]
-
 [package litll]
-
 [import litll.core]
 
 /// [document_tag litll.idl.document.IdlDocumentTag]
 [tuple Idl
-    [header_tags.. HeaderTag]
     [package_declaration PackageDeclaration]
     [import_declarations.. ImportDeclaration]
     [type_definitions.. TypeDefinition]
-]
-
-[enum HeaderTag
-    overwrite
 ]
 
 [enum PackageDeclaration
@@ -32,23 +25,25 @@
     [enum [name TypeNameDeclaration] [constructors.. EnumConstructor]]
     [struct [name TypeNameDeclaration] [arguments.. Argument]]
 ]
+
 [enum TypeNameDeclaration
     [[primitive unfold] [name TypeName]]
     [[generic tuple] [name TypeName] [parameters.. TypeParameterDeclaration]]
 ]
 [enum TypeParameterDeclaration
     [[type_name unfold] [type_name TypeName]]
-    [[dependence tuple] [name TypeDependenceName] [type TypeReference]]
+    [[dependence unfold] [declaration TypeDependenceDeclaration]]
 ]
 [newtype TypeName String]
+[tuple TypeDependenceDeclaration
+    [name TypeDependenceName] [type TypeReference]
+]
 [newtype TypeDependenceName String]
 
 [enum TupleArgument
     [[label unfold] [constant String]]
     [[data unfold] [argument Argument]]
 ]
-
-/// [document_tag litll.idl.document.ArgumentDocumentTag]
 [tuple Argument 
     [name ArgumentName]
     [type TypeReference]
@@ -56,16 +51,20 @@
 ]
 [newtype ArgumentName String]
 
-// [document_tag litll.idl.document.EnumConstructorDocumentTag]
 [enum EnumConstructor
     [[primitive unfold] [name EnumConstructorName]]
-    [[parameterized tuple] [name EnumConstructorHeader] [arguments.. TupleArgument]]
+    [[parameterized unfold] [constructor ParameterizedEnumConstructor]]
 ]
-
+[tuple ParameterizedEnumConstructor
+    [header EnumConstructorHeader] [arguments.. TupleArgument]
+]
 [newtype EnumConstructorName String]
 [enum EnumConstructorHeader
-    [[basic unfold] [name EnumConstructorName]]
-    [[special tuple] [name EnumConstructorName] [condition EnumConstructorCondition]]
+    [[primitive unfold] [name EnumConstructorName]]
+    [[declarative unfold] [header DeclarativeEnumConstructorHeader]]
+]
+[tuple DeclarativeEnumConstructorHeader
+    [name EnumConstructorName] [condition EnumConstructorCondition]
 ]
 [enum EnumConstructorCondition
     unfold
@@ -78,7 +77,9 @@
 
 [enum TypeReference
     [[primitive unfold] [type_path TypePath]]
-    [[generic tuple] [type_path TypePath] [parameters.. TypeReferenceParameter]]
+    [[generic unfold] [type GenericTypeReference]]
 ]
-
+[tuple GenericTypeReference
+    [type_path TypePath] [parameters.. TypeReferenceParameter]
+]
 [newtype TypeReferenceParameter Any]

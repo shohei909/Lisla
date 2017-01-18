@@ -1,7 +1,6 @@
 /// 'File API'
 /// [schema litll.idl.Idl]
 /// [license "public domain"]
-
 [package litll]
 
 [newtype FilePath String]

@@ -25,8 +25,8 @@ class TypeParameterDeclarationTools
 				case TypeParameterDeclaration.TypeName(typeName):
                     parameters.push(typeName);
 				
-				case TypeParameterDeclaration.Dependence(name, type):
-					dependences.push(new TypeDependenceDeclaration(name, type));
+				case TypeParameterDeclaration.Dependence(declaration):
+					dependences.push(declaration);
 			}
 		}
         
@@ -43,11 +43,11 @@ class TypeParameterDeclarationTools
 		{
 			switch (param)
 			{
-				case TypeParameterDeclaration.Dependence(name, type):
+				case TypeParameterDeclaration.Dependence(dependence):
 					result.push(
 						{
-							name: name.toVariableName(),
-							type: ComplexType.TPath(TypeReferenceTools.toMacroTypePath(type, config)),
+							name: dependence.name.toVariableName(),
+							type: ComplexType.TPath(TypeReferenceTools.toMacroTypePath(dependence.type, config)),
 						}
 					);
 					
