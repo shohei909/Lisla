@@ -1,4 +1,5 @@
 /// 'IDL for Litll Interface Description Language (Litll IDL)'
+/// [license "public domain"]
 /// [schema litll.idl.Idl]
 [package litll]
 [import litll.core]
@@ -23,7 +24,7 @@
     [newtype [name TypeNameDeclaration] [type TypeReference]]
     [tuple [name TypeNameDeclaration] [arguments.. TupleArgument]]
     [enum [name TypeNameDeclaration] [constructors.. EnumConstructor]]
-    [struct [name TypeNameDeclaration] [arguments.. Argument]]
+    [struct [name TypeNameDeclaration] [fields.. StructField]]
 ]
 
 [enum TypeNameDeclaration
@@ -58,18 +59,26 @@
 [tuple ParameterizedEnumConstructor
     [header EnumConstructorHeader] [arguments.. TupleArgument]
 ]
-[newtype EnumConstructorName String]
 [enum EnumConstructorHeader
     [[primitive unfold] [name EnumConstructorName]]
-    [[declarative unfold] [header DeclarativeEnumConstructorHeader]]
+    [[unfold tuple] [name EnumConstructorName] unfold]
+    [[tuple tuple] [name EnumConstructorName] tuple]
+    [ignore]
 ]
+[newtype EnumConstructorName String]
 [tuple DeclarativeEnumConstructorHeader
     [name EnumConstructorName] [condition EnumConstructorCondition]
 ]
-[enum EnumConstructorCondition
-    unfold
-    tuple
+
+[tuple StructField
+    [header StructFieldHeader] [type TypeReference]
 ]
+[enum StructFieldHeader
+    [[primitive unfold] [name StructFieldName]]
+    [[unfold tuple] [name StructFieldName] unfold]
+    [ignore]
+]
+[newtype StructFieldName String]
 
 [newtype PackagePath String]
 [newtype ModulePath String]

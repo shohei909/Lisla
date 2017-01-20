@@ -1,0 +1,9 @@
+/// 'Document tags for Litll IDL'
+/// [schema litll.idl.Idl]
+/// [license "public domain"]
+[package litll.idl]
+
+[struct TypeDefinitionDocumentTag
+    [document_tag String]
+    [[ignore]]
+]

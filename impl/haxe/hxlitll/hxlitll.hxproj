@@ -39,7 +39,6 @@
   <compileTargets>
     <compile path="test\TestMain.hx" />
     <compile path="test\core\TestMain.hx" />
-    <compile path="test\core\TestCore.hx" />
   </compileTargets>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>

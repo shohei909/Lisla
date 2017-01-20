@@ -1,6 +1,6 @@
 /// 'Basic types'
-/// [schema litll.idl.Idl]
 /// [license "public domain"]
+/// [schema litll.idl.Idl]
 [package litll]
 
 /// '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'
@@ -80,5 +80,7 @@
     [Array T]
 ]
 
+/// 'Base64 encoded binary'
 [newtype Binary String]
+
 [newtype BigInt String]

@@ -1,0 +1,5 @@
+/// [schema litll.idl.Idl]
+
+[idl idl]
+[extension idl litll.idl.Idl]
+[extension litllconfig litll.config.LitllConfig]

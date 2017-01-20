@@ -1,0 +1,23 @@
+/// 'IDL for Litll Document Comment'
+/// [license "public domain"]
+/// [schema litll.idl.Idl]
+
+[package litll]
+[import litll.idl]
+
+[struct Document
+    [[comment.. unfold] String]
+    [[ignore]]
+]
+
+[struct DocumentHeaderTag
+    [encoding DocumentEncoding]
+    [license.. String]
+    [author.. String]
+    [schema TypeReference]
+    [[ignore]]
+]
+
+[enum DocumentEncoding
+    utf8
+]

@@ -1,0 +1,10 @@
+/// 'IDL for Litll IDL configure file(.litllconfig.litll)'
+/// [schema litll.idl.Idl]
+
+[package litll]
+[import litll.file]
+
+[struct LitllConfig
+    [idl.. FilePath]
+    [extention.. String]
+]
