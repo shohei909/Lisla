@@ -6,11 +6,17 @@ import haxe.macro.Expr.Field;
 import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeDefKind;
+import litll.idl.exception.IdlException;
 import litll.idl.project.output.data.HaxeDataTypePath;
+import litll.idl.std.data.core.LitllBoolean;
 import litll.idl.std.data.idl.Argument;
-import litll.idl.std.data.idl.ArgumentName.ArgumentKind;
+import litll.idl.std.data.idl.ArgumentKind;
 import litll.idl.std.data.idl.EnumConstructor;
+import litll.idl.std.data.idl.StructField;
+import litll.idl.std.data.idl.StructFieldKind;
+import litll.idl.std.data.idl.StructFieldName;
 import litll.idl.std.data.idl.TupleArgument;
+import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.haxe.DataOutputConfig;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
 import litll.idl.std.tools.idl.TypeDependenceDeclarationTools;
@@ -24,6 +30,7 @@ using litll.core.ds.MaybeTools;
 using litll.core.ds.ResultTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 using litll.idl.std.tools.idl.EnumConstructorHeaderTools;
+using litll.idl.std.tools.idl.StructFieldHeaderTools;
 
 class IdlToHaxeDataConverter
 {
@@ -40,8 +47,8 @@ class IdlToHaxeDataConverter
 		{
 			case IdlTypeDefinition.Struct(name, arguments):
 				kind = TypeDefKind.TDClass(null, null, false);
-				var convertedArguments = convertArguments(arguments, config).concat(additionalFields);
-				setupBasicFields(fields, convertedArguments);
+				var convertedStructFields = convertStructFields(arguments, config).concat(additionalFields);
+				setupBasicFields(fields, convertedStructFields);
 				
 			case IdlTypeDefinition.Enum(name, constructors):
 				kind = TypeDefKind.TDEnum;
@@ -151,9 +158,77 @@ class IdlToHaxeDataConverter
             type: typePath,
         };
 	}
-	private static function convertArguments(source:Array<Argument>, config:DataOutputConfig):Array<FunctionArg>
+	private static function convertField(name:StructFieldName, type:TypeReference, config:DataOutputConfig):FunctionArg
 	{
-		return [for (argument in source) convertArgument(argument, config)];
+        var typePath = ComplexType.TPath(type.toMacroTypePath(config));
+        typePath = switch (name.kind)
+        {
+            case StructFieldKind.Normal | StructFieldKind.Unfold:
+                typePath;
+                
+            case StructFieldKind.Optional:
+                ComplexType.TPath(
+                    {
+                        pack : ["haxe", "ds"],
+                        name : "Option",
+                        params : [TypeParam.TPType(typePath)],
+                        sub : null
+                    }
+                );
+                
+            case StructFieldKind.Rest:
+                ComplexType.TPath(
+                    {
+                        pack : [],
+                        name : "Array",
+                        params : [TypeParam.TPType(typePath)],
+                        sub : null
+                    }
+                );
+        }
+				
+		return {
+            name: name.toVariableName().getOrThrow(),
+            type: typePath,
+        };
+	}
+    
+	private static function convertStructFields(fields:Array<StructField>, config:DataOutputConfig):Array<FunctionArg>
+	{
+		var args = [];
+        for (field in fields)
+        {
+            switch (field)
+            {
+                case StructField.Field(header, type):
+                    args.push(convertField(header.getHeaderName(), type, config));
+                    
+                case StructField.Boolean(name):
+                    var typePath = switch (name.kind)
+                    {
+                        case StructFieldKind.Normal:
+                            macro:litll.idl.std.data.core.LitllBoolean;
+                            
+                        case StructFieldKind.Unfold:
+                            throw new IdlException("unfold suffix(?) for boolean is not supported");
+                            
+                        case StructFieldKind.Optional:
+                            throw new IdlException("optional suffix(?) for boolean is not supported");
+                            
+                        case StructFieldKind.Rest:
+                            macro:Array<litll.idl.std.data.core.LitllBoolean>;
+                    }
+                    
+                    args.push(
+                        {
+                            name : name.toVariableName().getOrThrow(),
+                            type : typePath,
+                        }
+                    );
+            }
+        }
+        
+        return args;
 	}
     
 	private static function convertTupleArguments(source:Array<TupleArgument>, config:DataOutputConfig):Array<FunctionArg>

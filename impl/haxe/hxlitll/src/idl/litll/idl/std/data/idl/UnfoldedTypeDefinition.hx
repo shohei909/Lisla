@@ -9,5 +9,5 @@ enum UnfoldedTypeDefinition
     Str;
     Enum(constuctors:Array<EnumConstructor>);
     Tuple(arguments:Array<TupleArgument>);
-    Struct(arguments:Array<Argument>);
+    Struct(arguments:Array<StructField>);
 }

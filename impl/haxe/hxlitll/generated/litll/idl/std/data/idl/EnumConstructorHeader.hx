@@ -2,5 +2,6 @@
 package litll.idl.std.data.idl;
 enum EnumConstructorHeader {
     Primitive(name:litll.idl.std.data.idl.EnumConstructorName);
-    Declarative(header:litll.idl.std.data.idl.DeclarativeEnumConstructorHeader);
+    Unfold(name:litll.idl.std.data.idl.EnumConstructorName);
+    Tuple(name:litll.idl.std.data.idl.EnumConstructorName);
 }

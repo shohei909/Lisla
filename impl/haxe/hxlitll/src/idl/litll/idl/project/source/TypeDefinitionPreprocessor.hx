@@ -10,6 +10,9 @@ import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.project.error.IdlReadErrorKind;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.EnumConstructor;
+import litll.idl.std.data.idl.EnumConstructorName;
+import litll.idl.std.data.idl.StructField;
+import litll.idl.std.data.idl.StructFieldName;
 import litll.idl.std.data.idl.TupleArgument;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeDependenceName;
@@ -21,6 +24,8 @@ import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
 import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
 using litll.idl.std.tools.idl.TypeDefinitionTools;
+using litll.idl.std.tools.idl.EnumConstructorHeaderTools;
+using litll.idl.std.tools.idl.StructFieldHeaderTools;
 
 class TypeDefinitionPreprocessor
 {
@@ -82,33 +87,83 @@ class TypeDefinitionPreprocessor
 				processTypeReference(type);
 				
 			case TypeDefinition.Enum(_, constructors):
-				for (constructor in constructors)
-				{
-					processEnumConstuctors(constructor);
-				}
+				processEnumConstuctors(constructors);
 				
-			case TypeDefinition.Struct(_, arguments):
-                processArguments(arguments);
+			case TypeDefinition.Struct(_, fields):
+                processStructFields(fields);
                 
             case TypeDefinition.Tuple(_, arguments):
 				processTupleArguments(arguments);
 		}
 	}
+    
 	
-	private function processEnumConstuctors(constructor:EnumConstructor):Void
+	private function processEnumConstuctors(constructors:Array<EnumConstructor>):Void
 	{
-		switch (constructor)
+        // TODO: varidation condition dupplication
+        
+    	var usedNames = new Set<String>(new Map());
+        inline function add(name:EnumConstructorName):Void
+        {
+            if (usedNames.exists(name.toString()))
+            {
+                addError(IdlReadErrorKind.EnumConstuctorNameDupplicated(name));
+            }
+            else
+            {
+                usedNames.set(name.toString());
+            }
+        }
+        
+        for (constructor in constructors)
 		{
-			case EnumConstructor.Primitive(_):
-				constructor;
-				
-			case EnumConstructor.Parameterized(parameterized):
-				processTupleArguments(parameterized.arguments);
-		}
+            switch (constructor)
+            {
+                case EnumConstructor.Primitive(name):
+                    add(name);
+                    
+                case EnumConstructor.Parameterized(parameterized):
+                    add(parameterized.header.getHeaderName());
+                    processTupleArguments(parameterized.arguments);
+            }
+        }
 	}
 	
+    private function processStructFields(fields:Array<StructField>):Void
+    {
+        // TODO: varidation condition dupplication
+        
+    	var usedNames = new Set<String>(new Map());
+        inline function add(name:StructFieldName):Void
+        {
+            if (usedNames.exists(name.name))
+            {
+                addError(IdlReadErrorKind.StructFieldNameDupplicated(name));
+            }
+            else
+            {
+                usedNames.set(name.name);
+            }
+        }
+        
+        for (field in fields)
+        {
+            switch (field)
+            {
+                case StructField.Boolean(name):
+                    add(name);
+                    
+                case StructField.Field(header, type):
+                    add(header.getHeaderName());
+                    processTypeReference(type);
+            }
+        }
+    }
+    
 	private function processTupleArguments(arguments:Array<TupleArgument>):Void
 	{
+        // TODO: varidation condition dupplication
+        
 		var usedNames = new Set<String>(new Map());
 		for (argument in arguments)
 		{
@@ -131,23 +186,6 @@ class TypeDefinitionPreprocessor
 		}
 	}
     
-    private function processArguments(arguments:Array<Argument>):Void
-    {
-        var usedNames = new Set<String>(new Map());
-        for (argument in arguments)
-		{
-            if (usedNames.exists(argument.name.name))
-            {
-                addError(IdlReadErrorKind.ArgumentNameDupplicated(argument.name));
-            }
-            else
-            {
-                usedNames.set(argument.name.name);
-                processTypeReference(argument.type);
-            }
-        }
-    }
-	
 	private function processTypeReference(type:TypeReference):Void
 	{
 		var path, parameters;

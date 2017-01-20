@@ -14,9 +14,8 @@ import litll.idl.project.output.data.store.HaxeDataConstructorKind;
 import litll.idl.project.output.data.store.HaxeDataConstructorReturnKind;
 import litll.idl.project.output.delitll.HaxeDelitllfierTypePathPair;
 import litll.idl.std.data.idl.Argument;
-import litll.idl.std.data.idl.ArgumentName.ArgumentKind;
+import litll.idl.std.data.idl.ArgumentKind;
 import litll.idl.std.data.idl.EnumConstructor;
-import litll.idl.std.data.idl.EnumConstructorCondition;
 import litll.idl.std.data.idl.EnumConstructorHeader;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.GenericTypeReference;
@@ -523,35 +522,30 @@ class IdlToHaxeDelitllfierConverter
                                         }
                                     );
                                     
-                                case EnumConstructorHeader.Declarative(header):
-                                    var name = header.name;
-                                    switch (header.condition)
+                                case EnumConstructorHeader.Unfold(name):
+                                    if (arguments.length != 1)
                                     {
-                                        case EnumConstructorCondition.Tuple:
-                                            var guardConditions = createGuardConditions(arguments);
-                                            cases.push(
-                                                {
-                                                    values: [macro litll.core.Litll.Arr(data)],
-                                                    guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
-                                                    expr: instantiationExpr,
-                                                }
-                                            );
-                                    
-                                        case EnumConstructorCondition.Unfold:
-                                            if (arguments.length != 1)
-                                            {
-                                                throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
-                                            }
-                                            
-                                            switch (arguments[0])
-                                            {
-                                                case TupleArgument.Data(argument):
-                                                    _addUnfoldCase(instantiationExpr, argument.type);
-                                                    
-                                                case TupleArgument.Label(litllString):
-                                                    _addPrimitiveCase(instantiationExpr, litllString.data);
-                                            }
+                                        throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
                                     }
+                                    
+                                    switch (arguments[0])
+                                    {
+                                        case TupleArgument.Data(argument):
+                                            _addUnfoldCase(instantiationExpr, argument.type);
+                                            
+                                        case TupleArgument.Label(litllString):
+                                            _addPrimitiveCase(instantiationExpr, litllString.data);
+                                    }
+                                    
+                                case EnumConstructorHeader.Tuple(name):
+                                    var guardConditions = createGuardConditions(arguments);
+                                    cases.push(
+                                        {
+                                            values: [macro litll.core.Litll.Arr(data)],
+                                            guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
+                                            expr: instantiationExpr, 
+                                        }
+                                    );
                             }
                         }
                     }
@@ -587,27 +581,22 @@ class IdlToHaxeDelitllfierConverter
                             var label = TupleArgument.Label(new LitllString(name.toString(), name.tag));
                             addTupleCase(name, [label].concat(arguments));
                     
-                        case EnumConstructorHeader.Declarative(header):
-                            var name = header.name;
-                            switch (header.condition)
+                        case EnumConstructorHeader.Tuple(name):
+                            addTupleCase(name, arguments);
+                            
+                        case EnumConstructorHeader.Unfold(name):
+                            if (arguments.length != 1)
                             {
-                                case EnumConstructorCondition.Tuple:
-                                    addTupleCase(name, arguments);
+                                throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
+                            }
+                            
+                            switch (arguments[0])
+                            {
+                                case TupleArgument.Data(argument):
+                                    addUnfoldCase(name, argument.type);
                                     
-                                case EnumConstructorCondition.Unfold:
-                                    if (arguments.length != 1)
-                                    {
-                                        throw new IdlException("unfold target type number must be one. but actual " + arguments.length);
-                                    }
-                                    
-                                    switch (arguments[0])
-                                    {
-                                        case TupleArgument.Data(argument):
-                                            addUnfoldCase(name, argument.type);
-                                            
-                                        case TupleArgument.Label(litllString):
-                                            addPrimitiveCase(name, litllString.data);
-                                    }
+                                case TupleArgument.Label(litllString):
+                                    addPrimitiveCase(name, litllString.data);
                             }
                     }
             }

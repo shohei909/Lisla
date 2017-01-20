@@ -2,8 +2,8 @@
 /// [schema litll.idl.Idl]
 /// [license "public domain"]
 [package litll.idl]
+[import litll.idl]
 
-[struct TypeDefinitionDocumentTag
-    [document_tag String]
-    [[ignore]]
+[struct TypeDefinitionDocument
+    [document_tag TypeReference]
 ]

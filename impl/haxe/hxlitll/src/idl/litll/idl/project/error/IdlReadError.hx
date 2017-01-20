@@ -34,16 +34,22 @@ class IdlReadError
 				getRangeStringFromTag(typePath.tag.upCast()) + "Type " + typePath.toString() + " is dupplicated";
 				
 			case IdlReadErrorKind.ArgumentNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Argument name " + name + " is dupplicated";
+				getRangeStringFromTag(name.tag.upCast()) + "Argument name " + name.name + " is dupplicated";
+				
+			case IdlReadErrorKind.EnumConstuctorNameDupplicated(name):
+				getRangeStringFromTag(name.tag.upCast()) + "Enum constructor name " + name.toString() + " is dupplicated";
+				
+			case IdlReadErrorKind.StructFieldNameDupplicated(name):
+				getRangeStringFromTag(name.tag.upCast()) + "Struct field name " + name.name + " is dupplicated";
 				
 			case IdlReadErrorKind.TypeDependenceNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Type dependent name " + name + " is dupplicated";
+				getRangeStringFromTag(name.tag.upCast()) + "Type dependent name " + name.toString() + " is dupplicated";
 				
 			case IdlReadErrorKind.TypeParameterNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Type parameter name " + name + " is dupplicated";
+				getRangeStringFromTag(name.tag.upCast()) + "Type parameter name " + name.toString() + " is dupplicated";
 				
 			case IdlReadErrorKind.InvalidPackage(expected, actual):
-				getRangeStringFromTag(actual.tag.upCast()) + "Package name " + expected + " is expected but " + actual;
+				getRangeStringFromTag(actual.tag.upCast()) + "Package name " + expected.toString() + " is expected but " + actual.toString();
 				
 			case IdlReadErrorKind.TypeNotFound(path):
 				getRangeStringFromTag(path.tag.upCast()) + "Type " + path.toString() + " is not found";

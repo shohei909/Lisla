@@ -75,6 +75,7 @@ class DataOutputConfig
 		this.addPredefinedType(TypePath);
 		this.addPredefinedType(TypeDependenceName);
 		this.addPredefinedType(TypeReferenceParameter);
+		this.addPredefinedType(StructFieldName);
 	}
 	
 	public function toHaxeDataPath(typePath:TypePath):HaxeDataTypePath

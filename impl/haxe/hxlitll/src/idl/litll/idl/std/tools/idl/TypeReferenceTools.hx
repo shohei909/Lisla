@@ -26,6 +26,7 @@ using litll.idl.std.tools.idl.ArgumentTools;
 using litll.idl.std.tools.idl.EnumConstructorTools;
 using litll.idl.std.tools.idl.TypeReferenceParameterTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
+using litll.idl.std.tools.idl.StructFieldTools;
 
 class TypeReferenceTools
 {
@@ -156,9 +157,9 @@ class TypeReferenceTools
                             [for (el in arguments) el.resolveGenericType(parameterContext)]
                         );
                         
-                    case TypeDefinition.Struct(_, arguments):
+                    case TypeDefinition.Struct(_, fields):
                         UnfoldedTypeDefinition.Struct(
-                            [for (el in arguments) el.resolveGenericType(parameterContext)]
+                            [for (el in fields) el.resolveGenericType(parameterContext)]
                         );
                         
                     case TypeDefinition.Newtype(_, type):

@@ -4,5 +4,5 @@ enum TypeDefinition {
     Newtype(name:litll.idl.std.data.idl.TypeNameDeclaration, type:litll.idl.std.data.idl.TypeReference);
     Tuple(name:litll.idl.std.data.idl.TypeNameDeclaration, arguments:Array<litll.idl.std.data.idl.TupleArgument>);
     Enum(name:litll.idl.std.data.idl.TypeNameDeclaration, constructors:Array<litll.idl.std.data.idl.EnumConstructor>);
-    Struct(name:litll.idl.std.data.idl.TypeNameDeclaration, arguments:Array<litll.idl.std.data.idl.Argument>);
+    Struct(name:litll.idl.std.data.idl.TypeNameDeclaration, fields:Array<litll.idl.std.data.idl.StructField>);
 }

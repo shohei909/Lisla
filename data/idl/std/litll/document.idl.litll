@@ -7,15 +7,13 @@
 
 [struct Document
     [[comment.. unfold] String]
-    [[ignore]]
 ]
 
-[struct DocumentHeaderTag
+[struct HeaderDocument
     [encoding DocumentEncoding]
     [license.. String]
     [author.. String]
     [schema TypeReference]
-    [[ignore]]
 ]
 
 [enum DocumentEncoding

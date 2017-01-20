@@ -73,11 +73,3 @@ class ArgumentName
 	}
 }
 
-enum ArgumentKind
-{
-	Normal;
-	Optional;
-	Rest;
-	Unfold;
-}
-

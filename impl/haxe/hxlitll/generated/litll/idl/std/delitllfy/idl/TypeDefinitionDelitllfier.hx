@@ -107,7 +107,7 @@ class TypeDefinitionDelitllfier {
                         return litll.core.ds.Result.Err(error);
                     };
                 };
-                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.ArgumentDelitllfier.process)) {
+                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.StructFieldDelitllfier.process)) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };

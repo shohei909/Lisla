@@ -12,16 +12,52 @@ class EnumConstructorHeaderDelitllfier {
                 };
             }));
         };
-        case litll.core.Litll.Arr(data) if (data.length == 2):{
-            litll.core.ds.Result.Ok(litll.idl.std.data.idl.EnumConstructorHeader.Declarative(switch (litll.idl.std.delitllfy.idl.DeclarativeEnumConstructorHeaderDelitllfier.process(context)) {
-                case litll.core.ds.Result.Ok(data):{
+        case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[1].match(litll.core.Litll.Str(_.data => "unfold"))):{
+            var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+            var data = {
+                var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.EnumConstructorNameDelitllfier.process)) {
+                    case litll.core.ds.Result.Ok(data):{
+                        data;
+                    };
+                    case litll.core.ds.Result.Err(error):{
+                        return litll.core.ds.Result.Err(error);
+                    };
+                };
+                arrayContext.readLabel("unfold");
+                litll.core.ds.Result.Ok(litll.idl.std.data.idl.EnumConstructorHeader.Unfold(arg0));
+            };
+            switch (arrayContext.closeOrError()) {
+                case haxe.ds.Option.None:{
                     data;
                 };
-                case litll.core.ds.Result.Err(error):{
-                    return litll.core.ds.Result.Err(error);
+                case haxe.ds.Option.Some(error):{
+                    litll.core.ds.Result.Err(error);
                 };
-            }));
+            };
         };
-        case data:litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumConstructor([])));
+        case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[1].match(litll.core.Litll.Str(_.data => "tuple"))):{
+            var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+            var data = {
+                var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.EnumConstructorNameDelitllfier.process)) {
+                    case litll.core.ds.Result.Ok(data):{
+                        data;
+                    };
+                    case litll.core.ds.Result.Err(error):{
+                        return litll.core.ds.Result.Err(error);
+                    };
+                };
+                arrayContext.readLabel("tuple");
+                litll.core.ds.Result.Ok(litll.idl.std.data.idl.EnumConstructorHeader.Tuple(arg0));
+            };
+            switch (arrayContext.closeOrError()) {
+                case haxe.ds.Option.None:{
+                    data;
+                };
+                case haxe.ds.Option.Some(error):{
+                    litll.core.ds.Result.Err(error);
+                };
+            };
+        };
+        case data:litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumConstructor(["unfold", "tuple"])));
     };
 }

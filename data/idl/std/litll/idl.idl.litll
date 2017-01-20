@@ -63,20 +63,16 @@
     [[primitive unfold] [name EnumConstructorName]]
     [[unfold tuple] [name EnumConstructorName] unfold]
     [[tuple tuple] [name EnumConstructorName] tuple]
-    [ignore]
 ]
 [newtype EnumConstructorName String]
-[tuple DeclarativeEnumConstructorHeader
-    [name EnumConstructorName] [condition EnumConstructorCondition]
-]
 
-[tuple StructField
-    [header StructFieldHeader] [type TypeReference]
+[enum StructField
+    [[field tuple] [header StructFieldHeader] [type TypeReference]]
+    [[boolean unfold] [name StructFieldName]]
 ]
 [enum StructFieldHeader
     [[primitive unfold] [name StructFieldName]]
     [[unfold tuple] [name StructFieldName] unfold]
-    [ignore]
 ]
 [newtype StructFieldName String]
 
