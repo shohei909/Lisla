@@ -2,5 +2,5 @@
 package litll.idl.std.data.idl;
 enum EnumConstructor {
     Primitive(name:litll.idl.std.data.idl.EnumConstructorName);
-    Parameterized(constructor:litll.idl.std.data.idl.ParameterizedEnumConstructor);
+    Parameterized(parameterized:litll.idl.std.data.idl.ParameterizedEnumConstructor);
 }

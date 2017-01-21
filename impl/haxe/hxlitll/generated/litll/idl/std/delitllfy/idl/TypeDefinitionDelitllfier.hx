@@ -45,7 +45,7 @@ class TypeDefinitionDelitllfier {
                         return litll.core.ds.Result.Err(error);
                     };
                 };
-                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TupleArgumentDelitllfier.process)) {
+                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TupleElementDelitllfier.process)) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
@@ -107,7 +107,7 @@ class TypeDefinitionDelitllfier {
                         return litll.core.ds.Result.Err(error);
                     };
                 };
-                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.StructFieldDelitllfier.process)) {
+                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.StructElementDelitllfier.process)) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };

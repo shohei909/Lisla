@@ -8,7 +8,7 @@ import litll.core.ds.Result;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.delitllfy.idl.ArgumentDelitllfier;
 import litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier;
-import litll.idl.std.delitllfy.idl.TupleArgumentDelitllfier;
+import litll.idl.std.delitllfy.idl.TupleElementDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeDefinitionDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeNameDeclarationDelitllfier;
 import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
@@ -36,7 +36,7 @@ class TypeDefinitionDelitllfier
 							case "tuple":
 								var arrayContext = new DelitllfyArrayContext(array, 1, context.config);
 								var name = arrayContext.read(TypeNameDeclarationDelitllfier.process).getOrThrow();
-								var type = arrayContext.readRest(TupleArgumentDelitllfier.process).getOrThrow();
+								var type = arrayContext.readRest(TupleElementDelitllfier.process).getOrThrow();
 								arrayContext.close(TypeDefinition.Tuple.bind(name, type));	
 							
 							case "enum":

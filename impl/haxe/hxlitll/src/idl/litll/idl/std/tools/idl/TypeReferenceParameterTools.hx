@@ -3,7 +3,7 @@ import haxe.ds.Option;
 import litll.core.ds.Maybe;
 import litll.idl.exception.IdlException;
 import litll.idl.std.data.idl.EnumConstructor;
-import litll.idl.std.data.idl.TupleArgument;
+import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;

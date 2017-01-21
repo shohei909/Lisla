@@ -4,12 +4,12 @@ class ParameterizedEnumConstructorDelitllfier {
     public static function process(context:litll.idl.delitllfy.DelitllfyContext):litll.core.ds.Result<litll.idl.std.data.idl.ParameterizedEnumConstructor, litll.idl.delitllfy.DelitllfyError> {
         return switch (context.litll) {
             case litll.core.Litll.Str(string):{
-                litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofString(string, litll.core.ds.Maybe.none(), litll.idl.delitllfy.DelitllfyErrorKind.CantBeString));
+                litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.CantBeString));
             };
             case litll.core.Litll.Arr(data):{
                 var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
                 var data = {
-                    var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.EnumConstructorHeaderDelitllfier.process)) {
+                    var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.EnumConstructorNameDelitllfier.process)) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };
@@ -17,7 +17,7 @@ class ParameterizedEnumConstructorDelitllfier {
                             return litll.core.ds.Result.Err(error);
                         };
                     };
-                    var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TupleArgumentDelitllfier.process)) {
+                    var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TupleElementDelitllfier.process)) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };

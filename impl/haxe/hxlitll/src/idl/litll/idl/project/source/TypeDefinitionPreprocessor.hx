@@ -9,9 +9,9 @@ import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.project.error.IdlReadErrorKind;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorName;
-import litll.idl.std.data.idl.StructField;
+import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructFieldName;
-import litll.idl.std.data.idl.TupleArgument;
+import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeDependenceName;
 import litll.idl.std.data.idl.TypeName;
@@ -89,7 +89,7 @@ class TypeDefinitionPreprocessor
                 processStructFields(fields);
                 
             case TypeDefinition.Tuple(_, arguments):
-				processTupleArguments(arguments);
+				processTupleElements(arguments);
 		}
 	}
     
@@ -120,12 +120,12 @@ class TypeDefinitionPreprocessor
                     
                 case EnumConstructor.Parameterized(parameterized):
                     add(parameterized.name);
-                    processTupleArguments(parameterized.arguments);
+                    processTupleElements(parameterized.elements);
             }
         }
 	}
 	
-    private function processStructFields(fields:Array<StructField>):Void
+    private function processStructFields(fields:Array<StructElement>):Void
     {
         // TODO: validation condition dupplication
         
@@ -146,20 +146,20 @@ class TypeDefinitionPreprocessor
         {
             switch (field)
             {
-                case StructField.Boolean(name):
+                case StructElement.Label(name):
                     add(name);
                     // TODO: validation kind
                     
-                case StructField.Field(name, type):
-                    add(name);
-                    processTypeReference(type);
+                case StructElement.Field(field):
+                    add(field.name);
+                    processTypeReference(field.type);
                     
                     // TODO: validation default value
             }
         }
     }
     
-	private function processTupleArguments(arguments:Array<TupleArgument>):Void
+	private function processTupleElements(arguments:Array<TupleElement>):Void
 	{
         // TODO: validation condition dupplication
         
@@ -168,10 +168,10 @@ class TypeDefinitionPreprocessor
 		{
             switch (argument)
             {
-                case TupleArgument.Label(_):
+                case TupleElement.Label(_):
                     // Nothing to do.
                 
-                case TupleArgument.Data(argument):
+                case TupleElement.Data(argument):
                     if (usedNames.exists(argument.name.name))
                     {
                         addError(IdlReadErrorKind.ArgumentNameDupplicated(argument.name));

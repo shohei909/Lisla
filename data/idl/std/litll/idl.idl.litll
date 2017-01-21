@@ -22,9 +22,9 @@
 /// [document_tag litll.idl.document.TypeDefinitionDocumentTag]
 [enum TypeDefinition
     [newtype [name TypeNameDeclaration] [type TypeReference]]
-    [tuple [name TypeNameDeclaration] [arguments.. TupleArgument]]
+    [tuple [name TypeNameDeclaration] [arguments.. TupleElement]]
     [enum [name TypeNameDeclaration] [constructors.. EnumConstructor]]
-    [struct [name TypeNameDeclaration] [fields.. StructField]]
+    [struct [name TypeNameDeclaration] [fields.. StructElement]]
 ]
 
 [enum TypeNameDeclaration
@@ -43,7 +43,7 @@
 
 [enum TupleElement
     [label< [constant String]]
-    [data: [argument Argument]]
+    [data< [argument Argument]]
 ]
 [tuple Argument
     [name ArgumentName]
@@ -79,10 +79,10 @@
         /// 'Multiple suffix and Unfolding suffix are disabled'
         [name StructFieldName]
     ]
-    [field< StructField]
+    [field< [field StructField]]
 ]
-[enum StructField
-    [header StructFieldName] 
+[tuple StructField
+    [name StructFieldName] 
     [type TypeReference] 
     [default_value? Any]
 ]

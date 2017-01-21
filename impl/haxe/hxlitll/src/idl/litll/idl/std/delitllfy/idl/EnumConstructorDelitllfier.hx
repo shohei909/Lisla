@@ -9,7 +9,7 @@ import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier;
 import litll.idl.std.delitllfy.idl.EnumConstructorHeaderDelitllfier;
 import litll.idl.std.delitllfy.idl.EnumConstructorNameDelitllfier;
-import litll.idl.std.delitllfy.idl.TupleArgumentDelitllfier;
+import litll.idl.std.delitllfy.idl.TupleElementDelitllfier;
 using litll.core.ds.ResultTools;
 
 class EnumConstructorDelitllfier
@@ -22,7 +22,7 @@ class EnumConstructorDelitllfier
 			case Litll.Arr(array) if (array.data.length >= 1):
                 var arrayContext = new DelitllfyArrayContext(array, 0, context.config);
                 var header = arrayContext.read(EnumConstructorHeaderDelitllfier.process).getOrThrow();
-                var parameters = arrayContext.readRest(TupleArgumentDelitllfier.process).getOrThrow();
+                var parameters = arrayContext.readRest(TupleElementDelitllfier.process).getOrThrow();
 				Result.Ok(EnumConstructor.Parameterized(header, parameters));
                 
 			case Litll.Str(data):

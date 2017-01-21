@@ -21,12 +21,12 @@ import litll.idl.std.data.idl.TypeDefinition;
 
 using litll.idl.std.tools.idl.TypeDefinitionTools;
 using litll.idl.std.tools.idl.TypeParameterDeclarationTools;
-using litll.idl.std.tools.idl.TupleArgumentTools;
+using litll.idl.std.tools.idl.TupleElementTools;
 using litll.idl.std.tools.idl.ArgumentTools;
 using litll.idl.std.tools.idl.EnumConstructorTools;
 using litll.idl.std.tools.idl.TypeReferenceParameterTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
-using litll.idl.std.tools.idl.StructFieldTools;
+using litll.idl.std.tools.idl.StructElementTools;
 
 class TypeReferenceTools
 {
