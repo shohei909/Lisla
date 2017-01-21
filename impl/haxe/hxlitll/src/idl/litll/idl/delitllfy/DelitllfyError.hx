@@ -44,26 +44,6 @@ class DelitllfyError
 		}
 	}
 	
-	public function recoverable():Bool
-	{
-		return switch (kind)
-		{
-			case DelitllfyErrorKind.UnmatchedEnumConstructor(_) | 
-				DelitllfyErrorKind.UnmatchedConst(_) | 
-				DelitllfyErrorKind.UnmatchedEnumLabel(_) | 
-				DelitllfyErrorKind.CantBeArray | 
-				DelitllfyErrorKind.CantBeString |
-				DelitllfyErrorKind.TooLongArray |
-				DelitllfyErrorKind.EndOfArray |
-				DelitllfyErrorKind.Recoverable(_):
-				true;
-				
-			case DelitllfyErrorKind.Fatal(_):
-				false;
-		}
-	}
-	
-	
 	public function toString():String
 	{
 		return makeErrorMessages([], false).join("\n");
@@ -127,10 +107,10 @@ class DelitllfyError
 			case DelitllfyErrorKind.UnmatchedEnumConstructor(expected):
 				"unmatched enum constructor. '" + expected.join(" | ") + "' expected";
 				
-			case DelitllfyErrorKind.UnmatchedConst(actual, expected):
-				"unmatched const. '" + expected + "' expected, but actual '" + actual + "'";
-				
-			case DelitllfyErrorKind.UnmatchedEnumLabel(expected):
+			case DelitllfyErrorKind.UnmatchedStructElement(expected):
+				"unmatched struct element. '" + expected.join(" | ") + "' expected";
+                
+			case DelitllfyErrorKind.UnmatchedLabel(expected):
 				"unmatched enum label. '" + expected + "' expected";
 				
 			case DelitllfyErrorKind.CantBeArray:
@@ -144,9 +124,6 @@ class DelitllfyError
 				
 			case DelitllfyErrorKind.EndOfArray:
 				"end of array";
-				
-			case DelitllfyErrorKind.Recoverable(message):
-				message;
 				
 			case DelitllfyErrorKind.Fatal(message):
 				message;

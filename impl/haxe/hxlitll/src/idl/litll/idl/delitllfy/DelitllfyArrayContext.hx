@@ -8,6 +8,7 @@ import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 using Lambda;
 
+// TODO: guard
 class DelitllfyArrayContext
 {
 	private var array:LitllArray<Litll>;
@@ -40,16 +41,8 @@ class DelitllfyArrayContext
 					
 				case Result.Err(error):
 					index--;
-					
-					if (error.recoverable())
-					{
-						maybeErrors.push(error);
-						break;
-					}
-					else
-					{
-						return createErrorResult(error);
-					}
+					maybeErrors.push(error);
+					break;
 			}
 		}
 		
@@ -66,16 +59,8 @@ class DelitllfyArrayContext
                 
             case Result.Err(error):
                 index--;
-                
-                if (error.recoverable())
-                {
-                    maybeErrors.push(error);
-                    Result.Ok(Option.None);
-                }
-                else
-                {
-                    return createErrorResult(error);
-                }
+                maybeErrors.push(error);
+                Result.Ok(Option.None);
         }
     }
     
@@ -88,15 +73,8 @@ class DelitllfyArrayContext
 				
 			case Result.Err(error):
 				index--;
-				if (error.recoverable())
-				{
-					maybeErrors.push(error);
-					Result.Ok(defaultValue);
-				}
-				else
-				{
-					createErrorResult(error);
-				}
+				maybeErrors.push(error);
+				Result.Ok(defaultValue);
 		}
 	}
 	
@@ -123,7 +101,7 @@ class DelitllfyArrayContext
                 Result.Ok(true);
                 
             case _:
-                createErrorResult(DelitllfyError.ofLitll(array.data[index - 1], DelitllfyErrorKind.UnmatchedEnumLabel(string)));
+                createErrorResult(DelitllfyError.ofLitll(array.data[index - 1], DelitllfyErrorKind.UnmatchedLabel(string)));
         }
     }
     

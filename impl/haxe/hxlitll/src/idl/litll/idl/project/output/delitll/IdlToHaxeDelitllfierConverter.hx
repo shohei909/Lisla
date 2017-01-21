@@ -29,6 +29,7 @@ import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
 import litll.idl.std.data.idl.UnfoldedTypeDefinition;
 import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
+import litll.idl.std.delitllfy.document.HeaderDocumentDelitllfier;
 import litll.idl.std.tools.idl.TypeNameTools;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
@@ -77,7 +78,7 @@ class IdlToHaxeDelitllfierConverter
 				
 			case IdlTypeDefinition.Struct(name, elements):
 				parameters = name.getParameters().collect();
-				macro null;
+				createStructExpr(pathPair.dataPath, parameters, elements);
 		}
 	
 		var args = [
@@ -707,9 +708,9 @@ class IdlToHaxeDelitllfierConverter
     // ==============================================================
     // struct
     // ==============================================================
-    private function createStructExpr(sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection, fields:Array<StructElement>):Expr 
+    private function createStructExpr(sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection, elements:Array<StructElement>):Expr 
 	{
-        var instantiationElements = createStructInstantiationElements(parameters, fields);
+        var instantiationElements = createStructInstantiationElements(parameters, elements);
         var instantiationExpr = createClassInstantiationExpr((macro context), instantiationElements.declarations, instantiationElements.references, sourcePath, parameters);
         
         return macro switch (context.litll)
@@ -727,12 +728,13 @@ class IdlToHaxeDelitllfierConverter
         }
     }
     
-    private function createStructInstantiationElements(parameters:TypeParameterDeclarationCollection, fields:Array<StructElement>):{ declarations:Array<Expr>, references:Array<Expr> }
+    private function createStructInstantiationElements(parameters:TypeParameterDeclarationCollection, elements:Array<StructElement>):{ declarations:Array<Expr>, references:Array<Expr> }
     {
         var declarations:Array<Expr> = [];
         var references:Array<Expr> = [];
+        var cases:Array<Case> = [];
         
-        for (field in fields)
+        for (field in elements)
         {
             var id = "arg" + references.length;
             switch (field)
@@ -757,7 +759,6 @@ class IdlToHaxeDelitllfierConverter
                             
                         case StructFieldKind.ArrayUnfold:
                             declarations.push(macro var $id = []);
-                            
                     }
                     
                 case StructElement.Label(name):
@@ -786,6 +787,31 @@ class IdlToHaxeDelitllfierConverter
             references.push(macro $i{id});
         }
         
+        cases.push(
+            {
+                // case data:
+                values : [macro data],
+                expr: macro litll.core.ds.Result.Err(
+                    litll.idl.delitllfy.DelitllfyError.ofLitll(
+                        context.litll, 
+                        
+                        // TODO: target list
+                        litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumLabel([])
+                    )
+                )
+            }
+        );
+        declarations.push(
+            {
+                expr: ExprDef.ESwitch(
+                    macro context.litll,
+                    cases,
+                    null
+                ),
+                pos: null
+            }
+        );
+        new HeaderDocumentDelitllfier();
         return {
             declarations: declarations,
             references: references,

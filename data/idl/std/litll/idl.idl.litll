@@ -58,7 +58,7 @@
 /// Additionally, some suffixes are supported.
 /// "?"   : Optional argument. (default value is disabled)
 /// ".."  : Rest arguments. (default value is disabled)
-/// "<"   : Unfolded argument.
+/// "<"   : Unfolded argument. (default value is disabled)
 /// '''
 [newtype ArgumentName String]
 
@@ -69,7 +69,6 @@
 [tuple ParameterizedEnumConstructor
     [name EnumConstructorName] [elements.. TupleElement]
 ]
-
 /// '''
 /// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
 /// Additionally, the following suffixes are supported.
@@ -77,19 +76,19 @@
 /// "<"   : Unfolding argument. Its argument must be one and the argument is unfolded.
 /// '''
 [newtype EnumConstructorName String]
+
 [enum StructElement
-    [label< 
+    [label<
         /// 'Multiple suffix and Unfolding suffix are disabled'
         [name StructFieldName]
     ]
     [field< [field StructField]]
 ]
 [tuple StructField
-    [name StructFieldName] 
-    [type TypeReference] 
+    [name StructFieldName]
+    [type TypeReference]
     [default_value? Any]
 ]
-
 /// '''
 /// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
 /// Additionally, the following suffixes are supported
