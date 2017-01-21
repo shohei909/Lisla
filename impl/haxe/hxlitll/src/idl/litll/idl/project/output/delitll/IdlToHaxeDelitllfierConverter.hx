@@ -346,7 +346,7 @@ class IdlToHaxeDelitllfierConverter
         {
             switch (argument)
             {
-                case TupleElement.Data(data):
+                case TupleElement.Argument(data):
                     var processFunc = createProcessFuncExpr(parameters, data.type.generalize());
                     
                     // TODO: defatult value
@@ -532,7 +532,7 @@ class IdlToHaxeDelitllfierConverter
                                         
                                         switch (elements[0])
                                         {
-                                            case TupleElement.Data(argument):
+                                            case TupleElement.Argument(argument):
                                                 _addUnfoldCase(instantiationExpr, argument.type);
                                                 
                                             case TupleElement.Label(litllString):
@@ -595,7 +595,7 @@ class IdlToHaxeDelitllfierConverter
                             
                             switch (elements[0])
                             {
-                                case TupleElement.Data(argument):
+                                case TupleElement.Argument(argument):
                                     addUnfoldCase(name, argument.type);
                                     
                                 case TupleElement.Label(litllString):
@@ -655,7 +655,7 @@ class IdlToHaxeDelitllfierConverter
                     }
                     min++;
                     
-                case TupleElement.Data(argument):
+                case TupleElement.Argument(argument):
                     switch (argument.name.kind)
                     {
                         case ArgumentKind.Normal:

@@ -13,7 +13,7 @@ class TupleElementDelitllfier {
             }));
         };
         case litll.core.Litll.Arr(data) if (data.length >= 2):{
-            litll.core.ds.Result.Ok(litll.idl.std.data.idl.TupleElement.Data(switch (litll.idl.std.delitllfy.idl.ArgumentDelitllfier.process(context)) {
+            litll.core.ds.Result.Ok(litll.idl.std.data.idl.TupleElement.Argument(switch (litll.idl.std.delitllfy.idl.ArgumentDelitllfier.process(context)) {
                 case litll.core.ds.Result.Ok(data):{
                     data;
                 };

@@ -35,6 +35,9 @@
     [type_name< [type_name TypeName]]
     [dependence< [declaration TypeDependenceDeclaration]]
 ]
+/// '''
+/// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
+/// '''
 [newtype TypeName String]
 [tuple TypeDependenceDeclaration
     [name TypeDependenceName] [type TypeReference]
@@ -43,7 +46,7 @@
 
 [enum TupleElement
     [label< [constant String]]
-    [data< [argument Argument]]
+    [argument< [argument Argument]]
 ]
 [tuple Argument
     [name ArgumentName]

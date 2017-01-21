@@ -246,7 +246,7 @@ class IdlToHaxeDataConverter
         {
             switch (argument)
             {
-                case TupleElement.Data(argument):
+                case TupleElement.Argument(argument):
                     args.push(convertArgument(argument, config));
                     
                 case TupleElement.Label(_):

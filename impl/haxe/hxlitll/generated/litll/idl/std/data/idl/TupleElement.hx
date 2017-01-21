@@ -2,5 +2,5 @@
 package litll.idl.std.data.idl;
 enum TupleElement {
     Label(constant:litll.core.LitllString);
-    Data(argument:litll.idl.std.data.idl.Argument);
+    Argument(argument:litll.idl.std.data.idl.Argument);
 }

@@ -171,7 +171,7 @@ class TypeDefinitionPreprocessor
                 case TupleElement.Label(_):
                     // Nothing to do.
                 
-                case TupleElement.Data(argument):
+                case TupleElement.Argument(argument):
                     if (usedNames.exists(argument.name.name))
                     {
                         addError(IdlReadErrorKind.ArgumentNameDupplicated(argument.name));

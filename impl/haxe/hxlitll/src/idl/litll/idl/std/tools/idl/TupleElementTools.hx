@@ -11,8 +11,8 @@ class TupleElementTools
             case TupleElement.Label(_):
                 element;
                 
-            case TupleElement.Data(element):
-                TupleElement.Data(ArgumentTools.resolveGenericType(element, parameterContext));
+            case TupleElement.Argument(element):
+                TupleElement.Argument(ArgumentTools.resolveGenericType(element, parameterContext));
         }
     }
 }
