@@ -37,7 +37,7 @@ class IdlReadError
 				getRangeStringFromTag(name.tag.upCast()) + "Argument name " + name.name + " is dupplicated";
 				
 			case IdlReadErrorKind.EnumConstuctorNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Enum constructor name " + name.toString() + " is dupplicated";
+				getRangeStringFromTag(name.tag.upCast()) + "Enum constructor name " + name.name + " is dupplicated";
 				
 			case IdlReadErrorKind.StructFieldNameDupplicated(name):
 				getRangeStringFromTag(name.tag.upCast()) + "Struct field name " + name.name + " is dupplicated";

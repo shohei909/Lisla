@@ -17,19 +17,29 @@ class StructFieldName
 	
     public function new(name:String, ?tag:Maybe<StringTag>) 
     {
+        if (name.endsWith("?<"))
+		{
+			name = name.substr(0, name.length - 2);
+			kind = StructFieldKind.OptionalUnfold;
+		}
+		else if (name.endsWith("..<"))
+		{
+			name = name.substr(0, name.length - 3);
+			kind = StructFieldKind.ArrayUnfold;
+		}
 		if (name.endsWith(".."))
 		{
 			name = name.substr(0, name.length - 2);
-			kind = StructFieldKind.Rest;
+			kind = StructFieldKind.Array;
 		}
 		else if (name.endsWith("?"))
 		{
 			name = name.substr(0, name.length - 1);
 			kind = StructFieldKind.Optional;
 		}
-		else if (name.endsWith("{}"))
+		else if (name.endsWith("<"))
 		{
-			name = name.substr(0, name.length - 2);
+			name = name.substr(0, name.length - 1);
 			kind = StructFieldKind.Unfold;
 		}
 		else

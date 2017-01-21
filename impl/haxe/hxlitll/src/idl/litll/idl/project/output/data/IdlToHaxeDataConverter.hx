@@ -29,8 +29,6 @@ import litll.idl.std.data.idl.TypeDefinition in IdlTypeDefinition;
 using litll.core.ds.MaybeTools;
 using litll.core.ds.ResultTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
-using litll.idl.std.tools.idl.EnumConstructorHeaderTools;
-using litll.idl.std.tools.idl.StructFieldHeaderTools;
 
 class IdlToHaxeDataConverter
 {
@@ -63,7 +61,7 @@ class IdlToHaxeDataConverter
 							arguments = [];
 							
 						case EnumConstructor.Parameterized(constructor):
-							name = constructor.header.getHeaderName().toPascalCase().getOrThrow();
+							name = constructor.name.toPascalCase().getOrThrow();
 							arguments = convertTupleArguments(constructor.arguments, config);
 					}
 					
@@ -166,7 +164,7 @@ class IdlToHaxeDataConverter
             case StructFieldKind.Normal | StructFieldKind.Unfold:
                 typePath;
                 
-            case StructFieldKind.Optional:
+            case StructFieldKind.Optional | StructFieldKind.OptionalUnfold:
                 ComplexType.TPath(
                     {
                         pack : ["haxe", "ds"],
@@ -176,7 +174,7 @@ class IdlToHaxeDataConverter
                     }
                 );
                 
-            case StructFieldKind.Rest:
+            case StructFieldKind.Array | StructFieldKind.ArrayUnfold:
                 ComplexType.TPath(
                     {
                         pack : [],
@@ -200,8 +198,8 @@ class IdlToHaxeDataConverter
         {
             switch (field)
             {
-                case StructField.Field(header, type):
-                    args.push(convertField(header.getHeaderName(), type, config));
+                case StructField.Field(name, type):
+                    args.push(convertField(name, type, config));
                     
                 case StructField.Boolean(name):
                     var typePath = switch (name.kind)
@@ -209,14 +207,20 @@ class IdlToHaxeDataConverter
                         case StructFieldKind.Normal:
                             macro:litll.idl.std.data.core.LitllBoolean;
                             
-                        case StructFieldKind.Unfold:
-                            throw new IdlException("unfold suffix(?) for boolean is not supported");
+                        case StructFieldKind.Array:
+                            macro:Array<litll.idl.std.data.core.LitllBoolean>;
                             
                         case StructFieldKind.Optional:
                             throw new IdlException("optional suffix(?) for boolean is not supported");
                             
-                        case StructFieldKind.Rest:
-                            macro:Array<litll.idl.std.data.core.LitllBoolean>;
+                        case StructFieldKind.Unfold:
+                            throw new IdlException("unfold suffix(<) for boolean is not supported");
+                            
+                        case StructFieldKind.ArrayUnfold:
+                            throw new IdlException("array unfold suffix(..<) for boolean is not supported");
+                            
+                        case StructFieldKind.OptionalUnfold:
+                            throw new IdlException("optional unfold suffix(?<) for boolean is not supported");
                     }
                     
                     args.push(

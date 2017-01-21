@@ -4,6 +4,8 @@ enum StructFieldKind
 {
 	Normal;
 	Optional;
-	Rest;
+	Array;
 	Unfold;
+    ArrayUnfold;
+    OptionalUnfold;
 }

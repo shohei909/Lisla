@@ -6,7 +6,7 @@
 [import litll.idl]
 
 [struct Document
-    [[comment.. unfold] String]
+    [comment..< String]
 ]
 
 [struct HeaderDocument

@@ -26,7 +26,7 @@ class ArgumentName
 			name = name.substr(0, name.length - 1);
 			kind = ArgumentKind.Optional;
 		}
-		else if (name.endsWith("{}"))
+		else if (name.endsWith("<"))
 		{
 			name = name.substr(0, name.length - 2);
 			kind = ArgumentKind.Unfold;

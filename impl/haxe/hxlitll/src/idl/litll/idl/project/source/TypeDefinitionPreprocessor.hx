@@ -1,14 +1,12 @@
 package litll.idl.project.source;
 
 import haxe.ds.Option;
-import litll.core.Litll;
 import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.ds.Set;
 import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.project.error.IdlReadErrorKind;
-import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.StructField;
@@ -24,8 +22,6 @@ import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
 import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
 using litll.idl.std.tools.idl.TypeDefinitionTools;
-using litll.idl.std.tools.idl.EnumConstructorHeaderTools;
-using litll.idl.std.tools.idl.StructFieldHeaderTools;
 
 class TypeDefinitionPreprocessor
 {
@@ -100,18 +96,18 @@ class TypeDefinitionPreprocessor
 	
 	private function processEnumConstuctors(constructors:Array<EnumConstructor>):Void
 	{
-        // TODO: varidation condition dupplication
+        // TODO: validation condition dupplication
         
     	var usedNames = new Set<String>(new Map());
         inline function add(name:EnumConstructorName):Void
         {
-            if (usedNames.exists(name.toString()))
+            if (usedNames.exists(name.name))
             {
                 addError(IdlReadErrorKind.EnumConstuctorNameDupplicated(name));
             }
             else
             {
-                usedNames.set(name.toString());
+                usedNames.set(name.name);
             }
         }
         
@@ -123,7 +119,7 @@ class TypeDefinitionPreprocessor
                     add(name);
                     
                 case EnumConstructor.Parameterized(parameterized):
-                    add(parameterized.header.getHeaderName());
+                    add(parameterized.name);
                     processTupleArguments(parameterized.arguments);
             }
         }
@@ -131,7 +127,7 @@ class TypeDefinitionPreprocessor
 	
     private function processStructFields(fields:Array<StructField>):Void
     {
-        // TODO: varidation condition dupplication
+        // TODO: validation condition dupplication
         
     	var usedNames = new Set<String>(new Map());
         inline function add(name:StructFieldName):Void
@@ -152,17 +148,20 @@ class TypeDefinitionPreprocessor
             {
                 case StructField.Boolean(name):
                     add(name);
+                    // TODO: validation kind
                     
-                case StructField.Field(header, type):
-                    add(header.getHeaderName());
+                case StructField.Field(name, type):
+                    add(name);
                     processTypeReference(type);
+                    
+                    // TODO: validation default value
             }
         }
     }
     
 	private function processTupleArguments(arguments:Array<TupleArgument>):Void
 	{
-        // TODO: varidation condition dupplication
+        // TODO: validation condition dupplication
         
 		var usedNames = new Set<String>(new Map());
 		for (argument in arguments)
@@ -182,6 +181,8 @@ class TypeDefinitionPreprocessor
                         usedNames.set(argument.name.name);
                         processTypeReference(argument.type);
                     }
+                    
+                    // TODO: validation default value
             }
 		}
 	}

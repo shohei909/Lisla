@@ -28,12 +28,12 @@
 ]
 
 [enum TypeNameDeclaration
-    [[primitive unfold] [name TypeName]]
-    [[generic tuple] [name TypeName] [parameters.. TypeParameterDeclaration]]
+    [primitive< [name TypeName]]
+    [generic: [name TypeName] [parameters.. TypeParameterDeclaration]]
 ]
 [enum TypeParameterDeclaration
-    [[type_name unfold] [type_name TypeName]]
-    [[dependence unfold] [declaration TypeDependenceDeclaration]]
+    [type_name< [type_name TypeName]]
+    [dependence< [declaration TypeDependenceDeclaration]]
 ]
 [newtype TypeName String]
 [tuple TypeDependenceDeclaration
@@ -41,39 +41,61 @@
 ]
 [newtype TypeDependenceName String]
 
-[enum TupleArgument
-    [[label unfold] [constant String]]
-    [[data unfold] [argument Argument]]
+[enum TupleElement
+    [label< [constant String]]
+    [data: [argument Argument]]
 ]
-[tuple Argument 
+[tuple Argument
     [name ArgumentName]
     [type TypeReference]
     [default_value? Any]
 ]
+/// '''
+/// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
+/// Additionally, some suffixes are supported.
+/// "?"   : Optional argument. (default value is disabled)
+/// ".."  : Rest arguments. (default value is disabled)
+/// "<"   : Unfolded argument.
+/// '''
 [newtype ArgumentName String]
 
 [enum EnumConstructor
-    [[primitive unfold] [name EnumConstructorName]]
-    [[parameterized unfold] [constructor ParameterizedEnumConstructor]]
+    [primitive< [name EnumConstructorName]]
+    [parameterized< [parameterized ParameterizedEnumConstructor]]
 ]
 [tuple ParameterizedEnumConstructor
-    [header EnumConstructorHeader] [arguments.. TupleArgument]
+    [name EnumConstructorName] [elements.. TupleElement]
 ]
-[enum EnumConstructorHeader
-    [[primitive unfold] [name EnumConstructorName]]
-    [[unfold tuple] [name EnumConstructorName] unfold]
-    [[tuple tuple] [name EnumConstructorName] tuple]
-]
-[newtype EnumConstructorName String]
 
+/// '''
+/// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
+/// Additionally, the following suffixes are supported.
+/// ":"  : Tuple style. Its first element have not to be label.
+/// "<"   : Unfolding argument. Its argument must be one and the argument is unfolded.
+/// '''
+[newtype EnumConstructorName String]
+[enum StructElement
+    [label< 
+        /// 'Multiple suffix and Unfolding suffix are disabled'
+        [name StructFieldName]
+    ]
+    [field< StructField]
+]
 [enum StructField
-    [[field tuple] [header StructFieldHeader] [type TypeReference]]
-    [[boolean unfold] [name StructFieldName]]
+    [header StructFieldName] 
+    [type TypeReference] 
+    [default_value? Any]
 ]
-[enum StructFieldHeader
-    [[primitive unfold] [name StructFieldName]]
-    [[unfold tuple] [name StructFieldName] unfold]
-]
+
+/// '''
+/// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
+/// Additionally, the following suffixes are supported
+/// "?"   : Optional field. (default value is disabled)
+/// ".."  : Multiple field. (default value is disabled)
+/// "<"   : Unfolded field. 
+/// "?<"  : Optional unfolded field. (default value is disabled)
+/// "..<" : Multiple unfolded field. (default value is disabled)
+/// '''
 [newtype StructFieldName String]
 
 [newtype PackagePath String]
@@ -81,8 +103,8 @@
 [newtype TypePath String]
 
 [enum TypeReference
-    [[primitive unfold] [type_path TypePath]]
-    [[generic unfold] [type GenericTypeReference]]
+    [primitive< [type_path TypePath]]
+    [generic< [type GenericTypeReference]]
 ]
 [tuple GenericTypeReference
     [type_path TypePath] [parameters.. TypeReferenceParameter]

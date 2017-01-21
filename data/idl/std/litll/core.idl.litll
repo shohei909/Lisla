@@ -64,13 +64,13 @@
 ]
 
 [enum Any
-    [[str unfold] [data String]]
-    [[arr unfold] [data [Array Any]]]
+    [str< [data String]]
+    [arr< [data [Array Any]]]
 ]
 
 [enum [Option T]
-    [[none tuple]]
-    [[some tuple] [data T]]
+    [none:]
+    [some: [data T]]
 ]
 
 [newtype [Const [string String]] 
@@ -82,5 +82,4 @@
 
 /// 'Base64 encoded binary'
 [newtype Binary String]
-
 [newtype BigInt String]
