@@ -36,11 +36,18 @@ class DelitllfyGuardCondition
     public static function createForTuple(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):DelitllfyGuardCondition 
     {
         var condition = new DelitllfyGuardCondition(0, Option.Some(0), []);
-        condition.process(elements, source, definitionParameters);
+        condition.processTuple(elements, source, definitionParameters);
+        return condition;
+    }
+    
+    public static function createForStruct(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):DelitllfyGuardCondition 
+    {
+        var condition = new DelitllfyGuardCondition(0, Option.Some(0), []);
+        condition.processStruct(elements, source, definitionParameters);
         return condition;
     }
 
-    private function process(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Void
+    private function processTuple(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Void
     {
         for (element in elements)
         {
@@ -72,7 +79,7 @@ class DelitllfyGuardCondition
                                     processStruct(elements, source, definitionParameters);
                                     
                                 case UnfoldedTypeDefinition.Tuple(elements):
-                                    process(elements, source, definitionParameters);
+                                    processTuple(elements, source, definitionParameters);
                                     
                                 case UnfoldedTypeDefinition.Str:
                                     throw new IdlException("string can't be unfold");
@@ -121,14 +128,12 @@ class DelitllfyGuardCondition
                             case [StructFieldKind.Unfold, Option.None]:
                                 switch (field.type.unfold(source, definitionParameters))
                                 {
-                                    case UnfoldedTypeDefinition.Struct(elements):
-                                        _processStruct(elements);
-                                        
                                     case UnfoldedTypeDefinition.Str:
                                         condition = merge(condition, ConditionKind.Str);
                                     
-                                    case UnfoldedTypeDefinition.Arr(_) |
-                                        UnfoldedTypeDefinition.Tuple(_):
+                                    case UnfoldedTypeDefinition.Struct(_)
+                                        | UnfoldedTypeDefinition.Arr(_)
+                                        | UnfoldedTypeDefinition.Tuple(_):
                                         condition = merge(condition, ConditionKind.Arr);
                                         _add();
                                         
@@ -136,11 +141,25 @@ class DelitllfyGuardCondition
                                         condition = merge(condition, resolveEnumCondition(constructors, source, definitionParameters));
                                         _add();
                                 }
+                                
+                            case [StructFieldKind.Merge, Option.None]:
+                                switch (field.type.unfold(source, definitionParameters))
+                                {
+                                    case UnfoldedTypeDefinition.Struct(elements):
+                                        _processStruct(elements);
+                                        
+                                    case UnfoldedTypeDefinition.Enum(_)
+                                        | UnfoldedTypeDefinition.Arr(_)
+                                        | UnfoldedTypeDefinition.Tuple(_)
+                                        | UnfoldedTypeDefinition.Str:
+                                        throw new IdlException("merge field is not supported " + field.type.getTypeReferenceName());
+                                }
                                
                             case [StructFieldKind.ArrayUnfold, Option.Some(_)]
                                 | [StructFieldKind.OptionalUnfold, Option.Some(_)]
                                 | [StructFieldKind.Array, Option.Some(_)]
-                                | [StructFieldKind.Optional, Option.Some(_)]:
+                                | [StructFieldKind.Optional, Option.Some(_)]
+                                | [StructFieldKind.Merge, Option.Some(_)]:
                                 throw new IdlException("unsupported default value kind: " + field.name.kind);
                         }
                         
@@ -165,6 +184,9 @@ class DelitllfyGuardCondition
                                 
                             case StructFieldKind.OptionalUnfold:
                                 throw new IdlException("optional unfold suffix(<?) for label is not supported");
+                                
+                            case StructFieldKind.Merge:
+                                throw new IdlException("merge suffix(<<) for label is not supported");
                         }
                         
                     case StructElement.NestedLabel(name):
@@ -188,6 +210,9 @@ class DelitllfyGuardCondition
                                 
                             case StructFieldKind.OptionalUnfold:
                                 throw new IdlException("optional unfold suffix(<?) for label is not supported");
+                                
+                            case StructFieldKind.Merge:
+                                throw new IdlException("merge suffix(<<) for label is not supported");
                         }
                 }
             }

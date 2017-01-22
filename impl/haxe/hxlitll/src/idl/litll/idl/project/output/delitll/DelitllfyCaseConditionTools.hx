@@ -80,36 +80,7 @@ class DelitllfyCaseConditionTools
                 }
                 
             case UnfoldedTypeDefinition.Struct(elements):
-                for (element in elements)
-                {
-                    switch (element)
-                    {
-                        case StructElement.Label(name):
-                            result.push(DelitllfyCaseCondition.Const(name.name));
-                            
-                        case StructElement.NestedLabel(name):
-                            var label = TupleElement.Label(new LitllString(name.name, name.tag));
-                            addTuple([label]);
-                            
-                        case StructElement.Field(field):
-                            var name = field.name;
-                            switch (name.kind)
-                            {
-                                case StructFieldKind.Normal
-                                    | StructFieldKind.Optional
-                                    | StructFieldKind.Array:
-                                    var label = TupleElement.Label(new LitllString(name.name, name.tag));
-                                    var arg = TupleElement.Argument(new Argument(new ArgumentName(name.name, name.tag), field.type, Option.None));
-                                    addTuple([label, arg]);
-                                    
-                                case StructFieldKind.Unfold
-                                    | StructFieldKind.OptionalUnfold
-                                    | StructFieldKind.ArrayUnfold:
-                                    var unfoldedType = field.type.unfold(source, []);
-                                    _createForUnfoldedType(result, unfoldedType, source);    
-                            }
-                    }
-                }
+                result.push(DelitllfyCaseCondition.Arr(DelitllfyGuardCondition.createForStruct(elements, source, [])));
         }
     }
 }

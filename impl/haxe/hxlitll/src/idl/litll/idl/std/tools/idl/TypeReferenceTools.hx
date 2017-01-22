@@ -90,7 +90,7 @@ class TypeReferenceTools
 		}
 	}
     
-    public static function getName(type:TypeReference):String
+    public static function getTypeReferenceName(type:TypeReference):String
     {
 		return switch (type)
 		{

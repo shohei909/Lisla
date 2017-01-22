@@ -8,4 +8,5 @@ enum StructFieldKind
 	Unfold;
     ArrayUnfold;
     OptionalUnfold;
+    Merge;
 }

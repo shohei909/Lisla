@@ -185,7 +185,6 @@ class IdlToHaxeDelitllfierConverter
                 
         }
 	}
-    
     private function createEnumInstantiationExpr(argumentDeclaration:Array<Expr>, argumentReferences:Array<Expr>, sourcePath:HaxeDataTypePath, name:EnumConstructorName, parameters:TypeParameterDeclarationCollection):Expr 
     {
         for (dependence in parameters.dependences)
@@ -561,7 +560,7 @@ class IdlToHaxeDelitllfierConverter
     // ==============================================================
     private function createStructExpr(sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection, elements:Array<StructElement>):Expr 
 	{
-        var instantiationElements = createStructInstantiationElements(parameters, elements);
+        var instantiationElements = createStructInstantiationElements(sourcePath, parameters, elements);
         var instantiationExpr = createClassInstantiationExpr((macro context), instantiationElements.declarations, instantiationElements.references, sourcePath, parameters);
         
         return macro return switch (context.litll)
@@ -578,7 +577,7 @@ class IdlToHaxeDelitllfierConverter
                 $instantiationExpr;
         }
     }
-    private function createStructInstantiationElements(parameters:TypeParameterDeclarationCollection, elements:Array<StructElement>):{ declarations:Array<Expr>, references:Array<Expr> }
+    private function createStructInstantiationElements(sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection, elements:Array<StructElement>):{ declarations:Array<Expr>, references:Array<Expr> }
     {
         var declarations:Array<Expr> = [];
         var references:Array<Expr> = [];
@@ -616,6 +615,15 @@ class IdlToHaxeDelitllfierConverter
             switch (element)
             {
                 case StructElement.Field(field):
+                    inline function fieldInstantiation():Expr
+                    {
+                        return macro null;
+                    }
+                    inline function unfoldInstantiation():Expr
+                    {
+                        var callExpr = createProcessCallExpr((macro context), parameters, field.type.generalize());
+                        return callExpr;
+                    }
                     inline function addFieldCase(caseExpr:Expr):Void
                     {
                         cases.push(createFieldCase(field.name, field.type, parameters.parameters, caseExpr));
@@ -628,49 +636,53 @@ class IdlToHaxeDelitllfierConverter
                     switch [field.name.kind, field.defaultValue]
                     {
                         case [StructFieldKind.Normal, Option.None]:
-                            var instantationExpr = macro null;
+                            var instantationExpr = fieldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Normal, Option.Some(defaultValue)]:
-                            var instantationExpr = macro null;
+                            var instantationExpr = fieldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Optional, Option.None]:
-                            var instantationExpr = macro null;
+                            var instantationExpr = fieldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Array, Option.None]:
-                            var instantationExpr = macro null;
+                            var instantationExpr = fieldInstantiation();
                             var caseExpr = addArrayDeclaration(instantationExpr);
                             addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Unfold, Option.None]:
-                            var instantationExpr = macro null;
+                            var instantationExpr = unfoldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.Unfold, Option.Some(defaultValue)]:
-                            var instantationExpr = macro null;
+                            var instantationExpr = unfoldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.OptionalUnfold, Option.None]:
-                            var instantationExpr = macro null;
+                            var instantationExpr = unfoldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.ArrayUnfold, Option.None]:
-                            var instantationExpr = macro null;
+                            var instantationExpr = unfoldInstantiation();
                             var caseExpr = addArrayDeclaration(instantationExpr);
                             addUnfoldCase(caseExpr);
+                            
+                        case [StructFieldKind.Merge, Option.None]:
+                            // TODO
                             
                         case [StructFieldKind.ArrayUnfold, Option.Some(_)]
                             | [StructFieldKind.OptionalUnfold, Option.Some(_)]
                             | [StructFieldKind.Array, Option.Some(_)]
-                            | [StructFieldKind.Optional, Option.Some(_)]:
+                            | [StructFieldKind.Optional, Option.Some(_)]
+                            | [StructFieldKind.Merge, Option.Some(_)]:
                             
                             throw new IdlException("unsupported default value kind: " + field.name.kind);
                     }
@@ -699,6 +711,9 @@ class IdlToHaxeDelitllfierConverter
                             
                         case StructFieldKind.OptionalUnfold:
                             throw new IdlException("optional unfold suffix(<?) for label is not supported");
+                            
+                        case StructFieldKind.Merge:
+                            throw new IdlException("merge suffix(<<) for label is not supported");
                     }
             }
             
@@ -726,7 +741,13 @@ class IdlToHaxeDelitllfierConverter
             ),
             pos: null
         }
-        declarations.push(macro for (litll in array.data) $switchExpr);
+        declarations.push(
+            macro for (litll in array.data)
+            {
+                var context = new DelitllfyContext(litll, context.config);
+                $switchExpr;
+            }
+        );
         
         return {
             declarations: declarations,

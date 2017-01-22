@@ -42,6 +42,11 @@ class StructFieldName
 			name = name.substr(0, name.length - 1);
 			kind = StructFieldKind.Unfold;
 		}
+		else if (name.endsWith("<<"))
+		{
+			name = name.substr(0, name.length - 2);
+			kind = StructFieldKind.Merge;
+		}
 		else
 		{
 			kind = StructFieldKind.Normal;

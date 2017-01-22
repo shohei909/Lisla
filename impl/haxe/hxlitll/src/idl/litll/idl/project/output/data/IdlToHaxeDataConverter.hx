@@ -164,7 +164,7 @@ class IdlToHaxeDataConverter
         
         typePath = switch (name.kind)
         {
-            case StructFieldKind.Normal | StructFieldKind.Unfold:
+            case StructFieldKind.Normal | StructFieldKind.Unfold | StructFieldKind.Merge:
                 typePath;
                 
             case StructFieldKind.Optional | StructFieldKind.OptionalUnfold:
@@ -218,6 +218,9 @@ class IdlToHaxeDataConverter
                     
                 case StructFieldKind.OptionalUnfold:
                     throw new IdlException("optional unfold suffix(?<) for label is not supported");
+                    
+                case StructFieldKind.Merge:
+                    throw new IdlException("merge suffix(<<) for label is not supported");
             }
             args.push(
                 {
