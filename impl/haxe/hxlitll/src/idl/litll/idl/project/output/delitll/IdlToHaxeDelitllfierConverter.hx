@@ -5,6 +5,7 @@ import haxe.macro.Expr;
 import haxe.macro.Expr.Access;
 import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.TypeDefKind;
+import litll.core.Litll;
 import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
@@ -168,14 +169,14 @@ class IdlToHaxeDelitllfierConverter
                     [
                         macro switch ($i{sourcePath.toString()}.$name($a{argumentReferences}))
                         {
-                            case litll.core.ds.Result.Ok(ok):
-                                litll.core.ds.Result.Ok(ok);
+                            case litll.core.ds.Result.Ok(data):
+                                litll.core.ds.Result.Ok(data);
                                 
-                            case litll.core.ds.Result.Err(err):
+                            case litll.core.ds.Result.Err(data):
                                 litll.core.ds.Result.Err(
                                     litll.idl.delitllfy.DelitllfyError.ofLitll(
                                         $contextExpr.litll, 
-                                        err
+                                        data
                                     )
                                 );
                         }
@@ -299,8 +300,8 @@ class IdlToHaxeDelitllfierConverter
 				case litll.core.ds.Result.Ok(data):
 					$instantiationExpr;
 					
-				case litll.core.ds.Result.Err(error):
-					litll.core.ds.Result.Err(error);
+				case litll.core.ds.Result.Err(data):
+					litll.core.ds.Result.Err(data);
 			}
 		}
 	}
@@ -316,7 +317,7 @@ class IdlToHaxeDelitllfierConverter
         return macro {
             return switch (context.litll)
             {
-                case litll.core.Litll.Str(string):
+                case litll.core.Litll.Str(_):
                     litll.core.ds.Result.Err(
                         litll.idl.delitllfy.DelitllfyError.ofLitll(
                             context.litll,
@@ -324,16 +325,16 @@ class IdlToHaxeDelitllfierConverter
                         )
                     );
                     
-                case litll.core.Litll.Arr(array):
-                    var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
-                    var data = $instantiationExpr;
+                case litll.core.Litll.Arr(data):
+                    var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+                    var instance = $instantiationExpr;
                     switch (arrayContext.closeOrError())
                     {
                         case haxe.ds.Option.None:
-                            data;
+                            instance;
                             
-                        case haxe.ds.Option.Some(error):
-                            litll.core.ds.Result.Err(error);
+                        case haxe.ds.Option.Some(data):
+                            litll.core.ds.Result.Err(data);
                     }
             }
 		}
@@ -354,6 +355,7 @@ class IdlToHaxeDelitllfierConverter
                     var expr = switch [data.name.kind, data.defaultValue]
                     {
                         case [ArgumentKind.Normal, Option.Some(value)]:
+                            // TODO: default value
                             createGetOrReturnExpr(macro arrayContext.readWithDefault($processFunc, null));
                             
                         case [ArgumentKind.Normal, Option.None]:
@@ -396,7 +398,7 @@ class IdlToHaxeDelitllfierConverter
         return macro switch ($expr)
         {
             case litll.core.ds.Result.Ok(data): data;
-            case litll.core.ds.Result.Err(error): return litll.core.ds.Result.Err(error);
+            case litll.core.ds.Result.Err(data): return litll.core.ds.Result.Err(data);
         }
     }
     
@@ -565,7 +567,7 @@ class IdlToHaxeDelitllfierConverter
         
         return macro return switch (context.litll)
         {
-            case litll.core.Litll.Str(string):
+            case litll.core.Litll.Str(_):
                 litll.core.ds.Result.Err(
                     litll.idl.delitllfy.DelitllfyError.ofLitll(
                         context.litll,
@@ -594,16 +596,16 @@ class IdlToHaxeDelitllfierConverter
                 
                 return macro switch ($i{id})
                 {
-                    case haxe.ds.Option.Some(data):
+                    case haxe.ds.Option.Some(_):
                         return litll.core.ds.Result.Err(
                             litll.idl.delitllfy.DelitllfyError.ofLitll(
                                 litll,
-                                litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated(name)
+                                litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated($nameExpr)
                             )
                         );
                         
                     case haxe.ds.Option.None:
-                        $i{id} = $instantationExpr;
+                        $i{id} = haxe.ds.Option.Some($instantationExpr);
                 }
             }
             inline function addArrayDeclaration(instantationExpr:Expr):Expr
@@ -617,12 +619,16 @@ class IdlToHaxeDelitllfierConverter
                 case StructElement.Field(field):
                     inline function fieldInstantiation():Expr
                     {
-                        return macro null;
+                        var callExpr = createProcessCallExpr((macro context), parameters, field.type.generalize());
+                        return macro {
+                            var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                            ${createGetOrReturnExpr(callExpr)}
+                        }
                     }
                     inline function unfoldInstantiation():Expr
                     {
                         var callExpr = createProcessCallExpr((macro context), parameters, field.type.generalize());
-                        return callExpr;
+                        return macro createGetOrReturnExpr(callExpr);
                     }
                     inline function addFieldCase(caseExpr:Expr):Void
                     {
@@ -632,48 +638,94 @@ class IdlToHaxeDelitllfierConverter
                     {
                         createUnfoldFieldCase(field.type, parameters.parameters, caseExpr, cases);
                     }
-                    
+                    inline function addNormalReference():Void
+                    {
+                        var nameExpr = getStringConstExpr(field.name.name);
+                        references.push(
+                            macro switch ($i{id})
+                            {
+                                case haxe.ds.Option.Some(data):
+                                    data;
+                                    
+                                case haxe.ds.Option.None:
+                                    return litll.core.ds.Result.Err(
+                                        litll.idl.delitllfy.DelitllfyError.ofLitll(
+                                            context.litll,
+                                            litll.idl.delitllfy.DelitllfyErrorKind.StructElement($nameExpr)
+                                        )
+                                    );
+                            }
+                        );
+                    }
+                    inline function addDefaultReference(defaultValue:Litll):Void
+                    {
+                        var nameExpr = getStringConstExpr(field.name.name);
+                        references.push(
+                            macro switch ($i{id})
+                            {
+                                case haxe.ds.Option.Some(data):
+                                    data;
+                                    
+                                case haxe.ds.Option.None:
+                                    // TODO:
+                                    null;
+                            }
+                        );
+                    }
+                    inline function addDirectReference():Void
+                    {
+                        var nameExpr = getStringConstExpr(field.name.name);
+                        references.push(macro $i{id});
+                    }
                     switch [field.name.kind, field.defaultValue]
                     {
                         case [StructFieldKind.Normal, Option.None]:
                             var instantationExpr = fieldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addFieldCase(caseExpr);
+                            addNormalReference();
                             
                         case [StructFieldKind.Normal, Option.Some(defaultValue)]:
                             var instantationExpr = fieldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addFieldCase(caseExpr);
+                            addDefaultReference(defaultValue);
                             
                         case [StructFieldKind.Optional, Option.None]:
                             var instantationExpr = fieldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addFieldCase(caseExpr);
+                            addDirectReference();
                             
                         case [StructFieldKind.Array, Option.None]:
                             var instantationExpr = fieldInstantiation();
                             var caseExpr = addArrayDeclaration(instantationExpr);
                             addFieldCase(caseExpr);
+                            addDirectReference();
                             
                         case [StructFieldKind.Unfold, Option.None]:
                             var instantationExpr = unfoldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addUnfoldCase(caseExpr);
+                            addNormalReference();
                             
                         case [StructFieldKind.Unfold, Option.Some(defaultValue)]:
                             var instantationExpr = unfoldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addUnfoldCase(caseExpr);
+                            addDefaultReference(defaultValue);
                             
                         case [StructFieldKind.OptionalUnfold, Option.None]:
                             var instantationExpr = unfoldInstantiation();
                             var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addUnfoldCase(caseExpr);
+                            addDirectReference();
                             
                         case [StructFieldKind.ArrayUnfold, Option.None]:
                             var instantationExpr = unfoldInstantiation();
                             var caseExpr = addArrayDeclaration(instantationExpr);
                             addUnfoldCase(caseExpr);
+                            addDirectReference();
                             
                         case [StructFieldKind.Merge, Option.None]:
                             // TODO
@@ -686,8 +738,6 @@ class IdlToHaxeDelitllfierConverter
                             
                             throw new IdlException("unsupported default value kind: " + field.name.kind);
                     }
-                    
-                    references.push(macro $i{id});
                     
                 case StructElement.Label(name) | StructElement.NestedLabel(name):
                     switch (name.kind)
@@ -722,11 +772,10 @@ class IdlToHaxeDelitllfierConverter
         cases.push(
             {
                 // case data:
-                values : [macro litll],
+                values : [macro litllData],
                 expr: macro return litll.core.ds.Result.Err(
                     litll.idl.delitllfy.DelitllfyError.ofLitll(
-                        litll, 
-                        
+                        litllData, 
                         // TODO: target list
                         litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])
                     )
@@ -735,16 +784,16 @@ class IdlToHaxeDelitllfierConverter
         );
         var switchExpr = {
             expr: ExprDef.ESwitch(
-                macro litll,
+                macro litllData,
                 cases,
                 null
             ),
             pos: null
         }
         declarations.push(
-            macro for (litll in array.data)
+            macro for (litllData in array.data)
             {
-                var context = new DelitllfyContext(litll, context.config);
+                var context = new litll.idl.delitllfy.DelitllfyContext(litllData, context.config);
                 $switchExpr;
             }
         );
@@ -819,8 +868,8 @@ class IdlToHaxeDelitllfierConverter
                 case DelitllfyCaseCondition.Const(label):
                     var stringExpr:Expr = getStringConstExpr(label);
                     {
-                        values: [macro litll.core.Litll.Str(str)],
-                        guard: (macro str.data == $stringExpr),
+                        values: [macro litll.core.Litll.Str(string)],
+                        guard: (macro string.data == $stringExpr),
                         expr: caseExpr,
                     }
             }

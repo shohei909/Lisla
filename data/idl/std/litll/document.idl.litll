@@ -1,5 +1,5 @@
 /// 'IDL for Litll Document Comment'
-/// [license "public domain"]
+/// [license "Public Domain"]
 /// [schema litll.idl.Idl]
 
 [package litll]
@@ -13,22 +13,22 @@
     [encoding? DocumentEncoding]
     [license.. License]
     [author.. Author]
-    [schema?
-        /// [completion]
-        TypeReference
-    ]
+    [schema? TypeReference]
+    [markup_language? DocumentMarkupLanguage]
 ]
 
-[enum DocumentEncoding
-    utf8
-]
+[enum DocumentEncoding utf8]
 
+/// [completion_const "markdown"]
 /// [completion]
+[newtype DocumentMarkupLanguage String]
+
 /// [completion_const "MIT License"]
 /// [completion_const "Apache License 2.0"]
-/// [completion_const "public domain"]
+/// [completion_const "Public Domain"]
 /// [completion_const "GNU Lesser General Public License Version 3 (LGPLv3)"]
 /// [completion_const "GNU Lesser General Public License Version 2.1 (LGPLv2.1)"]
+/// [completion]
 [newtype License String]
 
 /// [completion]

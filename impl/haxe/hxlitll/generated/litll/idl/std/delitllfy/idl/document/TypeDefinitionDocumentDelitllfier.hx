@@ -11,11 +11,44 @@ class TypeDefinitionDocumentDelitllfier {
                 var arg1 = haxe.ds.Option.None;
                 var arg2 = [];
                 var arg3 = [];
-                for (litll in array.data) switch litll {
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "document_tag"))):arg0.push(null);
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "completion_const"))):arg2.push(null);
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "completion_type"))):arg3.push(null);
-                    case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
+                for (litll in array.data) {
+                    var context = new litll.idl.delitllfy.DelitllfyContext(litll, context.config);
+                    switch litll {
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "document_tag"))):arg0.push({
+                            var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                            switch (litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier.process(context)) {
+                                case litll.core.ds.Result.Ok(data):{
+                                    data;
+                                };
+                                case litll.core.ds.Result.Err(error):{
+                                    return litll.core.ds.Result.Err(error);
+                                };
+                            };
+                        });
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "completion_const"))):arg2.push({
+                            var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                            switch (litll.idl.std.delitllfy.core.AnyDelitllfier.process(context)) {
+                                case litll.core.ds.Result.Ok(data):{
+                                    data;
+                                };
+                                case litll.core.ds.Result.Err(error):{
+                                    return litll.core.ds.Result.Err(error);
+                                };
+                            };
+                        });
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "completion_type"))):arg3.push({
+                            var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                            switch (litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier.process(context)) {
+                                case litll.core.ds.Result.Ok(data):{
+                                    data;
+                                };
+                                case litll.core.ds.Result.Err(error):{
+                                    return litll.core.ds.Result.Err(error);
+                                };
+                            };
+                        });
+                        case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
+                    };
                 };
                 var instance = new litll.idl.std.data.idl.document.TypeDefinitionDocument(arg0, arg1, arg2, arg3);
                 litll.core.ds.Result.Ok(instance);

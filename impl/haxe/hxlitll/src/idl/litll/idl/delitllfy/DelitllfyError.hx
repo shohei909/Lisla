@@ -115,6 +115,9 @@ class DelitllfyError
 				
 			case DelitllfyErrorKind.StructElementDupplicated(name):
 				"struct element '" + name + "' is dupplicated";
+                
+			case DelitllfyErrorKind.StructElementNotFound(name):
+				"struct element '" + name + "' is not found";
 				
 			case DelitllfyErrorKind.CantBeArray:
 				"can't be array";

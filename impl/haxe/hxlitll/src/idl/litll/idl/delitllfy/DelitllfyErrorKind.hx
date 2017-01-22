@@ -9,6 +9,7 @@ enum DelitllfyErrorKind
 	UnmatchedLabel(expected:String);
 	UnmatchedStructElement(expected:Array<String>);
 	StructElementDupplicated(name:String);
+    StructElementNotFound(name:String);
 	EndOfArray;
 	TooLongArray;
 	Fatal(message:String);

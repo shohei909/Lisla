@@ -5,10 +5,12 @@ class HeaderDocument {
     public var license : Array<litll.idl.std.data.document.License>;
     public var author : Array<litll.idl.std.data.document.Author>;
     public var schema : haxe.ds.Option<litll.idl.std.data.idl.TypeReference>;
-    public function new(encoding:haxe.ds.Option<litll.idl.std.data.document.DocumentEncoding>, license:Array<litll.idl.std.data.document.License>, author:Array<litll.idl.std.data.document.Author>, schema:haxe.ds.Option<litll.idl.std.data.idl.TypeReference>) {
+    public var markupLanguage : haxe.ds.Option<litll.idl.std.data.document.DocumentMarkupLanguage>;
+    public function new(encoding:haxe.ds.Option<litll.idl.std.data.document.DocumentEncoding>, license:Array<litll.idl.std.data.document.License>, author:Array<litll.idl.std.data.document.Author>, schema:haxe.ds.Option<litll.idl.std.data.idl.TypeReference>, markupLanguage:haxe.ds.Option<litll.idl.std.data.document.DocumentMarkupLanguage>) {
         this.encoding = encoding;
         this.license = license;
         this.author = author;
         this.schema = schema;
+        this.markupLanguage = markupLanguage;
     }
 }

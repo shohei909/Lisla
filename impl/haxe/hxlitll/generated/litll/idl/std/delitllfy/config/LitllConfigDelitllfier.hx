@@ -9,10 +9,33 @@ class LitllConfigDelitllfier {
             {
                 var arg0 = [];
                 var arg1 = [];
-                for (litll in array.data) switch litll {
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "idl")) && array.data[1].match(litll.core.Litll.Str(_))):arg0.push(null);
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "extention")) && array.data[1].match(litll.core.Litll.Str(_))):arg1.push(null);
-                    case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
+                for (litll in array.data) {
+                    var context = new litll.idl.delitllfy.DelitllfyContext(litll, context.config);
+                    switch litll {
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "idl")) && array.data[1].match(litll.core.Litll.Str(_))):arg0.push({
+                            var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                            switch (litll.idl.std.delitllfy.config.LitllIdlSourceDirectoryDelitllfier.process(context)) {
+                                case litll.core.ds.Result.Ok(data):{
+                                    data;
+                                };
+                                case litll.core.ds.Result.Err(error):{
+                                    return litll.core.ds.Result.Err(error);
+                                };
+                            };
+                        });
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "extention")) && array.data[1].match(litll.core.Litll.Str(_))):arg1.push({
+                            var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                            switch (litll.idl.std.delitllfy.config.LitllSubextentionDelitllfier.process(context)) {
+                                case litll.core.ds.Result.Ok(data):{
+                                    data;
+                                };
+                                case litll.core.ds.Result.Err(error):{
+                                    return litll.core.ds.Result.Err(error);
+                                };
+                            };
+                        });
+                        case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
+                    };
                 };
                 var instance = new litll.idl.std.data.config.LitllConfig(arg0, arg1);
                 litll.core.ds.Result.Ok(instance);

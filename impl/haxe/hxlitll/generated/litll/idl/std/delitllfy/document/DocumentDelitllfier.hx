@@ -8,18 +8,38 @@ class DocumentDelitllfier {
         case litll.core.Litll.Arr(array):{
             {
                 var arg0 = haxe.ds.Option.None;
-                for (litll in array.data) switch litll {
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "comment")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg0) {
-                        case haxe.ds.Option.Some(data):{
-                            return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated(name)));
+                for (litll in array.data) {
+                    var context = new litll.idl.delitllfy.DelitllfyContext(litll, context.config);
+                    switch litll {
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "comment")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg0) {
+                            case haxe.ds.Option.Some(data):{
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("comment")));
+                            };
+                            case haxe.ds.Option.None:{
+                                arg0 = haxe.ds.Option.Some({
+                                    var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                                    switch (StringDelitllfier.process(context)) {
+                                        case litll.core.ds.Result.Ok(data):{
+                                            data;
+                                        };
+                                        case litll.core.ds.Result.Err(error):{
+                                            return litll.core.ds.Result.Err(error);
+                                        };
+                                    };
+                                });
+                            };
                         };
-                        case haxe.ds.Option.None:{
-                            arg0 = null;
-                        };
+                        case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                     };
-                    case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                 };
-                var instance = new litll.idl.std.data.document.Document(arg0);
+                var instance = new litll.idl.std.data.document.Document(switch (arg0) {
+                    case haxe.ds.Option.Some(data):{
+                        data;
+                    };
+                    case haxe.ds.Option.None:{
+                        return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElement("comment")));
+                    };
+                });
                 litll.core.ds.Result.Ok(instance);
             };
         };

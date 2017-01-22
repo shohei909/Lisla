@@ -11,28 +11,90 @@ class HeaderDocumentDelitllfier {
                 var arg1 = [];
                 var arg2 = [];
                 var arg3 = haxe.ds.Option.None;
-                for (litll in array.data) switch litll {
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "encoding")) && array.data[1].match(litll.core.Litll.Str(_.data => "utf8"))):switch (arg0) {
-                        case haxe.ds.Option.Some(data):{
-                            return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated(name)));
+                var arg4 = haxe.ds.Option.None;
+                for (litll in array.data) {
+                    var context = new litll.idl.delitllfy.DelitllfyContext(litll, context.config);
+                    switch litll {
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "encoding")) && array.data[1].match(litll.core.Litll.Str(_.data => "utf8"))):switch (arg0) {
+                            case haxe.ds.Option.Some(data):{
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("encoding")));
+                            };
+                            case haxe.ds.Option.None:{
+                                arg0 = haxe.ds.Option.Some({
+                                    var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                                    switch (litll.idl.std.delitllfy.document.DocumentEncodingDelitllfier.process(context)) {
+                                        case litll.core.ds.Result.Ok(data):{
+                                            data;
+                                        };
+                                        case litll.core.ds.Result.Err(error):{
+                                            return litll.core.ds.Result.Err(error);
+                                        };
+                                    };
+                                });
+                            };
                         };
-                        case haxe.ds.Option.None:{
-                            arg0 = null;
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "license")) && array.data[1].match(litll.core.Litll.Str(_))):arg1.push({
+                            var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                            switch (litll.idl.std.delitllfy.document.LicenseDelitllfier.process(context)) {
+                                case litll.core.ds.Result.Ok(data):{
+                                    data;
+                                };
+                                case litll.core.ds.Result.Err(error):{
+                                    return litll.core.ds.Result.Err(error);
+                                };
+                            };
+                        });
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "author")) && array.data[1].match(litll.core.Litll.Str(_))):arg2.push({
+                            var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                            switch (litll.idl.std.delitllfy.document.AuthorDelitllfier.process(context)) {
+                                case litll.core.ds.Result.Ok(data):{
+                                    data;
+                                };
+                                case litll.core.ds.Result.Err(error):{
+                                    return litll.core.ds.Result.Err(error);
+                                };
+                            };
+                        });
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "schema"))):switch (arg3) {
+                            case haxe.ds.Option.Some(data):{
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("schema")));
+                            };
+                            case haxe.ds.Option.None:{
+                                arg3 = haxe.ds.Option.Some({
+                                    var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                                    switch (litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier.process(context)) {
+                                        case litll.core.ds.Result.Ok(data):{
+                                            data;
+                                        };
+                                        case litll.core.ds.Result.Err(error):{
+                                            return litll.core.ds.Result.Err(error);
+                                        };
+                                    };
+                                });
+                            };
                         };
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "markup_language")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg4) {
+                            case haxe.ds.Option.Some(data):{
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("markup_language")));
+                            };
+                            case haxe.ds.Option.None:{
+                                arg4 = haxe.ds.Option.Some({
+                                    var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                                    switch (litll.idl.std.delitllfy.document.DocumentMarkupLanguageDelitllfier.process(context)) {
+                                        case litll.core.ds.Result.Ok(data):{
+                                            data;
+                                        };
+                                        case litll.core.ds.Result.Err(error):{
+                                            return litll.core.ds.Result.Err(error);
+                                        };
+                                    };
+                                });
+                            };
+                        };
+                        case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                     };
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "license")) && array.data[1].match(litll.core.Litll.Str(_))):arg1.push(null);
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "author")) && array.data[1].match(litll.core.Litll.Str(_))):arg2.push(null);
-                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "schema"))):switch (arg3) {
-                        case haxe.ds.Option.Some(data):{
-                            return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated(name)));
-                        };
-                        case haxe.ds.Option.None:{
-                            arg3 = null;
-                        };
-                    };
-                    case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                 };
-                var instance = new litll.idl.std.data.document.HeaderDocument(arg0, arg1, arg2, arg3);
+                var instance = new litll.idl.std.data.document.HeaderDocument(arg0, arg1, arg2, arg3, arg4);
                 litll.core.ds.Result.Ok(instance);
             };
         };
