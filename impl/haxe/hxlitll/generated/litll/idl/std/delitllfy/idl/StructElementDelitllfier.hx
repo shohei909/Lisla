@@ -7,8 +7,8 @@ class StructElementDelitllfier {
                 case litll.core.ds.Result.Ok(data):{
                     data;
                 };
-                case litll.core.ds.Result.Err(error):{
-                    return litll.core.ds.Result.Err(error);
+                case litll.core.ds.Result.Err(data):{
+                    return litll.core.ds.Result.Err(data);
                 };
             }));
         };
@@ -19,8 +19,8 @@ class StructElementDelitllfier {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 litll.core.ds.Result.Ok(litll.idl.std.data.idl.StructElement.NestedLabel(arg0));
@@ -39,8 +39,8 @@ class StructElementDelitllfier {
                 case litll.core.ds.Result.Ok(data):{
                     data;
                 };
-                case litll.core.ds.Result.Err(error):{
-                    return litll.core.ds.Result.Err(error);
+                case litll.core.ds.Result.Err(data):{
+                    return litll.core.ds.Result.Err(data);
                 };
             }));
         };

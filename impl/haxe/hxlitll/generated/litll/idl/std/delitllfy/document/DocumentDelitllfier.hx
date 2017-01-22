@@ -2,17 +2,17 @@
 package litll.idl.std.delitllfy.document;
 class DocumentDelitllfier {
     public static function process(context:litll.idl.delitllfy.DelitllfyContext):litll.core.ds.Result<litll.idl.std.data.document.Document, litll.idl.delitllfy.DelitllfyError> return switch (context.litll) {
-        case litll.core.Litll.Str(string):{
+        case litll.core.Litll.Str(_):{
             litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.CantBeString));
         };
         case litll.core.Litll.Arr(array):{
             {
                 var arg0 = haxe.ds.Option.None;
-                for (litll in array.data) {
-                    var context = new litll.idl.delitllfy.DelitllfyContext(litll, context.config);
-                    switch litll {
+                for (litllData in array.data) {
+                    var context = new litll.idl.delitllfy.DelitllfyContext(litllData, context.config);
+                    switch litllData {
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "comment")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg0) {
-                            case haxe.ds.Option.Some(data):{
+                            case haxe.ds.Option.Some(_):{
                                 return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("comment")));
                             };
                             case haxe.ds.Option.None:{
@@ -22,14 +22,14 @@ class DocumentDelitllfier {
                                         case litll.core.ds.Result.Ok(data):{
                                             data;
                                         };
-                                        case litll.core.ds.Result.Err(error):{
-                                            return litll.core.ds.Result.Err(error);
+                                        case litll.core.ds.Result.Err(data):{
+                                            return litll.core.ds.Result.Err(data);
                                         };
                                     };
                                 });
                             };
                         };
-                        case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
+                        case litllData:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                     };
                 };
                 var instance = new litll.idl.std.data.document.Document(switch (arg0) {

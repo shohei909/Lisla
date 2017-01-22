@@ -21,8 +21,8 @@ class OptionDelitllfier {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 litll.core.ds.Result.Ok(litll.idl.std.data.core.LitllOption.Some(arg0));

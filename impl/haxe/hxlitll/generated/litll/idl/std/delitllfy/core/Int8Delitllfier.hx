@@ -2,15 +2,15 @@
 package litll.idl.std.delitllfy.core;
 class Int8Delitllfier {
     public static function process(context:litll.idl.delitllfy.DelitllfyContext):litll.core.ds.Result<litll.idl.std.data.core.LitllInt8, litll.idl.delitllfy.DelitllfyError> {
-        return switch (StringDelitllfier.process(context)) {
+        return switch (litll.idl.std.delitllfy.core.FixedIntDelitllfier.process(context, null)) {
             case litll.core.ds.Result.Ok(data):{
                 {
                     var instance = new litll.idl.std.data.core.LitllInt8(data);
                     litll.core.ds.Result.Ok(instance);
                 };
             };
-            case litll.core.ds.Result.Err(error):{
-                litll.core.ds.Result.Err(error);
+            case litll.core.ds.Result.Err(data):{
+                litll.core.ds.Result.Err(data);
             };
         };
     }

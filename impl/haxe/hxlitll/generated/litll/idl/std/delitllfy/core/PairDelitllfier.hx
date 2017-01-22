@@ -3,26 +3,26 @@ package litll.idl.std.delitllfy.core;
 class PairDelitllfier {
     public static function process<K, V>(context:litll.idl.delitllfy.DelitllfyContext, kProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<K, litll.idl.delitllfy.DelitllfyError>, vProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<V, litll.idl.delitllfy.DelitllfyError>):litll.core.ds.Result<litll.idl.std.data.core.Pair<K, V>, litll.idl.delitllfy.DelitllfyError> {
         return switch (context.litll) {
-            case litll.core.Litll.Str(string):{
+            case litll.core.Litll.Str(_):{
                 litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.CantBeString));
             };
-            case litll.core.Litll.Arr(array):{
-                var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
-                var data = {
+            case litll.core.Litll.Arr(data):{
+                var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+                var instance = {
                     var arg0 = switch (arrayContext.read(kProcess)) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };
-                        case litll.core.ds.Result.Err(error):{
-                            return litll.core.ds.Result.Err(error);
+                        case litll.core.ds.Result.Err(data):{
+                            return litll.core.ds.Result.Err(data);
                         };
                     };
                     var arg1 = switch (arrayContext.read(vProcess)) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };
-                        case litll.core.ds.Result.Err(error):{
-                            return litll.core.ds.Result.Err(error);
+                        case litll.core.ds.Result.Err(data):{
+                            return litll.core.ds.Result.Err(data);
                         };
                     };
                     var instance = new litll.idl.std.data.core.Pair(arg0, arg1);
@@ -30,10 +30,10 @@ class PairDelitllfier {
                 };
                 switch (arrayContext.closeOrError()) {
                     case haxe.ds.Option.None:{
-                        data;
+                        instance;
                     };
-                    case haxe.ds.Option.Some(error):{
-                        litll.core.ds.Result.Err(error);
+                    case haxe.ds.Option.Some(data):{
+                        litll.core.ds.Result.Err(data);
                     };
                 };
             };

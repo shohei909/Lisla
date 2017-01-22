@@ -7,8 +7,8 @@ class TypeNameDeclarationDelitllfier {
                 case litll.core.ds.Result.Ok(data):{
                     data;
                 };
-                case litll.core.ds.Result.Err(error):{
-                    return litll.core.ds.Result.Err(error);
+                case litll.core.ds.Result.Err(data):{
+                    return litll.core.ds.Result.Err(data);
                 };
             }));
         };
@@ -19,16 +19,16 @@ class TypeNameDeclarationDelitllfier {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TypeParameterDeclarationDelitllfier.process)) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 litll.core.ds.Result.Ok(litll.idl.std.data.idl.TypeNameDeclaration.Generic(arg0, arg1));

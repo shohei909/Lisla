@@ -9,8 +9,8 @@ class DateTimeDelitllfier {
                     litll.core.ds.Result.Ok(instance);
                 };
             };
-            case litll.core.ds.Result.Err(error):{
-                litll.core.ds.Result.Err(error);
+            case litll.core.ds.Result.Err(data):{
+                litll.core.ds.Result.Err(data);
             };
         };
     }

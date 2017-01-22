@@ -2,15 +2,15 @@
 package litll.idl.std.delitllfy.core;
 class UInt32Delitllfier {
     public static function process(context:litll.idl.delitllfy.DelitllfyContext):litll.core.ds.Result<litll.idl.std.data.core.LitllUInt32, litll.idl.delitllfy.DelitllfyError> {
-        return switch (StringDelitllfier.process(context)) {
+        return switch (litll.idl.std.delitllfy.core.VariableUIntDelitllfier.process(context, null)) {
             case litll.core.ds.Result.Ok(data):{
                 {
                     var instance = new litll.idl.std.data.core.LitllUInt32(data);
                     litll.core.ds.Result.Ok(instance);
                 };
             };
-            case litll.core.ds.Result.Err(error):{
-                litll.core.ds.Result.Err(error);
+            case litll.core.ds.Result.Err(data):{
+                litll.core.ds.Result.Err(data);
             };
         };
     }

@@ -2,24 +2,24 @@
 package litll.idl.std.delitllfy.config;
 class LitllConfigDelitllfier {
     public static function process(context:litll.idl.delitllfy.DelitllfyContext):litll.core.ds.Result<litll.idl.std.data.config.LitllConfig, litll.idl.delitllfy.DelitllfyError> return switch (context.litll) {
-        case litll.core.Litll.Str(string):{
+        case litll.core.Litll.Str(_):{
             litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.CantBeString));
         };
         case litll.core.Litll.Arr(array):{
             {
                 var arg0 = [];
                 var arg1 = [];
-                for (litll in array.data) {
-                    var context = new litll.idl.delitllfy.DelitllfyContext(litll, context.config);
-                    switch litll {
+                for (litllData in array.data) {
+                    var context = new litll.idl.delitllfy.DelitllfyContext(litllData, context.config);
+                    switch litllData {
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "idl")) && array.data[1].match(litll.core.Litll.Str(_))):arg0.push({
                             var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
                             switch (litll.idl.std.delitllfy.config.LitllIdlSourceDirectoryDelitllfier.process(context)) {
                                 case litll.core.ds.Result.Ok(data):{
                                     data;
                                 };
-                                case litll.core.ds.Result.Err(error):{
-                                    return litll.core.ds.Result.Err(error);
+                                case litll.core.ds.Result.Err(data):{
+                                    return litll.core.ds.Result.Err(data);
                                 };
                             };
                         });
@@ -29,12 +29,12 @@ class LitllConfigDelitllfier {
                                 case litll.core.ds.Result.Ok(data):{
                                     data;
                                 };
-                                case litll.core.ds.Result.Err(error):{
-                                    return litll.core.ds.Result.Err(error);
+                                case litll.core.ds.Result.Err(data):{
+                                    return litll.core.ds.Result.Err(data);
                                 };
                             };
                         });
-                        case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
+                        case litllData:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                     };
                 };
                 var instance = new litll.idl.std.data.config.LitllConfig(arg0, arg1);

@@ -6,17 +6,17 @@ class EnumConstructorNameDelitllfier {
             case litll.core.ds.Result.Ok(data):{
                 {
                     switch (litll.idl.std.data.idl.EnumConstructorName.delitllfy(data)) {
-                        case litll.core.ds.Result.Ok(ok):{
-                            litll.core.ds.Result.Ok(ok);
+                        case litll.core.ds.Result.Ok(data):{
+                            litll.core.ds.Result.Ok(data);
                         };
-                        case litll.core.ds.Result.Err(err):{
-                            litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, err));
+                        case litll.core.ds.Result.Err(data):{
+                            litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, data));
                         };
                     };
                 };
             };
-            case litll.core.ds.Result.Err(error):{
-                litll.core.ds.Result.Err(error);
+            case litll.core.ds.Result.Err(data):{
+                litll.core.ds.Result.Err(data);
             };
         };
     }

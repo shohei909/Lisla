@@ -7,8 +7,8 @@ class AnyDelitllfier {
                 case litll.core.ds.Result.Ok(data):{
                     data;
                 };
-                case litll.core.ds.Result.Err(error):{
-                    return litll.core.ds.Result.Err(error);
+                case litll.core.ds.Result.Err(data):{
+                    return litll.core.ds.Result.Err(data);
                 };
             }));
         };
@@ -17,8 +17,8 @@ class AnyDelitllfier {
                 case litll.core.ds.Result.Ok(data):{
                     data;
                 };
-                case litll.core.ds.Result.Err(error):{
-                    return litll.core.ds.Result.Err(error);
+                case litll.core.ds.Result.Err(data):{
+                    return litll.core.ds.Result.Err(data);
                 };
             }));
         };

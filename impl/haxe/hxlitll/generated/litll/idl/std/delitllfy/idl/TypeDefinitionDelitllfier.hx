@@ -10,16 +10,16 @@ class TypeDefinitionDelitllfier {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 var arg1 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier.process)) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 litll.core.ds.Result.Ok(litll.idl.std.data.idl.TypeDefinition.Newtype(arg0, arg1));
@@ -41,16 +41,16 @@ class TypeDefinitionDelitllfier {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TupleElementDelitllfier.process)) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 litll.core.ds.Result.Ok(litll.idl.std.data.idl.TypeDefinition.Tuple(arg0, arg1));
@@ -72,16 +72,16 @@ class TypeDefinitionDelitllfier {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier.process)) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 litll.core.ds.Result.Ok(litll.idl.std.data.idl.TypeDefinition.Enum(arg0, arg1));
@@ -103,16 +103,16 @@ class TypeDefinitionDelitllfier {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.StructElementDelitllfier.process)) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
-                    case litll.core.ds.Result.Err(error):{
-                        return litll.core.ds.Result.Err(error);
+                    case litll.core.ds.Result.Err(data):{
+                        return litll.core.ds.Result.Err(data);
                     };
                 };
                 litll.core.ds.Result.Ok(litll.idl.std.data.idl.TypeDefinition.Struct(arg0, arg1));
