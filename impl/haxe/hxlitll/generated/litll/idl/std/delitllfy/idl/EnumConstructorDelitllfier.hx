@@ -12,7 +12,7 @@ class EnumConstructorDelitllfier {
                 };
             }));
         };
-        case litll.core.Litll.Arr(data) if (data.length >= 1):{
+        case litll.core.Litll.Arr(data) if (1 <= data.length && data.data[0].match(litll.core.Litll.Str(_))):{
             litll.core.ds.Result.Ok(litll.idl.std.data.idl.EnumConstructor.Parameterized(switch (litll.idl.std.delitllfy.idl.ParameterizedEnumConstructorDelitllfier.process(context)) {
                 case litll.core.ds.Result.Ok(data):{
                     data;

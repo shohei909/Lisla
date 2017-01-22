@@ -18,7 +18,7 @@ class StructElementTools
                     )
                 );
                 
-            case StructElement.Label(_):
+            case StructElement.Label(_) | StructElement.NestedLabel(_):
                 element;
         }
     }

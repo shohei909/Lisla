@@ -8,6 +8,6 @@ enum UnfoldedTypeDefinition
     Arr(elementType:TypeReference);
     Str;
     Enum(constuctors:Array<EnumConstructor>);
-    Tuple(arguments:Array<TupleElement>);
-    Struct(arguments:Array<StructElement>);
+    Tuple(elements:Array<TupleElement>);
+    Struct(elements:Array<StructElement>);
 }

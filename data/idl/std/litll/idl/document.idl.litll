@@ -2,8 +2,20 @@
 /// [schema litll.idl.Idl]
 /// [license "public domain"]
 [package litll.idl]
+
 [import litll.idl]
+[import litll.core]
 
 [struct TypeDefinitionDocument
-    [document_tag TypeReference]
+    [document_tag.. TypeReference]
+
+    [completion?]
+    [completion_const.. Any]
+    [completion_type.. TypeReference]
+]
+
+[struct TypeReferenceDocument
+    [completion?]
+    [completion_const.. Any]
+    [completion_type.. TypeReference]
 ]

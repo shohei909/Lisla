@@ -33,7 +33,7 @@ class TypeDefinitionDelitllfier {
                 };
             };
         };
-        case litll.core.Litll.Arr(data) if (data.length >= 2 && data.data[0].match(litll.core.Litll.Str(_.data => "tuple"))):{
+        case litll.core.Litll.Arr(data) if (2 <= data.length && data.data[0].match(litll.core.Litll.Str(_.data => "tuple"))):{
             var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
             var data = {
                 arrayContext.readLabel("tuple");
@@ -64,7 +64,7 @@ class TypeDefinitionDelitllfier {
                 };
             };
         };
-        case litll.core.Litll.Arr(data) if (data.length >= 2 && data.data[0].match(litll.core.Litll.Str(_.data => "enum"))):{
+        case litll.core.Litll.Arr(data) if (2 <= data.length && data.data[0].match(litll.core.Litll.Str(_.data => "enum"))):{
             var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
             var data = {
                 arrayContext.readLabel("enum");
@@ -95,7 +95,7 @@ class TypeDefinitionDelitllfier {
                 };
             };
         };
-        case litll.core.Litll.Arr(data) if (data.length >= 2 && data.data[0].match(litll.core.Litll.Str(_.data => "struct"))):{
+        case litll.core.Litll.Arr(data) if (2 <= data.length && data.data[0].match(litll.core.Litll.Str(_.data => "struct"))):{
             var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
             var data = {
                 arrayContext.readLabel("struct");

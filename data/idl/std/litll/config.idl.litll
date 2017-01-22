@@ -5,6 +5,9 @@
 [import litll.file]
 
 [struct LitllConfig
-    [idl.. FilePath]
-    [extention.. String]
+    [idl.. LitllIdlSourceDirectory]
+    [extention.. LitllSubextention]
 ]
+
+[newtype LitllIdlSourceDirectory FilePath]
+[newtype LitllSubextention String]

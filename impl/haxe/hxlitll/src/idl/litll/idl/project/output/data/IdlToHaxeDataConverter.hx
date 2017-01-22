@@ -205,17 +205,26 @@ class IdlToHaxeDataConverter
                 case StructElement.Field(field):
                     args.push(convertField(field, config));
                     
-                case StructElement.Label(name):
-                    var typePath = switch (name.kind)
+                case StructElement.Label(name) | StructElement.NestedLabel(name):
+                    switch (name.kind)
                     {
                         case StructFieldKind.Normal:
-                            macro:litll.idl.std.data.core.LitllBoolean;
                             
                         case StructFieldKind.Array:
-                            macro:Array<litll.idl.std.data.core.LitllBoolean>;
+                            args.push(
+                                {
+                                    name : name.toVariableName().getOrThrow(),
+                                    type : macro:Int,
+                                }
+                            );
                             
                         case StructFieldKind.Optional:
-                            throw new IdlException("optional suffix(?) for label is not supported");
+                            args.push(
+                                {
+                                    name : name.toVariableName().getOrThrow(),
+                                    type : macro:litll.idl.std.data.core.LitllBoolean,
+                                }
+                            );
                             
                         case StructFieldKind.Unfold:
                             throw new IdlException("unfold suffix(<) for label is not supported");
@@ -227,12 +236,6 @@ class IdlToHaxeDataConverter
                             throw new IdlException("optional unfold suffix(?<) for label is not supported");
                     }
                     
-                    args.push(
-                        {
-                            name : name.toVariableName().getOrThrow(),
-                            type : typePath,
-                        }
-                    );
             }
         }
         

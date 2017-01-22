@@ -2,6 +2,7 @@
 /// [license "public domain"]
 /// [schema litll.idl.Idl]
 [package litll]
+
 [import litll.core]
 
 /// [document_tag litll.idl.document.IdlDocumentTag]
@@ -79,7 +80,11 @@
 
 [enum StructElement
     [label<
-        /// 'Multiple suffix and Unfolding suffix are disabled'
+        /// 'and Unfolding suffix are disabled'
+        [name StructFieldName]
+    ]
+    [nested_label: 
+        /// 'and Unfolding suffix are disabled'
         [name StructFieldName]
     ]
     [field< [field StructField]]
@@ -100,10 +105,16 @@
 /// '''
 [newtype StructFieldName String]
 
+/// [completion_self]
 [newtype PackagePath String]
+/// [completion_self]
 [newtype ModulePath String]
+/// [completion_self]
 [newtype TypePath String]
 
+/// [completion_const String]
+/// [completion_const Array]
+/// [completion_type TypeNameDeclaration]
 [enum TypeReference
     [primitive< [type_path TypePath]]
     [generic< [type GenericTypeReference]]

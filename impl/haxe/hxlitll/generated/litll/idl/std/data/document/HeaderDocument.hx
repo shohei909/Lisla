@@ -2,10 +2,10 @@
 package litll.idl.std.data.document;
 class HeaderDocument {
     public var encoding : litll.idl.std.data.document.DocumentEncoding;
-    public var license : Array<litll.core.LitllString>;
-    public var author : Array<litll.core.LitllString>;
+    public var license : Array<litll.idl.std.data.document.License>;
+    public var author : Array<litll.idl.std.data.document.Author>;
     public var schema : litll.idl.std.data.idl.TypeReference;
-    public function new(encoding:litll.idl.std.data.document.DocumentEncoding, license:Array<litll.core.LitllString>, author:Array<litll.core.LitllString>, schema:litll.idl.std.data.idl.TypeReference) {
+    public function new(encoding:litll.idl.std.data.document.DocumentEncoding, license:Array<litll.idl.std.data.document.License>, author:Array<litll.idl.std.data.document.Author>, schema:litll.idl.std.data.idl.TypeReference) {
         this.encoding = encoding;
         this.license = license;
         this.author = author;

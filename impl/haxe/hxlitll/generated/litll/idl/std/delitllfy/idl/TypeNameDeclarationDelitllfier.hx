@@ -12,7 +12,7 @@ class TypeNameDeclarationDelitllfier {
                 };
             }));
         };
-        case litll.core.Litll.Arr(data) if (data.length >= 1):{
+        case litll.core.Litll.Arr(data) if (1 <= data.length && data.data[0].match(litll.core.Litll.Str(_))):{
             var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
             var data = {
                 var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.TypeNameDelitllfier.process)) {

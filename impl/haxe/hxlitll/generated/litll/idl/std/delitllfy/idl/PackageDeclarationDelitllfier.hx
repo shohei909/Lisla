@@ -2,7 +2,7 @@
 package litll.idl.std.delitllfy.idl;
 class PackageDeclarationDelitllfier {
     public static function process(context:litll.idl.delitllfy.DelitllfyContext):litll.core.ds.Result<litll.idl.std.data.idl.PackageDeclaration, litll.idl.delitllfy.DelitllfyError> return switch context.litll {
-        case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "package"))):{
+        case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "package")) && data.data[1].match(litll.core.Litll.Str(_))):{
             var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
             var data = {
                 arrayContext.readLabel("package");

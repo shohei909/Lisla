@@ -11,11 +11,25 @@
 
 [struct HeaderDocument
     [encoding DocumentEncoding]
-    [license.. String]
-    [author.. String]
-    [schema TypeReference]
+    [license.. License]
+    [author.. Author]
+    [schema
+        /// [completion]
+        TypeReference
+    ]
 ]
 
 [enum DocumentEncoding
     utf8
 ]
+
+/// [completion]
+/// [completion_const "MIT License"]
+/// [completion_const "Apache License 2.0"]
+/// [completion_const "public domain"]
+/// [completion_const "GNU Lesser General Public License Version 3 (LGPLv3)"]
+/// [completion_const "GNU Lesser General Public License Version 2.1 (LGPLv2.1)"]
+[newtype License String]
+
+/// [completion]
+[newtype Author String]

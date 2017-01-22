@@ -1,0 +1,4 @@
+[package litll]
+
+[newtype Argb32 String]
+[newtype Rgb24 String]

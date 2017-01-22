@@ -146,7 +146,7 @@ class TypeDefinitionPreprocessor
         {
             switch (field)
             {
-                case StructElement.Label(name):
+                case StructElement.Label(name) | StructElement.NestedLabel(name):
                     add(name);
                     // TODO: validation kind
                     

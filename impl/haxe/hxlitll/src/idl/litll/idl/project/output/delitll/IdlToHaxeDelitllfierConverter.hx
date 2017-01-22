@@ -6,6 +6,7 @@ import haxe.macro.Expr.Access;
 import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.TypeDefKind;
 import litll.core.LitllString;
+import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.exception.IdlException;
@@ -15,12 +16,14 @@ import litll.idl.project.output.data.store.HaxeDataConstructorReturnKind;
 import litll.idl.project.output.delitll.HaxeDelitllfierTypePathPair;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.ArgumentKind;
+import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorKind;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.GenericTypeReference;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructFieldKind;
+import litll.idl.std.data.idl.StructFieldName;
 import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
@@ -350,7 +353,6 @@ class IdlToHaxeDelitllfierConverter
                 case TupleElement.Argument(data):
                     var processFunc = createProcessFuncExpr(parameters, data.type.generalize());
                     
-                    // TODO: defatult value
                     var expr = switch [data.name.kind, data.defaultValue]
                     {
                         case [ArgumentKind.Normal, Option.Some(value)]:
@@ -369,8 +371,10 @@ class IdlToHaxeDelitllfierConverter
                             // TODO:
                             macro null;
                             
-                        case [_, Option.Some(_)]:
-                            throw new IdlException("unsupported default value kind");
+                        case [ArgumentKind.Rest, Option.Some(_)] 
+                            | [ArgumentKind.Unfold, Option.Some(_)]
+                            | [ArgumentKind.Optional, Option.Some(_)]:
+                            throw new IdlException("unsupported default value kind: " + data.name.kind);
                     }
                     
                     var name = "arg" + references.length;
@@ -420,7 +424,7 @@ class IdlToHaxeDelitllfierConverter
         }
         inline function _addTupleCase(instantiationExpr:Expr, elements:Array<TupleElement>):Void
         {
-            var guardConditions = createGuardConditions(elements);
+            var guardConditions = createTupleGuardConditions(elements, parameters.parameters);
             var caseData = {
                 values: [macro litll.core.Litll.Arr(data)],
                 guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
@@ -473,7 +477,7 @@ class IdlToHaxeDelitllfierConverter
         }
         function _addUnfoldCase(instantiationExpr:Expr, type:TypeReference):Void
         {
-            switch (type.unfold(context.source))
+            switch (type.unfold(context.source, parameters.parameters))
             {
                 case UnfoldedTypeDefinition.Arr(_):
                     cases.push(
@@ -492,7 +496,7 @@ class IdlToHaxeDelitllfierConverter
                     );
                     
                 case UnfoldedTypeDefinition.Tuple(elements):
-                    var guardConditions = createGuardConditions(elements);
+                    var guardConditions = createTupleGuardConditions(elements, parameters.parameters);
                     cases.push(
                         {
                             values: [macro litll.core.Litll.Arr(data)],
@@ -516,7 +520,7 @@ class IdlToHaxeDelitllfierConverter
                                 {
                                     case EnumConstructorKind.Normal:
                                         var label = TupleElement.Label(new LitllString(name.name, name.tag));
-                                        var guardConditions = createGuardConditions(elements);
+                                        var guardConditions = createTupleGuardConditions(elements, parameters.parameters);
                                         cases.push(
                                             {
                                                 values: [macro litll.core.Litll.Arr(data)],
@@ -541,7 +545,7 @@ class IdlToHaxeDelitllfierConverter
                                         }
                                         
                                     case EnumConstructorKind.Tuple:
-                                        var guardConditions = createGuardConditions(elements);
+                                        var guardConditions = createTupleGuardConditions(elements, parameters.parameters);
                                         cases.push(
                                             {
                                                 values: [macro litll.core.Litll.Arr(data)],
@@ -574,7 +578,17 @@ class IdlToHaxeDelitllfierConverter
             switch (constructor)
             {
                 case EnumConstructor.Primitive(name):
-                    addPrimitiveCase(name, name.name);
+                    switch (name.kind)
+                    {
+                        case EnumConstructorKind.Normal:
+                            addPrimitiveCase(name, name.name);
+                    
+                        case EnumConstructorKind.Tuple:
+                            throw new IdlException("tuple is not allowed for primitive enum constructor");
+                            
+                        case EnumConstructorKind.Unfold:
+                            throw new IdlException("unfold is not allowed for primitive enum constructor");
+                    }
                     
                 case EnumConstructor.Parameterized(parameterized):
                     var elements = parameterized.elements;
@@ -627,65 +641,9 @@ class IdlToHaxeDelitllfierConverter
             ),
             pos: null
         };
-        
+         
         return macro return $switchExpr;
 	}
-    
-    private function createGuardConditions(elements:Array<TupleElement>):Array<Expr>
-    {
-        var result = [];
-        var min:Int = 0;
-        var more:Bool = false;
-        
-        for (argument in elements)
-        {
-            switch (argument)
-            {
-                case TupleElement.Label(value):
-                    if (!more)
-                    {
-                        var string = {
-                            expr: ExprDef.EConst(Constant.CString(value.data)),
-                            pos: null,
-                        }
-                        var index = {
-                            expr: ExprDef.EConst(Constant.CInt(Std.string(min))),
-                            pos: null,
-                        }
-                        result.push(macro data.data[$index].match(litll.core.Litll.Str(_.data => $string)));
-                    }
-                    min++;
-                    
-                case TupleElement.Argument(argument):
-                    switch (argument.name.kind)
-                    {
-                        case ArgumentKind.Normal:
-                            min++;
-                            
-                        case ArgumentKind.Rest | ArgumentKind.Optional:
-                            more = true;
-                            
-                        case ArgumentKind.Unfold:
-                            argument.type;
-                    }
-            }
-        }
-        
-        var value = {
-            expr: ExprDef.EConst(Constant.CInt(Std.string(min))),
-            pos: null,
-        }
-        if (more)
-        {
-            result.unshift(macro data.length >= $value);
-        }
-        else
-        {
-            result.unshift(macro data.length == $value);
-        }
-        
-        return result;
-    }
     
     private static function createAndExpr(exprs:Array<Expr>):Expr 
     {
@@ -713,7 +671,7 @@ class IdlToHaxeDelitllfierConverter
         var instantiationElements = createStructInstantiationElements(parameters, elements);
         var instantiationExpr = createClassInstantiationExpr((macro context), instantiationElements.declarations, instantiationElements.references, sourcePath, parameters);
         
-        return macro switch (context.litll)
+        return macro return switch (context.litll)
         {
             case litll.core.Litll.Str(string):
                 litll.core.ds.Result.Err(
@@ -740,28 +698,47 @@ class IdlToHaxeDelitllfierConverter
             switch (field)
             {
                 case StructElement.Field(field):
-                    switch (field.name.kind)
+                    switch [field.name.kind, field.defaultValue]
                     {
-                        case StructFieldKind.Normal:
+                        case [StructFieldKind.Normal, Option.None]:
+                            declarations.push(macro var $id = null);
+                            var guards = createFieldGuardConditions(field.name, field.type, parameters.parameters);
+                            
+                        case [StructFieldKind.Normal, Option.Some(defaultValue)]:
+                            declarations.push(macro var $id = null);
+                            var guards = createFieldGuardConditions(field.name, field.type, parameters.parameters);
+                            
+                        case [StructFieldKind.Array, Option.None]:
+                            declarations.push(macro var $id = []);
+                            var guards = createFieldGuardConditions(field.name, field.type, parameters.parameters);
+                            
+                        case [StructFieldKind.Optional, Option.None]:
+                            declarations.push(macro var $id = haxe.ds.Option.None);
+                            var guards = createFieldGuardConditions(field.name, field.type, parameters.parameters);
+                            
+                        case [StructFieldKind.Unfold, Option.None]:
                             declarations.push(macro var $id = null);
                             
-                        case StructFieldKind.Array:
-                            declarations.push(macro var $id = []);
-                            
-                        case StructFieldKind.Optional:
-                            declarations.push(macro var $id = haxe.ds.Option.None);
-                            
-                        case StructFieldKind.Unfold:
+                        case [StructFieldKind.Unfold, Option.Some(defaultValue)]:
                             declarations.push(macro var $id = null);
                             
-                        case StructFieldKind.OptionalUnfold:
+                        case [StructFieldKind.OptionalUnfold, Option.None]:
                             declarations.push(macro var $id = haxe.ds.Option.None);
                             
-                        case StructFieldKind.ArrayUnfold:
+                        case [StructFieldKind.ArrayUnfold, Option.None]:
                             declarations.push(macro var $id = []);
+                            
+                        case [StructFieldKind.ArrayUnfold, Option.Some(_)]
+                            | [StructFieldKind.OptionalUnfold, Option.Some(_)]
+                            | [StructFieldKind.Array, Option.Some(_)]
+                            | [StructFieldKind.Optional, Option.Some(_)]:
+                            
+                            throw new IdlException("unsupported default value kind: " + field.name.kind);
                     }
                     
-                case StructElement.Label(name):
+                    references.push(macro $i{id});
+                    
+                case StructElement.Label(name) | StructElement.NestedLabel(name):
                     switch (name.kind)
                     {
                         case StructFieldKind.Normal:
@@ -769,12 +746,14 @@ class IdlToHaxeDelitllfierConverter
                             
                         case StructFieldKind.Array:
                             declarations.push(macro var $id = 0);
+                            references.push(macro $i{id});
+                            
+                        case StructFieldKind.Optional:
+                            declarations.push(macro var $id = false);
+                            references.push(macro $i{id});
                             
                         case StructFieldKind.Unfold:
                             throw new IdlException("unfold suffix(<) for label is not supported");
-                            
-                        case StructFieldKind.Optional:
-                            throw new IdlException("optional suffix(?) for label is not supported");
                             
                         case StructFieldKind.ArrayUnfold:
                             throw new IdlException("array unfold suffix(<..) for label is not supported");
@@ -784,37 +763,60 @@ class IdlToHaxeDelitllfierConverter
                     }
             }
             
-            references.push(macro $i{id});
         }
         
         cases.push(
             {
                 // case data:
                 values : [macro data],
-                expr: macro litll.core.ds.Result.Err(
+                expr: macro return litll.core.ds.Result.Err(
                     litll.idl.delitllfy.DelitllfyError.ofLitll(
                         context.litll, 
                         
                         // TODO: target list
-                        litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumLabel([])
+                        litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])
                     )
                 )
             }
         );
-        declarations.push(
-            {
-                expr: ExprDef.ESwitch(
-                    macro context.litll,
-                    cases,
-                    null
-                ),
-                pos: null
-            }
-        );
-        new HeaderDocumentDelitllfier();
+        var switchExpr = {
+            expr: ExprDef.ESwitch(
+                macro data,
+                cases,
+                null
+            ),
+            pos: null
+        }
+        declarations.push(macro for (data in array.data) $switchExpr);
+        
         return {
             declarations: declarations,
             references: references,
         }
+    }
+    
+    // ==============================================================
+    // guard
+    // ==============================================================
+    private function createTupleGuardConditions(elements:Array<TupleElement>, definitionParameters:Array<TypeName>):Array<Expr>
+    {
+        return new DelitllfyGuardCondition(elements, context.source, definitionParameters).getConditionExprs();
+    }
+    
+    private function createFieldGuardConditions(name:StructFieldName, type:TypeReference, definitionParameters:Array<TypeName>):Array<Expr>
+    {
+        return createTupleGuardConditions(
+            [
+                TupleElement.Label(new LitllString(name.name, name.tag)),
+                TupleElement.Argument(
+                    new Argument(
+                        new ArgumentName(name.name, name.tag),
+                        type,
+                        Option.None
+                    )
+                )
+            ],
+            definitionParameters
+        );
     }
 }

@@ -12,7 +12,29 @@ class StructElementDelitllfier {
                 };
             }));
         };
-        case litll.core.Litll.Arr(data) if (data.length >= 2):{
+        case litll.core.Litll.Arr(data) if (data.length == 1 && data.data[0].match(litll.core.Litll.Str(_))):{
+            var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+            var data = {
+                var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.StructFieldNameDelitllfier.process)) {
+                    case litll.core.ds.Result.Ok(data):{
+                        data;
+                    };
+                    case litll.core.ds.Result.Err(error):{
+                        return litll.core.ds.Result.Err(error);
+                    };
+                };
+                litll.core.ds.Result.Ok(litll.idl.std.data.idl.StructElement.NestedLabel(arg0));
+            };
+            switch (arrayContext.closeOrError()) {
+                case haxe.ds.Option.None:{
+                    data;
+                };
+                case haxe.ds.Option.Some(error):{
+                    litll.core.ds.Result.Err(error);
+                };
+            };
+        };
+        case litll.core.Litll.Arr(data) if (2 <= data.length && data.length <= 3 && data.data[0].match(litll.core.Litll.Str(_))):{
             litll.core.ds.Result.Ok(litll.idl.std.data.idl.StructElement.Field(switch (litll.idl.std.delitllfy.idl.StructFieldDelitllfier.process(context)) {
                 case litll.core.ds.Result.Ok(data):{
                     data;
@@ -22,6 +44,6 @@ class StructElementDelitllfier {
                 };
             }));
         };
-        case data:litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumConstructor([])));
+        case data:litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedEnumConstructor(["nested_label"])));
     };
 }
