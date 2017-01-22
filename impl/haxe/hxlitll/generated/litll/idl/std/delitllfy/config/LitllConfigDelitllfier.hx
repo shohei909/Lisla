@@ -10,6 +10,8 @@ class LitllConfigDelitllfier {
                 var arg0 = [];
                 var arg1 = [];
                 for (data in array.data) switch data {
+                    case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "idl")) && data.data[1].match(litll.core.Litll.Str(_))):null;
+                    case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "extention")) && data.data[1].match(litll.core.Litll.Str(_))):null;
                     case data:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                 };
                 var instance = new litll.idl.std.data.config.LitllConfig(arg0, arg1);

@@ -7,10 +7,12 @@ class TypeReferenceDocumentDelitllfier {
         };
         case litll.core.Litll.Arr(array):{
             {
-                var arg0 = false;
+                var arg0 = haxe.ds.Option.None;
                 var arg1 = [];
                 var arg2 = [];
                 for (data in array.data) switch data {
+                    case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "completion_const"))):null;
+                    case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "completion_type"))):null;
                     case data:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                 };
                 var instance = new litll.idl.std.data.idl.document.TypeReferenceDocument(arg0, arg1, arg2);

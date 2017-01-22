@@ -32,7 +32,6 @@ import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
 import litll.idl.std.data.idl.UnfoldedTypeDefinition;
 import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
-import litll.idl.std.delitllfy.document.HeaderDocumentDelitllfier;
 import litll.idl.std.tools.idl.TypeNameTools;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
@@ -424,25 +423,21 @@ class IdlToHaxeDelitllfierConverter
         }
         inline function _addTupleCase(instantiationExpr:Expr, elements:Array<TupleElement>):Void
         {
-            var guardConditions = createTupleGuardConditions(elements, parameters.parameters);
-            var caseData = {
-                values: [macro litll.core.Litll.Arr(data)],
-                guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
-                expr: macro  {
-                    var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
-                    var data = $instantiationExpr;
-                    switch (arrayContext.closeOrError())
-                    {
-                        case haxe.ds.Option.None:
-                            data;
-                            
-                        case haxe.ds.Option.Some(error):
-                            litll.core.ds.Result.Err(error);
-                    }
+            var guard = createTupleGuardConditions(elements, parameters.parameters);
+            var caseExpr = macro  {
+                var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+                var data = $instantiationExpr;
+                switch (arrayContext.closeOrError())
+                {
+                    case haxe.ds.Option.None:
+                        data;
+                        
+                    case haxe.ds.Option.Some(error):
+                        litll.core.ds.Result.Err(error);
                 }
-            };
+            }
             
-            cases.push(caseData);
+            cases.push(createTupleCase(guard, caseExpr));
         }
         inline function addTupleCase(name:EnumConstructorName, elements:Array<TupleElement>):Void
         {
@@ -477,89 +472,7 @@ class IdlToHaxeDelitllfierConverter
         }
         function _addUnfoldCase(instantiationExpr:Expr, type:TypeReference):Void
         {
-            switch (type.unfold(context.source, parameters.parameters))
-            {
-                case UnfoldedTypeDefinition.Arr(_):
-                    cases.push(
-                        {
-                            values: [macro litll.core.Litll.Arr(_)],
-                            expr: instantiationExpr,
-                        }
-                    );
-                    
-                case UnfoldedTypeDefinition.Str:
-                    cases.push(
-                        {
-                            values: [macro litll.core.Litll.Str(_)],
-                            expr: instantiationExpr,
-                        }
-                    );
-                    
-                case UnfoldedTypeDefinition.Tuple(elements):
-                    var guardConditions = createTupleGuardConditions(elements, parameters.parameters);
-                    cases.push(
-                        {
-                            values: [macro litll.core.Litll.Arr(data)],
-                            guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
-                            expr: instantiationExpr,
-                        }
-                    );
-                    
-                case UnfoldedTypeDefinition.Enum(constructors):
-                    for (constructor in constructors)
-                    {
-                        switch (constructor)
-                        {
-                            case EnumConstructor.Primitive(name):
-                                _addPrimitiveCase(instantiationExpr, name.name);
-                                    
-                            case EnumConstructor.Parameterized(parameterized):
-                                var elements = parameterized.elements;
-                                var name = parameterized.name;
-                                switch (name.kind)
-                                {
-                                    case EnumConstructorKind.Normal:
-                                        var label = TupleElement.Label(new LitllString(name.name, name.tag));
-                                        var guardConditions = createTupleGuardConditions(elements, parameters.parameters);
-                                        cases.push(
-                                            {
-                                                values: [macro litll.core.Litll.Arr(data)],
-                                                guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
-                                                expr: instantiationExpr,
-                                            }
-                                        );
-                                        
-                                    case EnumConstructorKind.Unfold:
-                                        if (elements.length != 1)
-                                        {
-                                            throw new IdlException("unfold target type number must be one. but actual " + elements.length);
-                                        }
-                                        
-                                        switch (elements[0])
-                                        {
-                                            case TupleElement.Argument(argument):
-                                                _addUnfoldCase(instantiationExpr, argument.type);
-                                                
-                                            case TupleElement.Label(litllString):
-                                                _addPrimitiveCase(instantiationExpr, litllString.data);
-                                        }
-                                        
-                                    case EnumConstructorKind.Tuple:
-                                        var guardConditions = createTupleGuardConditions(elements, parameters.parameters);
-                                        cases.push(
-                                            {
-                                                values: [macro litll.core.Litll.Arr(data)],
-                                                guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
-                                                expr: instantiationExpr, 
-                                            }
-                                        );
-                                }
-                        }
-                    }
-                    
-                case UnfoldedTypeDefinition.Struct(_):
-                    throw new IdlException("struct " + sourcePath.toString() + " can't be unfold");
-            }
+            createUnfoldFieldCase(type, parameters.parameters, instantiationExpr, cases);
         }
         
         inline function addUnfoldCase(name:EnumConstructorName, type:TypeReference):Void
@@ -645,23 +558,6 @@ class IdlToHaxeDelitllfierConverter
         return macro return $switchExpr;
 	}
     
-    private static function createAndExpr(exprs:Array<Expr>):Expr 
-    {
-        return if (exprs.length == 0)
-        {
-            macro true;
-        }
-        else if (exprs.length == 1)
-        {
-            exprs[0];
-        }
-        else
-        {
-            expr: ExprDef.EBinop(Binop.OpBoolAnd, exprs[0], createAndExpr(exprs.slice(1))),
-            pos: null
-        };
-    }
-    
     
     // ==============================================================
     // struct
@@ -692,41 +588,66 @@ class IdlToHaxeDelitllfierConverter
         var references:Array<Expr> = [];
         var cases:Array<Case> = [];
         
-        for (field in elements)
+        for (element in elements)
         {
             var id = "arg" + references.length;
-            switch (field)
+            
+            inline function addOptionDeclaration():Expr
+            {
+                declarations.push(macro var $id = haxe.ds.Option.None);
+                return macro null;
+            }
+            inline function addArrayDeclaration():Expr
+            {
+                declarations.push(macro var $id = []);
+                return macro null;
+            }
+            
+            switch (element)
             {
                 case StructElement.Field(field):
+                    inline function addFieldCase(caseExpr:Expr):Void
+                    {
+                        cases.push(createFieldCase(field.name, field.type, parameters.parameters, caseExpr));
+                    }
+                    inline function addUnfoldCase(caseExpr:Expr):Void
+                    {
+                        createUnfoldFieldCase(field.type, parameters.parameters, caseExpr, cases);
+                    }
+                    
                     switch [field.name.kind, field.defaultValue]
                     {
                         case [StructFieldKind.Normal, Option.None]:
-                            declarations.push(macro var $id = null);
-                            var guards = createFieldGuardConditions(field.name, field.type, parameters.parameters);
+                            var caseExpr = addOptionDeclaration();
+                            addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Normal, Option.Some(defaultValue)]:
-                            declarations.push(macro var $id = null);
-                            var guards = createFieldGuardConditions(field.name, field.type, parameters.parameters);
-                            
-                        case [StructFieldKind.Array, Option.None]:
-                            declarations.push(macro var $id = []);
-                            var guards = createFieldGuardConditions(field.name, field.type, parameters.parameters);
+                            var caseExpr = addOptionDeclaration();
+                            addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Optional, Option.None]:
-                            declarations.push(macro var $id = haxe.ds.Option.None);
-                            var guards = createFieldGuardConditions(field.name, field.type, parameters.parameters);
+                            var caseExpr = addOptionDeclaration();
+                            addFieldCase(caseExpr);
+                            
+                        case [StructFieldKind.Array, Option.None]:
+                            var caseExpr = addArrayDeclaration();
+                            addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Unfold, Option.None]:
-                            declarations.push(macro var $id = null);
+                            var caseExpr = addOptionDeclaration();
+                            addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.Unfold, Option.Some(defaultValue)]:
-                            declarations.push(macro var $id = null);
+                            var caseExpr = addOptionDeclaration();
+                            addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.OptionalUnfold, Option.None]:
-                            declarations.push(macro var $id = haxe.ds.Option.None);
+                            var caseExpr = addOptionDeclaration();
+                            addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.ArrayUnfold, Option.None]:
-                            declarations.push(macro var $id = []);
+                            var caseExpr = addArrayDeclaration();
+                            addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.ArrayUnfold, Option.Some(_)]
                             | [StructFieldKind.OptionalUnfold, Option.Some(_)]
@@ -742,14 +663,14 @@ class IdlToHaxeDelitllfierConverter
                     switch (name.kind)
                     {
                         case StructFieldKind.Normal:
-                            declarations.push(macro var $id = false);
+                            declarations.push(macro var $id = haxe.ds.Option.None);
                             
                         case StructFieldKind.Array:
-                            declarations.push(macro var $id = 0);
+                            declarations.push(macro var $id = []);
                             references.push(macro $i{id});
                             
                         case StructFieldKind.Optional:
-                            declarations.push(macro var $id = false);
+                            declarations.push(macro var $id = haxe.ds.Option.None);
                             references.push(macro $i{id});
                             
                         case StructFieldKind.Unfold:
@@ -798,12 +719,12 @@ class IdlToHaxeDelitllfierConverter
     // ==============================================================
     // guard
     // ==============================================================
-    private function createTupleGuardConditions(elements:Array<TupleElement>, definitionParameters:Array<TypeName>):Array<Expr>
+    private function createTupleGuardConditions(elements:Array<TupleElement>, definitionParameters:Array<TypeName>):DelitllfyGuardCondition
     {
-        return new DelitllfyGuardCondition(elements, context.source, definitionParameters).getConditionExprs();
+        return DelitllfyGuardCondition.createForTuple(elements, context.source, definitionParameters);
     }
     
-    private function createFieldGuardConditions(name:StructFieldName, type:TypeReference, definitionParameters:Array<TypeName>):Array<Expr>
+    private function createFieldGuardConditions(name:StructFieldName, type:TypeReference, definitionParameters:Array<TypeName>):DelitllfyGuardCondition
     {
         return createTupleGuardConditions(
             [
@@ -818,5 +739,84 @@ class IdlToHaxeDelitllfierConverter
             ],
             definitionParameters
         );
+    }
+    
+    // ==============================================================
+    // Case
+    // ==============================================================
+    private function createFieldCase(name:StructFieldName, type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr):Case
+    {
+        var guard = createTupleGuardConditions(
+            [
+                TupleElement.Label(new LitllString(name.name, name.tag)),
+                TupleElement.Argument(
+                    new Argument(
+                        new ArgumentName(name.name, name.tag),
+                        type,
+                        Option.None
+                    )
+                )
+            ],
+            definitionParameters
+        );
+        
+        return createTupleCase(guard, caseExpr);
+    }
+    private function createUnfoldFieldCase(type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr, outputCases:Array<Case>):Void
+    {
+        var unfoldedType = type.unfold(context.source, definitionParameters);
+        for (caseKind in DelitllfyCaseConditionTools.createForUnfoldedType(unfoldedType, context.source))
+        {
+            var caseData = switch (caseKind)
+            {
+                case DelitllfyCaseCondition.Arr(guard):
+                    createTupleCase(guard, caseExpr);
+                    
+                case DelitllfyCaseCondition.Str:
+                    {
+                        values: [macro litll.core.Litll.Str(_)],
+                        expr: caseExpr,
+                    }
+                    
+                case DelitllfyCaseCondition.Const(label):
+                    var stringExpr:Expr = {
+                        expr: ExprDef.EConst(Constant.CString(label)),
+                        pos: null,
+                    };
+                    {
+                        values: [macro litll.core.Litll.Str(data)],
+                        guard: (macro data.data == $stringExpr),
+                        expr: caseExpr,
+                    }
+            }
+            
+            outputCases.push(caseData);
+        }
+    }
+    private static function createTupleCase(guard:DelitllfyGuardCondition, caseExpr:Expr):Case
+    {
+        var guardConditions = guard.getConditionExprs();
+        return {
+            values: [macro litll.core.Litll.Arr(data)],
+            guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
+            expr: caseExpr,
+        }
+    }
+    
+    private static function createAndExpr(exprs:Array<Expr>):Expr 
+    {
+        return if (exprs.length == 0)
+        {
+            macro true;
+        }
+        else if (exprs.length == 1)
+        {
+            exprs[0];
+        }
+        else
+        {
+            expr: ExprDef.EBinop(Binop.OpBoolAnd, exprs[0], createAndExpr(exprs.slice(1))),
+            pos: null
+        };
     }
 }

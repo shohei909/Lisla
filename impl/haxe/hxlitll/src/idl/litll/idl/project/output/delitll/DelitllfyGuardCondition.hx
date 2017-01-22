@@ -21,12 +21,23 @@ class DelitllfyGuardCondition
     private var max:Option<Int>;
     private var conditions:Array<ConditionKind>;
     
-    public function new (elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>)
+    public function new (min:Int, max:Option<Int>, conditions:Array<ConditionKind>)
     {
-        min = 0;
-        max = Option.Some(0);
-        conditions = [];
-        process(elements, source, definitionParameters);
+        this.min = min;
+        this.max = max;
+        this.conditions = conditions;
+    }
+    
+    public static function any():DelitllfyGuardCondition
+    {
+        return new DelitllfyGuardCondition(0, Option.None, []);
+    }
+    
+    public static function createForTuple(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):DelitllfyGuardCondition 
+    {
+        var condition = new DelitllfyGuardCondition(0, Option.Some(0), []);
+        condition.process(elements, source, definitionParameters);
+        return condition;
     }
 
     private function process(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Void
@@ -213,7 +224,10 @@ class DelitllfyGuardCondition
                 result.push(macro data.length <= $maxValue);
                 
             case Option.None:
-                result.push(macro $minValue <= data.length);
+                if (0 < min)
+                {
+                    result.push(macro $minValue <= data.length);
+                }
         }
         
         
@@ -422,6 +436,7 @@ class DelitllfyGuardCondition
         }
         return result;
     }
+    
 }
 
 private enum ConditionKind

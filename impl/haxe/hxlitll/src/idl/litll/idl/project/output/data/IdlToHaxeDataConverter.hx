@@ -162,7 +162,6 @@ class IdlToHaxeDataConverter
         var typePath = ComplexType.TPath(field.type.toMacroTypePath(config));
         var name = field.name;
         
-        // TODO: default value
         typePath = switch (name.kind)
         {
             case StructFieldKind.Normal | StructFieldKind.Unfold:
@@ -197,7 +196,37 @@ class IdlToHaxeDataConverter
     
 	private static function convertStructElements(fields:Array<StructElement>, config:DataOutputConfig):Array<FunctionArg>
 	{
-		var args = [];
+		var args:Array<FunctionArg> = [];
+        inline function addLabel(name:StructFieldName, tagKind:ComplexType):Void
+        {
+            var typePath = switch (name.kind)
+            {
+                case StructFieldKind.Normal:
+                    tagKind;
+                    
+                case StructFieldKind.Array:
+                    macro:Array<$tagKind>;
+                    
+                case StructFieldKind.Optional:
+                    macro:haxe.ds.Option<$tagKind>;
+                    
+                case StructFieldKind.Unfold:
+                    throw new IdlException("unfold suffix(<) for label is not supported");
+                    
+                case StructFieldKind.ArrayUnfold:
+                    throw new IdlException("array unfold suffix(..<) for label is not supported");
+                    
+                case StructFieldKind.OptionalUnfold:
+                    throw new IdlException("optional unfold suffix(?<) for label is not supported");
+            }
+            args.push(
+                {
+                    name : name.toVariableName().getOrThrow(),
+                    type : typePath,
+                }
+            );
+        }
+        
         for (field in fields)
         {
             switch (field)
@@ -205,37 +234,11 @@ class IdlToHaxeDataConverter
                 case StructElement.Field(field):
                     args.push(convertField(field, config));
                     
-                case StructElement.Label(name) | StructElement.NestedLabel(name):
-                    switch (name.kind)
-                    {
-                        case StructFieldKind.Normal:
-                            
-                        case StructFieldKind.Array:
-                            args.push(
-                                {
-                                    name : name.toVariableName().getOrThrow(),
-                                    type : macro:Int,
-                                }
-                            );
-                            
-                        case StructFieldKind.Optional:
-                            args.push(
-                                {
-                                    name : name.toVariableName().getOrThrow(),
-                                    type : macro:litll.idl.std.data.core.LitllBoolean,
-                                }
-                            );
-                            
-                        case StructFieldKind.Unfold:
-                            throw new IdlException("unfold suffix(<) for label is not supported");
-                            
-                        case StructFieldKind.ArrayUnfold:
-                            throw new IdlException("array unfold suffix(..<) for label is not supported");
-                            
-                        case StructFieldKind.OptionalUnfold:
-                            throw new IdlException("optional unfold suffix(?<) for label is not supported");
-                    }
+                case StructElement.Label(name):
+                    addLabel(name, macro:litll.core.ds.Maybe<litll.core.tag.StringTag>);
                     
+                case StructElement.NestedLabel(name):
+                    addLabel(name, macro:litll.core.ds.Maybe<litll.core.tag.ArrayTag>);
             }
         }
         

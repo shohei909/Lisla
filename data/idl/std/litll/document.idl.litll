@@ -10,10 +10,10 @@
 ]
 
 [struct HeaderDocument
-    [encoding DocumentEncoding]
+    [encoding? DocumentEncoding]
     [license.. License]
     [author.. Author]
-    [schema
+    [schema?
         /// [completion]
         TypeReference
     ]
