@@ -11,11 +11,11 @@ class TypeDefinitionDocumentDelitllfier {
                 var arg1 = haxe.ds.Option.None;
                 var arg2 = [];
                 var arg3 = [];
-                for (data in array.data) switch data {
-                    case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "document_tag"))):null;
-                    case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "completion_const"))):null;
-                    case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "completion_type"))):null;
-                    case data:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
+                for (litll in array.data) switch litll {
+                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "document_tag"))):arg0.push(null);
+                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "completion_const"))):arg2.push(null);
+                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "completion_type"))):arg3.push(null);
+                    case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                 };
                 var instance = new litll.idl.std.data.idl.document.TypeDefinitionDocument(arg0, arg1, arg2, arg3);
                 litll.core.ds.Result.Ok(instance);

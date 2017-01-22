@@ -12,7 +12,7 @@ class TypeReferenceDelitllfier {
                 };
             }));
         };
-        case litll.core.Litll.Arr(data) if (1 <= data.length && data.data[0].match(litll.core.Litll.Str(_))):{
+        case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_))):{
             litll.core.ds.Result.Ok(litll.idl.std.data.idl.TypeReference.Generic(switch (litll.idl.std.delitllfy.idl.GenericTypeReferenceDelitllfier.process(context)) {
                 case litll.core.ds.Result.Ok(data):{
                     data;

@@ -2,8 +2,8 @@
 package litll.idl.std.delitllfy.idl;
 class ImportDeclarationDelitllfier {
     public static function process(context:litll.idl.delitllfy.DelitllfyContext):litll.core.ds.Result<litll.idl.std.data.idl.ImportDeclaration, litll.idl.delitllfy.DelitllfyError> return switch context.litll {
-        case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "import")) && data.data[1].match(litll.core.Litll.Str(_))):{
-            var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "import")) && array.data[1].match(litll.core.Litll.Str(_))):{
+            var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
             var data = {
                 arrayContext.readLabel("import");
                 var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.ModulePathDelitllfier.process)) {

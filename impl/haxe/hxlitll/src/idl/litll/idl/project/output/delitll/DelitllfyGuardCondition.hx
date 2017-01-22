@@ -202,7 +202,7 @@ class DelitllfyGuardCondition
         }
     }
     
-    public function getConditionExprs():Array<Expr>
+    public function getConditionExprs(dataExpr:Expr):Array<Expr>
     {
         var result = [];
         var minValue = {
@@ -213,20 +213,20 @@ class DelitllfyGuardCondition
         switch (max)
         {
             case Option.Some(max) if (max == min):
-                result.push(macro data.length == $minValue);
+                result.push(macro $dataExpr.length == $minValue);
                 
             case Option.Some(max):
                 var maxValue = {
                     expr: ExprDef.EConst(Constant.CInt(Std.string(max))),
                     pos: null,
                 }
-                result.push(macro $minValue <= data.length);
-                result.push(macro data.length <= $maxValue);
+                result.push(macro $minValue <= $dataExpr.length);
+                result.push(macro $dataExpr.length <= $maxValue);
                 
             case Option.None:
                 if (0 < min)
                 {
-                    result.push(macro $minValue <= data.length);
+                    result.push(macro $minValue <= $dataExpr.length);
                 }
         }
         
@@ -246,7 +246,7 @@ class DelitllfyGuardCondition
                         expr: ExprDef.EConst(Constant.CString(key)),
                         pos: null,
                     }
-                    result.push(macro data.data[$index].match(litll.core.Litll.Str(_.data => $string)));
+                    result.push(macro $dataExpr.data[$index].match(litll.core.Litll.Str(_.data => $string)));
                 }
             }
             
@@ -256,14 +256,14 @@ class DelitllfyGuardCondition
                     addConst(strings);
                     
                 case ConditionKind.Str:
-                    result.push(macro data.data[$index].match(litll.core.Litll.Str(_)));
+                    result.push(macro $dataExpr.data[$index].match(litll.core.Litll.Str(_)));
                     
                 case ConditionKind.Arr:
-                    result.push(macro data.data[$index].match(litll.core.Litll.Arr(_)));
+                    result.push(macro $dataExpr.data[$index].match(litll.core.Litll.Arr(_)));
                     
                 case ConditionKind.ArrOrConst(strings):
                     addConst(strings);
-                    result.push(macro data.data[$index].match(litll.core.Litll.Arr(_)));
+                    result.push(macro $dataExpr.data[$index].match(litll.core.Litll.Arr(_)));
                     
                 case ConditionKind.Never:
                     result.push(macro false);

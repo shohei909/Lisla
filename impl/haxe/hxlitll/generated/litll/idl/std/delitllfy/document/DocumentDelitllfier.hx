@@ -8,9 +8,16 @@ class DocumentDelitllfier {
         case litll.core.Litll.Arr(array):{
             {
                 var arg0 = haxe.ds.Option.None;
-                for (data in array.data) switch data {
-                    case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_.data => "comment")) && data.data[1].match(litll.core.Litll.Str(_))):null;
-                    case data:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
+                for (litll in array.data) switch litll {
+                    case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "comment")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg0) {
+                        case haxe.ds.Option.Some(data):{
+                            return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated(name)));
+                        };
+                        case haxe.ds.Option.None:{
+                            arg0 = null;
+                        };
+                    };
+                    case litll:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                 };
                 var instance = new litll.idl.std.data.document.Document(arg0);
                 litll.core.ds.Result.Ok(instance);

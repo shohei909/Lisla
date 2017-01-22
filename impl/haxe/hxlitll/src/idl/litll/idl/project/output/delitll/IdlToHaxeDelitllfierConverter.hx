@@ -325,8 +325,8 @@ class IdlToHaxeDelitllfierConverter
                         )
                     );
                     
-                case litll.core.Litll.Arr(data):
-                    var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+                case litll.core.Litll.Arr(array):
+                    var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
                     var data = $instantiationExpr;
                     switch (arrayContext.closeOrError())
                     {
@@ -381,10 +381,7 @@ class IdlToHaxeDelitllfierConverter
                     references.push(macro $i{name});
                     
                 case TupleElement.Label(data):
-                    var value = {
-                        expr: ExprDef.EConst(Constant.CString(data.data)),
-                        pos: null,
-                    }
+                    var value = getStringConstExpr(data.data);
                     declarations.push(macro arrayContext.readLabel($value));
             }
         }
@@ -425,7 +422,7 @@ class IdlToHaxeDelitllfierConverter
         {
             var guard = createTupleGuardConditions(elements, parameters.parameters);
             var caseExpr = macro  {
-                var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+                var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
                 var data = $instantiationExpr;
                 switch (arrayContext.closeOrError())
                 {
@@ -581,7 +578,6 @@ class IdlToHaxeDelitllfierConverter
                 $instantiationExpr;
         }
     }
-    
     private function createStructInstantiationElements(parameters:TypeParameterDeclarationCollection, elements:Array<StructElement>):{ declarations:Array<Expr>, references:Array<Expr> }
     {
         var declarations:Array<Expr> = [];
@@ -592,15 +588,29 @@ class IdlToHaxeDelitllfierConverter
         {
             var id = "arg" + references.length;
             
-            inline function addOptionDeclaration():Expr
+            inline function addOptionDeclaration(instantationExpr:Expr, name:String):Expr
             {
                 declarations.push(macro var $id = haxe.ds.Option.None);
-                return macro null;
+                var nameExpr = getStringConstExpr(name);
+                
+                return macro switch ($i{id})
+                {
+                    case haxe.ds.Option.Some(data):
+                        return litll.core.ds.Result.Err(
+                            litll.idl.delitllfy.DelitllfyError.ofLitll(
+                                litll,
+                                litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated(name)
+                            )
+                        );
+                        
+                    case haxe.ds.Option.None:
+                        $i{id} = $instantationExpr;
+                }
             }
-            inline function addArrayDeclaration():Expr
+            inline function addArrayDeclaration(instantationExpr:Expr):Expr
             {
                 declarations.push(macro var $id = []);
-                return macro null;
+                return macro $i{id}.push($instantationExpr);
             }
             
             switch (element)
@@ -618,35 +628,43 @@ class IdlToHaxeDelitllfierConverter
                     switch [field.name.kind, field.defaultValue]
                     {
                         case [StructFieldKind.Normal, Option.None]:
-                            var caseExpr = addOptionDeclaration();
+                            var instantationExpr = macro null;
+                            var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Normal, Option.Some(defaultValue)]:
-                            var caseExpr = addOptionDeclaration();
+                            var instantationExpr = macro null;
+                            var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Optional, Option.None]:
-                            var caseExpr = addOptionDeclaration();
+                            var instantationExpr = macro null;
+                            var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Array, Option.None]:
-                            var caseExpr = addArrayDeclaration();
+                            var instantationExpr = macro null;
+                            var caseExpr = addArrayDeclaration(instantationExpr);
                             addFieldCase(caseExpr);
                             
                         case [StructFieldKind.Unfold, Option.None]:
-                            var caseExpr = addOptionDeclaration();
+                            var instantationExpr = macro null;
+                            var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.Unfold, Option.Some(defaultValue)]:
-                            var caseExpr = addOptionDeclaration();
+                            var instantationExpr = macro null;
+                            var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.OptionalUnfold, Option.None]:
-                            var caseExpr = addOptionDeclaration();
+                            var instantationExpr = macro null;
+                            var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                             addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.ArrayUnfold, Option.None]:
-                            var caseExpr = addArrayDeclaration();
+                            var instantationExpr = macro null;
+                            var caseExpr = addArrayDeclaration(instantationExpr);
                             addUnfoldCase(caseExpr);
                             
                         case [StructFieldKind.ArrayUnfold, Option.Some(_)]
@@ -689,10 +707,10 @@ class IdlToHaxeDelitllfierConverter
         cases.push(
             {
                 // case data:
-                values : [macro data],
+                values : [macro litll],
                 expr: macro return litll.core.ds.Result.Err(
                     litll.idl.delitllfy.DelitllfyError.ofLitll(
-                        context.litll, 
+                        litll, 
                         
                         // TODO: target list
                         litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])
@@ -702,13 +720,13 @@ class IdlToHaxeDelitllfierConverter
         );
         var switchExpr = {
             expr: ExprDef.ESwitch(
-                macro data,
+                macro litll,
                 cases,
                 null
             ),
             pos: null
         }
-        declarations.push(macro for (data in array.data) $switchExpr);
+        declarations.push(macro for (litll in array.data) $switchExpr);
         
         return {
             declarations: declarations,
@@ -723,7 +741,6 @@ class IdlToHaxeDelitllfierConverter
     {
         return DelitllfyGuardCondition.createForTuple(elements, context.source, definitionParameters);
     }
-    
     private function createFieldGuardConditions(name:StructFieldName, type:TypeReference, definitionParameters:Array<TypeName>):DelitllfyGuardCondition
     {
         return createTupleGuardConditions(
@@ -742,7 +759,7 @@ class IdlToHaxeDelitllfierConverter
     }
     
     // ==============================================================
-    // Case
+    // case
     // ==============================================================
     private function createFieldCase(name:StructFieldName, type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr):Case
     {
@@ -779,13 +796,10 @@ class IdlToHaxeDelitllfierConverter
                     }
                     
                 case DelitllfyCaseCondition.Const(label):
-                    var stringExpr:Expr = {
-                        expr: ExprDef.EConst(Constant.CString(label)),
-                        pos: null,
-                    };
+                    var stringExpr:Expr = getStringConstExpr(label);
                     {
-                        values: [macro litll.core.Litll.Str(data)],
-                        guard: (macro data.data == $stringExpr),
+                        values: [macro litll.core.Litll.Str(str)],
+                        guard: (macro str.data == $stringExpr),
                         expr: caseExpr,
                     }
             }
@@ -793,11 +807,12 @@ class IdlToHaxeDelitllfierConverter
             outputCases.push(caseData);
         }
     }
+    
     private static function createTupleCase(guard:DelitllfyGuardCondition, caseExpr:Expr):Case
     {
-        var guardConditions = guard.getConditionExprs();
+        var guardConditions = guard.getConditionExprs(macro array);
         return {
-            values: [macro litll.core.Litll.Arr(data)],
+            values: [macro litll.core.Litll.Arr(array)],
             guard: if (guardConditions.length == 0) null else createAndExpr(guardConditions),
             expr: caseExpr,
         }
@@ -817,6 +832,17 @@ class IdlToHaxeDelitllfierConverter
         {
             expr: ExprDef.EBinop(Binop.OpBoolAnd, exprs[0], createAndExpr(exprs.slice(1))),
             pos: null
+        };
+    }
+    
+    // ==============================================================
+    // case
+    // ==============================================================
+    private static function getStringConstExpr(label:String):Expr
+    {
+        return {
+            expr: ExprDef.EConst(Constant.CString(label)),
+            pos: null,
         };
     }
 }

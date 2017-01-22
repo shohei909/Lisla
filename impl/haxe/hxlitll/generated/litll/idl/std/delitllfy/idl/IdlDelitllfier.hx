@@ -6,8 +6,8 @@ class IdlDelitllfier {
             case litll.core.Litll.Str(string):{
                 litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.CantBeString));
             };
-            case litll.core.Litll.Arr(data):{
-                var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
+            case litll.core.Litll.Arr(array):{
+                var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
                 var data = {
                     var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.PackageDeclarationDelitllfier.process)) {
                         case litll.core.ds.Result.Ok(data):{

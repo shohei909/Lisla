@@ -113,6 +113,9 @@ class DelitllfyError
 			case DelitllfyErrorKind.UnmatchedLabel(expected):
 				"unmatched enum label. '" + expected + "' expected";
 				
+			case DelitllfyErrorKind.StructElementDupplicated(name):
+				"struct element '" + name + "' is dupplicated";
+				
 			case DelitllfyErrorKind.CantBeArray:
 				"can't be array";
 				

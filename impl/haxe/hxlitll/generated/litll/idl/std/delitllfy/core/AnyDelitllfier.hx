@@ -12,7 +12,7 @@ class AnyDelitllfier {
                 };
             }));
         };
-        case litll.core.Litll.Arr(data):{
+        case litll.core.Litll.Arr(array):{
             litll.core.ds.Result.Ok(litll.core.Litll.Arr(switch (ArrayDelitllfier.process(context, litll.idl.std.delitllfy.core.AnyDelitllfier.process)) {
                 case litll.core.ds.Result.Ok(data):{
                     data;

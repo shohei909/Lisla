@@ -12,7 +12,7 @@ class TypeParameterDeclarationDelitllfier {
                 };
             }));
         };
-        case litll.core.Litll.Arr(data) if (data.length == 2 && data.data[0].match(litll.core.Litll.Str(_))):{
+        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_))):{
             litll.core.ds.Result.Ok(litll.idl.std.data.idl.TypeParameterDeclaration.Dependence(switch (litll.idl.std.delitllfy.idl.TypeDependenceDeclarationDelitllfier.process(context)) {
                 case litll.core.ds.Result.Ok(data):{
                     data;
