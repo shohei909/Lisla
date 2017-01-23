@@ -1,4 +1,4 @@
-package litll.idl.generator;
+package;
 
 import haxe.ds.Option;
 import haxe.io.Path;

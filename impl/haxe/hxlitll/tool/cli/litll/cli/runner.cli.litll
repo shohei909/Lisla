@@ -1,0 +1,16 @@
+[version 1.0.0]
+[about 
+    """
+    Hxlitll Command Line Tools
+    """
+]
+[subcommand convert
+    [short c]
+    [input litll.file.FilePath]
+    [input litll.file.FilePath]
+]
+[subcommand idl
+    [arg idl
+        [input [litll.file.FilePathWithExtension [litllconfig.litll]]]
+    ]
+]

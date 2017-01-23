@@ -27,7 +27,7 @@ class PackagePath
 	{
 		if (string.length == 0)
 		{
-			throw "Package name must not be empty.";
+			//throw "Package name must not be empty.";
 		}
 		else if (!headEReg.match(string.substr(0, 1)))
 		{

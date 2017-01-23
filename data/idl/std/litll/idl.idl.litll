@@ -7,17 +7,17 @@
 
 /// [document_tag litll.idl.document.IdlDocumentTag]
 [tuple Idl
-    [package_declaration PackageDeclaration]
+    [package_declaration PackageDeclaration [package '']]
     [import_declarations.. ImportDeclaration]
     [type_definitions.. TypeDefinition]
 ]
 
-[enum PackageDeclaration
-    [package [package PackagePath]]
+[tuple PackageDeclaration
+    package [package PackagePath]
 ]
 
-[enum ImportDeclaration
-    [import [module ModulePath]]
+[tuple ImportDeclaration
+    import [module ModulePath]
 ]
 
 /// [document_tag litll.idl.document.TypeDefinitionDocumentTag]

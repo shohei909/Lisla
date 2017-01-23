@@ -28,7 +28,7 @@ class ArgumentName
 		}
 		else if (name.endsWith("<"))
 		{
-			name = name.substr(0, name.length - 2);
+			name = name.substr(0, name.length - 1);
 			kind = ArgumentKind.Unfold;
 		}
 		else

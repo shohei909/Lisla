@@ -2,9 +2,9 @@
 package litll.idl.std.data.config;
 class LitllConfig {
     public var idl : Array<litll.idl.std.data.config.LitllIdlSourceDirectory>;
-    public var extention : Array<litll.idl.std.data.config.LitllSubextention>;
-    public function new(idl:Array<litll.idl.std.data.config.LitllIdlSourceDirectory>, extention:Array<litll.idl.std.data.config.LitllSubextention>) {
+    public var extension : litll.idl.std.data.config.LitllFileExtensionConfig;
+    public function new(idl:Array<litll.idl.std.data.config.LitllIdlSourceDirectory>, extension:litll.idl.std.data.config.LitllFileExtensionConfig) {
         this.idl = idl;
-        this.extention = extention;
+        this.extension = extension;
     }
 }

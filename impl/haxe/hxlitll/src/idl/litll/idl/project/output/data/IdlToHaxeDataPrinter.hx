@@ -44,7 +44,7 @@ class IdlToHaxeDataPrinter
 				}
 				return ProcessResult.Failure;
 		}
-		
+        
 		for (key in types.keys())
 		{
 			var config = context.dataOutputConfig;

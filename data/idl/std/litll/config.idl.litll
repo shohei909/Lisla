@@ -1,13 +1,16 @@
 /// 'IDL for Litll IDL configure file(.litllconfig.litll)'
 /// [schema litll.idl.Idl]
-
 [package litll]
+
 [import litll.file]
+[import litll.idl]
 
 [struct LitllConfig
     [idl.. LitllIdlSourceDirectory]
-    [extention.. LitllSubextention]
+    [extension..< LitllFileExtensionConfig]
 ]
 
 [newtype LitllIdlSourceDirectory FilePath]
-[newtype LitllSubextention String]
+[tuple LitllFileExtensionConfig 
+    extension [target FileExtension] [type TypeReference]
+]

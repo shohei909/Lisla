@@ -15,12 +15,14 @@ import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeDependenceName;
 import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.data.idl.TypeNameDeclaration;
 import litll.idl.std.data.idl.TypeParameterDeclaration;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
 import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
+import litll.idl.std.tools.idl.TypeReferenceTools;
 using litll.idl.std.tools.idl.TypeDefinitionTools;
 
 class TypeDefinitionPreprocessor
@@ -91,6 +93,25 @@ class TypeDefinitionPreprocessor
             case TypeDefinition.Tuple(_, arguments):
 				processTupleElements(arguments);
 		}
+        
+        switch (TypeDefinitionTools.getNameDeclaration(target))
+        {
+            case TypeNameDeclaration.Primitive(_):
+                // nothing to do.
+                
+            case TypeNameDeclaration.Generic(_, parameters):
+                for (parameter in parameters)
+                {
+                    switch (parameter)
+                    {
+                        case TypeParameterDeclaration.TypeName(_):
+                            // nothing to do.
+                            
+                        case TypeParameterDeclaration.Dependence(dependence):
+                            processTypeReference(dependence.type);
+                    }
+                }
+        }
 	}
     
 	
@@ -189,7 +210,7 @@ class TypeDefinitionPreprocessor
     
 	private function processTypeReference(type:TypeReference):Void
 	{
-		var path, parameters;
+    	var path, parameters;
 		switch (type)
 		{
 			case TypeReference.Primitive(p):
@@ -279,7 +300,8 @@ class TypeDefinitionPreprocessor
 			var processedValue = switch (definitionParameter)
 			{
 				case TypeParameterDeclaration.Dependence(dependence):
-					TypeReferenceParameterKind.Dependence(dependence.type);
+                    processTypeReference(dependence.type);
+                    TypeReferenceParameterKind.Dependence(dependence.type);
 					
 				case TypeParameterDeclaration.TypeName(_):
 					var context = new DelitllfyContext(referenceParameter.value, parent.element.root.reader.config);

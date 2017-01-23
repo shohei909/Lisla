@@ -1,0 +1,47 @@
+[package '']
+[import litll.idl]
+
+[struct CliConfig
+    [version VersionString]
+    [about String]
+    [common<< CommonConfig]
+]
+[newtype VersionString String]
+
+[tuple Subcommand
+    subcommand
+    [name CommandName]
+    [config< SubcommandConfig]
+]
+[struct SubcommandConfig
+    [name_config<< NameConfig]
+    [common<< CommonConfig]
+]
+[newtype CommandName String]
+
+[tuple CommandArgument
+    arg 
+    [name CommandName]
+    [config< CommandArgumentConfig]
+]
+[struct CommandArgumentConfig
+    [required?]
+    [name<< NameConfig]
+    [common<< CommonConfig]
+]
+
+[tuple CommandInput
+    input 
+    TypeReference
+]
+
+[struct NameConfig
+    [short.. CommandName]
+    [long.. CommandName]
+]
+[struct CommonConfig
+    [description? String]
+    [subcommand..< Subcommand]
+    [arg..< CommandArgument]
+    [input..< CommandInput]
+]

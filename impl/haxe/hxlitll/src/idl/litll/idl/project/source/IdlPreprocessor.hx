@@ -39,14 +39,12 @@ class IdlPreprocessor
 		var modulePath = element.getModulePath();
 		var packagePath = modulePath.packagePath;
 		
-		switch (idl.data.packageDeclaration)
-		{
-			case Package(_packagePath):
-				if (packagePath.toString() != _packagePath.toString())
-				{
-					addError(IdlReadErrorKind.InvalidPackage(packagePath, _packagePath));
-				}
-		}
+        var _packagePath = idl.data.packageDeclaration._package;
+        if (packagePath.toString() != _packagePath.toString())
+        {
+            addError(IdlReadErrorKind.InvalidPackage(packagePath, _packagePath));
+        }
+
 	}
 	
 	private function processImportedModules():Void
@@ -55,18 +53,14 @@ class IdlPreprocessor
 		
 		for (importTarget in idl.data.importDeclarations)
 		{
-			switch (importTarget)
-			{
-				case ImportDeclaration.Import(module):
-					switch (element.root.getElement(module.toArray()).toOption())
-					{
-						case Option.Some(element) if (element.hasModule()):
-							importedElements.push(element);
-							
-						case _:
-							addError(IdlReadErrorKind.ModuleNotFound(module));
-					}
-			}
+            switch (element.root.getElement(importTarget.module.toArray()).toOption())
+            {
+                case Option.Some(element) if (element.hasModule()):
+                    importedElements.push(element);
+                    
+                case _:
+                    addError(IdlReadErrorKind.ModuleNotFound(importTarget.module));
+            }
 		}
 	}
 	

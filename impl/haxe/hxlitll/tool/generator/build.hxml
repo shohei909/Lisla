@@ -1,4 +1,4 @@
--main litll.idl.generator.Main
+-main Main
 -lib unifill
 -cp src
 -cp ../../src/core

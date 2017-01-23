@@ -4,4 +4,10 @@
 
 [package litll]
 
+[newtype FileOrDirectoryPath String]
 [newtype FilePath String]
+[newtype DirectoryPath String]
+[newtype FileExtension String]
+[newtype [FilePathWithExtension [extensions [Array FileExtension]]] String]
+[newtype [FilePathWithoutExtension [extensions [Array FileExtension]]] String]
+
