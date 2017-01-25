@@ -4,6 +4,7 @@ import TestCore;
 import file.FileTools;
 import litll.core.LitllArray;
 import litll.core.ds.Result;
+import litll.idl.delitllfy.Delitllfier;
 import litll.idl.std.delitllfy.idl.IdlDelitllfier;
 import litll.core.parse.Parser;
 import sys.io.File;
@@ -14,7 +15,7 @@ class IdlTest extends LitllTestCase
 	{
 		for (file in FileTools.readRecursively(TestIdl.IDL_DIRECTORY))
 		{
-			if (StringTools.endsWith(file, ".litll"))
+			if (StringTools.endsWith(file, ".idl.litll"))
 			{
 				var content = File.getContent(TestIdl.IDL_DIRECTORY+ "/" + file);
 				var caseData = switch (Parser.run(content))
@@ -27,7 +28,7 @@ class IdlTest extends LitllTestCase
 						continue;
 				}
 				
-				var idl = switch (IdlDelitllfier.run(caseData))
+				var idl = switch (Delitllfier.run(IdlDelitllfier.process, caseData))
 				{
 					case Result.Ok(data):
 						data;
