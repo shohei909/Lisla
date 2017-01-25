@@ -386,7 +386,7 @@ string // this is also comment
 /// 
 /// これは様々なツール(エディタやドキュメント生成など)向けのコメントです。
 /// """
-/// [auther shohei909]
+/// [author shohei909]
 /// [license "public domain"]
 /// [document_format markdown]
 
@@ -398,7 +398,7 @@ aaa
 
 ### 保護されたコメント
 
-`//!`と`///!`は`minify`によって除去されないコメントを意味します。
+`//!`と`///!`は、ツールによる空白除去やコメント除去を行った場合に除去されないコメントを意味します。
 
 ```
 //! 「!」で始まるコメントはLitllがminifyされる際に除去されません
@@ -429,7 +429,7 @@ LitllはUTF-8のみをサポートしています。 (BOMありなし両方)
 
 ## Version
 
-1.0.0
+ここで説明されている`Litll`のバージョンは`1.0.0`です。
 
 ## Lisence 
 このドキュメントとテストケースのライセンスは[Creative Commons 0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)です。

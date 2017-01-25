@@ -1,10 +1,7 @@
 // Litll
 ''''''''
 //! Comments start with ! are keeped when Litll is minified.
-///! 'Keeping document comments are also avarable.'
-// //! not keeping comment
-// ///! not keeping comment
-////! not keeping comment
+///! 'Keeping document comments are also available.'
 ''''''''
 
 // Json

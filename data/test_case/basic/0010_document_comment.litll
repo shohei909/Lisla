@@ -1,12 +1,20 @@
 // Litll
 ''''''''
-/// 'This is comment for various tools (e.g. editor, document generation).'
-/// [auther, shohei909]
-/// [version, 0.2]
-/// [license, "public domain"]
+/// '''
+/// # Sample for document comment.
+/// 
+/// This is comment for various tools (e.g. editor, document generation).
+/// '''
+/// [author shohei909]
+/// [version 0.1]
+/// [license "public domain"]
+/// [document_format markdown]
+
+/// 'This is documment for first element'
+aaa
 ''''''''
 
 // Json
 ''''''''
-[]
+["aaa"]
 ''''''''

@@ -340,12 +340,12 @@ Multi-line comment is not supported.
 /// 
 /// This is comment for various tools (e.g. editor, document generation).
 /// '''
-/// [auther shohei909]
+/// [author shohei909]
 /// [version 0.1]
 /// [license "public domain"]
 /// [document_format markdown]
 
-/// 'first element'
+/// 'This is documment for first element'
 aaa
 ```
 
@@ -355,7 +355,7 @@ Document comment is also described with Litll.
 
 ```
 //! Comments start with ! are keeped when Litll is minified.
-///! 'Keeping document comments are also avarable.'
+///! 'Keeping document comments are also available.'
 ```
 
 ## Encoding
