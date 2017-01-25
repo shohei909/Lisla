@@ -25,7 +25,6 @@ Litllはシンプルです。そして、十分な機能を持っています。
 * ブラックリスト空白文字(全角スペースなど、詳しくは後述)
 * コメント構文(`//`)
 
-
 <table>
     <tr><th>Litll</th><th>JSON</th></tr>
     <tr>
@@ -145,6 +144,46 @@ def
     </tr>
 </table>
 
+
+## 入れ子
+
+配列を入れ子にしたい場合、大かっこ`[]`で囲みます。
+
+<table>
+    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr>
+        <td>
+            <pre><code>
+a [[bc def] [g]]
+            </code></pre>
+        </td>
+        <td>
+            <pre><code>
+["a", [["bc", "def"], ["g"]]]
+            </code></pre>
+        </td>
+    </tr>
+</table>
+
+大カッコの前後の区切り文字は省略可能です。
+
+<table>
+    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr>
+        <td>
+            <pre><code>
+["a"[bc def][g]][[h\ni]jk]
+            </code></pre>
+        </td>
+        <td>
+            <pre><code>
+[["a", [["bc", "def"], ["g"]]], [["h\ni"], "jk"]]
+            </code></pre>
+        </td>
+    </tr>
+</table>
+
+
 ## 複数行文字列
 
 Litllでは、複数行のクオートあり文字列が使用できます。
@@ -183,6 +222,7 @@ line
         </td>
     </tr>
 </table>
+
 
 ## エスケープシークエンス
 
@@ -283,48 +323,43 @@ Litllでは、クオート無しの文字列と、ダブルクオートのクオ
 * `U+205F` (Medium mathematical space)
 * `U+3000` (Ideographic space)
 
-### 入れ子
+## 配列補間
 
-配列を入れ子にしたい場合、大かっこ`[]`で囲みます。
+文字列内で`\[`から始めて`]`で閉じることで、その配列の内容を文字列の間に挿入することができます。つまり以下のようなことです。
 
 <table>
     <tr><th>Litll</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
-[a [[bc def] [g]]]
-[ 
-    [ 
-        """
-        h
-        i
-        """
-    ]
-    jk
-]
+    "
+    配列補間はインデントを壊さないので
+     例えばLitllを、\[bold "マークアップ言語のように"]
+      使う場合に役立ちます
+    "
             </code></pre>
         </td>
         <td>
             <pre><code>
-[["a", [["bc", "def"], ["g"]]], [["h\ni"], jk]]
+["配列補間はインデントを壊さないので\n 例えばLitllを、", ["bold", "マークアップ言語のように"], "\n  使う場合に役立ちます"]
             </code></pre>
         </td>
     </tr>
 </table>
 
-大カッコの前後の区切り文字は省略可能です。
+配列補間の`\[]`の内側では、'\'でエスケープされた区切り文字によって、複数の配列を文字列の間に挿入できます。
 
 <table>
     <tr><th>Litll</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
-["a"[bc def][g]][[h\ni]jk]
+"a\[b \ c [d]]d"
             </code></pre>
         </td>
         <td>
             <pre><code>
-[["a", [["bc", "def"], ["g"]]], [["h\ni"], "jk"]]
+["a", ["b"], ["c", ["d"]], "e"]
             </code></pre>
         </td>
     </tr>
@@ -394,8 +429,7 @@ LitllはUTF-8のみをサポートしています。 (BOMありなし両方)
 
 ## Version
 
-<!-- Current specfication version is `0.2` (draft). -->  
-<!-- Current test cases version is `0.1.0`. -->
+1.0.0
 
 ## Lisence 
 このドキュメントとテストケースのライセンスは[Creative Commons 0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)です。
