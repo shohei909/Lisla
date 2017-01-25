@@ -1,0 +1,8 @@
+/// [license "public domain"]
+/// [schema litll.idl.Idl]
+
+[package litll.util]
+[import litll.core]
+
+[newtype Argb32 [FixedUInt 32]]
+[newtype Rgb24 [FixedUInt 24]]

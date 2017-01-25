@@ -4,8 +4,8 @@ import litll.idl.project.output.data.store.HaxeDataClassInterface;
 import litll.idl.project.output.data.store.HaxeDataInterfaceStore;
 import litll.idl.project.source.IdlSourceProvider;
 import litll.idl.std.data.idl.GenericTypeReference;
-import litll.idl.std.data.idl.haxe.DataOutputConfig;
-import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
+import litll.idl.project.data.DataOutputConfig;
+import litll.idl.project.data.DelitllfierOutputConfig;
 
 interface IdlToHaxeConvertContext
 {

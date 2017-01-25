@@ -32,7 +32,7 @@ import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
 import litll.idl.std.data.idl.UnfoldedTypeDefinition;
-import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
+import litll.idl.project.data.DelitllfierOutputConfig;
 import litll.idl.std.tools.idl.TypeNameTools;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 

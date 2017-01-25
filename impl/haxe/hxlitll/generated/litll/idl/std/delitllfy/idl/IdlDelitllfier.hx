@@ -9,7 +9,7 @@ class IdlDelitllfier {
             case litll.core.Litll.Arr(data):{
                 var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
                 var instance = {
-                    var arg0 = switch (arrayContext.readWithDefault(litll.idl.std.delitllfy.idl.PackageDeclarationDelitllfier.process, null)) {
+                    var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.PackageDeclarationDelitllfier.process)) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };

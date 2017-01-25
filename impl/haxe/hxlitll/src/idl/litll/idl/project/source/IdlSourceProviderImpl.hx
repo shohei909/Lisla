@@ -8,7 +8,7 @@ import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.path.TypeGroupPath;
-import litll.idl.std.data.idl.haxe.SourceConfig;
+import litll.idl.project.data.SourceConfig;
 
 class IdlSourceProviderImpl implements IdlSourceProvider
 {

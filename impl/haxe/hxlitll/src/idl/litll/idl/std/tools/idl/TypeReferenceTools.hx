@@ -22,7 +22,7 @@ import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
 import litll.idl.std.data.idl.UnfoldedTypeDefinition;
-import litll.idl.std.data.idl.haxe.DataOutputConfig;
+import litll.idl.project.data.DataOutputConfig;
 import litll.idl.std.data.idl.TypeDefinition;
 
 using litll.idl.std.tools.idl.TypeDefinitionTools;

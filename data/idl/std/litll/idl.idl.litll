@@ -7,7 +7,7 @@
 
 /// [document_tag litll.idl.document.IdlDocumentTag]
 [tuple Idl
-    [package_declaration PackageDeclaration [package '']]
+    [package_declaration PackageDeclaration]
     [import_declarations.. ImportDeclaration]
     [type_definitions.. TypeDefinition]
 ]
@@ -57,7 +57,7 @@
 
 /// '''
 /// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
-/// Additionally, some suffixes are supported.
+/// Additionally, the following suffixes are supported.
 /// "?"   : Optional argument. (default value is disabled)
 /// ".."  : Rest arguments. (default value is disabled)
 /// "<"   : Unfolded argument. (default value is disabled)
@@ -83,10 +83,10 @@
 ]
 
 /// '''
-/// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
 /// Additionally, the following suffixes are supported.
 /// ":"  : Tuple style. Its first element have not to be label.
 /// "<"   : Unfolding argument. Its argument must be one and the argument is unfolded
+/// "_"   : Explicit normal field.
 /// 
 /// ## Restriction
 /// ### Unfoldable type
@@ -102,11 +102,11 @@
 
 [enum StructElement
     [label<
-        /// 'and Unfolding suffix are disabled'
+        /// 'and unfolding suffix are disabled'
         [name StructFieldName]
     ]
     [nested_label: 
-        /// 'and Unfolding suffix are disabled'
+        /// 'and unfolding suffix are disabled'
         [name StructFieldName]
     ]
     [field< [field StructField]]
@@ -117,15 +117,15 @@
     [default_value? Any]
 ]
 
-/// '''
-/// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
-/// Additionally, the following suffixes are supported
+/// ''' 
+/// The following suffixes are supported
 /// "?"   : Optional field. (default value is disabled)
 /// ".."  : Multiple field. (default value is disabled)
 /// "<"   : Unfolding field. 
 /// "?<"  : Optional unfolding field. (default value is disabled)
 /// "..<" : Multiple unfolding field. (default value is disabled)
 /// "<<"  : Merge struct fields. (default value is disabled)
+/// "_"   : Explicit normal field.
 /// 
 /// ## Restriction
 /// ### Unfoldable type

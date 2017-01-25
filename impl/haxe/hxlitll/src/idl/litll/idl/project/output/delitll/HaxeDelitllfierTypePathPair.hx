@@ -2,8 +2,8 @@ package litll.idl.project.output.delitll;
 import litll.idl.project.output.data.HaxeDataTypePath;
 import litll.idl.project.output.delitll.HaxeDelitllfierTypePath;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.haxe.DataOutputConfig;
-import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
+import litll.idl.project.data.DataOutputConfig;
+import litll.idl.project.data.DelitllfierOutputConfig;
 
 class HaxeDelitllfierTypePathPair
 {

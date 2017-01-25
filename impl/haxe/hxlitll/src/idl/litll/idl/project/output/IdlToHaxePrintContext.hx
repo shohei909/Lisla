@@ -7,9 +7,9 @@ import litll.idl.project.output.haxe.HaxePrinter;
 import litll.idl.project.output.haxe.HaxePrinterImpl;
 import litll.idl.project.source.IdlSourceProvider;
 import litll.idl.project.source.IdlSourceProviderImpl;
-import litll.idl.std.data.idl.haxe.DataOutputConfig;
-import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
-import litll.idl.std.data.idl.haxe.ProjectConfig;
+import litll.idl.project.data.DataOutputConfig;
+import litll.idl.project.data.DelitllfierOutputConfig;
+import litll.idl.project.data.ProjectConfig;
 
 class IdlToHaxePrintContext implements IdlToHaxeConvertContext
 {

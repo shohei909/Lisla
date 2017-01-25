@@ -4,7 +4,7 @@ import litll.idl.ds.ProcessResult;
 import litll.idl.project.output.IdlToHaxePrintContext;
 import litll.idl.project.output.delitll.HaxeDelitllfierTypePathPair;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.haxe.DelitllfierOutputConfig;
+import litll.idl.project.data.DelitllfierOutputConfig;
 using litll.core.ds.ResultTools;
 
 class IdlToHaxeDelitllfierPrinter

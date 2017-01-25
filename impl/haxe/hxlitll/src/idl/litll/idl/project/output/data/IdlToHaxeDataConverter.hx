@@ -18,7 +18,7 @@ import litll.idl.std.data.idl.StructFieldKind;
 import litll.idl.std.data.idl.StructFieldName;
 import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeReference;
-import litll.idl.std.data.idl.haxe.DataOutputConfig;
+import litll.idl.project.data.DataOutputConfig;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
 import litll.idl.std.tools.idl.TypeDependenceDeclarationTools;
 import litll.idl.std.tools.idl.TypeNameTools;

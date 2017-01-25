@@ -4,7 +4,7 @@ import haxe.macro.Expr.TypeDefinition;
 import haxe.macro.Printer;
 import litll.idl.project.io.IoProvider;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.haxe.OutputConfig;
+import litll.idl.project.data.OutputConfig;
 import sys.FileSystem;
 import sys.io.File;
 

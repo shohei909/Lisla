@@ -9,7 +9,7 @@ import litll.idl.std.data.idl.TypeDependenceDeclaration;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeParameterDeclaration;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.haxe.DataOutputConfig;
+import litll.idl.project.data.DataOutputConfig;
 
 class TypeParameterDeclarationTools
 {

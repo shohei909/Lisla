@@ -1,0 +1,10 @@
+/// 'Type for matching Litll IDL Data'
+/// [schema litll.idl.Idl]
+/// [license "public domain"]
+[package litll.idl]
+[import litll.idl]
+
+[tuple TypeGroupFilter
+    [from TypeGroupPath] [to TypeGroupPath]
+]
+[newtype TypeGroupPath String]

@@ -1,4 +1,0 @@
-/// [schema litll.idl.Idl]
-
-[extension idl.litll litll.idl.Idl]
-[extension litllconfig.litll litll.config.LitllConfig]

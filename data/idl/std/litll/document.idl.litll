@@ -4,6 +4,7 @@
 
 [package litll]
 [import litll.idl]
+[import litll.idl.portable]
 
 [struct Document
     [comment..< String]
@@ -14,6 +15,7 @@
     [license.. License]
     [author.. Author]
     [schema? TypeReference]
+    [schema_note? PortableIdl]
     [markup_language? DocumentMarkupLanguage]
 ]
 
