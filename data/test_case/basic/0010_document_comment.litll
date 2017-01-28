@@ -6,9 +6,8 @@
 /// This is comment for various tools (e.g. editor, document generation).
 /// '''
 /// [author shohei909]
-/// [version 0.1]
-/// [license "public domain"]
-/// [document_format markdown]
+/// [license "Public Domain"]
+/// [document_markup markdown]
 
 /// 'This is documment for first element'
 aaa

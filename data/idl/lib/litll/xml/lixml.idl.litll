@@ -1,0 +1,15 @@
+/// 
+/// 
+/// 
+
+[tuple LixmlElement
+    [name LixmlElementName]
+    [children [Array LixmlElement]]
+    [attribute.. ]
+]
+[tuple LixmlAttribute
+    [name LixmlAttributeName]
+    [value? LixmlAttributeName]
+]
+[newtype LixmlAttributeName String]
+[newtype LixmlElementName String]

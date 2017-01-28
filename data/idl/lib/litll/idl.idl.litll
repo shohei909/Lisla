@@ -149,6 +149,8 @@
 [newtype StructFieldName String]
 
 /// [completion_self]
+[newtype LibraryPath String]
+/// [completion_self]
 [newtype PackagePath String]
 /// [completion_self]
 [newtype ModulePath String]

@@ -387,8 +387,8 @@ string // this is also comment
 /// これは様々なツール(エディタやドキュメント生成など)向けのコメントです。
 /// """
 /// [author shohei909]
-/// [license "public domain"]
-/// [document_format markdown]
+/// [license "Public Domain"]
+/// [document_markup markdown]
 
 /// "最初の要素に対するドキュメントコメント"
 aaa
@@ -427,11 +427,11 @@ LitllはUTF-8のみをサポートしています。 (BOMありなし両方)
 
 多くのテストケースが用意されているのでそちらに目を通してください。
 
-## Version
+## バージョン
 
 ここで説明されている`Litll`のバージョンは`1.0.0`です。
 
-## Lisence 
+## ライセンス
 このドキュメントとテストケースのライセンスは[Creative Commons 0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)です。
 
 各実装のライセンスは各実装のディレクトリを確認してください。

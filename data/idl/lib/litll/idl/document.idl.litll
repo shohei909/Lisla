@@ -12,6 +12,7 @@
     [completion?]
     [completion_const.. Any]
     [completion_type.. TypeReference]
+    [highlight.. HighlightScope]
 ]
 
 [struct TypeReferenceDocument

@@ -6,8 +6,8 @@
 /// これは様々なツール(エディタやドキュメント生成など)向けのコメントです。
 /// """
 /// [author shohei909]
-/// [license "public domain"]
-/// [document_format markdown]
+/// [license "Public Domain"]
+/// [document_markup markdown]
 
 /// "最初の要素に対するドキュメントコメント"
 aaa

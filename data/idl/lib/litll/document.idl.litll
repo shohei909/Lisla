@@ -16,7 +16,7 @@
     [author.. Author]
     [schema? TypeReference]
     [schema_note? PortableIdl]
-    [markup_language? DocumentMarkupLanguage]
+    [document_markup? DocumentMarkupLanguage]
 ]
 
 [enum DocumentEncoding utf8]

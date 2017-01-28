@@ -1,0 +1,9 @@
+
+/// [schema litll.config.IdlConfig]
+
+[version 0.0.0]
+[description "Standard Library of Litll IDL"]
+
+[extension idl.litll litll.idl.Idl]
+[extension library.litll litll.idl.lib.IdlLibrary]
+[extension project.litll litll.idl.litll.LitllProject]

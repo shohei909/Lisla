@@ -1,0 +1,5 @@
+/// [license "public domain"]
+/// [schema litll.idl.Idl]
+
+/// 'major[-suffix][.minor[-suffix][[.patch[-suffix]].release[-suffix]]]'
+[newtype Version String]

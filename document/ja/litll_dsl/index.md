@@ -85,3 +85,15 @@ Visual Studio Code上で、Litllを記述するためのプラグイン
 - [ ] バリデーション
 - [ ] コードジャンプ
 - [ ] 入力補完
+
+### さまざまなLitll DSL
+
+Litll 
+
+#### Litll IDL
+
+#### Clidl (Command Line Interface language)
+
+Clidlはコマンドラインのインターフェスを記述する言語です。
+
+#### Lixml

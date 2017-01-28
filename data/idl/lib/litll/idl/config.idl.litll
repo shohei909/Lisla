@@ -1,0 +1,23 @@
+/// 'IDL for Litll IDL configure file(.config.litll)'
+/// [schema litll.idl.Idl]
+[package litll.idl]
+
+[import litll.util.file]
+[import litll.util.version]
+[import litll.idl]
+
+[struct IdlConfig
+    [version? Version]
+    [extension..< FileExtensionTuple]
+    [depend..< LibraryDependenceTuple]
+]
+
+[tuple FileExtensionTuple
+    extension [target FileExtension] [type TypeReference]
+]
+
+[tuple LibraryDependenceTuple
+    depend [] []
+]
+
+
