@@ -88,7 +88,7 @@ class QuotedStringContext
 					{
 						addQuotes(length);
 						state = QuotedStringState.Body;
-						processBody(top, codePoint);
+						processBody(codePoint);
 					}
 				}
 				
@@ -100,15 +100,15 @@ class QuotedStringContext
 				else
 				{
 					state = QuotedStringState.Body;
-					processBody(top, codePoint);
+					processBody(codePoint);
 				}
 				
 			case QuotedStringState.Body:
-				processBody(top, codePoint);
+				processBody(codePoint);
 		}
 	}
     
-	private inline function processBody(top:ParseContext, codePoint:CodePoint):Void
+	private inline function processBody(codePoint:CodePoint):Void
 	{
 		if (matchQuote(codePoint))
 		{

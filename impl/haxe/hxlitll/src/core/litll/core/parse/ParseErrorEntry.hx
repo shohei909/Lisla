@@ -15,6 +15,9 @@ class ParseErrorEntry
 			case ParseErrorKind.BlacklistedWhitespace(codePoint):
 				"Char 0x" + StringTools.hex(codePoint.toInt()) + " is blacklisted whitespace. It can't be use without quoting.";
 				
+			case ParseErrorKind.UnquotedEscapeSequence:
+				"Escape sequence is not supported for unquoted sequence.";
+				
 			case ParseErrorKind.InvalidEscapeSequence:
 				"Invalid escape sequence.";
 				

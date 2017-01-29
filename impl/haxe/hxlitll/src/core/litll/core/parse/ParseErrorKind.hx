@@ -7,6 +7,7 @@ enum ParseErrorKind
     InvalidEscapeSequence;
     InvalidDigitUnicodeEscape;
     InvalidUnicode;
+    UnquotedEscapeSequence;
     UnclosedArray;
     UnclosedQuote;
     TooManyClosingQuotes(expected:Int, actual:Int);

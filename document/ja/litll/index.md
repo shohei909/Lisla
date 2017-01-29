@@ -172,7 +172,7 @@ a [[bc def] [g]]
     <tr>
         <td>
             <pre><code>
-["a"[bc def][g]][[h\ni]jk]
+["a"[bc def][g]][["h\ni"]jk]
             </code></pre>
         </td>
         <td>
@@ -268,7 +268,7 @@ Litllでは、クオート無しの文字列と、ダブルクオートのクオ
     <tr>
         <td>
             <pre><code>
-"Multi\r\nline" "\"" \u{305D}\u{3089}
+"Multi\r\nline" "\"" "\u{305D}\u{3089}"
             </code></pre>
         </td>
         <td>
