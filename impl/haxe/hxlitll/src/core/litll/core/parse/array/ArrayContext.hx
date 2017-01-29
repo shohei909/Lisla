@@ -85,28 +85,28 @@ class ArrayContext
 				commentDetail.process(codePoint);
 				
 			case [_, ArrayState.Slash(1)]:
-				var unquotedString = startUnquotedString(CodePoint.fromInt(CodePointTools.SLASH));
+				startUnquotedString(CodePoint.fromInt(CodePointTools.SLASH));
 				top.current.process(codePoint);
 				
 			case [_, ArrayState.Slash(length)]:
 				throw "invalid slash length: " + length;
 				
-			case [CodePointTools.SLASH, ArrayState.Normal(_)]:
+			case [CodePointTools.SLASH, ArrayState.Normal]:
 				state = ArrayState.Slash(1);
 				
 			// --------------------------
 			// Separater, Normal
 			// --------------------------
-			case [CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB, ArrayState.Normal(_)]:
-				state = ArrayState.Normal(true);
+			case [CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB, ArrayState.Normal]:
+				// nothing to do.
 			
 			// --------------------------
 			// Bracket, Normal
 			// --------------------------
-			case [CodePointTools.OPENNING_BRACKET, ArrayState.Normal(_)]:
+			case [CodePointTools.OPENNING_BRACKET, ArrayState.Normal]:
 				startArray();
 				
-			case [CodePointTools.CLOSEING_BRACKET, ArrayState.Normal(_)]:
+			case [CodePointTools.CLOSEING_BRACKET, ArrayState.Normal]:
 				switch (parent)
 				{
                     case ArrayParent.Array(parentContext):
@@ -119,39 +119,27 @@ class ArrayContext
                         top.error(ParseErrorKind.TooManyClosingBracket);
 				}
                 
-				state = ArrayState.Normal(true);
+				state = ArrayState.Normal;
 			
 			// --------------------------
 			// QuotedString, Normal
 			// --------------------------
-			case [CodePointTools.DOUBLE_QUOTE, ArrayState.Normal(separated)]:
-				if (!separated)
-				{
-					top.error(ParseErrorKind.SeparatorRequired);
-				}
+			case [CodePointTools.DOUBLE_QUOTE, ArrayState.Normal]:
 				state = ArrayState.OpeningQuote(false, 1);
 				
-			case [CodePointTools.SINGLE_QUOTE, ArrayState.Normal(separated)]:
-				if (!separated)
-				{
-					top.error(ParseErrorKind.SeparatorRequired);
-				}
+			case [CodePointTools.SINGLE_QUOTE, ArrayState.Normal]:
 				state = ArrayState.OpeningQuote(true, 1);
 				
 			// --------------------------
 			// Other, Normal
 			// --------------------------
-			case [_, ArrayState.Normal(separated)]:
+			case [_, ArrayState.Normal]:
 				if (CodePointTools.isBlackListedWhitespace(codePoint))
 				{
 					top.error(ParseErrorKind.BlacklistedWhitespace(codePoint));
 				}
 				else
 				{
-					if (!separated)
-					{
-						top.error(ParseErrorKind.SeparatorRequired);
-					}
 					startUnquotedString(codePoint);
 				}
 		}
@@ -176,7 +164,7 @@ class ArrayContext
 	private inline function startArray():Void 
 	{
         var tag = popArrayTag(top.position - 1);
-		state = ArrayState.Normal(true);
+		state = ArrayState.Normal;
         var child = new ArrayContext(top, ArrayParent.Array(this), state, false, tag);
 		top.current = child;
 	}
@@ -197,7 +185,7 @@ class ArrayContext
 		if (length == 2)
 		{
 			data.push(Litll.Str(new LitllString("", popStringTag(top.position - 2).settle(top.position))));
-			state = ArrayState.Normal(false);
+			state = ArrayState.Normal;
 		}
 		else
 		{
@@ -225,7 +213,12 @@ class ArrayContext
     public function pushString(litllString:LitllString):Void
     {
         data.push(Litll.Str(litllString));
-		state = ArrayState.Normal(false);
+		state = ArrayState.Normal;
+    }
+    public function pushArray(litll:LitllArray<Litll>):Void
+    {
+        data.push(Litll.Arr(litll));
+		state = ArrayState.Normal;
     }
     
     public function writeDocument(codePoint:CodePoint):Void
@@ -247,7 +240,7 @@ class ArrayContext
                 startUnquotedString(CodePoint.fromInt(CodePointTools.SLASH));
                 Option.None;
                 
-            case ArrayState.Normal(_):
+            case ArrayState.Normal:
                 switch (parent)
                 {
                     case ArrayParent.Array(arrayContext):

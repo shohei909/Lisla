@@ -34,7 +34,7 @@ class ParseContext
 		current = new ArrayContext(
             this,
             ArrayParent.Top,
-            ArrayState.Normal(true), 
+            ArrayState.Normal, 
             true, 
             new UnsettledLeadingTag(sourceMap).toArrayTag(0)
         );
@@ -69,7 +69,7 @@ class ParseContext
 	{
 		position += 1;
 		
-        var data;
+        var data = null;
 		while (true)
 		{
             switch (current.getData())

@@ -36,9 +36,6 @@ class ParseErrorEntry
 			case ParseErrorKind.TooManyClosingBracket:
 				"Too many closing brackets.";
 				
-			case ParseErrorKind.SeparatorRequired:
-				"Separator(whitespace or newline) required.";
-				
 			case ParseErrorKind.TooShortIndent:
 				"Too short indent.";
 				

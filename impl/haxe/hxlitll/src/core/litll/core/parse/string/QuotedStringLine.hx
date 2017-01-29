@@ -16,8 +16,8 @@ class QuotedStringLine
 	{
 		this.startPosition = startPosition;
 		
+        newLine = "";
 		content = "";
 		indent = 0;
 	}
-    
 }

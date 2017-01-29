@@ -6,7 +6,7 @@ import litll.core.parse.tag.UnsettledLeadingTag;
 
 enum ArrayState
 {
-	Normal(separated:Bool);
+	Normal;
 	Slash(length:Int);
     Comment(context:CommentContext);
 	OpeningQuote(singleQuoted:Bool, length:Int);

@@ -11,7 +11,6 @@ enum ParseErrorKind
     UnclosedQuote;
     TooManyClosingQuotes(expected:Int, actual:Int);
 	TooManyClosingBracket;
-    SeparatorRequired;
 	TooShortIndent;
 	UnmatchedIndentWhiteSpaces;
 }
