@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace></RootNamespace>
+    <AssemblyName>TestIdl</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+	
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  
+  </ItemGroup>
+  <ItemGroup>
+	
+    <Compile Include="src\litll\idl\std\data\idl\EnumConstructor.cs"/>
+	
+    <Compile Include="src\haxe\unit\TestStatus.cs"/>
+	
+    <Compile Include="src\cs\Boot.cs"/>
+	
+    <Compile Include="src\Std.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\StructFieldKind.cs"/>
+	
+    <Compile Include="src\haxe\lang\Null.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TypeReferenceDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\Litll.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\StructField.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\ImportDeclaration.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\StructElement.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\ParameterizedEnumConstructorDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\ds\Result.cs"/>
+	
+    <Compile Include="src\unifill\InternalEncoding.cs"/>
+	
+    <Compile Include="src\Array.cs"/>
+	
+    <Compile Include="src\litll\core\parse\ParseError.cs"/>
+	
+    <Compile Include="src\cs\internal\Function.cs"/>
+	
+    <Compile Include="src\cases\IdlTest.cs"/>
+	
+    <Compile Include="src\litll\core\parse\string\EscapeSequenceState.cs"/>
+	
+    <Compile Include="src\litll\core\parse\array\CommentState.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TupleElement.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\StructFieldDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\parse\string\EscapeSequenceContext.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\path\TypeGroupPath.cs"/>
+	
+    <Compile Include="src\litll\core\tag\StringTag.cs"/>
+	
+    <Compile Include="src\file\FileTools.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\StructFieldName.cs"/>
+	
+    <Compile Include="src\litll\core\tag\entry\StringFormatTagEntry.cs"/>
+	
+    <Compile Include="src\haxe\format\JsonParser.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\EnumConstructorDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\tag\entry\DocumentTagEntry.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TypeNameDeclarationDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\StructElementDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\ds\SourceMap.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\core\AnyDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\LitllTools.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\PackageDeclarationDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\parse\ParseErrorKind.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\PackagePathDelitllfier.cs"/>
+	
+    <Compile Include="src\unifill\Utf16.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypeNameDeclaration.cs"/>
+	
+    <Compile Include="src\haxe\io\Eof.cs"/>
+	
+    <Compile Include="src\litll\core\parse\string\EscapeResult.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\Argument.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\EnumConstructorName.cs"/>
+	
+    <Compile Include="src\unifill\Unifill.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\ArrayDelitllfier.cs"/>
+	
+    <Compile Include="src\unifill\CodePointIter.cs"/>
+	
+    <Compile Include="src\Type.cs"/>
+	
+    <Compile Include="src\haxe\ds\Option.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypeReference.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\StructFieldNameDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\parse\tag\UnsettledLeadingTag.cs"/>
+	
+    <Compile Include="src\litll\core\tag\entry\StringKind.cs"/>
+	
+    <Compile Include="src\Lambda.cs"/>
+	
+    <Compile Include="src\haxe\io\Error.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypeDefinition.cs"/>
+	
+    <Compile Include="src\nanotest\NanoTestStatus.cs"/>
+	
+    <Compile Include="src\TestIdl.cs"/>
+	
+    <Compile Include="src\nanotest\NanoTestAssertResult.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypeParameterDeclaration.cs"/>
+	
+    <Compile Include="src\litll\core\parse\string\QuotedStringLine.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\IdlDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TypeDependenceDeclarationDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypeDependenceName.cs"/>
+	
+    <Compile Include="src\StringTools.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TypePathDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\ModulePath.cs"/>
+	
+    <Compile Include="src\litll\core\string\IdentifierTools.cs"/>
+	
+    <Compile Include="src\litll\core\tag\Tag.cs"/>
+	
+    <Compile Include="src\haxe\unit\TestRunner.cs"/>
+	
+    <Compile Include="src\litll\idl\delitllfy\DelitllfyArrayContext.cs"/>
+	
+    <Compile Include="src\litll\core\parse\tag\UnsettledStringTag.cs"/>
+	
+    <Compile Include="src\Reflect.cs"/>
+	
+    <Compile Include="src\litll\core\parse\string\UnquotedStringContext.cs"/>
+	
+    <Compile Include="src\litll\core\ds\LinePosition.cs"/>
+	
+    <Compile Include="src\litll\core\parse\tag\UnsettledArrayTag.cs"/>
+	
+    <Compile Include="src\haxe\io\Bytes.cs"/>
+	
+    <Compile Include="src\litll\core\ds\MaybeTools.cs"/>
+	
+    <Compile Include="src\litll\core\math\SearchTools.cs"/>
+	
+    <Compile Include="src\litll\core\parse\Parser.cs"/>
+	
+    <Compile Include="src\cases\ParseTest.cs"/>
+	
+    <Compile Include="src\litll\core\parse\ParseContext.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\ParameterizedEnumConstructor.cs"/>
+	
+    <Compile Include="src\litll\core\parse\array\CommentKind.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\EnumConstructorKind.cs"/>
+	
+    <Compile Include="src\litll\core\char\NewLineChar.cs"/>
+	
+    <Compile Include="src\litll\idl\delitllfy\DelitllfyError.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\GenericTypeReference.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\ArgumentKind.cs"/>
+	
+    <Compile Include="src\litll\core\LitllString.cs"/>
+	
+    <Compile Include="src\litll\core\parse\string\QuotedStringState.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TypeDependenceNameDelitllfier.cs"/>
+	
+    <Compile Include="src\nanotest\NanoTestCase.cs"/>
+	
+    <Compile Include="src\TestCore.cs"/>
+	
+    <Compile Include="src\sys\FileSystem.cs"/>
+	
+    <Compile Include="src\litll\idl\delitllfy\DelitllfyErrorTarget.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\ArgumentNameDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\Idl.cs"/>
+	
+    <Compile Include="src\litll\core\ds\Maybe.cs"/>
+	
+    <Compile Include="src\litll\idl\delitllfy\Delitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\parse\array\ArrayParent.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypeName.cs"/>
+	
+    <Compile Include="src\litll\core\parse\array\ArrayContext.cs"/>
+	
+    <Compile Include="src\litll\core\ds\ResultTools.cs"/>
+	
+    <Compile Include="src\litll\core\parse\ParseErrorEntry.cs"/>
+	
+    <Compile Include="src\unifill\Unicode.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\EnumConstructorNameDelitllfier.cs"/>
+	
+    <Compile Include="src\cs\internal\StringExt.cs"/>
+	
+    <Compile Include="src\cs\internal\Runtime.cs"/>
+	
+    <Compile Include="src\cs\Lib.cs"/>
+	
+    <Compile Include="src\sys\io\FileInput.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TypeParameterDeclarationDelitllfier.cs"/>
+	
+    <Compile Include="src\nanotest\NanoTestRunner.cs"/>
+	
+    <Compile Include="src\unifill\Exception.cs"/>
+	
+    <Compile Include="src\EReg.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TypeReferenceParameterDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\tag\ArrayTag.cs"/>
+	
+    <Compile Include="src\litll\core\ds\SourceRange.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\ModulePathDelitllfier.cs"/>
+	
+    <Compile Include="src\cs\internal\HxObject.cs"/>
+	
+    <Compile Include="src\cs\internal\Exceptions.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\GenericTypeReferenceDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\parse\array\ArrayState.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\ImportDeclarationDelitllfier.cs"/>
+	
+    <Compile Include="src\Math.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\StringDelitllfier.cs"/>
+	
+    <Compile Include="src\cs\internal\FieldLookup.cs"/>
+	
+    <Compile Include="src\sys\io\File.cs"/>
+	
+    <Compile Include="src\litll\core\char\NewLineCharTools.cs"/>
+	
+    <Compile Include="src\litll\core\char\CodePointTools.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TypeNameDelitllfier.cs"/>
+	
+    <Compile Include="src\LitllTestCase.cs"/>
+	
+    <Compile Include="src\litll\core\parse\ParserConfig.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\ArgumentDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TupleElementDelitllfier.cs"/>
+	
+    <Compile Include="src\litll\core\parse\string\QuotedStringArrayPair.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypePath.cs"/>
+	
+    <Compile Include="src\haxe\io\BytesBuffer.cs"/>
+	
+    <Compile Include="src\litll\idl\std\delitllfy\idl\TypeDefinitionDelitllfier.cs"/>
+	
+    <Compile Include="src\cs\io\NativeInput.cs"/>
+	
+    <Compile Include="src\unifill\InternalEncodingIter.cs"/>
+	
+    <Compile Include="src\haxe\unit\TestCase.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\PackagePath.cs"/>
+	
+    <Compile Include="src\litll\idl\delitllfy\DelitllfyConfig.cs"/>
+	
+    <Compile Include="src\litll\core\parse\array\CommentContext.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypeReferenceParameterKind.cs"/>
+	
+    <Compile Include="src\litll\core\parse\string\QuotedStringContext.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypeReferenceParameter.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\PackageDeclaration.cs"/>
+	
+    <Compile Include="src\litll\idl\delitllfy\DelitllfyContext.cs"/>
+	
+    <Compile Include="src\litll\core\LitllArray.cs"/>
+	
+    <Compile Include="src\unifill\CodePoint.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\ArgumentName.cs"/>
+	
+    <Compile Include="src\litll\idl\std\data\idl\TypeDependenceDeclaration.cs"/>
+	
+    <Compile Include="src\litll\core\ds\SourcePosition.cs"/>
+	
+    <Compile Include="src\litll\idl\delitllfy\DelitllfyErrorKind.cs"/>
+	
+    <Compile Include="src\haxe\io\Input.cs"/>
+	
+    <Compile Include="src\haxe\CallStack.cs"/>
+	
+    <Compile Include="src\StringBuf.cs"/>
+	
+  </ItemGroup>
+  
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

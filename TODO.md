@@ -39,7 +39,7 @@ Later
 # Rust library
 ## Litll
 - [p] parse
-    - [x] basic
+    - [p] basic
     - [ ] document comment
 - [ ] write
 - [ ] format
@@ -84,3 +84,10 @@ Later
         - [ ] litllfy
         - [ ] debitllfy
         - [ ] bitllfy
+
+# Haxe CLI tool ()
+- [ ] help
+- [ ] first impliment
+- [ ] installer
+    - [ ] windows 
+- [ ] language server

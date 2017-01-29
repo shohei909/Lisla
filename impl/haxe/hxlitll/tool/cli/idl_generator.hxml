@@ -4,6 +4,7 @@
 -cp ../../src/core
 -cp ../../src/idl
 -cp ../../generated
--cp lib/src/idl
+-cp ../../migration
+-cp src/idl
 -dce full
 -neko bin/idl_generator.n

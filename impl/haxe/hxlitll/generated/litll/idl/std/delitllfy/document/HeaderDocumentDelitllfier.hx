@@ -56,9 +56,9 @@ class HeaderDocumentDelitllfier {
                                 };
                             };
                         });
-                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "schema"))):switch (arg3) {
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "type"))):switch (arg3) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("schema")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("type")));
                             };
                             case haxe.ds.Option.None:{
                                 arg3 = haxe.ds.Option.Some({
@@ -74,9 +74,9 @@ class HeaderDocumentDelitllfier {
                                 });
                             };
                         };
-                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "schema_note")) && array.data[1].match(litll.core.Litll.Arr(_))):switch (arg4) {
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "type_note")) && array.data[1].match(litll.core.Litll.Arr(_))):switch (arg4) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("schema_note")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("type_note")));
                             };
                             case haxe.ds.Option.None:{
                                 arg4 = haxe.ds.Option.Some({

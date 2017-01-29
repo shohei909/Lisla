@@ -1,9 +1,0 @@
--main Main
--lib unifill
--cp src
--cp ../../src/core
--cp ../../src/idl
--cp ../../generated
--cp ../../migration
--dce full
--neko bin/generator.n

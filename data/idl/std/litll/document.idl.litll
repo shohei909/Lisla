@@ -14,8 +14,8 @@
     [encoding? DocumentEncoding]
     [license.. License]
     [author.. Author]
-    [schema? TypeReference]
-    [schema_note? PortableIdl]
+    [type? TypeReference]
+    [type_note? PortableIdl]
     [document_markup? DocumentMarkupLanguage]
 ]
 

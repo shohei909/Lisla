@@ -19,7 +19,8 @@
     <class path="..\..\src\core" />
     <class path="..\..\src\idl" />
     <class path="..\..\generated" />
-    <class path="lib\src\idl" />
+    <class path="..\..\migration" />
+    <class path="src\idl" />
   </classpaths>
   <!-- Build options -->
   <build>

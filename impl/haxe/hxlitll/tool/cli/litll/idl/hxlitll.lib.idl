@@ -1,0 +1,6 @@
+[version 1.0.0]
+
+[description "Configure file of hxlitll haxe generator"]
+
+[extension hxinput.litll  litll.idl.config.InputFile]
+[extension hxoutput.litll litll.idl.config.OutputFile]

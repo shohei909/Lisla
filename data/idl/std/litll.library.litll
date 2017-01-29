@@ -1,0 +1,8 @@
+[version 1.0.0]
+[description "Standard Library of Litll IDL"]
+
+[extension idl.litll      litll.idl.Idl]
+[extension library.litll  litll.idl.lib.IdlLibrary]
+[extension project.litll  litll.idl.project.LitllProject]
+[extension clidl.litll    litll.cli.clidl.Clidl]
+[extension libref.litll   litll.idl.library.LibraryRootDirectory]
