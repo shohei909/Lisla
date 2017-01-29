@@ -21,7 +21,7 @@ class ParseTest extends LitllTestCase
 	{
 		for (file in FileSystem.readDirectory(TestCore.BASIC_DIRECTORY))
 		{
-			if (StringTools.endsWith(file, "1012.litll"))
+			if (StringTools.endsWith(file, ".litll"))
 			{
 				var content = File.getContent(TestCore.BASIC_DIRECTORY + "/" + file);
 				var caseData = switch (Parser.run(content))
