@@ -5,10 +5,12 @@ class TypeDefinitionDocument {
     public var completion : haxe.ds.Option<litll.core.ds.Maybe<litll.core.tag.ArrayTag>>;
     public var completionConst : Array<litll.core.Litll>;
     public var completionType : Array<litll.idl.std.data.idl.TypeReference>;
-    public function new(documentTag:Array<litll.idl.std.data.idl.TypeReference>, completion:haxe.ds.Option<litll.core.ds.Maybe<litll.core.tag.ArrayTag>>, completionConst:Array<litll.core.Litll>, completionType:Array<litll.idl.std.data.idl.TypeReference>) {
+    public var highlight : Array<litll.idl.std.data.util.highlight.HighlightScope>;
+    public function new(documentTag:Array<litll.idl.std.data.idl.TypeReference>, completion:haxe.ds.Option<litll.core.ds.Maybe<litll.core.tag.ArrayTag>>, completionConst:Array<litll.core.Litll>, completionType:Array<litll.idl.std.data.idl.TypeReference>, highlight:Array<litll.idl.std.data.util.highlight.HighlightScope>) {
         this.documentTag = documentTag;
         this.completion = completion;
         this.completionConst = completionConst;
         this.completionType = completionType;
+        this.highlight = highlight;
     }
 }

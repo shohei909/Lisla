@@ -6,13 +6,13 @@ class HeaderDocument {
     public var author : Array<litll.idl.std.data.document.Author>;
     public var schema : haxe.ds.Option<litll.idl.std.data.idl.TypeReference>;
     public var schemaNote : haxe.ds.Option<litll.idl.std.data.idl.portable.PortableIdl>;
-    public var markupLanguage : haxe.ds.Option<litll.idl.std.data.document.DocumentMarkupLanguage>;
-    public function new(encoding:haxe.ds.Option<litll.idl.std.data.document.DocumentEncoding>, license:Array<litll.idl.std.data.document.License>, author:Array<litll.idl.std.data.document.Author>, schema:haxe.ds.Option<litll.idl.std.data.idl.TypeReference>, schemaNote:haxe.ds.Option<litll.idl.std.data.idl.portable.PortableIdl>, markupLanguage:haxe.ds.Option<litll.idl.std.data.document.DocumentMarkupLanguage>) {
+    public var documentMarkup : haxe.ds.Option<litll.idl.std.data.document.DocumentMarkupLanguage>;
+    public function new(encoding:haxe.ds.Option<litll.idl.std.data.document.DocumentEncoding>, license:Array<litll.idl.std.data.document.License>, author:Array<litll.idl.std.data.document.Author>, schema:haxe.ds.Option<litll.idl.std.data.idl.TypeReference>, schemaNote:haxe.ds.Option<litll.idl.std.data.idl.portable.PortableIdl>, documentMarkup:haxe.ds.Option<litll.idl.std.data.document.DocumentMarkupLanguage>) {
         this.encoding = encoding;
         this.license = license;
         this.author = author;
         this.schema = schema;
         this.schemaNote = schemaNote;
-        this.markupLanguage = markupLanguage;
+        this.documentMarkup = documentMarkup;
     }
 }

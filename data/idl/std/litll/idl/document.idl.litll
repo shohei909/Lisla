@@ -4,6 +4,7 @@
 
 [import litll.idl]
 [import litll.core]
+[import litll.util.highlight]
 
 [struct TypeDefinitionDocument
     [document_tag.. TypeReference]

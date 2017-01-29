@@ -92,9 +92,9 @@ class HeaderDocumentDelitllfier {
                                 });
                             };
                         };
-                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "markup_language")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg5) {
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "document_markup")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg5) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("markup_language")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("document_markup")));
                             };
                             case haxe.ds.Option.None:{
                                 arg5 = haxe.ds.Option.Some({

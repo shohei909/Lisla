@@ -1,20 +1,22 @@
 /// ''
+
 [package litll.xml]
 
 [tuple LixmlElement
     [name LixmlElementName]
-    [attribute.. ]
+    [attribute.. LixmlAttribute]
     [children?< LixmlChildrenTuple]
 ]
+
 [tuple LixmlAttribute
     [name LixmlAttributeName]
     [value? LixmlAttributeValue]
 ]
+[newtype LixmlAttributeName String]
+[newtype LixmlAttributeValue String]
+
 [tuple LixmlChildrenTuple
     >
     [children..< LixmlElement]
 ]
-
-[newtype LixmlAttributeName String]
 [newtype LixmlElementName String]
-[newtype LixmlElementValue String]

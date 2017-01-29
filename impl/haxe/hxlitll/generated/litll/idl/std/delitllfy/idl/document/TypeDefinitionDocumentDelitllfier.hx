@@ -11,6 +11,7 @@ class TypeDefinitionDocumentDelitllfier {
                 var arg1 = haxe.ds.Option.None;
                 var arg2 = [];
                 var arg3 = [];
+                var arg4 = [];
                 for (litllData in array.data) {
                     var context = new litll.idl.delitllfy.DelitllfyContext(litllData, context.config);
                     switch litllData {
@@ -47,10 +48,21 @@ class TypeDefinitionDocumentDelitllfier {
                                 };
                             };
                         });
+                        case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "highlight")) && array.data[1].match(litll.core.Litll.Str(_))):arg4.push({
+                            var context = new litll.idl.delitllfy.DelitllfyContext(array.data[1], context.config);
+                            switch (litll.idl.std.delitllfy.util.highlight.HighlightScopeDelitllfier.process(context)) {
+                                case litll.core.ds.Result.Ok(data):{
+                                    data;
+                                };
+                                case litll.core.ds.Result.Err(data):{
+                                    return litll.core.ds.Result.Err(data);
+                                };
+                            };
+                        });
                         case litllData:return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.UnmatchedStructElement([])));
                     };
                 };
-                var instance = new litll.idl.std.data.idl.document.TypeDefinitionDocument(arg0, arg1, arg2, arg3);
+                var instance = new litll.idl.std.data.idl.document.TypeDefinitionDocument(arg0, arg1, arg2, arg3, arg4);
                 litll.core.ds.Result.Ok(instance);
             };
         };
