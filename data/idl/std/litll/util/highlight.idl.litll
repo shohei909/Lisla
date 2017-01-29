@@ -1,4 +1,5 @@
 /// 'Types for .tmTheme'
+[package litll.util]
 
 /// [completion_const comment]
 /// [completion_const comment.line]

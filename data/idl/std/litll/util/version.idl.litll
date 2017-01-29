@@ -1,0 +1,5 @@
+/// [license "Public Domain"]
+[package litll.util]
+
+/// 'major[-suffix][.minor[-suffix][[.patch[-suffix]].release[-suffix]]]'
+[newtype Version String]

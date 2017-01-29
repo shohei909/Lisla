@@ -1,6 +1,6 @@
 /// 'IDL for Litll Document Comment'
 /// [license "Public Domain"]
-/// [schema litll.idl.Idl]
+
 
 [package litll]
 [import litll.idl]

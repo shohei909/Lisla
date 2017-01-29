@@ -1,0 +1,20 @@
+/// ''
+[package litll.xml]
+
+[tuple LixmlElement
+    [name LixmlElementName]
+    [attribute.. ]
+    [children?< LixmlChildrenTuple]
+]
+[tuple LixmlAttribute
+    [name LixmlAttributeName]
+    [value? LixmlAttributeValue]
+]
+[tuple LixmlChildrenTuple
+    >
+    [children..< LixmlElement]
+]
+
+[newtype LixmlAttributeName String]
+[newtype LixmlElementName String]
+[newtype LixmlElementValue String]

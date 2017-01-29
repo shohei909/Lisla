@@ -1,0 +1,11 @@
+/// [license "Public Domain"]
+[package litll.util]
+
+/// 'ISO 639 Code'
+[newtype LanguageCode String]
+
+/// 'ISO 3166-1 Code'
+[newtype CountryCode String]
+
+/// 'IETF language tag (see RFC 5646)'
+[newtype LanguageTag String]

@@ -1,15 +1,15 @@
 /// 'IDL for Litll IDL configure file(.config.litll)'
-/// [schema litll.idl.Idl]
+/// [license "Public Domain"]
 [package litll.idl]
 
 [import litll.util.file]
 [import litll.util.version]
 [import litll.idl]
 
-[struct IdlConfig
+[struct LibraryConfig
     [version? Version]
     [extension..< FileExtensionTuple]
-    [depend..< LibraryDependenceTuple]
+    [lib..< LibraryDependenceTuple]
 ]
 
 [tuple FileExtensionTuple
@@ -17,7 +17,5 @@
 ]
 
 [tuple LibraryDependenceTuple
-    depend [] []
+    lib [library LibraryPath] [version Version]
 ]
-
-
