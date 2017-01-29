@@ -1,9 +1,11 @@
 package litll.core.parse.array;
 import haxe.ds.Option;
+import litll.core.LitllArray;
 import litll.core.LitllString;
 import litll.core.ds.Result;
 import litll.core.ds.SourceRange;
 import litll.core.parse.string.QuotedStringContext;
+import litll.core.parse.string.QuotedStringArrayPair;
 import litll.core.parse.string.UnquotedStringContext;
 import unifill.CodePoint;
 import litll.core.parse.ParseContext;
@@ -24,13 +26,12 @@ class ArrayContext
     
     public var state:ArrayState;
     
-	public function new(top:ParseContext, parent:ArrayParent, state:ArrayState, isInHead:Bool, tag:UnsettledArrayTag) 
+	public function new(top:ParseContext, parent:ArrayParent, isInHead:Bool, tag:UnsettledArrayTag) 
 	{
         this.top = top;
-        this.state = state;
         this.isInHead = isInHead;
         this.parent = parent;
-    
+        this.state = ArrayState.Normal;
 		this.tag = tag;
 		this.data = [];
 		this.elementTag = new UnsettledLeadingTag(tag.leadingTag.sourceMap);
@@ -70,6 +71,31 @@ class ArrayContext
 			case [_, ArrayState.UnquotedString(context)]:
 				context.process(codePoint);
 
+			// --------------------------
+			// Escape
+			// --------------------------
+			case [CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB, ArrayState.Escape]:
+                switch (parent)
+                {
+                    case ArrayParent.QuotedString(stringContext, store):
+                        var arr = new LitllArray<Litll>(data, tag.settle(top.position));
+                        store.array.push(arr);
+                        
+                        var nextContext = new ArrayContext(top, this.parent, false, new UnsettledLeadingTag(top.sourceMap).toArrayTag(top.position));
+                        top.current = nextContext;
+                        
+                    case ArrayParent.Array(_) | ArrayParent.Top:
+                        top.error(ParseErrorKind.InvalidInterpolationSeparator, new SourceRange(top.sourceMap, tag.startPosition, top.position));
+                        state = ArrayState.Normal;
+				}
+                
+			case [_, ArrayState.Escape]:
+				top.error(ParseErrorKind.UnquotedEscapeSequence, new SourceRange(top.sourceMap, tag.startPosition, top.position));
+				state = ArrayState.Normal;
+                
+			case [CodePointTools.BACK_SLASH, ArrayState.Normal]:
+                state = ArrayState.Escape;
+                
 			// --------------------------
 			// Slash
 			// --------------------------
@@ -112,8 +138,8 @@ class ArrayContext
                     case ArrayParent.Array(parentContext):
                         endArray(parentContext);
                         
-                    case ArrayParent.QuotedString(array, string, storedArray):
-                        endInterporation(array, string, storedArray);
+                    case ArrayParent.QuotedString(stringContext, store):
+                        endInterporation(stringContext, store);
                     
                     case ArrayParent.Top:
                         top.error(ParseErrorKind.TooManyClosingBracket);
@@ -164,8 +190,7 @@ class ArrayContext
 	private inline function startArray():Void 
 	{
         var tag = popArrayTag(top.position - 1);
-		state = ArrayState.Normal;
-        var child = new ArrayContext(top, ArrayParent.Array(this), state, false, tag);
+        var child = new ArrayContext(top, ArrayParent.Array(this), false, tag);
 		top.current = child;
 	}
 
@@ -201,13 +226,13 @@ class ArrayContext
 		top.current = destination;
 	}
     
-    private function endInterporation(arrayContext:ArrayContext, stringContext:QuotedStringContext, storedArray:Array<LitllArray<Litll>>):Void
+    private function endInterporation(stringContext:QuotedStringContext, store:QuotedStringArrayPair):Void
     {
     	var arr = new LitllArray<Litll>(data, tag.settle(top.position));
-        storedArray.push(arr);
-		stringContext.store(storedArray);
+        store.array.push(arr);
+		stringContext.store(store);
         
-		top.current = arrayContext;
+		top.current = stringContext.parent;
     }
     
     public function pushString(litllString:LitllString):Void
@@ -248,9 +273,9 @@ class ArrayContext
                         endArray(arrayContext);
                         Option.None;
                         
-                    case ArrayParent.QuotedString(arrayContext, stringContext, storedArray):
+                    case ArrayParent.QuotedString(stringContext, store):
                         top.error(ParseErrorKind.UnclosedArray, new SourceRange(top.sourceMap, tag.startPosition, tag.startPosition + 1));
-                        endInterporation(arrayContext, stringContext, storedArray);
+                        endInterporation(stringContext, store);
                         Option.None;
                         
                     case ArrayParent.Top:
@@ -271,6 +296,11 @@ class ArrayContext
                 
             case ArrayState.Comment(context):
                 context.end();
+                Option.None;
+                
+            case ArrayState.Escape:
+				top.error(ParseErrorKind.UnquotedEscapeSequence, new SourceRange(top.sourceMap, tag.startPosition, top.position));
+                state = ArrayState.Normal;
                 Option.None;
         }
 	}

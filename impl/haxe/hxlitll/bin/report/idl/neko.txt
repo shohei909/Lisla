@@ -1,24 +1,3 @@
-Class: cases.ParseTest .E
-Class: cases.IdlTest F
-* cases.ParseTest::testSuccess()
-cases/ParseTest.hx:46: Test failed : failed to parse file: 
-ParseError: line:2:16(46)-line:2:17(47): Invalid escape sequence. [0012_ja_interpolation.litll]
-cases/ParseTest.hx:46: Test failed : failed to parse file: 
-ParseError: line:0:4(3)-line:0:5(4): Invalid escape sequence. [0013_multiple_interpolation.litll]
-cases/ParseTest.hx:50: Test failed : expected "" but was "" [1010.litll[10]]
-cases/ParseTest.hx:46: Test failed : failed to parse file: 
-ParseError: line:0:5(4)-line:0:6(5): Invalid escape sequence. [1012.litll]
-C:\HaxeToolkit\haxe\std/haxe/format/JsonParser.hx:251: exception thrown : Invalid char 93 at position 79
-C:\HaxeToolkit\haxe\std/haxe/format/JsonParser.hx:96: Called from
-cases/ParseTest.hx:50: Called from
-C:\HaxeToolkit\haxe\std/neko/_std/Reflect.hx:58: Called from
-nanotest/NanoTestCase.hx:78: Called from
-
-* cases.IdlTest::testDelitllfy()
-cases/IdlTest.hx:37: Test failed : failed to delitllfy file:  
-Warning:line:3:8(39)-line:3:20(51): Package name must start with lowercase alphabet: LixmlElement
-Warning:line:5:4(85)-line:5:18(99): unmatched enum constructor. '' expected
-Warning:line:5:4(85)-line:5:18(99): too long array
-Error:line:3:0(31)-line:7:1(139): too long array [std/litll/xml/lixml.idl.litll]
-
-FAILED 3 tests, 2 failed, 1 success
+Class: cases.ParseTest ..
+Class: cases.IdlTest .
+OK 3 tests, 0 failed, 3 success

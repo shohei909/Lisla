@@ -1,9 +1,10 @@
 package litll.core.parse.array;
 import litll.core.parse.string.QuotedStringContext;
+import litll.core.parse.string.QuotedStringArrayPair;
 
 enum ArrayParent
 {
     Top;
     Array(context:ArrayContext);
-    QuotedString(arrayContext:ArrayContext, stringContext:QuotedStringContext, storedArray:Array<LitllArray<Litll>>);
+    QuotedString(stringContext:QuotedStringContext, store:QuotedStringArrayPair);
 }

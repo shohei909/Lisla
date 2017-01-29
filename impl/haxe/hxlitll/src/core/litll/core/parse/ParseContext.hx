@@ -34,7 +34,6 @@ class ParseContext
 		current = new ArrayContext(
             this,
             ArrayParent.Top,
-            ArrayState.Normal, 
             true, 
             new UnsettledLeadingTag(sourceMap).toArrayTag(0)
         );

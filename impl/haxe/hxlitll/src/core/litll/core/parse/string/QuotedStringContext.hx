@@ -3,25 +3,27 @@ using litll.core.char.CodePointTools;
 import litll.core.ds.SourceRange;
 import litll.core.parse.ParseContext;
 import litll.core.parse.array.ArrayContext;
+import litll.core.parse.array.ArrayParent;
 import litll.core.parse.array.ArrayState;
+import litll.core.parse.tag.UnsettledLeadingTag;
 import litll.core.parse.tag.UnsettledStringTag;
+import litll.core.tag.StringTag;
 import unifill.CodePoint;
 
 class QuotedStringContext 
 {
-    private var parent:ArrayContext;
+    public var parent(default, null):ArrayContext;
     private var top:ParseContext;
     
 	private var currentLine:QuotedStringLine;
     private var currentString:Array<QuotedStringLine>;
-	private var storedData:Array<QuotedStringStoredData>;
+	private var storedData:Array<QuotedStringArrayPair>;
 	
 	private var state:QuotedStringState;
 	private var singleQuoted:Bool;
 	private var startQuoteCount:Int;
 	private var tag:UnsettledStringTag;
     
-    private var isSingleLine:Bool;
     private var lastIndent:String;
     
 	public function new(top:ParseContext, parent:ArrayContext, singleQuoted:Bool, startQuoteCount:Int, tag:UnsettledStringTag) 
@@ -36,16 +38,13 @@ class QuotedStringContext
 		this.currentLine = new QuotedStringLine(tag.startPosition);
 		this.state = QuotedStringState.Indent;
         
-        this.isSingleLine = true;
         this.lastIndent = "";
 	}
 	
-    public function store(array:Array<LitllArray<Litll>>):Void
+    public function store(data:QuotedStringArrayPair):Void
     {
-        storedData.push(new QuotedStringStoredData(currentString, array));
-        
-		this.currentLine = new QuotedStringLine(top.position);
-        currentString = [];
+        tag = new UnsettledLeadingTag(top.sourceMap).toStringTag(top.position);
+        storedData.push(data);
     }
     
     public function process(codePoint:CodePoint):Void
@@ -53,13 +52,26 @@ class QuotedStringContext
 		switch (state) 
 		{
 			case QuotedStringState.EscapeSequence(context):
-                context.process(codePoint, true).iter(
-					function (string)
-					{
+                switch (context.process(codePoint, true))
+                {
+					case EscapeResult.Letter(string):
                         currentLine.content += string;
 						state = QuotedStringState.Body;
-					}
-				);
+                        
+					case EscapeResult.Interpolate:
+                        currentString.push(currentLine);
+                        var store = new QuotedStringArrayPair(currentString, tag.settle(top.position));
+                        
+                        currentString = [];
+                        this.currentLine = new QuotedStringLine(top.position);
+                        state = QuotedStringState.Body;
+                        
+                        var arrayTag = new UnsettledLeadingTag(tag.leadingTag.sourceMap).toArrayTag(0);
+                        top.current = new ArrayContext(top, ArrayParent.QuotedString(this, store), false, arrayTag);
+                        
+					case EscapeResult.Continue:
+                        // nothing to do.
+				}
 			
 			case QuotedStringState.CarriageReturn:
 				switch (codePoint.toInt())
@@ -142,7 +154,6 @@ class QuotedStringContext
     
 	private inline function newLine(string:String):Void 
 	{
-        isSingleLine = false;
         lastIndent = "";
         
 		currentLine.newLine = string;
@@ -150,16 +161,6 @@ class QuotedStringContext
 		currentLine = new QuotedStringLine(top.position);
 		state = QuotedStringState.Indent;
 	}
-    
-    private inline function newString(array:Array<LitllArray<Litll>>):Void
-    {   
-        currentString.push(currentLine);
-        storedData.push(new QuotedStringStoredData(currentString, array));
-        
-        currentString = [];
-        currentLine = new QuotedStringLine(top.position);
-        state = QuotedStringState.Body;
-    }
 	
 	private inline function matchQuote(codePoint:CodePoint):Bool
 	{
@@ -226,14 +227,14 @@ class QuotedStringContext
         var isFirstGroup = true;
         var lastIndentSize = lastIndent.length;
         
-        function addString(lines:Array<QuotedStringLine>, isLastGroup:Bool):Void
+        function addString(lines:Array<QuotedStringLine>, isLastGroup:Bool, tag:StringTag):Void
         {
             var string = "";
             var isGroupTop = true;
             
             for (line in lines)
             {
-                var isSkipTarget = !isSingleLine && isFirstGroup && isGroupTop && line.isWhite();
+                var isSkipTarget = lines.length > 1 && isFirstGroup && isGroupTop && line.isWhite();
                 if (!isSkipTarget)
                 {
                     if (isGroupTop)
@@ -258,16 +259,17 @@ class QuotedStringContext
                     }
                     string += line.newLine;
                 }
+                
                 isGroupTop = false;
             }
             
-            parent.pushString(new LitllString(string, tag.settle(top.position)));
+            parent.pushString(new LitllString(string, tag));
             isFirstGroup = false;
         }
         
         for (pair in storedData)
         {
-            addString(pair.string, false);
+            addString(pair.string, false, pair.tag);
             
             for (array in pair.array)
             {
@@ -284,6 +286,6 @@ class QuotedStringContext
             currentString[currentString.length - 1].newLine = "";
         }
         
-        addString(currentString, true);
+        addString(currentString, true, tag.settle(top.position));
 	}
 }

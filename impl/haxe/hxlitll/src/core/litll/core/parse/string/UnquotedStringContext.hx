@@ -46,7 +46,7 @@ class UnquotedStringContext
 				
 			case [CodePointTools.BACK_SLASH, _]:
 				top.error(ParseErrorKind.UnquotedEscapeSequence, new SourceRange(top.sourceMap, tag.startPosition, top.position));
-            	
+				
 			// --------------------------
 			// Separater
 			// --------------------------

@@ -18,6 +18,9 @@ class ParseErrorEntry
 			case ParseErrorKind.UnquotedEscapeSequence:
 				"Escape sequence is not supported for unquoted sequence.";
 				
+			case ParseErrorKind.InvalidInterpolationSeparator:
+				"Interpolation separator is used in not interpolation context.";
+				
 			case ParseErrorKind.InvalidEscapeSequence:
 				"Invalid escape sequence.";
 				
