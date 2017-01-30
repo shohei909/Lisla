@@ -13,7 +13,7 @@ class DocumentDelitllfier {
                     switch litllData {
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "comment")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg0) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("comment")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("comment")));
                             };
                             case haxe.ds.Option.None:{
                                 arg0 = haxe.ds.Option.Some({
@@ -37,7 +37,7 @@ class DocumentDelitllfier {
                         data;
                     };
                     case haxe.ds.Option.None:{
-                        return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElement("comment")));
+                        return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementNotFound("comment")));
                     };
                 });
                 litll.core.ds.Result.Ok(instance);

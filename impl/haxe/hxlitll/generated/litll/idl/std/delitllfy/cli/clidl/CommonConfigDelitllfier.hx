@@ -16,7 +16,7 @@ class CommonConfigDelitllfier {
                     switch litllData {
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "description")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg0) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("description")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("description")));
                             };
                             case haxe.ds.Option.None:{
                                 arg0 = haxe.ds.Option.Some({
@@ -34,7 +34,7 @@ class CommonConfigDelitllfier {
                         };
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "subcommand")) && array.data[1].match(litll.core.Litll.Arr(_))):switch (arg1) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("subcommand")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("subcommand")));
                             };
                             case haxe.ds.Option.None:{
                                 arg1 = haxe.ds.Option.Some({
@@ -52,7 +52,7 @@ class CommonConfigDelitllfier {
                         };
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "arg")) && array.data[1].match(litll.core.Litll.Arr(_))):switch (arg2) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("arg")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("arg")));
                             };
                             case haxe.ds.Option.None:{
                                 arg2 = haxe.ds.Option.Some({
@@ -70,7 +70,7 @@ class CommonConfigDelitllfier {
                         };
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "input")) && array.data[1].match(litll.core.Litll.Arr(_))):switch (arg3) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("input")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("input")));
                             };
                             case haxe.ds.Option.None:{
                                 arg3 = haxe.ds.Option.Some({
@@ -94,21 +94,21 @@ class CommonConfigDelitllfier {
                         data;
                     };
                     case haxe.ds.Option.None:{
-                        return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElement("subcommand")));
+                        return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementNotFound("subcommand")));
                     };
                 }, switch (arg2) {
                     case haxe.ds.Option.Some(data):{
                         data;
                     };
                     case haxe.ds.Option.None:{
-                        return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElement("arg")));
+                        return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementNotFound("arg")));
                     };
                 }, switch (arg3) {
                     case haxe.ds.Option.Some(data):{
                         data;
                     };
                     case haxe.ds.Option.None:{
-                        return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElement("input")));
+                        return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementNotFound("input")));
                     };
                 });
                 litll.core.ds.Result.Ok(instance);

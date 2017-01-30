@@ -1,7 +1,7 @@
 package litll.idl.std.tools.idl;
 import haxe.macro.Expr.FunctionArg;
 import litll.idl.std.data.idl.TypeDependenceDeclaration;
-import litll.idl.project.data.DataOutputConfig;
+import litll.idl.generator.data.DataOutputConfig;
 
 class TypeDependenceDeclarationTools 
 {

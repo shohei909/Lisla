@@ -6,7 +6,7 @@ import litll.core.ds.Result;
 
 class Delitllfier
 {
-	public static function run<T>(process:DelitllfyContext->Result<T, DelitllfyError>, litll:LitllArray<Litll>, ?config:DelitllfyConfig):Result<T, DelitllfyError>
+	public static function run<T>(processor:DelitllfyProcessor<T>, litll:LitllArray<Litll>, ?config:DelitllfyConfig):Result<T, DelitllfyError>
 	{
 		if (config == null)
 		{
@@ -14,7 +14,7 @@ class Delitllfier
 		}
 		
 		var context = new DelitllfyContext(Litll.Arr(litll), config);
-		return process(context);
+		return processor.process(context);
 	}
 	
 	public static function processLitll(context:DelitllfyContext):Result<Litll, DelitllfyError>

@@ -4,46 +4,27 @@ import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.parse.Parser;
 import litll.idl.delitllfy.Delitllfier;
-import litll.idl.project.IdlProject;
-import litll.idl.project.data.DataOutputConfig;
-import litll.idl.project.data.DelitllfierOutputConfig;
-import litll.idl.project.data.OutputConfig;
-import litll.idl.project.data.ProjectConfig;
-import litll.idl.project.data.SourceConfig;
+import litll.idl.generator.IdlProject;
+import litll.idl.generator.data.DataOutputConfig;
+import litll.idl.generator.data.DelitllfierOutputConfig;
+import litll.idl.generator.data.OutputConfig;
+import litll.idl.generator.data.ProjectConfig;
+import litll.idl.generator.data.SourceConfig;
+import litll.idl.read.litll.LitllStringToData;
 import litll.idl.std.data.idl.path.TypeGroupPath;
 import litll.idl.std.tools.idl.path.TypePathFilterTools;
 import sys.FileSystem;
 import sys.io.File;
 using litll.core.ds.ResultTools;
 
+// import litll.idl.hxlitll.delitllfy.idl.config.InputFileDelitllfier;
+
 class Main 
 {
 	public static function main():Void
 	{
-        var hxinputData = File.getContent("litll/hxlitll/hxlitll.hxinput.litll");
-        
-        switch (Parser.run(content))
-        {
-            case Result.Err(error):
-                throw error;
-                
-            case Result.Ok(litllArray):
-                switch (Delitllfier.run(new InputFle, litllArray, config))
-                {
-                    case Result.Err(error):
-                        errorResult(IdlReadErrorKind.Delitll(error));
-                        
-                    case Result.Ok(idl):
-                        switch (loadedIdl.toOption())
-                        {
-                            case Option.Some(prevIdl):
-                                errorResult(IdlReadErrorKind.ModuleDupplicated(new ModulePath(path), prevIdl.file));
-                                
-                            case Option.None:
-                                loadedIdl = Maybe.some(new LoadedIdl(idl, filePath));
-                        }
-                }
-        }
+//        var hxinputData = File.getContent("litll/hxlitll/hxlitll.hxinput.litll");
+//        LitllStringToData.run(InputFileDelitllfier, hxinputData);
         
         remove("../../migration/litll");
 		var config = new ProjectConfig(
@@ -59,6 +40,7 @@ class Main
 				new DataOutputConfig(
 					[
 						TypeGroupPath.create("litll").getOrThrow(),
+						TypeGroupPath.create("hxlitll").getOrThrow(),
 					],
 					[
                         TypePathFilterTools.createPrefix("hxlitll", "litll.idl.hxlitll.data"),
@@ -68,6 +50,7 @@ class Main
 					new DelitllfierOutputConfig(
 						[
 							TypeGroupPath.create("litll").getOrThrow(),
+							TypeGroupPath.create("hxlitll").getOrThrow(),
 						],
 						[
                             TypePathFilterTools.createPrefix("hxlitll", "litll.idl.hxlitll.delitllfy"),

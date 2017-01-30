@@ -18,7 +18,7 @@ class HeaderDocumentDelitllfier {
                     switch litllData {
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "encoding")) && array.data[1].match(litll.core.Litll.Str(_.data => "utf8"))):switch (arg0) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("encoding")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("encoding")));
                             };
                             case haxe.ds.Option.None:{
                                 arg0 = haxe.ds.Option.Some({
@@ -58,7 +58,7 @@ class HeaderDocumentDelitllfier {
                         });
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "type"))):switch (arg3) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("type")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("type")));
                             };
                             case haxe.ds.Option.None:{
                                 arg3 = haxe.ds.Option.Some({
@@ -76,7 +76,7 @@ class HeaderDocumentDelitllfier {
                         };
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "type_note")) && array.data[1].match(litll.core.Litll.Arr(_))):switch (arg4) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("type_note")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("type_note")));
                             };
                             case haxe.ds.Option.None:{
                                 arg4 = haxe.ds.Option.Some({
@@ -94,7 +94,7 @@ class HeaderDocumentDelitllfier {
                         };
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "document_markup")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg5) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litll, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("document_markup")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("document_markup")));
                             };
                             case haxe.ds.Option.None:{
                                 arg5 = haxe.ds.Option.Some({

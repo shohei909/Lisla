@@ -4,12 +4,12 @@ import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeParamDecl;
 import litll.core.ds.Maybe;
-import litll.idl.project.output.data.HaxeDataTypePath;
+import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.std.data.idl.TypeDependenceDeclaration;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeParameterDeclaration;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.project.data.DataOutputConfig;
+import litll.idl.generator.data.DataOutputConfig;
 
 class TypeParameterDeclarationTools
 {
