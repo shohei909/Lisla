@@ -17,7 +17,12 @@ class IdlDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.ImportDeclarationDelitllfier.process)) {
+                    var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.ImportDeclarationDelitllfier.process, function(data) {
+                            return switch data {
+                                case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "import")) && array.data[1].match(litll.core.Litll.Str(_))):true;
+                                case _:false;
+                            };
+                        })) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };
@@ -25,7 +30,15 @@ class IdlDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg2 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TypeDefinitionDelitllfier.process)) {
+                    var arg2 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TypeDefinitionDelitllfier.process, function(data) {
+                            return switch data {
+                                case litll.core.Litll.Arr(array) if (array.length == 3 && array.data[0].match(litll.core.Litll.Str(_.data => "newtype"))):true;
+                                case litll.core.Litll.Arr(array) if (2 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "tuple"))):true;
+                                case litll.core.Litll.Arr(array) if (2 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "enum"))):true;
+                                case litll.core.Litll.Arr(array) if (2 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "struct"))):true;
+                                case _:false;
+                            };
+                        })) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };

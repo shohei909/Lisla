@@ -8,7 +8,6 @@ import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 using Lambda;
 
-// TODO: guard
 class DelitllfyArrayContext
 {
 	private var array:LitllArray<Litll>;
@@ -27,57 +26,98 @@ class DelitllfyArrayContext
 		error = Maybe.none();
 		maybeErrors = [];
 	}
-	
-	public function readRest<T>(process:ProcessFunction<T>):Result<Array<T>, DelitllfyError> 
-	{
-		var result = [];
-		
-		while (true)
-		{
-			switch (readData(process))
-			{
-				case Result.Ok(data):
-					result.push(data);
-					
-				case Result.Err(error):
-					index--;
-					maybeErrors.push(error);
-					break;
-			}
-		}
-		
-		return Result.Ok(result);
-	}
-	
     
-    public function readOptional<T>(process:ProcessFunction<T>):Result<Option<T>, DelitllfyError>
+	public function nextValue():Option<Litll>
     {
-        return switch (readData(process))
+		return if (array.data.length <= index)
+		{
+			Option.None;
+		}
+        else
         {
-            case Result.Ok(data):
-                Result.Ok(Option.Some(data));
-                
-            case Result.Err(error):
-                index--;
-                maybeErrors.push(error);
-                Result.Ok(Option.None);
+            Option.Some(array.data[index]);
         }
     }
     
-	public inline function readWithDefault<T>(process:ProcessFunction<T>, defaultValue:T):Result<T, DelitllfyError>
-	{
-		return switch (readData(process))
+    private inline function matchNext(match:Litll->Bool):Bool
+    {
+        return if (array.data.length <= index)
 		{
-			case Result.Ok(data):
-				Result.Ok(data);
-				
-			case Result.Err(error):
-				index--;
-				maybeErrors.push(error);
-				Result.Ok(defaultValue);
+			false;
 		}
+        else
+        {
+            match(array.data[index]);
+        }
+    }
+    
+    public inline function readRest<T>(process:ProcessFunction<T>, match:Litll->Bool):Result<Array<T>, DelitllfyError> 
+	{
+		var array = [];
+		var result = null;
+		
+		while (true)
+		{
+			if (matchNext(match))
+			{
+                switch (readData(process))
+                {
+                    case Result.Ok(data):
+                        array.push(data);
+                        
+                    case Result.Err(error):
+                        result = Result.Err(error);
+                        break;
+                }
+			}
+            else
+            {
+                result = Result.Ok(array);
+                break;
+            }
+		}
+        
+        return result;
 	}
-	
+    
+    public inline function readOptional<T>(process:ProcessFunction<T>, match:Litll->Bool):Result<Option<T>, DelitllfyError> 
+	{
+        return if (matchNext(match))
+        {
+            switch (readData(process))
+            {
+                case Result.Ok(data):
+                    Result.Ok(Option.Some(data));
+                    
+                case Result.Err(error):
+                    Result.Err(error);
+            }
+        }
+        else
+        {
+            Result.Ok(Option.None);
+        }
+	}
+    
+	public inline function readWithDefault<T>(process:ProcessFunction<T>, match:Litll->Bool, defaultValue:T):Result<T, DelitllfyError>
+	{
+        return if (matchNext(match))
+        {
+            switch (readData(process))
+            {
+                case Result.Ok(data):
+                    Result.Ok(data);
+                    
+                case Result.Err(error):
+                    Result.Err(error);
+            }
+        }
+        else
+        {
+            Result.Ok(defaultValue);
+        }
+	}
+    
 	public inline function read<T>(process:ProcessFunction<T>):Result<T, DelitllfyError>
 	{
 		return switch (readData(process))
@@ -90,11 +130,9 @@ class DelitllfyArrayContext
 		}
 	}
 	
-    
     public function readLabel(string:String):Result<Bool, DelitllfyError>
     {
         index++;
-        
         return switch (array.data[index - 1])
         {
             case Litll.Str(data) if (data.data == string):
@@ -188,7 +226,6 @@ class DelitllfyArrayContext
 				error = Maybe.some(nextError);
 		}
 	}
-    
 }
 
 private typedef ProcessFunction<T> = DelitllfyContext->Result<T, DelitllfyError>;

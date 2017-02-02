@@ -17,7 +17,13 @@ class GenericTypeReferenceDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TypeReferenceParameterDelitllfier.process)) {
+                    var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TypeReferenceParameterDelitllfier.process, function(data) {
+                            return switch data {
+                                case litll.core.Litll.Str(_):true;
+                                case litll.core.Litll.Arr(array):true;
+                                case _:false;
+                            };
+                        })) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };

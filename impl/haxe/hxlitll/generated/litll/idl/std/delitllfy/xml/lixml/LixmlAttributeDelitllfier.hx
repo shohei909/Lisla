@@ -17,7 +17,12 @@ class LixmlAttributeDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg1 = switch (arrayContext.readOptional(litll.idl.std.delitllfy.xml.lixml.LixmlAttributeValueDelitllfier.process)) {
+                    var arg1 = switch (arrayContext.readOptional(litll.idl.std.delitllfy.xml.lixml.LixmlAttributeValueDelitllfier.process, function(data) {
+                            return switch data {
+                                case litll.core.Litll.Str(_):true;
+                                case _:false;
+                            };
+                        })) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };

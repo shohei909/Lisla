@@ -237,7 +237,7 @@ class DelitllfierExprBuilder
         
         return createTupleCase(guard, caseExpr);
     }
-    public function createUnfoldFieldCase(type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr, outputCases:Array<Case>):Void
+    public function createTypeCase(type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr, outputCases:Array<Case>):Void
     {
         var unfoldedType = type.unfold(context.source, definitionParameters);
         for (caseKind in DelitllfyCaseConditionTools.createForUnfoldedType(unfoldedType, context.source))

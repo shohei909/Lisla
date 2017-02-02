@@ -154,7 +154,7 @@ class EnumDelitllfierBuild
     }
     function _addUnfoldCase(instantiationExpr:Expr, type:TypeReference):Void
     {
-        builder.createUnfoldFieldCase(type, parameters.parameters, instantiationExpr, cases);
+        builder.createTypeCase(type, parameters.parameters, instantiationExpr, cases);
     }
     
     inline function addUnfoldCase(name:EnumConstructorName, type:TypeReference):Void

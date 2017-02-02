@@ -17,7 +17,13 @@ class ParameterizedEnumConstructorDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TupleElementDelitllfier.process)) {
+                    var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TupleElementDelitllfier.process, function(data) {
+                            return switch data {
+                                case litll.core.Litll.Str(_):true;
+                                case litll.core.Litll.Arr(array) if (2 <= array.length && array.length <= 3 && array.data[0].match(litll.core.Litll.Str(_))):true;
+                                case _:false;
+                            };
+                        })) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };

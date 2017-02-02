@@ -23,7 +23,13 @@ class TypeNameDeclarationDelitllfier {
                         return litll.core.ds.Result.Err(data);
                     };
                 };
-                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TypeParameterDeclarationDelitllfier.process)) {
+                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TypeParameterDeclarationDelitllfier.process, function(data) {
+                        return switch data {
+                            case litll.core.Litll.Str(_):true;
+                            case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_))):true;
+                            case _:false;
+                        };
+                    })) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };

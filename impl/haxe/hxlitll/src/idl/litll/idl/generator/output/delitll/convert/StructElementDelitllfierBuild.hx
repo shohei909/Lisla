@@ -75,7 +75,7 @@ class StructElementDelitllfierBuild
     }
     private inline function addUnfoldCase(field:StructField, caseExpr:Expr):Void
     {
-        parent.builder.createUnfoldFieldCase(field.type, parent.parameters.parameters, caseExpr, parent.cases);
+        parent.builder.createTypeCase(field.type, parent.parameters.parameters, caseExpr, parent.cases);
     }
     private inline function addNormalReference(field:StructField):Void
     {

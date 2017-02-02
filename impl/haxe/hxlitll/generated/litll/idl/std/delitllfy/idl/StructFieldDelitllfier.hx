@@ -25,7 +25,13 @@ class StructFieldDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg2 = switch (arrayContext.readOptional(litll.idl.std.delitllfy.core.AnyDelitllfier.process)) {
+                    var arg2 = switch (arrayContext.readOptional(litll.idl.std.delitllfy.core.AnyDelitllfier.process, function(data) {
+                            return switch data {
+                                case litll.core.Litll.Str(_):true;
+                                case litll.core.Litll.Arr(array):true;
+                                case _:false;
+                            };
+                        })) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };

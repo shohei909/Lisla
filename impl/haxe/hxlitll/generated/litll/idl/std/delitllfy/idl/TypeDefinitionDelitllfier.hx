@@ -45,7 +45,13 @@ class TypeDefinitionDelitllfier {
                         return litll.core.ds.Result.Err(data);
                     };
                 };
-                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TupleElementDelitllfier.process)) {
+                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.TupleElementDelitllfier.process, function(data) {
+                        return switch data {
+                            case litll.core.Litll.Str(_):true;
+                            case litll.core.Litll.Arr(array) if (2 <= array.length && array.length <= 3 && array.data[0].match(litll.core.Litll.Str(_))):true;
+                            case _:false;
+                        };
+                    })) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
@@ -76,7 +82,13 @@ class TypeDefinitionDelitllfier {
                         return litll.core.ds.Result.Err(data);
                     };
                 };
-                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier.process)) {
+                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.EnumConstructorDelitllfier.process, function(data) {
+                        return switch data {
+                            case litll.core.Litll.Str(_):true;
+                            case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_))):true;
+                            case _:false;
+                        };
+                    })) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };
@@ -107,7 +119,14 @@ class TypeDefinitionDelitllfier {
                         return litll.core.ds.Result.Err(data);
                     };
                 };
-                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.StructElementDelitllfier.process)) {
+                var arg1 = switch (arrayContext.readRest(litll.idl.std.delitllfy.idl.StructElementDelitllfier.process, function(data) {
+                        return switch data {
+                            case litll.core.Litll.Str(_):true;
+                            case litll.core.Litll.Arr(array) if (array.length == 1 && array.data[0].match(litll.core.Litll.Str(_))):true;
+                            case litll.core.Litll.Arr(array) if (2 <= array.length && array.length <= 3 && array.data[0].match(litll.core.Litll.Str(_))):true;
+                            case _:false;
+                        };
+                    })) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };

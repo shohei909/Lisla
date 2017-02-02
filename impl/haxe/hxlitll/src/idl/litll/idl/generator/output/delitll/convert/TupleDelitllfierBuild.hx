@@ -6,6 +6,7 @@ import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.tools.ExprBuilder;
 import litll.idl.std.data.idl.ArgumentKind;
 import litll.idl.std.data.idl.TupleElement;
+import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
 class TupleDelitllfierBuild 
@@ -44,17 +45,19 @@ class TupleDelitllfierBuild
                     var expr = switch [data.name.kind, data.defaultValue]
                     {
                         case [ArgumentKind.Normal, Option.Some(value)]:
-                            // TODO: default value
-                            ExprBuilder.createGetOrReturnExpr(macro arrayContext.readWithDefault($processFunc, null));
+                            var guardFunction = getGuardFuncExpr(data.type);
+                            ExprBuilder.createGetOrReturnExpr(macro arrayContext.readWithDefault($processFunc, $guardFunction, null));
                             
                         case [ArgumentKind.Normal, Option.None]:
                             ExprBuilder.createGetOrReturnExpr(macro arrayContext.read($processFunc));
                             
                         case [ArgumentKind.Rest, Option.None]:
-                            ExprBuilder.createGetOrReturnExpr(macro arrayContext.readRest($processFunc)); 
+                            var guardFunction = getGuardFuncExpr(data.type);
+                            ExprBuilder.createGetOrReturnExpr(macro arrayContext.readRest($processFunc, $guardFunction)); 
                             
                         case [ArgumentKind.Optional, Option.None]:
-                            ExprBuilder.createGetOrReturnExpr(macro arrayContext.readOptional($processFunc)); 
+                            var guardFunction = getGuardFuncExpr(data.type);
+                            ExprBuilder.createGetOrReturnExpr(macro arrayContext.readOptional($processFunc, $guardFunction)); 
                             
                         case [ArgumentKind.Unfold, Option.None]:
                             // TODO:
@@ -74,6 +77,23 @@ class TupleDelitllfierBuild
                     var value = ExprBuilder.getStringConstExpr(data.data);
                     declarations.push(macro arrayContext.readLabel($value));
             }
+        }
+    }
+    
+    private function getGuardFuncExpr(type:TypeReference):Expr
+    {
+        var cases = [];
+        builder.createTypeCase(type, parameters.parameters, macro true, cases);
+        cases.push(
+            {
+                values: [macro _],
+                expr: macro false,
+            }
+        );
+        var switchExpr = ExprBuilder.createSwitchExpr(macro data, cases);
+        return macro function (data)
+        {
+            return $switchExpr;
         }
     }
 }
