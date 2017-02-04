@@ -1,6 +1,8 @@
 package litll.idl.generator.error;
+import litll.core.LitllTools;
 import litll.core.ds.Maybe;
 import litll.core.ds.SourceRange;
+import litll.core.print.Printer;
 import litll.core.tag.StringTag;
 import litll.core.tag.Tag;
 import litll.idl.std.data.idl.TypePath;
@@ -43,7 +45,7 @@ class IdlReadError
 				getRangeStringFromTag(name.tag.upCast()) + "Struct field name " + name.name + " is dupplicated";
 				
 			case IdlReadErrorKind.TypeDependenceNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Type dependent name " + name.toString() + " is dupplicated";
+				getRangeStringFromTag(name.tag.upCast()) + "Type dependent name " + name.data + " is dupplicated";
 				
 			case IdlReadErrorKind.TypeParameterNameDupplicated(name):
 				getRangeStringFromTag(name.tag.upCast()) + "Type parameter name " + name.toString() + " is dupplicated";
@@ -60,6 +62,11 @@ class IdlReadError
 			case IdlReadErrorKind.InvalidTypeParameterLength(path, expected, actual):
 				getRangeStringFromTag(path.tag.upCast()) + "Type " + path.toString() + " parameter length is " + expected + " expected but actual " + actual;
 				
+			case IdlReadErrorKind.LoopedNewtype(path):
+				getRangeStringFromTag(path.tag.upCast()) + "NewType " + path.toString() + " is loop";
+                
+            case IdlReadErrorKind.InvalidTypeDependenceDescription(litll):
+                getRangeStringFromTag(LitllTools.getTag(litll).upCast()) + "Invalid " + Printer.printLitll(litll) + " is loop";
 		}
 	}
     

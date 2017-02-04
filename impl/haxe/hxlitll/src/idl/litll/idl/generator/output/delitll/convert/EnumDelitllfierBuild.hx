@@ -3,6 +3,7 @@ import haxe.macro.Expr;
 import litll.core.LitllString;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.output.data.HaxeDataTypePath;
+import litll.idl.generator.output.data.store.HaxeDataInterface;
 import litll.idl.generator.tools.ExprBuilder;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorKind;
@@ -18,13 +19,13 @@ class EnumDelitllfierBuild
     
     private var constructors:Array<EnumConstructor>;
     private var parameters:TypeParameterDeclarationCollection;
-    private var sourcePath:HaxeDataTypePath;
     private var builder:DelitllfierExprBuilder;
+    private var dataInterface:HaxeDataInterface;
         
-    public function new(builder:DelitllfierExprBuilder, sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection, constructors:Array<EnumConstructor>) 
+    public function new(builder:DelitllfierExprBuilder, dataInterface:HaxeDataInterface, parameters:TypeParameterDeclarationCollection, constructors:Array<EnumConstructor>) 
     {
         this.builder = builder;
-        this.sourcePath = sourcePath;
+        this.dataInterface = dataInterface;
         this.parameters = parameters;
         this.constructors = constructors;
         
@@ -46,8 +47,8 @@ class EnumDelitllfierBuild
                         case EnumConstructorKind.Tuple:
                             throw new IdlException("tuple is not allowed for primitive enum constructor");
                             
-                        case EnumConstructorKind.Unfold:
-                            throw new IdlException("unfold is not allowed for primitive enum constructor");
+                        case EnumConstructorKind.Inline:
+                            throw new IdlException("inline is not allowed for primitive enum constructor");
                     }
                     
                 case EnumConstructor.Parameterized(parameterized):
@@ -62,10 +63,10 @@ class EnumDelitllfierBuild
                         case EnumConstructorKind.Tuple:
                             addTupleCase(name, elements);
                             
-                        case EnumConstructorKind.Unfold:
+                        case EnumConstructorKind.Inline:
                             if (elements.length != 1)
                             {
-                                throw new IdlException("unfold target type number must be one. but actual " + elements.length);
+                                throw new IdlException("inline target type number must be one. but actual " + elements.length);
                             }
                             
                             switch (elements[0])
@@ -127,7 +128,7 @@ class EnumDelitllfierBuild
         addTarget(string);
         
         var build = new TupleDelitllfierBuild(builder, parameters, elements);
-        var instantiationExpr = builder.createEnumInstantiationExpr(build.declarations, build.references, sourcePath, name, parameters);
+        var instantiationExpr = builder.createEnumInstantiationExpr(build.declarations, build.references, dataInterface.path, name, parameters);
         _addTupleCase(instantiationExpr, elements);
     }
     inline function _addPrimitiveCase(instantiationExpr:Expr, label:String):Void
@@ -149,7 +150,7 @@ class EnumDelitllfierBuild
         var string = name.name;
         addTarget(string);
         
-        var instantiationExpr = builder.createEnumInstantiationExpr([], [], sourcePath, name, parameters);
+        var instantiationExpr = builder.createEnumInstantiationExpr([], [], dataInterface.path, name, parameters);
         _addPrimitiveCase(instantiationExpr, label);
     }
     function _addUnfoldCase(instantiationExpr:Expr, type:TypeReference):Void
@@ -163,7 +164,7 @@ class EnumDelitllfierBuild
         var instantiationExpr = builder.createEnumInstantiationExpr(
             [], 
             [ExprBuilder.createGetOrReturnExpr(callExpr)], 
-            sourcePath, name, parameters
+            dataInterface.path, name, parameters
         );
         _addUnfoldCase(instantiationExpr, type);
     }

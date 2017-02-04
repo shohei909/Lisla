@@ -5,8 +5,23 @@ import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.delitllfy.idl.ParameterizedEnumConstructorDelitllfier;
 
 class EnumConstructorTools 
-{
-    public static function resolveGenericType(constructor:EnumConstructor, parameterContext:Map<String, TypeReference>):EnumConstructor
+{    
+    public static function iterateOverTypeReference(constructor:EnumConstructor, func:TypeReference-> Void) 
+    {
+        switch (constructor)
+        {
+            case EnumConstructor.Primitive(_):
+                // nothing to do
+                
+            case EnumConstructor.Parameterized(paramerizedConstructor):
+                for (element in paramerizedConstructor.elements)
+                {
+                    TupleElementTools.iterateOverTypeReference(element, func);
+                }
+        }
+    }
+    
+    public static function mapOverTypeReference(constructor:EnumConstructor, func:TypeReference->TypeReference):EnumConstructor
     {
         return switch (constructor)
         {
@@ -17,7 +32,7 @@ class EnumConstructorTools
                 EnumConstructor.Parameterized(
                     new ParameterizedEnumConstructor(
                         paramerizedConstructor.name, 
-                        [for (element in paramerizedConstructor.elements) TupleElementTools.resolveGenericType(element, parameterContext)]
+                        [for (element in paramerizedConstructor.elements) TupleElementTools.mapOverTypeReference(element, func)]
                     )
                 );
         }

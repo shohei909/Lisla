@@ -1,4 +1,4 @@
-package litll.core.write;
+package litll.core.print;
 
 class WriteConfig
 {

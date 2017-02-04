@@ -5,8 +5,14 @@ class TypeGroupPathDelitllfier {
         return switch (StringDelitllfier.process(context)) {
             case litll.core.ds.Result.Ok(data):{
                 {
-                    var instance = new litll.idl.std.data.idl.group.TypeGroupPath(data);
-                    litll.core.ds.Result.Ok(instance);
+                    switch (litll.idl.std.data.idl.group.TypeGroupPath.delitllfy(data)) {
+                        case litll.core.ds.Result.Ok(data):{
+                            litll.core.ds.Result.Ok(data);
+                        };
+                        case litll.core.ds.Result.Err(data):{
+                            litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(context.litll, data));
+                        };
+                    };
                 };
             };
             case litll.core.ds.Result.Err(data):{

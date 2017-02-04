@@ -8,10 +8,13 @@ import litll.idl.generator.data.DelitllfierOutputConfig;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.output.data.store.HaxeDataConstructorKind;
 import litll.idl.generator.output.data.store.HaxeDataConstructorReturnKind;
+import litll.idl.generator.output.data.store.HaxeDataInterface;
+import litll.idl.generator.output.data.store.HaxeDataInterfaceKind;
 import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
 import litll.idl.generator.output.delitll.match.DelitllfyCaseConditionTools;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardCondition;
 import litll.idl.generator.output.delitll.path.HaxeDelitllfierTypePathPair;
+import litll.idl.generator.source.validate.ValidType;
 import litll.idl.generator.tools.ExprBuilder;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.ArgumentName;
@@ -41,9 +44,18 @@ class DelitllfierExprBuilder
     // ==============================================================
     // common
     // ==============================================================
-    public function createClassInstantiationExpr(contextExpr:Expr, argumentDeclarations:Array<Expr>, argumentReferences:Array<Expr>, sourcePath:HaxeDataTypePath, parameters:TypeParameterDeclarationCollection):Expr
+    public function createClassInstantiationExpr(contextExpr:Expr, argumentDeclarations:Array<Expr>, argumentReferences:Array<Expr>, dataInterface:HaxeDataInterface, parameters:TypeParameterDeclarationCollection):Expr
     {
-        var classInterface = context.interfaceStore.getDataClassInterface(sourcePath).getOrThrow(IdlException.new.bind("class " + sourcePath.toString() + " not found"));
+        var sourcePath = dataInterface.path;
+        var classInterface = switch(dataInterface.kind)
+        {
+            case HaxeDataInterfaceKind.Class(data):
+                data;
+                
+            case HaxeDataInterfaceKind.Enum(_):
+                throw new IdlException("must be class interface");
+        }
+        
         for (dependence in parameters.dependences)
         {
             argumentReferences.push(macro $i{dependence.name.toVariableName()});
@@ -182,7 +194,7 @@ class DelitllfierExprBuilder
                             macro $i{typeName}.process.bind($a{childParametersExpr});
                     }
                     
-                case TypeReferenceParameterKind.Dependence(value):
+                case TypeReferenceParameterKind.Dependence(_, _):
                     // TODO: instantiate dependence value
                     macro null;
             }
@@ -239,8 +251,8 @@ class DelitllfierExprBuilder
     }
     public function createTypeCase(type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr, outputCases:Array<Case>):Void
     {
-        var unfoldedType = type.unfold(context.source, definitionParameters);
-        for (caseKind in DelitllfyCaseConditionTools.createForUnfoldedType(unfoldedType, context.source))
+        var followedType = type.follow(context.source, definitionParameters);
+        for (caseKind in DelitllfyCaseConditionTools.createForFollowedType(followedType, context.source, definitionParameters))
         {
             var caseData = switch (caseKind)
             {
@@ -274,10 +286,4 @@ class DelitllfierExprBuilder
             expr: caseExpr,
         }
     }
-    
-    
-	public function createPathPair(typePath:TypePath):HaxeDelitllfierTypePathPair
-	{
-		return HaxeDelitllfierTypePathPair.create(typePath, context.dataOutputConfig, config);
-	}
 }

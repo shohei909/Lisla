@@ -5,11 +5,13 @@ import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeParamDecl;
 import litll.core.ds.Maybe;
 import litll.idl.generator.output.data.HaxeDataTypePath;
+import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeDependenceDeclaration;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeParameterDeclaration;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.generator.data.DataOutputConfig;
+import litll.idl.std.data.idl.TypeReference;
 
 class TypeParameterDeclarationTools
 {
@@ -63,4 +65,19 @@ class TypeParameterDeclarationTools
 		}
 		return result;
 	}
+    
+    public static function iterateOverTypeReference(params:Array<TypeParameterDeclaration>, func:TypeReference-> Void) 
+    {
+        for (param in params)
+		{
+			switch (param)
+			{
+				case TypeParameterDeclaration.Dependence(dependence):
+					func(dependence.type);
+					
+				case TypeParameterDeclaration.TypeName(typeName):
+					// nothing to do
+			}
+		}
+    }
 }

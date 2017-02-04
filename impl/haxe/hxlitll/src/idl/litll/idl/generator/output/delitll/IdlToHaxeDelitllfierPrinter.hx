@@ -12,7 +12,7 @@ class IdlToHaxeDelitllfierPrinter
 {
 	public static function print(context:IdlToHaxePrintContext, config:DelitllfierOutputConfig):ProcessResult
 	{
-		var types = switch (context.source.resolveGroups(config.targets))
+		var types = switch (context.resolveGroups(config.targets))
 		{
 			case Result.Ok(_types):
 				_types;
@@ -25,11 +25,13 @@ class IdlToHaxeDelitllfierPrinter
 				return ProcessResult.Failure;
 		}
 		
-		for (key in types.keys())
+		for (type in types)
 		{
-            var typePath = TypePath.create(key).getOrThrow();
-			var pathPair = HaxeDelitllfierTypePathPair.create(typePath, context.dataOutputConfig, config);
-			var convertedType = IdlToHaxeDelitllfierConverter.convertType(pathPair, types[key], context, config);
+            var pathPair = new HaxeDelitllfierTypePathPair(
+                type,
+                config.toHaxeDelitllfierPath(type.typePath)
+            );
+			var convertedType = IdlToHaxeDelitllfierConverter.convertType(pathPair, context, config);
 			context.printer.printType(convertedType);
 		}
 		

@@ -8,6 +8,8 @@ import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeDefKind;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.output.data.HaxeDataTypePath;
+import litll.idl.generator.output.DataTypeInfomation;
+import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.core.LitllBoolean;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.ArgumentKind;
@@ -33,8 +35,11 @@ using litll.idl.std.tools.idl.TypeReferenceTools;
 
 class IdlToHaxeDataConverter
 {
-	public static function convertType(path:HaxeDataTypePath, source:IdlTypeDefinition, config:DataOutputConfig):HaxeTypeDefinition
+	public static function convertType(type:DataTypeInfomation, config:DataOutputConfig):HaxeTypeDefinition
 	{
+        var source = type.definition;
+        var path = type.haxePath;
+        
 		var fields:Array<Field> = [];
 		var kind:TypeDefKind;
 		var name = TypeDefinitionTools.getTypeName(source);
@@ -128,7 +133,7 @@ class IdlToHaxeDataConverter
         var typePath = ComplexType.TPath(argument.type.toMacroTypePath(config));
         typePath = switch (argument.name.kind)
         {
-            case ArgumentKind.Normal | ArgumentKind.Unfold:
+            case ArgumentKind.Normal | ArgumentKind.Inline:
                 typePath;
                 
             case ArgumentKind.Optional:
@@ -164,10 +169,10 @@ class IdlToHaxeDataConverter
         
         typePath = switch (name.kind)
         {
-            case StructFieldKind.Normal | StructFieldKind.Unfold | StructFieldKind.Merge:
+            case StructFieldKind.Normal | StructFieldKind.Inline | StructFieldKind.Merge:
                 typePath;
                 
-            case StructFieldKind.Optional | StructFieldKind.OptionalUnfold:
+            case StructFieldKind.Optional | StructFieldKind.OptionalInline:
                 ComplexType.TPath(
                     {
                         pack : ["haxe", "ds"],
@@ -177,7 +182,7 @@ class IdlToHaxeDataConverter
                     }
                 );
                 
-            case StructFieldKind.Array | StructFieldKind.ArrayUnfold:
+            case StructFieldKind.Array | StructFieldKind.ArrayInline:
                 ComplexType.TPath(
                     {
                         pack : [],
@@ -210,14 +215,14 @@ class IdlToHaxeDataConverter
                 case StructFieldKind.Optional:
                     macro:haxe.ds.Option<$tagKind>;
                     
-                case StructFieldKind.Unfold:
-                    throw new IdlException("unfold suffix(<) for label is not supported");
+                case StructFieldKind.Inline:
+                    throw new IdlException("inline suffix(<) for label is not supported");
                     
-                case StructFieldKind.ArrayUnfold:
-                    throw new IdlException("array unfold suffix(..<) for label is not supported");
+                case StructFieldKind.ArrayInline:
+                    throw new IdlException("array inline suffix(..<) for label is not supported");
                     
-                case StructFieldKind.OptionalUnfold:
-                    throw new IdlException("optional unfold suffix(?<) for label is not supported");
+                case StructFieldKind.OptionalInline:
+                    throw new IdlException("optional inline suffix(?<) for label is not supported");
                     
                 case StructFieldKind.Merge:
                     throw new IdlException("merge suffix(<<) for label is not supported");

@@ -1,4 +1,4 @@
-package litll.idl.std.data.idl.path;
+package litll.idl.std.data.idl.group;
 
 enum TypePathFilter
 {

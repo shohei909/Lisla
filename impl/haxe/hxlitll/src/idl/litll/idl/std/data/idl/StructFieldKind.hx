@@ -5,8 +5,8 @@ enum StructFieldKind
 	Normal;
 	Optional;
 	Array;
-	Unfold;
-    ArrayUnfold;
-    OptionalUnfold;
+	Inline;
+    ArrayInline;
+    OptionalInline;
     Merge;
 }

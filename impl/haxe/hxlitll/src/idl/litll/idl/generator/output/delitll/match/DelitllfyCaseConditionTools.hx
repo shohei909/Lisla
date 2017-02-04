@@ -13,36 +13,37 @@ import litll.idl.std.data.idl.EnumConstructorKind;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructFieldKind;
 import litll.idl.std.data.idl.TupleElement;
-import litll.idl.std.data.idl.UnfoldedTypeDefinition;
+import litll.idl.std.data.idl.FollowedTypeDefinition;
+import litll.idl.std.data.idl.TypeName;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 
 class DelitllfyCaseConditionTools 
 {
-    public static function createForUnfoldedType(type:UnfoldedTypeDefinition, source:IdlSourceProvider):Array<DelitllfyCaseCondition>
+    public static function createForFollowedType(type:FollowedTypeDefinition, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Array<DelitllfyCaseCondition>
     {
         var result:Array<DelitllfyCaseCondition> = [];
-        _createForUnfoldedType(result, type, source);
+        _createForInlineType(result, type, source, definitionParameters);
         return result;
     }   
     
-    private static function _createForUnfoldedType(result:Array<DelitllfyCaseCondition>, type:UnfoldedTypeDefinition, source:IdlSourceProvider):Void
+    private static function _createForInlineType(result:Array<DelitllfyCaseCondition>, type:FollowedTypeDefinition, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Void
     {
         inline function addTuple(elements:Array<TupleElement>):Void
         {
-            result.push(DelitllfyCaseCondition.Arr(DelitllfyGuardCondition.createForTuple(elements, source, [])));
+            result.push(DelitllfyCaseCondition.Arr(DelitllfyGuardCondition.createForTuple(elements, source, definitionParameters)));
         }
         switch (type)
         {
-            case UnfoldedTypeDefinition.Arr(_):
+            case FollowedTypeDefinition.Arr(_):
                 result.push(DelitllfyCaseCondition.Arr(DelitllfyGuardCondition.any()));
                 
-            case UnfoldedTypeDefinition.Str:
+            case FollowedTypeDefinition.Str:
                 result.push(DelitllfyCaseCondition.Str);
                 
-            case UnfoldedTypeDefinition.Tuple(elements):
+            case FollowedTypeDefinition.Tuple(elements):
                 addTuple(elements);
                 
-            case UnfoldedTypeDefinition.Enum(constructors):
+            case FollowedTypeDefinition.Enum(constructors):
                 for (constuctor in constructors)
                 {
                     switch (constuctor)
@@ -60,18 +61,18 @@ class DelitllfyCaseConditionTools
                                 case EnumConstructorKind.Tuple:
                                     addTuple(parameterized.elements);
                             
-                                case EnumConstructorKind.Unfold:
+                                case EnumConstructorKind.Inline:
                                     var elements = parameterized.elements;
                                     if (elements.length != 1)
                                     {
-                                        throw new IdlException("unfold target type number must be one. but actual " + elements.length);
+                                        throw new IdlException("inline target type number must be one. but actual " + elements.length);
                                     }
                                     
                                     switch (elements[0])
                                     {
                                         case TupleElement.Argument(argument):
-                                            var unfoldedType = argument.type.unfold(source, []);
-                                            _createForUnfoldedType(result, unfoldedType, source);
+                                            var followedType = argument.type.follow(source, definitionParameters);
+                                            _createForInlineType(result, followedType, source, definitionParameters);
                                             
                                         case TupleElement.Label(litllString):
                                             result.push(DelitllfyCaseCondition.Const(litllString.data));
@@ -80,7 +81,7 @@ class DelitllfyCaseConditionTools
                     }
                 }
                 
-            case UnfoldedTypeDefinition.Struct(elements):
+            case FollowedTypeDefinition.Struct(elements):
                 result.push(DelitllfyCaseCondition.Arr(DelitllfyGuardCondition.createForStruct(elements, source, [])));
         }
     }

@@ -12,7 +12,7 @@ import litll.idl.std.data.idl.StructFieldKind;
 import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeReference;
-import litll.idl.std.data.idl.UnfoldedTypeDefinition;
+import litll.idl.std.data.idl.FollowedTypeDefinition;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 
 class DelitllfyGuardCondition 
@@ -69,27 +69,27 @@ class DelitllfyGuardCondition
                         case [ArgumentKind.Rest, Option.None]:
                             max = Option.None;
                             
-                        case [ArgumentKind.Unfold, Option.None]:
-                            switch (argument.type.unfold(source, definitionParameters))
+                        case [ArgumentKind.Inline, Option.None]:
+                            switch (argument.type.follow(source, definitionParameters))
                             {
-                                case UnfoldedTypeDefinition.Arr(_):
+                                case FollowedTypeDefinition.Arr(_):
                                     max = Option.None;
                                     
-                                case UnfoldedTypeDefinition.Struct(elements):
+                                case FollowedTypeDefinition.Struct(elements):
                                     processStruct(elements, source, definitionParameters);
                                     
-                                case UnfoldedTypeDefinition.Tuple(elements):
+                                case FollowedTypeDefinition.Tuple(elements):
                                     processTuple(elements, source, definitionParameters);
                                     
-                                case UnfoldedTypeDefinition.Str:
-                                    throw new IdlException("string can't be unfold");
+                                case FollowedTypeDefinition.Str:
+                                    throw new IdlException("string can't be inlined");
                                     
-                                case UnfoldedTypeDefinition.Enum(_):
+                                case FollowedTypeDefinition.Enum(_):
                                     max = Option.None;
                             }
                             
                         case [ArgumentKind.Rest, Option.Some(_)] 
-                            | [ArgumentKind.Unfold, Option.Some(_)]
+                            | [ArgumentKind.Inline, Option.Some(_)]
                             | [ArgumentKind.Optional, Option.Some(_)]:
                             throw new IdlException("unsupported default value kind: " + argument.name.kind);
                     }
@@ -117,46 +117,46 @@ class DelitllfyGuardCondition
                                 
                             case [StructFieldKind.Normal, Option.Some(_)]
                                 | [StructFieldKind.Optional, Option.None]
-                                | [StructFieldKind.Unfold, Option.Some(_)]
-                                | [StructFieldKind.OptionalUnfold, Option.None] :
+                                | [StructFieldKind.Inline, Option.Some(_)]
+                                | [StructFieldKind.OptionalInline, Option.None] :
                                 addMax();
                                 
                             case [StructFieldKind.Array, Option.None]
-                                | [StructFieldKind.ArrayUnfold, Option.None]:
+                                | [StructFieldKind.ArrayInline, Option.None]:
                                 max = Option.None;
                                 
-                            case [StructFieldKind.Unfold, Option.None]:
-                                switch (field.type.unfold(source, definitionParameters))
+                            case [StructFieldKind.Inline, Option.None]:
+                                switch (field.type.follow(source, definitionParameters))
                                 {
-                                    case UnfoldedTypeDefinition.Str:
+                                    case FollowedTypeDefinition.Str:
                                         condition = merge(condition, ConditionKind.Str);
                                     
-                                    case UnfoldedTypeDefinition.Struct(_)
-                                        | UnfoldedTypeDefinition.Arr(_)
-                                        | UnfoldedTypeDefinition.Tuple(_):
+                                    case FollowedTypeDefinition.Struct(_)
+                                        | FollowedTypeDefinition.Arr(_)
+                                        | FollowedTypeDefinition.Tuple(_):
                                         condition = merge(condition, ConditionKind.Arr);
                                         _add();
                                         
-                                    case UnfoldedTypeDefinition.Enum(constructors):
+                                    case FollowedTypeDefinition.Enum(constructors):
                                         condition = merge(condition, resolveEnumCondition(constructors, source, definitionParameters));
                                         _add();
                                 }
                                 
                             case [StructFieldKind.Merge, Option.None]:
-                                switch (field.type.unfold(source, definitionParameters))
+                                switch (field.type.follow(source, definitionParameters))
                                 {
-                                    case UnfoldedTypeDefinition.Struct(elements):
+                                    case FollowedTypeDefinition.Struct(elements):
                                         _processStruct(elements);
                                         
-                                    case UnfoldedTypeDefinition.Enum(_)
-                                        | UnfoldedTypeDefinition.Arr(_)
-                                        | UnfoldedTypeDefinition.Tuple(_)
-                                        | UnfoldedTypeDefinition.Str:
+                                    case FollowedTypeDefinition.Enum(_)
+                                        | FollowedTypeDefinition.Arr(_)
+                                        | FollowedTypeDefinition.Tuple(_)
+                                        | FollowedTypeDefinition.Str:
                                         throw new IdlException("merge field is not supported " + field.type.getTypeReferenceName());
                                 }
                                
-                            case [StructFieldKind.ArrayUnfold, Option.Some(_)]
-                                | [StructFieldKind.OptionalUnfold, Option.Some(_)]
+                            case [StructFieldKind.ArrayInline, Option.Some(_)]
+                                | [StructFieldKind.OptionalInline, Option.Some(_)]
                                 | [StructFieldKind.Array, Option.Some(_)]
                                 | [StructFieldKind.Optional, Option.Some(_)]
                                 | [StructFieldKind.Merge, Option.Some(_)]:
@@ -176,14 +176,14 @@ class DelitllfyGuardCondition
                             case StructFieldKind.Optional:
                                 addMax();
                                 
-                            case StructFieldKind.Unfold:
-                                throw new IdlException("unfold suffix(<) for label is not supported");
+                            case StructFieldKind.Inline:
+                                throw new IdlException("inline suffix(<) for label is not supported");
                                 
-                            case StructFieldKind.ArrayUnfold:
-                                throw new IdlException("array unfold suffix(<..) for label is not supported");
+                            case StructFieldKind.ArrayInline:
+                                throw new IdlException("array inline suffix(<..) for label is not supported");
                                 
-                            case StructFieldKind.OptionalUnfold:
-                                throw new IdlException("optional unfold suffix(<?) for label is not supported");
+                            case StructFieldKind.OptionalInline:
+                                throw new IdlException("optional inline suffix(<?) for label is not supported");
                                 
                             case StructFieldKind.Merge:
                                 throw new IdlException("merge suffix(<<) for label is not supported");
@@ -202,14 +202,14 @@ class DelitllfyGuardCondition
                             case StructFieldKind.Optional:
                                 addMax();
                                 
-                            case StructFieldKind.Unfold:
-                                throw new IdlException("unfold suffix(<) for label is not supported");
+                            case StructFieldKind.Inline:
+                                throw new IdlException("inline suffix(<) for label is not supported");
                                 
-                            case StructFieldKind.ArrayUnfold:
-                                throw new IdlException("array unfold suffix(<..) for label is not supported");
+                            case StructFieldKind.ArrayInline:
+                                throw new IdlException("array inline suffix(<..) for label is not supported");
                                 
-                            case StructFieldKind.OptionalUnfold:
-                                throw new IdlException("optional unfold suffix(<?) for label is not supported");
+                            case StructFieldKind.OptionalInline:
+                                throw new IdlException("optional inline suffix(<?) for label is not supported");
                                 
                             case StructFieldKind.Merge:
                                 throw new IdlException("merge suffix(<<) for label is not supported");
@@ -338,19 +338,19 @@ class DelitllfyGuardCondition
     
     private function resolveTypeCondition(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):ConditionKind
     {
-        return switch (type.unfold(source, definitionParameters))
+        return switch (type.follow(source, definitionParameters))
         {
-            case UnfoldedTypeDefinition.Struct(elements):
+            case FollowedTypeDefinition.Struct(elements):
                 ConditionKind.Arr;
                 
-            case UnfoldedTypeDefinition.Str:
+            case FollowedTypeDefinition.Str:
                 ConditionKind.Str;
                 
-            case UnfoldedTypeDefinition.Arr(_)
-                | UnfoldedTypeDefinition.Tuple(_):
+            case FollowedTypeDefinition.Arr(_)
+                | FollowedTypeDefinition.Tuple(_):
                 ConditionKind.Arr;
                 
-            case UnfoldedTypeDefinition.Enum(constructors):
+            case FollowedTypeDefinition.Enum(constructors):
                 resolveEnumCondition(constructors, source, definitionParameters);
         }
     }
@@ -372,8 +372,8 @@ class DelitllfyGuardCondition
                         case EnumConstructorKind.Tuple:
                             throw new IdlException("tuple is not allowed for primitive enum constructor");
                             
-                        case EnumConstructorKind.Unfold:
-                            throw new IdlException("unfold is not allowed for primitive enum constructor");
+                        case EnumConstructorKind.Inline:
+                            throw new IdlException("inline is not allowed for primitive enum constructor");
                     }
                     
                 case EnumConstructor.Parameterized(parameterized):
@@ -382,11 +382,11 @@ class DelitllfyGuardCondition
                         case EnumConstructorKind.Normal | EnumConstructorKind.Tuple:
                             ConditionKind.Arr;
                     
-                        case EnumConstructorKind.Unfold:
+                        case EnumConstructorKind.Inline:
                             var elements = parameterized.elements;
                             if (elements.length != 1)
                             {
-                                throw new IdlException("unfold target type number must be one. but actual " + elements.length);
+                                throw new IdlException("inline target type number must be one. but actual " + elements.length);
                             }
                             
                             switch (elements[0])

@@ -20,12 +20,12 @@ class StructFieldName
         if (name.endsWith("?<"))
 		{
 			name = name.substr(0, name.length - 2);
-			kind = StructFieldKind.OptionalUnfold;
+			kind = StructFieldKind.OptionalInline;
 		}
 		else if (name.endsWith("..<"))
 		{
 			name = name.substr(0, name.length - 3);
-			kind = StructFieldKind.ArrayUnfold;
+			kind = StructFieldKind.ArrayInline;
 		}
 		if (name.endsWith(".."))
 		{
@@ -45,7 +45,7 @@ class StructFieldName
 		else if (name.endsWith("<"))
 		{
 			name = name.substr(0, name.length - 1);
-			kind = StructFieldKind.Unfold;
+			kind = StructFieldKind.Inline;
 		}
 		else
 		{

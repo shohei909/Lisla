@@ -3,27 +3,23 @@ import haxe.ds.Option;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
 import litll.core.LitllString;
+import litll.core.ds.Maybe;
+import litll.core.ds.Result;
 import litll.idl.exception.IdlException;
-import litll.idl.generator.output.IdlToHaxeConvertContext;
+import litll.idl.generator.data.DataOutputConfig;
 import litll.idl.generator.output.data.HaxeDataTypePath;
-import litll.idl.generator.output.data.store.HaxeDataInterfaceStore;
 import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.data.idl.Argument;
-import litll.idl.std.data.idl.EnumConstructor;
-import litll.idl.std.data.idl.EnumConstructorName;
+import litll.idl.std.data.idl.FollowedTypeDefinition;
 import litll.idl.std.data.idl.GenericTypeReference;
 import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.data.idl.ParameterizedEnumConstructor;
-import litll.idl.std.data.idl.TupleElement;
+import litll.idl.std.data.idl.SpecializedTypeDefinition;
 import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypeParameterDeclaration;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.data.idl.TypeReferenceDependenceKind;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
-import litll.idl.std.data.idl.UnfoldedTypeDefinition;
-import litll.idl.generator.data.DataOutputConfig;
-import litll.idl.std.data.idl.TypeDefinition;
+import litll.idl.std.tools.idl.error.TypeSpecializeErrorKindTools;
 
 using litll.idl.std.tools.idl.TypeDefinitionTools;
 using litll.idl.std.tools.idl.TypeParameterDeclarationTools;
@@ -102,13 +98,14 @@ class TypeReferenceTools
 		}
     }
     
-    public static function unfold(type:TypeReference, source:IdlSourceProvider, parentDefinitionParameters:Array<TypeName>):UnfoldedTypeDefinition
+    public static function follow(specializedType:TypeReference, source:IdlSourceProvider, parentDefinitionParameters:Array<TypeName>):FollowedTypeDefinition
     {
         var parameterNames = [for (p in parentDefinitionParameters) p.toString()];
-        var generic = generalize(type);
+        var generic = generalize(specializedType);
         var referenceParameters = generic.parameters.getTypeParameters();
         var targetPath = generic.typePath;
-        switch (type)
+        
+        switch (specializedType)
         {
             case TypeReference.Primitive(typePath):
                 var name = typePath.toString();
@@ -119,7 +116,7 @@ class TypeReferenceTools
                 }
                 if (name == "String")
                 {
-                    return UnfoldedTypeDefinition.Str;
+                    return FollowedTypeDefinition.Str;
                 }
             
             case TypeReference.Generic(generic):
@@ -129,7 +126,7 @@ class TypeReferenceTools
                     switch (generic.parameters[0].processedValue.toOption())
                     {
                         case Option.Some(TypeReferenceParameterKind.Type(_)):
-                            return UnfoldedTypeDefinition.Arr(referenceParameters[0]);
+                            return FollowedTypeDefinition.Arr(referenceParameters[0]);
                             
                         case _:
                     }
@@ -140,68 +137,99 @@ class TypeReferenceTools
         
         return switch (source.resolveTypePath(targetPath).toOption())
         {
-            case Option.Some(definition):
-                
-                var parameterContext = new Map<String, TypeReference>();
-                var definitionParameters = definition.getTypeParameters().collect().parameters;
-                if (referenceParameters.length != definitionParameters.length)
+            case Option.Some(validType):
+                switch(TypeDefinitionTools.specialize(validType.definition, generic.parameters))
                 {
-                    throw new IdlException("invalid type parameter length.");
-                }
-                for (i in 0...definitionParameters.length)
-                {
-                    var referenceParameter:TypeReference = referenceParameters[i];
-                    var definitionParameter:TypeName = definitionParameters[i];
-                    
-                    parameterContext[definitionParameter.toString()] = referenceParameter;
-                }
-                switch (definition)
-                {
-                    case TypeDefinition.Enum(_, constuctors):
-                        UnfoldedTypeDefinition.Enum(
-                            [for (el in constuctors) el.resolveGenericType(parameterContext)]
-                        );
+                    case Result.Ok(specializedTypeDefinition):
+                        switch (specializedTypeDefinition)
+                        {
+                            case SpecializedTypeDefinition.Enum(constuctors):
+                                FollowedTypeDefinition.Enum(constuctors);
+                                
+                            case SpecializedTypeDefinition.Tuple(arguments):
+                                FollowedTypeDefinition.Tuple(arguments);
+                                
+                            case SpecializedTypeDefinition.Struct(fields):
+                                FollowedTypeDefinition.Struct(fields);
+                                
+                            case SpecializedTypeDefinition.Newtype(type):
+                                follow(type, source, parentDefinitionParameters);
+                        }
                         
-                    case TypeDefinition.Tuple(_, arguments):
-                        UnfoldedTypeDefinition.Tuple(
-                            [for (el in arguments) el.resolveGenericType(parameterContext)]
-                        );
-                        
-                    case TypeDefinition.Struct(_, fields):
-                        UnfoldedTypeDefinition.Struct(
-                            [for (el in fields) el.resolveGenericType(parameterContext)]
-                        );
-                        
-                    case TypeDefinition.Newtype(_, type):
-                        unfold(resolveGenericType(type, parameterContext), source, []);
+                    case Result.Err(error):
+                        throw new IdlException(TypeSpecializeErrorKindTools.toString(error));
                 }
                 
             case Option.None:
-                throw new IdlException(generic.typePath.toString() + " can't be resolve.");
+                throw new IdlException("Type " + generic.typePath.toString() + " not found.");
         }
     }
     
-    
-    public static function resolveGenericType(type:TypeReference, parameterContext:Map<String, TypeReference>):TypeReference
+    public static function mapOverTypePath(type:TypeReference, func:TypePath->TypePath):TypeReference
     {
         return switch (type)
         {
             case TypeReference.Primitive(typePath):
-                if (parameterContext.exists(typePath.toString()))
-                {
-                    parameterContext[typePath.toString()];
-                }
-                else
-                {
-                    type;
-                }
+                TypeReference.Primitive(func(typePath));
+                
+            case TypeReference.Generic(generic):
+                TypeReference.Generic(
+                    new GenericTypeReference(
+                        func(generic.typePath), 
+                        [
+                            for (parameter in generic.parameters)
+                            {
+                                TypeReferenceParameterTools.mapOverTypePath(parameter, func);
+                            }
+                        ]
+                    )
+                );
+        }
+    }
+    
+    public static function specialize(type:TypeReference, typeMap:Map<String, TypeReference>, dependenceMap:Map<String, TypeReferenceDependenceKind>):TypeReference
+    {
+        return switch (type)
+        {
+            case TypeReference.Primitive(typePath):
+                var name = typePath.toString();
+                if (typeMap.exists(name)) typeMap[name] else type;
                 
             case TypeReference.Generic(generic):
                 TypeReference.Generic(
                     new GenericTypeReference(
                         generic.typePath, 
                         [
-                            for (parameter in generic.parameters) TypeReferenceParameterTools.resolveGenericType(parameter, parameterContext)
+                            for (parameter in generic.parameters)
+                            {
+                                var processedValue = switch (parameter.processedValue.toOption())
+                                {
+                                    case Option.None:
+                                        Maybe.none();
+                                        
+                                    case Option.Some(TypeReferenceParameterKind.Type(type)):
+                                        var kind = TypeReferenceParameterKind.Type(specialize(type, typeMap, dependenceMap));
+                                        Maybe.some(kind);
+                                        
+                                    case Option.Some(TypeReferenceParameterKind.Dependence(data, type)):
+                                        var kind = TypeReferenceParameterKind.Dependence(
+                                            switch (data)
+                                            {
+                                                case TypeReferenceDependenceKind.Reference(name):
+                                                    if (dependenceMap.exists(name)) dependenceMap[name] else data; 
+                                                    
+                                                case TypeReferenceDependenceKind.Const(value):
+                                                    data;
+                                            },
+                                            specialize(type, typeMap, dependenceMap)
+                                        );
+                                        Maybe.some(kind);
+                                }
+                                
+                                var result = new TypeReferenceParameter(parameter.value);
+                                result.processedValue = processedValue;
+                                result;
+                            }
                         ]
                     )
                 );

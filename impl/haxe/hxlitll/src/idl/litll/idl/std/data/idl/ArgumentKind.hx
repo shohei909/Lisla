@@ -5,5 +5,5 @@ enum ArgumentKind
 	Normal;
 	Optional;
 	Rest;
-	Unfold;
+	Inline;
 }

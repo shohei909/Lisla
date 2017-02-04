@@ -4,22 +4,22 @@
 [package litll]
 
 /// '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'
-[newtype Int64 [VariableInt 64]]
+[newtype Int64 [VariableInt [const 64]]]
 /// '32 bit integer.'
-[newtype Int32 [VariableInt 32]]
+[newtype Int32 [VariableInt [const 32]]]
 /// '16 bit integer.'
-[newtype Int16 [FixedInt 16]]
+[newtype Int16 [FixedInt [const 16]]]
 /// '8 bit integer.'
-[newtype Int8 [FixedInt 8]]
+[newtype Int8 [FixedInt [const 8]]]
 
 /// 'unsigned 64 bit integer'
-[newtype UInt64 [VariableUInt 64]]
+[newtype UInt64 [VariableUInt [const 64]]]
 /// 'unsigned 32 bit integer'
-[newtype UInt32 [VariableUInt 32]]
+[newtype UInt32 [VariableUInt [const 32]]]
 /// 'unsigned 16 bit integer'
-[newtype UInt16 [FixedUInt 16]]
+[newtype UInt16 [FixedUInt [const 16]]]
 /// 'unsigned 8 bit integer'
-[newtype UInt8 [FixedUInt 8]]
+[newtype UInt8 [FixedUInt [const 8]]]
 
 /// 'Signed integer serialized in variable length in binary(bitll) mode.'
 [newtype [VariableInt [bit_length UInt64]] String]

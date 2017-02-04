@@ -4,31 +4,13 @@ import litll.core.ds.Maybe;
 import litll.idl.exception.IdlException;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.TupleElement;
+import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
 
 class TypeReferenceParameterTools 
 {
-    public static function resolveGenericType(parameter:TypeReferenceParameter, parameterContext:Map<String, TypeReference>):TypeReferenceParameter
-    {
-        var processedValue = switch (parameter.processedValue.toOption())
-        {
-            case Option.None:
-                Maybe.none();
-                
-            case Option.Some(TypeReferenceParameterKind.Dependence(type)):
-                Maybe.some(TypeReferenceParameterKind.Dependence(TypeReferenceTools.resolveGenericType(type, parameterContext)));
-                
-            case Option.Some(TypeReferenceParameterKind.Type(type)):
-                Maybe.some(TypeReferenceParameterKind.Type(TypeReferenceTools.resolveGenericType(type, parameterContext)));
-        }
-        
-        var result = new TypeReferenceParameter(parameter.value);
-        result.processedValue = processedValue;
-        return result;
-    }
-    
     public static function getTypeParameters(parameters:Array<TypeReferenceParameter>):Array<TypeReference>
     {
         var result = [];
@@ -39,7 +21,7 @@ class TypeReferenceParameterTools
                 case Option.None:
                     throw new IdlException("must be processed: " + parameter.toString());
                     
-                case Option.Some(TypeReferenceParameterKind.Dependence(type)):
+                case Option.Some(TypeReferenceParameterKind.Dependence(_)):
                     // skip
                     
                 case Option.Some(TypeReferenceParameterKind.Type(type)):
@@ -47,6 +29,38 @@ class TypeReferenceParameterTools
             }
         }
         
+        return result;
+    }
+    
+    public static function mapOverTypePath(parameter:TypeReferenceParameter, func:TypePath->TypePath):TypeReferenceParameter
+    {
+        var processedValue = switch (parameter.processedValue.toOption())
+        {
+            case Option.None:
+                Maybe.none();
+                
+            case Option.Some(data):
+                Maybe.some(TypeReferenceParameterKindTools.mapOverTypePath(data, func));
+        }
+        
+        var result = new TypeReferenceParameter(parameter.value);
+        result.processedValue = processedValue;
+        return result;
+    }
+    
+    public static inline function mapOverTypeReference(parameter:TypeReferenceParameter, func:TypeReference->TypeReference):TypeReferenceParameter
+    {
+        var processedValue = switch (parameter.processedValue.toOption())
+        {
+            case Option.None:
+                Maybe.none();
+                
+            case Option.Some(data):
+                Maybe.some(TypeReferenceParameterKindTools.mapOverTypeReference(data, func));
+        }
+        
+        var result = new TypeReferenceParameter(parameter.value);
+        result.processedValue = processedValue;
         return result;
     }
 }

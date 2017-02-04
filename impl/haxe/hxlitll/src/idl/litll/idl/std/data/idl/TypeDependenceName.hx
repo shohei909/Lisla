@@ -7,7 +7,7 @@ import litll.core.tag.StringTag;
 import litll.idl.delitllfy.DelitllfyErrorKind;
 using litll.core.ds.ResultTools;
 
-@:forward(tag)
+@:forward(tag, data)
 abstract TypeDependenceName(LitllString)
 {
 	public function new (string:LitllString) 
@@ -44,11 +44,6 @@ abstract TypeDependenceName(LitllString)
 		}
 	}
 	
-	public function toString():String
-	{
-		return this.data;
-	}
-    
 	public function toVariableName():String
 	{
 		return "dependence" + IdentifierTools.toPascalCase(this.data).getOrThrow();

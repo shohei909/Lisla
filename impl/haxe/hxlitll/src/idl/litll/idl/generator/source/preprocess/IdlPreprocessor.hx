@@ -1,7 +1,8 @@
-package litll.idl.generator.source;
+package litll.idl.generator.source.preprocess;
 import haxe.ds.Option;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.source.LoadedIdl;
+import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.ImportDeclaration;
 import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.data.idl.TypeDefinition;
@@ -12,8 +13,8 @@ import litll.idl.std.tools.idl.TypeDefinitionTools;
 class IdlPreprocessor
 {
 	private var idl:LoadedIdl;
-	public var element:PackageElement;
-	public var importedElements:Array<PackageElement>;
+	public var element(default, null):PackageElement;
+	public var importedElements(default, null):Array<PackageElement>;
 	
 	public static function run(element:PackageElement, idl:LoadedIdl):Void
 	{
@@ -21,8 +22,8 @@ class IdlPreprocessor
 		
 		processor.varidatePackagePath();
 		processor.processImportedModules();
-		
-		for (typeDefininition in idl.data.typeDefinitions)
+        
+        for (typeDefininition in idl.data.typeDefinitions)
 		{
 			TypeDefinitionPreprocessor.run(processor, typeDefininition);
 		}
@@ -44,8 +45,7 @@ class IdlPreprocessor
         {
             addError(IdlReadErrorKind.InvalidPackage(packagePath, _packagePath));
         }
-
-	}
+    }
 	
 	private function processImportedModules():Void
 	{

@@ -1,25 +1,28 @@
 package litll.idl.generator.output;
 import litll.core.ds.Maybe;
+import litll.core.ds.Result;
+import litll.idl.generator.data.DataOutputConfig;
+import litll.idl.generator.data.DelitllfierOutputConfig;
+import litll.idl.generator.data.ProjectConfig;
+import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.io.IoProvider;
 import litll.idl.generator.io.StandardIoProvider;
-import litll.idl.generator.output.data.store.HaxeDataInterfaceStore;
+import litll.idl.generator.output.DataTypeInfomation;
+import litll.idl.generator.output.data.store.HaxeDataInterface;
+import litll.idl.generator.output.data.store.HaxeDataInterfaceKindTools;
 import litll.idl.generator.output.haxe.HaxePrinter;
 import litll.idl.generator.output.haxe.HaxePrinterImpl;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.generator.source.IdlSourceProviderImpl;
-import litll.idl.generator.data.DataOutputConfig;
-import litll.idl.generator.data.DelitllfierOutputConfig;
-import litll.idl.generator.data.ProjectConfig;
+import litll.idl.std.data.idl.group.TypeGroupPath;
 
 class IdlToHaxePrintContext implements IdlToHaxeConvertContext
 {
-	public var io(default, null):IoProvider;
-	public var printer(default, null):HaxePrinter;
-	
 	public var source(default, null):IdlSourceProvider;
+    
+    public var io(default, null):IoProvider;
+	public var printer(default, null):HaxePrinter;
 	public var dataOutputConfig(default, null):DataOutputConfig;
-	public var interfaceStore(default, null):HaxeDataInterfaceStore;
-	
 	public var delitllfierOutputConfig(default, null):Maybe<DelitllfierOutputConfig>;
 	
 	public function new(
@@ -35,7 +38,6 @@ class IdlToHaxePrintContext implements IdlToHaxeConvertContext
 		this.io = io;
 		this.printer = printer;
 		this.source = source;
-		this.interfaceStore = new litll.idl.generator.output.data.store.HaxeDataInterfaceStore();
 	}
 	
 	public static function createDefault(homeDirectory:String, config:ProjectConfig):IdlToHaxePrintContext
@@ -50,4 +52,37 @@ class IdlToHaxePrintContext implements IdlToHaxeConvertContext
 			config.outputConfig.delitllfierOutputConfig
 		);
 	}
+    
+    public function resolveGroups(targets:Array<TypeGroupPath>):Result<Array<DataTypeInfomation>, Array<IdlReadError>>
+    {
+        return switch (source.resolveGroups(targets))
+        {
+            case Result.Ok(readData):
+                var result = [];
+                for (type in readData)
+                {
+                    var haxePath = dataOutputConfig.toHaxeDataPath(type.typePath);
+                    var interf = if (dataOutputConfig.predefinedTypes.exists(haxePath.toString()))
+                    {
+                        dataOutputConfig.predefinedTypes[haxePath.toString()];
+                    }
+                    else
+                    {
+                        var kind = HaxeDataInterfaceKindTools.createDefault(type.definition);
+                        new HaxeDataInterface(haxePath, kind);
+                    }
+                    
+                    result.push(
+                        new DataTypeInfomation(
+                            type, interf
+                        )
+                    );
+                }
+                
+                Result.Ok(result);
+                
+            case Result.Err(err):
+                Result.Err(err);
+        }
+    }
 }

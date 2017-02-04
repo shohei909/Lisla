@@ -149,25 +149,25 @@ class StructElementDelitllfierBuild
                         addFieldCase(field, caseExpr);
                         addDirectReference(field);
                         
-                    case [StructFieldKind.Unfold, Option.None]:
+                    case [StructFieldKind.Inline, Option.None]:
                         var instantationExpr = unfoldInstantiation(field);
                         var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                         addUnfoldCase(field, caseExpr);
                         addNormalReference(field);
                         
-                    case [StructFieldKind.Unfold, Option.Some(defaultValue)]:
+                    case [StructFieldKind.Inline, Option.Some(defaultValue)]:
                         var instantationExpr = unfoldInstantiation(field);
                         var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                         addUnfoldCase(field, caseExpr);
                         addDefaultReference(field, defaultValue);
                         
-                    case [StructFieldKind.OptionalUnfold, Option.None]:
+                    case [StructFieldKind.OptionalInline, Option.None]:
                         var instantationExpr = unfoldInstantiation(field);
                         var caseExpr = addOptionDeclaration(instantationExpr, field.name.name);
                         addUnfoldCase(field, caseExpr);
                         addDirectReference(field);
                         
-                    case [StructFieldKind.ArrayUnfold, Option.None]:
+                    case [StructFieldKind.ArrayInline, Option.None]:
                         var instantationExpr = unfoldInstantiation(field);
                         var caseExpr = addArrayDeclaration(instantationExpr);
                         addUnfoldCase(field, caseExpr);
@@ -176,8 +176,8 @@ class StructElementDelitllfierBuild
                     case [StructFieldKind.Merge, Option.None]:
                         // TODO
                         
-                    case [StructFieldKind.ArrayUnfold, Option.Some(_)]
-                        | [StructFieldKind.OptionalUnfold, Option.Some(_)]
+                    case [StructFieldKind.ArrayInline, Option.Some(_)]
+                        | [StructFieldKind.OptionalInline, Option.Some(_)]
                         | [StructFieldKind.Array, Option.Some(_)]
                         | [StructFieldKind.Optional, Option.Some(_)]
                         | [StructFieldKind.Merge, Option.Some(_)]:
@@ -199,14 +199,14 @@ class StructElementDelitllfierBuild
                         parent.declarations.push(macro var $id = haxe.ds.Option.None);
                         parent.references.push(macro $i{id});
                         
-                    case StructFieldKind.Unfold:
-                        throw new IdlException("unfold suffix(<) for label is not supported");
+                    case StructFieldKind.Inline:
+                        throw new IdlException("inline suffix(<) for label is not supported");
                         
-                    case StructFieldKind.ArrayUnfold:
-                        throw new IdlException("array unfold suffix(<..) for label is not supported");
+                    case StructFieldKind.ArrayInline:
+                        throw new IdlException("array inline suffix(<..) for label is not supported");
                         
-                    case StructFieldKind.OptionalUnfold:
-                        throw new IdlException("optional unfold suffix(<?) for label is not supported");
+                    case StructFieldKind.OptionalInline:
+                        throw new IdlException("optional inline suffix(<?) for label is not supported");
                         
                     case StructFieldKind.Merge:
                         throw new IdlException("merge suffix(<<) for label is not supported");

@@ -1,4 +1,4 @@
-package litll.idl.std.data.idl.path;
+package litll.idl.std.data.idl.group;
 import haxe.ds.Option;
 import litll.core.LitllString;
 import litll.core.ds.Maybe;

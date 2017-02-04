@@ -59,12 +59,12 @@ class TupleDelitllfierBuild
                             var guardFunction = getGuardFuncExpr(data.type);
                             ExprBuilder.createGetOrReturnExpr(macro arrayContext.readOptional($processFunc, $guardFunction)); 
                             
-                        case [ArgumentKind.Unfold, Option.None]:
+                        case [ArgumentKind.Inline, Option.None]:
                             // TODO:
                             macro null;
                             
                         case [ArgumentKind.Rest, Option.Some(_)] 
-                            | [ArgumentKind.Unfold, Option.Some(_)]
+                            | [ArgumentKind.Inline, Option.Some(_)]
                             | [ArgumentKind.Optional, Option.Some(_)]:
                             throw new IdlException("unsupported default value kind: " + data.name.kind);
                     }

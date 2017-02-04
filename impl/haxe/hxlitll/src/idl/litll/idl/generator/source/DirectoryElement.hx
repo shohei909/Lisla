@@ -1,4 +1,5 @@
 package litll.idl.generator.source;
+import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypePath;
 import sys.FileSystem;
@@ -46,7 +47,7 @@ class DirectoryElement
 		loaded = true;
 	}
 	
-	public function fetchChildren(output:Map<String, TypeDefinition>):Void 
+	public function fetchChildren(output:Array<ValidType>):Void 
 	{
 		loadChildren();
 		for (child in children)

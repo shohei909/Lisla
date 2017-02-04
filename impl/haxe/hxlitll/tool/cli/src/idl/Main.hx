@@ -11,7 +11,7 @@ import litll.idl.generator.data.OutputConfig;
 import litll.idl.generator.data.ProjectConfig;
 import litll.idl.generator.data.SourceConfig;
 import litll.idl.read.litll.LitllStringToData;
-import litll.idl.std.data.idl.path.TypeGroupPath;
+import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.std.tools.idl.path.TypePathFilterTools;
 import sys.FileSystem;
 import sys.io.File;

@@ -23,7 +23,7 @@ class EnumConstructorName
 		else if (name.endsWith("<"))
 		{
 			name = name.substr(0, name.length - 1);
-			kind = EnumConstructorKind.Unfold;
+			kind = EnumConstructorKind.Inline;
 		}
         else
         {

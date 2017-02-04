@@ -4,5 +4,6 @@ class HaxeDataEnumInterface
 {
 	public function new ()
 	{
+        // TODO:
 	}
 }

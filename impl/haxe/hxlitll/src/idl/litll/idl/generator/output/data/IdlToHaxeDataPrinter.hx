@@ -16,23 +16,8 @@ class IdlToHaxeDataPrinter
 {
 	public static function run(context:IdlToHaxePrintContext):ProcessResult
 	{
-		recordPredefinedTypes(context);
-		return print(context);
-	}
-
-	private static function recordPredefinedTypes(context:IdlToHaxePrintContext):Void
-	{
-		var predefinedTypes = context.dataOutputConfig.predefinedTypes;
-		for (type in predefinedTypes)
-		{
-			context.interfaceStore.add(type.path, type);
-		}
-	}
-	
-	private static function print(context:IdlToHaxePrintContext):ProcessResult
-	{
 		var targets = context.dataOutputConfig.targets;
-		var types = switch (context.source.resolveGroups(targets))
+		var types = switch (context.resolveGroups(targets))
 		{
 			case Result.Ok(_types):
 				_types;
@@ -45,30 +30,16 @@ class IdlToHaxeDataPrinter
 				return ProcessResult.Failure;
 		}
         
-		for (key in types.keys())
+		for (type in types)
 		{
 			var config = context.dataOutputConfig;
-            var typePath = TypePath.create(key).getOrThrow();
-			var convertedPath = config.toHaxeDataPath(typePath);
-			if (context.interfaceStore.exists(convertedPath))
-			{
-				continue;
-			}
-			
-			var convertedType = IdlToHaxeDataConverter.convertType(convertedPath, types[key], config);
-			context.printer.printType(convertedType);
+            if (config.predefinedTypes.exists(type.haxePath.toString()))
+            {
+                continue;
+            }
             
-            context.interfaceStore.add(
-                convertedPath, 
-                new HaxeDataInterface(
-                    convertedPath, 
-                    HaxeDataInterfaceKind.Class(
-                        new HaxeDataClassInterface(
-                            HaxeDataConstructorKind.New
-                        )
-                    )
-                )
-            );
+            var convertedType = IdlToHaxeDataConverter.convertType(type, config);
+			context.printer.printType(convertedType);
 		}
 		
 		return ProcessResult.Success;

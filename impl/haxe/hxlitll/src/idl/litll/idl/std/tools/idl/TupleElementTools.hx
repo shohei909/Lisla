@@ -4,15 +4,27 @@ import litll.idl.std.data.idl.TypeReference;
 
 class TupleElementTools
 {
-    public static function resolveGenericType(element:TupleElement, parameterContext:Map<String, TypeReference>):TupleElement
+    public static function mapOverTypeReference(element:TupleElement, func:TypeReference->TypeReference):TupleElement
     {
         return switch (element)
         {
             case TupleElement.Label(_):
                 element;
                 
-            case TupleElement.Argument(element):
-                TupleElement.Argument(ArgumentTools.resolveGenericType(element, parameterContext));
+            case TupleElement.Argument(argument):
+                TupleElement.Argument(ArgumentTools.mapOverTypeReference(argument, func));
+        }
+    }
+    
+    public static function iterateOverTypeReference(element:TupleElement, func:TypeReference-> Void):Void
+    {
+        switch (element)
+        {
+            case TupleElement.Label(_):
+                // nothing to do
+                
+            case TupleElement.Argument(argument):
+                func(argument.type);
         }
     }
 }

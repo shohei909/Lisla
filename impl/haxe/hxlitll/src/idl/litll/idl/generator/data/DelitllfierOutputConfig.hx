@@ -4,8 +4,8 @@ import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.output.delitll.path.HaxeDelitllfierTypePath;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.path.TypeGroupPath;
-import litll.idl.std.data.idl.path.TypePathFilter;
+import litll.idl.std.data.idl.group.TypeGroupPath;
+import litll.idl.std.data.idl.group.TypePathFilter;
 
 using litll.core.ds.ResultTools;
 using litll.core.ds.MaybeTools;

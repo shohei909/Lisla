@@ -60,17 +60,17 @@
 /// Additionally, the following suffixes are supported.
 /// "?"   : Optional argument. (default value is disabled)
 /// ".."  : Rest arguments. (default value is disabled)
-/// "<"   : Unfolded argument. (default value is disabled)
+/// "<"   : Inlined argument. (default value is disabled)
 /// 
 /// ## Restriction
-/// ### Unfoldable type
+/// ### Inlinable type
 ///     String
 ///     Array
 ///     Tuple
 ///     Enum
 ///     Struct
 /// 
-/// In other words, all type can be unfolded. Newtype resolves to one of the above types.
+/// In other words, all type can be inlined. Newtype resolves to one of the above types.
 /// '''
 [newtype ArgumentName String]
 
@@ -85,11 +85,11 @@
 /// '''
 /// Additionally, the following suffixes are supported.
 /// ":"  : Tuple style. Its first element have not to be label.
-/// "<"   : Unfolding argument. Its argument must be one and the argument is unfolded
+/// "<"   : Inlining argument. Its argument must be one and the argument is inlined
 /// "_"   : Explicit normal field.
 /// 
 /// ## Restriction
-/// ### Unfoldable type
+/// ### Inlinable type
 ///     Array
 ///     Tuple
 ///     Enum
@@ -121,21 +121,21 @@
 /// The following suffixes are supported
 /// "?"   : Optional field. (default value is disabled)
 /// ".."  : Multiple field. (default value is disabled)
-/// "<"   : Unfolding field. 
+/// "<"   : Inlining field. 
 /// "?<"  : Optional unfolding field. (default value is disabled)
 /// "..<" : Multiple unfolding field. (default value is disabled)
 /// "<<"  : Merge struct fields. (default value is disabled)
 /// "_"   : Explicit normal field.
 /// 
 /// ## Restriction
-/// ### Unfoldable type
+/// ### Inlinable type
 /// * String
 /// * Array
 /// * Tuple
 /// * Enum
 /// * Struct
 /// 
-/// In other words, all type can be unfolded. Newtype resolves to one of the above types.
+/// In other words, all type can be inlined. Newtype resolves to one of the above types.
 ///
 /// ### Mergeable type:    
 /// * Struct

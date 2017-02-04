@@ -5,7 +5,7 @@ import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
 import litll.idl.delitllfy.DelitllfyErrorKind;
-import litll.idl.std.data.idl.path.TypeGroupPath;
+import litll.idl.std.data.idl.group.TypeGroupPath;
 
 class TypePath
 {

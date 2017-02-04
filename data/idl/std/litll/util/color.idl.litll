@@ -2,5 +2,5 @@
 [package litll.util]
 [import litll.core]
 
-[newtype Argb32 [FixedUInt 32]]
-[newtype Rgb24 [FixedUInt 24]]
+[newtype Argb32 [FixedUInt [const 32]]]
+[newtype Rgb24 [FixedUInt [const 24]]]

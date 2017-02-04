@@ -4,9 +4,10 @@ import litll.core.ds.Maybe;
 import litll.idl.delitllfy.DelitllfyConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.error.IdlReadErrorKind;
+import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.path.TypeGroupPath;
+import litll.idl.std.data.idl.group.TypeGroupPath;
 using litll.core.ds.MaybeTools;
 
 class RootPackageElement extends PackageElement
@@ -56,7 +57,7 @@ class RootPackageElement extends PackageElement
 		errors.push(new IdlReadError(filePath, kind));
 	}
 	
-	public function fetchGroups(output:Map<String, TypeDefinition>, targets:Array<TypeGroupPath>):Void
+	public function fetchGroups(output:Array<ValidType>, targets:Array<TypeGroupPath>):Void
 	{
 		for (target in targets)
 		{
@@ -79,11 +80,10 @@ class RootPackageElement extends PackageElement
 			switch (target.typeName.toOption())
 			{
 				case Option.Some(typeName):
-					switch (element.getType(typeName).toOption())
+					switch (element.getValidType(typeName).toOption())
 					{
 						case Option.Some(type):
-							var path = new TypePath(Maybe.some(element.getModulePath()), typeName, typeName.tag);
-							output[path.toString()] = type;
+							output.push(type);
 						
 						case Option.None:
 					}

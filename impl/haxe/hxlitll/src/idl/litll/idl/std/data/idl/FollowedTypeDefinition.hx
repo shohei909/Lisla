@@ -3,7 +3,7 @@ import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.TupleElement;
 
-enum UnfoldedTypeDefinition
+enum FollowedTypeDefinition
 {
     Arr(elementType:TypeReference);
     Str;

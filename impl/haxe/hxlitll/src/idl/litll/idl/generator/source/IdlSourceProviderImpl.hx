@@ -3,11 +3,13 @@ import haxe.ds.Option;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.idl.delitllfy.DelitllfyConfig;
+import litll.idl.generator.data.DataOutputConfig;
 import litll.idl.generator.error.IdlReadError;
+import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
-import litll.idl.std.data.idl.path.TypeGroupPath;
+import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.generator.data.SourceConfig;
 
 class IdlSourceProviderImpl implements IdlSourceProvider
@@ -22,15 +24,15 @@ class IdlSourceProviderImpl implements IdlSourceProvider
 		{
 			directories.push(source);
 		}
-		
+        
 		var reader = new IdlSourceReader(directories, sourceConfig.delitllfyConfig);
 		root = new RootPackageElement(reader);
 	}
 	
-	public function resolveGroups(targets:Array<TypeGroupPath>):Result<Map<String, TypeDefinition>, Array<IdlReadError>>
+	public function resolveGroups(targets:Array<TypeGroupPath>):Result<Array<ValidType>, Array<IdlReadError>>
 	{
-		var map = new Map();
-		root.fetchGroups(map, targets);
+		var array = [];
+		root.fetchGroups(array, targets);
 		
 		return if (root.hasError())
 		{
@@ -38,11 +40,11 @@ class IdlSourceProviderImpl implements IdlSourceProvider
 		}
 		else
 		{
-			Result.Ok(map);
+			Result.Ok(array);
 		}
 	}
     
-    public function resolveTypePath(path:TypePath):Maybe<TypeDefinition>
+    public function resolveTypePath(path:TypePath):Maybe<ValidType>
     {
         var element:PackageElement = switch (path.modulePath.toOption())
         {
@@ -60,6 +62,6 @@ class IdlSourceProviderImpl implements IdlSourceProvider
                 root;
         }
         
-        return element.getType(path.typeName);
+        return element.getValidType(path.typeName);
     }
 }

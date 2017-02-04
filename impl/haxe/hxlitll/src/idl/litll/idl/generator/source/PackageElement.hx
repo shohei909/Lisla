@@ -3,21 +3,16 @@ package litll.idl.generator.source;
 import haxe.ds.Option;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
-import litll.core.ds.Set;
-import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.exception.SourceException;
-import litll.idl.std.data.idl.Idl;
-import litll.idl.std.data.idl.ImportDeclaration;
+import litll.idl.generator.error.IdlReadErrorKind;
+import litll.idl.generator.source.preprocess.IdlPreprocessor;
+import litll.idl.generator.source.validate.IdlValidator;
+import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.data.idl.TypeDefinition;
-import litll.idl.std.data.idl.TypeDependenceName;
 import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypeParameterDeclaration;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
-import sys.FileSystem;
-import litll.idl.std.data.idl.Idl;
-import unifill.Exception;
 
 using litll.idl.generator.source.ModuleStateTools;
 using litll.core.ds.MapTools;
@@ -42,10 +37,9 @@ class PackageElement
 	{
 		if (!root.reader.moduleExists(directory.path))
 		{
-			module = ModuleState.Loaded(Maybe.none());
+			module = ModuleState.Empty;
 		}
 	}
-	
 	
 	public function getElement(pathArray:Array<String>):Maybe<PackageElement>
 	{
@@ -93,12 +87,12 @@ class PackageElement
 	
 	public function loadModule():Void
 	{
-		if (module.isParseStarted()) return;
+		if (module.isLoadStarted()) return;
 		
 		var idl = switch (readIdl().toOption())
 		{
 			case Option.None:
-				module = Loaded(Maybe.none());
+                module = Empty;
 				return;
 				
 			case Option.Some(data):
@@ -106,34 +100,51 @@ class PackageElement
 		}
 		
 		var typeMap = getTypeMap(idl.data.typeDefinitions, idl.file);
-		module = Loading(typeMap);
+		module = ModuleState.Loading(typeMap);
 		IdlPreprocessor.run(this, idl);
-		module = Loaded(Maybe.some(typeMap));
+		module = ModuleState.Loaded(typeMap);
 	}
-	
+    
+    public function validateModule():Void
+    {
+		if (module.isValidationStarted()) return;
+        
+        loadModule();
+        
+        switch (module)
+		{
+			case ModuleState.Loaded(typeMap):
+                module = ModuleState.Validating(typeMap);
+				var validTypeMap = IdlValidator.run(this, typeMap);
+                module = ModuleState.Validated(validTypeMap);
+				
+			case ModuleState.Empty:
+				// nothing to do
+		
+			case ModuleState.Validated(_) | ModuleState.Validating(_):
+                throw new SourceException("validation has already started");
+                
+			case ModuleState.Unloaded | ModuleState.Loading(_):
+				throw new SourceException("must be loaded");
+		}
+	}
+    
 	public function hasModule():Bool
 	{
 		return switch (module)
 		{
-			case ModuleState.Loaded(data):
-				data.isSome();
-				
-			case ModuleState.Loading(set):
+            case ModuleState.Empty:
+                false;
+                
+			case ModuleState.Loaded(_) | ModuleState.Loading(_) | ModuleState.Validating(_) | ModuleState.Validated(_):
 				true;
 				
 			case ModuleState.Unloaded:
 				loadModule();
-				switch (module)
-				{
-					case ModuleState.Loaded(data):
-						data.isSome();
-						
-					case ModuleState.Unloaded | ModuleState.Loading(_): 
-						throw new SourceException("must be loaded");
-				}
+				hasModule();
 		}
 	}
-	
+    
 	private function getTypeMap(types:Array<TypeDefinition>, filePath:String):Map<String, TypeDefinition>
 	{
 		var typeMap:Map<String, TypeDefinition> = new Map<String, TypeDefinition>();
@@ -156,21 +167,37 @@ class PackageElement
 	}
 	
 	
-	public function getType(typeName:TypeName):Maybe<TypeDefinition>
+	public function getValidType(typeName:TypeName):Maybe<ValidType>
 	{
-		loadModule();
-		
-		return switch (module)
+        validateModule();
+        return switch (module)
 		{
-			case ModuleState.Loaded(_.toOption() => Option.Some(data)):
-				data.getMaybe(typeName.toString());
-				
-            case ModuleState.Loading(data):
+			case ModuleState.Validated(data):
                 data.getMaybe(typeName.toString());
-                
-			case ModuleState.Loaded(_):
+				
+			case ModuleState.Empty:
 				Maybe.none();
 			
+			case ModuleState.Unloaded | ModuleState.Loading(_) | ModuleState.Loaded(_) | ModuleState.Validating(_):
+                throw new SourceException("must be validated");
+		}
+	}
+    
+	public function getTypeDefinition(typeName:TypeName):Maybe<TypeDefinition>
+	{
+		loadModule();
+        
+		return switch (module)
+		{
+			case ModuleState.Validated(data):
+                data.getMaybe(typeName.toString()).map(function (type) return type.definition);
+                
+			case ModuleState.Loaded(data) | ModuleState.Validating(data) | ModuleState.Loading(data):
+				data.getMaybe(typeName.toString());
+				
+			case ModuleState.Empty:
+				Maybe.none();
+                
 			case ModuleState.Unloaded:
 				throw new SourceException("must be loaded");
 		}
@@ -219,60 +246,45 @@ class PackageElement
 	}
 	
 	public function hasType(typeName:TypeName):Bool
-	{
-		inline function exists(data:Maybe<Map<String, TypeDefinition>>):Bool
-		{
-			return data.map(function (map) return map.exists(typeName.toString())).getOrElse(false);
-		}
-		
+	{	
 		return switch (module)
 		{
-			case ModuleState.Loaded(data):
-				exists(data);
-				
-			case ModuleState.Loading(set):
-				set.exists(typeName.toString());
+			case ModuleState.Empty:
+				false;
+                
+			case ModuleState.Validated(data):
+				data.exists(typeName.toString());
+                
+			case ModuleState.Loaded(data) | ModuleState.Loading(data) | ModuleState.Validating(data):
+				data.exists(typeName.toString());
 				
 			case ModuleState.Unloaded:
 				loadModule();
-				switch (module)
-				{
-					case ModuleState.Loaded(data):
-						exists(data);
-						
-					case ModuleState.Unloaded | ModuleState.Loading(_): 
-						throw new SourceException("must be loaded");
-				}
+				hasType(typeName);
 		}
 	}
 	
-	public function fetchChildren(output:Map<String, TypeDefinition>):Void
+	public function fetchChildren(output:Array<ValidType>):Void
 	{
 		fetchModule(output);
 		directory.fetchChildren(output);
 	}
 	
-	public function fetchModule(output:Map<String, TypeDefinition>):Void
+	public function fetchModule(output:Array<ValidType>):Void
 	{
-		loadModule();
+		validateModule();
 		switch (module)
 		{
-			case ModuleState.Loaded(_.toOption() => Option.Some(data)):
+			case ModuleState.Validated(data):
                 for (key in data.keys())
 				{
-					output[getTypePath(key).toString()] = data[key];
+					output.push(data[key]);
 				}
                 
-            case ModuleState.Loading(data):
-				for (key in data.keys())
-				{
-					output[getTypePath(key).toString()] = data[key];
-				}
+			case ModuleState.Empty:
 				
-			case ModuleState.Loaded(_):
-				
-			case ModuleState.Unloaded: 
-				throw new SourceException("must be loaded");
+			case ModuleState.Unloaded | ModuleState.Loading(_) | ModuleState.Loaded(_) | ModuleState.Validating(_):
+                throw new SourceException("must be validated");
 		}
 	}
 }
