@@ -8,6 +8,8 @@ import litll.core.ds.Result;
 import litll.core.ds.Set;
 import litll.idl.delitllfy.DelitllfyContext;
 import litll.idl.generator.error.IdlReadErrorKind;
+import litll.idl.generator.error.IdlValidationErrorKind;
+import litll.idl.generator.error.IdlValidationErrorKindTools;
 import litll.idl.generator.source.preprocess.IdlPreprocessor;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorName;
@@ -25,6 +27,8 @@ import litll.idl.std.data.idl.TypeReferenceDependenceKind;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
 import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
+import litll.idl.std.error.GetConditionErrorKind;
+import litll.idl.std.error.TypeFollowErrorKind;
 using litll.idl.std.tools.idl.TypeDefinitionTools;
 
 class TypeDefinitionPreprocessor
@@ -119,12 +123,16 @@ class TypeDefinitionPreprocessor
 					);
 					return;
 				}
-                
 				if (path.isCoreType() || typeParameters.exists(path.typeName.toString())) 
 				{
 					if (parameters.length != 0)
 					{
-						addError(IdlReadErrorKind.InvalidTypeParameterLength(path, 0, parameters.length));
+                        
+                        addError(
+                            IdlReadErrorKind.Validation(
+                                IdlValidationErrorKindTools.createInvalidTypeParameterLength(path, 0, parameters.length)
+                            )
+                        );
 					}
 					return;
 				}
@@ -155,10 +163,11 @@ class TypeDefinitionPreprocessor
 		if (referenceParameters.length != definitionParameters.length)
 		{
 			addError(
-				IdlReadErrorKind.InvalidTypeParameterLength(
-					path, definitionParameters.length, referenceParameters.length
+				IdlReadErrorKind.Validation(
+                    IdlValidationErrorKindTools.createInvalidTypeParameterLength(path, definitionParameters.length, referenceParameters.length)
 				)
 			);
+            return;
 		}
 		
 		var iter = referenceParameters.iterator();

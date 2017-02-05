@@ -1,4 +1,5 @@
 package litll.idl.exception;
+import litll.core.error.LitllErrorSummary;
 
 class IdlException
 {

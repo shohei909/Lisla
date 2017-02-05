@@ -2,11 +2,13 @@ package litll.idl.generator.error;
 import litll.core.LitllTools;
 import litll.core.ds.Maybe;
 import litll.core.ds.SourceRange;
+import litll.core.error.LitllErrorSummary;
 import litll.core.print.Printer;
 import litll.core.tag.Tag;
+import litll.idl.generator.error.IdlValidationErrorKindTools;
+import litll.idl.generator.error.IdlValidationErrorKindTools;
+import litll.idl.generator.error.IdlValidationErrorKindTools;
 import litll.idl.generator.source.file.IdlFilePath;
-import litll.idl.std.tools.idl.TypeReferenceTools;
-using litll.core.ds.MaybeTools;
 
 class IdlReadError
 {
@@ -19,64 +21,44 @@ class IdlReadError
 		this.errorKind = errorKind;
 	}
 	
-	public function toString():String
+	public function getSummary():LitllErrorSummary
 	{
-		return filePath + ": " + switch (errorKind)
+        inline function summary(tag:Maybe<Tag>, message:String):LitllErrorSummary
+        {
+            return LitllErrorSummary.createWithTag(tag, message);
+        }
+        
+		return switch (errorKind)
 		{
 			case IdlReadErrorKind.Parse(error):
-				error.toString();
+				error.getSummary();
 				
 			case IdlReadErrorKind.Delitll(error):
-				error.toString();
+				error.getSummary();
 				
 			case IdlReadErrorKind.ModuleDupplicated(module, existingPath):
-				"Module " + module.toString() + " is dupplicated with " + existingPath.toString();
+                new LitllErrorSummary(Maybe.none(), "Module " + module.toString() + " is dupplicated with " + existingPath.toString());
 				
 			case IdlReadErrorKind.TypeNameDupplicated(typePath):
-				getRangeStringFromTag(typePath.tag.upCast()) + "Type " + typePath.toString() + " is dupplicated";
-				
-			case IdlReadErrorKind.ArgumentNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Argument name " + name.name + " is dupplicated";
-				
-			case IdlReadErrorKind.EnumConstuctorNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Enum constructor name " + name.name + " is dupplicated";
-				
-			case IdlReadErrorKind.StructFieldNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Struct field name " + name.name + " is dupplicated";
-				
-			case IdlReadErrorKind.TypeDependenceNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Type dependent name " + name.data + " is dupplicated";
+                summary(typePath.tag.upCast(), "Type " + typePath.toString() + " is dupplicated");
 				
 			case IdlReadErrorKind.TypeParameterNameDupplicated(name):
-				getRangeStringFromTag(name.tag.upCast()) + "Type parameter name " + name.toString() + " is dupplicated";
+				summary(name.tag.upCast(), "Type parameter name " + name.toString() + " is dupplicated");
 				
 			case IdlReadErrorKind.InvalidPackage(expected, actual):
-				getRangeStringFromTag(actual.tag.upCast()) + "Package name " + expected.toString() + " is expected but " + actual.toString();
+				summary(actual.tag.upCast(), "Package name " + expected.toString() + " is expected but " + actual.toString());
 				
 			case IdlReadErrorKind.TypeNotFound(path):
-				getRangeStringFromTag(path.tag.upCast()) + "Type " + path.toString() + " is not found";
+				summary(path.tag.upCast(), "Type " + path.toString() + " is not found");
 				
 			case IdlReadErrorKind.ModuleNotFound(path):
-				getRangeStringFromTag(path.tag.upCast()) + "Module " + path.toString() + " is not found";
-				
-			case IdlReadErrorKind.InvalidTypeParameterLength(path, expected, actual):
-                getRangeStringFromTag(path.tag.upCast()) + "Type " + path.toString() + " parameter length is " + expected + " expected but actual " + actual;
-				
-			case IdlReadErrorKind.LoopedNewtype(path):
-				getRangeStringFromTag(path.tag.upCast()) + "NewType " + path.toString() + " is loop";
+				summary(path.tag.upCast(), "Module " + path.toString() + " is not found");
                 
             case IdlReadErrorKind.InvalidTypeDependenceDescription(litll):
-                getRangeStringFromTag(LitllTools.getTag(litll).upCast()) + "Invalid " + Printer.printLitll(litll) + " is loop";
+                summary(LitllTools.getTag(litll).upCast(), "Invalid " + LitllTools.toString(litll) + " is loop");
+                
+            case IdlReadErrorKind.Validation(error):
+                IdlValidationErrorKindTools.getSummary(error);
 		}
 	}
-    
-    private function getRangeStringFromTag(tag:Maybe<Tag>):String
-    {
-        return getRangeString(tag.flatMap(function (t) return t.position));
-    }
-    
-    private function getRangeString(range:Maybe<SourceRange>):String
-    {
-        return range.map(function (r) return r.toString() + ": ").getOrElse("");
-    }
 }

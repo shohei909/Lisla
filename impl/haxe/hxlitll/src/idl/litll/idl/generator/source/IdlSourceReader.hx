@@ -10,7 +10,6 @@ import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.file.LoadedIdl;
-import litll.idl.std.data.idl.Idl;
 import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.delitllfy.idl.IdlDelitllfier;
 import sys.FileSystem;
@@ -79,7 +78,10 @@ class IdlSourceReader
 				switch (Parser.run(content))
 				{
 					case Result.Err(error):
-						errorResult(IdlReadErrorKind.Parse(error));
+                        for (errorEntry in error.entries)
+                        {
+                            errorResult(IdlReadErrorKind.Parse(errorEntry));
+                        }
 						
 					case Result.Ok(litllArray):
 						switch (Delitllfier.run(IdlDelitllfier, litllArray, config))

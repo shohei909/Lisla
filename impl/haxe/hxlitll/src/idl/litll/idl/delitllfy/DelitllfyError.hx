@@ -6,12 +6,17 @@ import litll.core.LitllString;
 import litll.core.LitllTools;
 import litll.core.ds.Maybe;
 import litll.core.ds.SourceRange;
+import litll.core.error.LitllErrorSummary;
 
 class DelitllfyError 
 {
 	public var target(default, null):DelitllfyErrorTarget;
 	public var kind(default, null):DelitllfyErrorKind;
-	public var maybeCauses(default, null):Array<DelitllfyError>;
+	
+    @:deprecated
+    public var maybeCauses(default, null):Array<DelitllfyError>;
+    
+    @:deprecated
 	public var followings(default, null):Array<DelitllfyError>;
     
 	public function new (target:DelitllfyErrorTarget, kind:DelitllfyErrorKind, maybeCauses:Array<DelitllfyError>)
@@ -135,4 +140,9 @@ class DelitllfyError
 				message;
 		}
 	}
+    
+    public function getSummary():LitllErrorSummary
+    {
+        return new LitllErrorSummary(getRange(), getKindString());
+    }
 }

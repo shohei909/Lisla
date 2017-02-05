@@ -14,10 +14,9 @@ import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceDependenceKind;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
-import litll.idl.std.tools.idl.error.TypeFollowErrorKind;
-import litll.idl.std.tools.idl.error.TypeSpecializeErrorKind;
-import litll.idl.std.tools.idl.error.TypeSpecializeErrorKindTools;
-
+import litll.idl.std.error.TypeFollowErrorKind;
+import litll.idl.std.error.TypeSpecializeErrorKind;
+import litll.idl.std.error.TypeSpecializeErrorKindTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 using litll.idl.std.data.idl.TypeParameterDeclaration;
 

@@ -1,5 +1,7 @@
 package litll.core.parse;
+import litll.core.ds.Maybe;
 import litll.core.ds.SourceRange;
+import litll.core.error.LitllErrorSummary;
 
 class ParseErrorEntry
 {
@@ -57,8 +59,8 @@ class ParseErrorEntry
 		this.range = range;
 	}
 	
-	public function toString():String
-	{
-		return 'ParseError: ${range.toString()}: $message';
-	}
+    public function getSummary():LitllErrorSummary
+    {
+        return new LitllErrorSummary(Maybe.some(range), message);
+    }
 }

@@ -2,6 +2,7 @@ package litll.core.parse;
 import litll.core.LitllArray;
 import haxe.ds.Option;
 import litll.core.ds.Maybe;
+import litll.core.error.LitllErrorSummary;
 
 class ParseError
 {
@@ -14,8 +15,9 @@ class ParseError
 		this.entries = entries;
 	}
 	
-	public function toString():String
+	public function getSummaries():Array<LitllErrorSummary>
 	{
-		return [for (entry in entries) entry.toString()].join("\n");
+		return [for (entry in entries) entry.getSummary()];
 	}
+    
 }

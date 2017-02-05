@@ -1,4 +1,4 @@
-package litll.idl.std.tools.idl.error;
+package litll.idl.std.error;
 
 class TypeSpecializeErrorKindTools
 {

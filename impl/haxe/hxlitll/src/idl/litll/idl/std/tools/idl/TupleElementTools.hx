@@ -1,6 +1,17 @@
 package litll.idl.std.tools.idl;
+import haxe.ds.Option;
+import litll.core.ds.Result;
+import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
+import litll.idl.generator.output.delitll.match.DelitllfyGuardCondition;
+import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionBuilder;
+import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
+import litll.idl.generator.source.IdlSourceProvider;
+import litll.idl.std.data.idl.ArgumentKind;
+import litll.idl.std.data.idl.FollowedTypeDefinition;
 import litll.idl.std.data.idl.TupleElement;
+import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.error.GetConditionErrorKind;
 
 class TupleElementTools
 {

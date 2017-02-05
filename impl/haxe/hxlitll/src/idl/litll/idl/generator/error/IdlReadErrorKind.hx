@@ -1,6 +1,7 @@
 package litll.idl.generator.error;
 import litll.core.Litll;
 import litll.core.parse.ParseError;
+import litll.core.parse.ParseErrorEntry;
 import litll.idl.delitllfy.DelitllfyError;
 import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructorName;
@@ -15,7 +16,7 @@ import litll.idl.std.data.idl.TypeReference;
 enum IdlReadErrorKind
 {
 	// Parse
-    Parse(error:ParseError);
+    Parse(error:ParseErrorEntry);
     
     // Delitll
 	Delitll(error:DelitllfyError);
@@ -27,14 +28,8 @@ enum IdlReadErrorKind
 	InvalidPackage(expected:PackagePath, actual:PackagePath);
 	ModuleNotFound(module:ModulePath);
     InvalidTypeDependenceDescription(path:Litll);
-    
-	TypeParameterNameDupplicated(name:TypeName);
-	TypeDependenceNameDupplicated(name:TypeDependenceName);
-	ArgumentNameDupplicated(name:ArgumentName);
-    StructFieldNameDupplicated(name:StructFieldName);
-    EnumConstuctorNameDupplicated(name:EnumConstructorName);
+    TypeParameterNameDupplicated(name:TypeName);
     
     // Validate
-    InvalidTypeParameterLength(typePath:TypePath, expected:Int, actual:Int);
-    LoopedNewtype(typePath:TypePath);
+    Validation(error:IdlValidationErrorKind);
 }

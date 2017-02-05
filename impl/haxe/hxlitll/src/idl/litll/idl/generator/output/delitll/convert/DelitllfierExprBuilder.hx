@@ -27,6 +27,9 @@ import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
+import litll.idl.std.error.GetConditionErrorKindTools;
+import litll.idl.std.tools.idl.FollowedTypeDefinitionTools;
+import litll.idl.std.tools.idl.TupleTools;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
 
@@ -209,7 +212,7 @@ class DelitllfierExprBuilder
     // ==============================================================
     public function createTupleGuardConditions(elements:Array<TupleElement>, definitionParameters:Array<TypeName>):DelitllfyGuardCondition
     {
-        return DelitllfyGuardCondition.createForTuple(elements, context.source, definitionParameters);
+        return elements.getGuard(context.source, definitionParameters).getOrThrow(GetConditionErrorKindTools.toIdlException);
     }
     public function createFieldGuardConditions(name:StructFieldName, type:TypeReference, definitionParameters:Array<TypeName>):DelitllfyGuardCondition
     {
@@ -252,7 +255,7 @@ class DelitllfierExprBuilder
     public function createTypeCase(type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr, outputCases:Array<Case>):Void
     {
         var followedType = type.followOrThrow(context.source, definitionParameters);
-        for (caseKind in DelitllfyCaseConditionTools.createForFollowedType(followedType, context.source, definitionParameters))
+        for (caseKind in followedType.getConditions(context.source, definitionParameters).getOrThrow(GetConditionErrorKindTools.toIdlException))
         {
             var caseData = switch (caseKind)
             {
