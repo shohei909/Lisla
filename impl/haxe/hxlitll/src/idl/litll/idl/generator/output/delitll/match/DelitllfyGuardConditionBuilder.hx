@@ -23,7 +23,7 @@ class DelitllfyGuardConditionBuilder
     
     public function build():DelitllfyGuardCondition
     {
-        return new DelitllfyGuardCondition(0, max, conditions);
+        return new DelitllfyGuardCondition(min, max, conditions);
     }
     
     public inline function add(kind:DelitllfyGuardConditionKind):Void
