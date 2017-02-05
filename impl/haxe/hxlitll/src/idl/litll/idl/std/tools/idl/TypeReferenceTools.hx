@@ -3,7 +3,6 @@ import haxe.ds.Option;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
 import litll.core.LitllString;
-import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.data.DataOutputConfig;
@@ -12,14 +11,13 @@ import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.FollowedTypeDefinition;
 import litll.idl.std.data.idl.GenericTypeReference;
 import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.data.idl.SpecializedTypeDefinition;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceDependenceKind;
-import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
-import litll.idl.std.tools.idl.error.TypeSpecializeErrorKindTools;
+import litll.idl.std.tools.idl.error.TypeFollowErrorKind;
+import litll.idl.std.tools.idl.error.TypeFollowErrorKindTools;
 
 using litll.idl.std.tools.idl.TypeDefinitionTools;
 using litll.idl.std.tools.idl.TypeParameterDeclarationTools;
@@ -29,6 +27,7 @@ using litll.idl.std.tools.idl.EnumConstructorTools;
 using litll.idl.std.tools.idl.TypeReferenceParameterTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 using litll.idl.std.tools.idl.StructElementTools;
+using litll.core.ds.ResultTools;
 
 class TypeReferenceTools
 {
@@ -98,67 +97,64 @@ class TypeReferenceTools
 		}
     }
     
-    public static function follow(specializedType:TypeReference, source:IdlSourceProvider, parentDefinitionParameters:Array<TypeName>):FollowedTypeDefinition
+    public static function followOrThrow(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):FollowedTypeDefinition
     {
-        var parameterNames = [for (p in parentDefinitionParameters) p.toString()];
-        var generic = generalize(specializedType);
+        return follow(type, source, definitionParameters).getOrThrow(TypeFollowErrorKindTools.toIdlException);
+    }
+    
+    public static function follow(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<FollowedTypeDefinition, TypeFollowErrorKind>
+    {
+        var startPath = getTypePath(type).toString();
+        return _follow(type, startPath, source, definitionParameters);
+    }
+    
+    public static function _follow(type:TypeReference, startPath:String, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<FollowedTypeDefinition, TypeFollowErrorKind>
+    {
+        var parameterNames = [for (p in definitionParameters) p.toString()];
+        var generic = generalize(type);
         var referenceParameters = generic.parameters.getTypeParameters();
         var targetPath = generic.typePath;
         
-        switch (specializedType)
+        var name = targetPath.toString();
+        if (name == "String")
         {
-            case TypeReference.Primitive(typePath):
-                var name = typePath.toString();
-                if (parameterNames.indexOf(name) != -1)
+            return if (generic.parameters.length == 0)
+            {
+                Result.Ok(FollowedTypeDefinition.Str);
+            }
+            else
+            {
+                Result.Err(TypeFollowErrorKind.InvalidTypeParameterLength(targetPath, 0, generic.parameters.length));
+            }
+        }
+        if (name == "Array")
+        {
+            return if (generic.parameters.length == 1)
+            {
+                if (referenceParameters.length == 1)
                 {
-                    // Any
-                    targetPath = new TypePath(new ModulePath(["litll", "core"]), new TypeName(new LitllString("Any")));
+                    Result.Ok(FollowedTypeDefinition.Arr(referenceParameters[0]));
                 }
-                if (name == "String")
+                else
                 {
-                    return FollowedTypeDefinition.Str;
+                    throw new IdlException("invalid TypeReferenceParameterKind");
                 }
-            
-            case TypeReference.Generic(generic):
-                var name = generic.typePath.toString();
-                if (name == "Array" && generic.parameters.length == 1)
-                {
-                    switch (generic.parameters[0].processedValue.toOption())
-                    {
-                        case Option.Some(TypeReferenceParameterKind.Type(_)):
-                            return FollowedTypeDefinition.Arr(referenceParameters[0]);
-                            
-                        case _:
-                    }
-                }
-                
-            case _:
+            }
+            else
+            {
+                Result.Err(TypeFollowErrorKind.InvalidTypeParameterLength(targetPath, 1, generic.parameters.length));
+            }
+        }
+        if (parameterNames.indexOf(name) != -1)
+        {
+            // Any
+            targetPath = new TypePath(new ModulePath(["litll", "core"]), new TypeName(new LitllString("Any")));
         }
         
         return switch (source.resolveTypePath(targetPath).toOption())
         {
-            case Option.Some(validType):
-                switch(TypeDefinitionTools.specialize(validType.definition, generic.parameters))
-                {
-                    case Result.Ok(specializedTypeDefinition):
-                        switch (specializedTypeDefinition)
-                        {
-                            case SpecializedTypeDefinition.Enum(constuctors):
-                                FollowedTypeDefinition.Enum(constuctors);
-                                
-                            case SpecializedTypeDefinition.Tuple(arguments):
-                                FollowedTypeDefinition.Tuple(arguments);
-                                
-                            case SpecializedTypeDefinition.Struct(fields):
-                                FollowedTypeDefinition.Struct(fields);
-                                
-                            case SpecializedTypeDefinition.Newtype(type):
-                                follow(type, source, parentDefinitionParameters);
-                        }
-                        
-                    case Result.Err(error):
-                        throw new IdlException(TypeSpecializeErrorKindTools.toString(error));
-                }
+            case Option.Some(definition):
+                TypeDefinitionTools.follow(definition, startPath, source, generic.parameters, definitionParameters);
                 
             case Option.None:
                 throw new IdlException("Type " + generic.typePath.toString() + " not found.");
@@ -202,33 +198,7 @@ class TypeReferenceTools
                         [
                             for (parameter in generic.parameters)
                             {
-                                var processedValue = switch (parameter.processedValue.toOption())
-                                {
-                                    case Option.None:
-                                        Maybe.none();
-                                        
-                                    case Option.Some(TypeReferenceParameterKind.Type(type)):
-                                        var kind = TypeReferenceParameterKind.Type(specialize(type, typeMap, dependenceMap));
-                                        Maybe.some(kind);
-                                        
-                                    case Option.Some(TypeReferenceParameterKind.Dependence(data, type)):
-                                        var kind = TypeReferenceParameterKind.Dependence(
-                                            switch (data)
-                                            {
-                                                case TypeReferenceDependenceKind.Reference(name):
-                                                    if (dependenceMap.exists(name)) dependenceMap[name] else data; 
-                                                    
-                                                case TypeReferenceDependenceKind.Const(value):
-                                                    data;
-                                            },
-                                            specialize(type, typeMap, dependenceMap)
-                                        );
-                                        Maybe.some(kind);
-                                }
-                                
-                                var result = new TypeReferenceParameter(parameter.value);
-                                result.processedValue = processedValue;
-                                result;
+                                TypeReferenceParameterTools.specialize(parameter, typeMap, dependenceMap);
                             }
                         ]
                     )

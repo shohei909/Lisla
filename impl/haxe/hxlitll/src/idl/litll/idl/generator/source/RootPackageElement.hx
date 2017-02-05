@@ -1,16 +1,19 @@
 package litll.idl.generator.source;
 import haxe.ds.Option;
 import litll.core.ds.Maybe;
+import litll.core.ds.Result;
 import litll.idl.delitllfy.DelitllfyConfig;
+import litll.idl.generator.data.SourceConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.error.IdlReadErrorKind;
+import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 using litll.core.ds.MaybeTools;
 
-class RootPackageElement extends PackageElement
+class RootPackageElement extends PackageElement implements IdlSourceProvider
 {
 	public var reader(default, null):IdlSourceReader;
 	public var errors(default, null):Array<IdlReadError>;
@@ -52,7 +55,7 @@ class RootPackageElement extends PackageElement
 		}
 	}
 
-	public function addError(filePath:String, kind:IdlReadErrorKind):Void
+	public function addError(filePath:IdlFilePath, kind:IdlReadErrorKind):Void
 	{
 		errors.push(new IdlReadError(filePath, kind));
 	}
@@ -104,5 +107,54 @@ class RootPackageElement extends PackageElement
 		var old = errors;
 		errors = [];
 		return old;
+	}
+    
+	public function resolveGroups(targets:Array<TypeGroupPath>):Result<Array<ValidType>, Array<IdlReadError>>
+	{
+		var array = [];
+		fetchGroups(array, targets);
+		
+		return if (root.hasError())
+		{
+			Result.Err(root.clearErrors());
+		}
+		else
+		{
+			Result.Ok(array);
+		}
+	}
+    
+    public function resolveTypePath(path:TypePath):Maybe<TypeDefinition>
+    {
+        var element:PackageElement = switch (path.modulePath.toOption())
+        {
+            case Option.Some(array):
+                switch (getElement(array.toArray()).toOption())
+                {
+                    case Option.None:
+                        return Maybe.none();
+                        
+                    case Option.Some(element):
+                        element;
+                }
+                
+            case Option.None:
+                root;
+        }
+        
+        return element.getTypeDefinition(path.typeName);
+    }
+    
+    
+	public static function create(homeDirectory:String, sourceConfig:SourceConfig):RootPackageElement
+	{
+		var directories = [homeDirectory + "/std"];
+		for (source in sourceConfig.sources)
+		{
+			directories.push(source);
+		}
+        
+		var reader = new IdlSourceReader(directories, sourceConfig.delitllfyConfig);
+		return new RootPackageElement(reader);
 	}
 }

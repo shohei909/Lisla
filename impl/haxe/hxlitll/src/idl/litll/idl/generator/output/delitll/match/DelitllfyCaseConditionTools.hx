@@ -71,7 +71,7 @@ class DelitllfyCaseConditionTools
                                     switch (elements[0])
                                     {
                                         case TupleElement.Argument(argument):
-                                            var followedType = argument.type.follow(source, definitionParameters);
+                                            var followedType = argument.type.followOrThrow(source, definitionParameters);
                                             _createForInlineType(result, followedType, source, definitionParameters);
                                             
                                         case TupleElement.Label(litllString):

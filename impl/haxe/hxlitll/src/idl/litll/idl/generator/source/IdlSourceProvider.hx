@@ -10,5 +10,5 @@ import litll.idl.std.data.idl.group.TypeGroupPath;
 interface IdlSourceProvider
 {
 	public function resolveGroups(targets:Array<TypeGroupPath>):Result<Array<ValidType>, Array<IdlReadError>>;
-    public function resolveTypePath(path:TypePath):Maybe<ValidType>;
+    public function resolveTypePath(path:TypePath):Maybe<TypeDefinition>;
 }

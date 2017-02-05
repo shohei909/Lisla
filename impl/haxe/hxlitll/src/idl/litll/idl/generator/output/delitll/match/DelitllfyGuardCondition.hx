@@ -70,7 +70,7 @@ class DelitllfyGuardCondition
                             max = Option.None;
                             
                         case [ArgumentKind.Inline, Option.None]:
-                            switch (argument.type.follow(source, definitionParameters))
+                            switch (argument.type.followOrThrow(source, definitionParameters))
                             {
                                 case FollowedTypeDefinition.Arr(_):
                                     max = Option.None;
@@ -126,7 +126,7 @@ class DelitllfyGuardCondition
                                 max = Option.None;
                                 
                             case [StructFieldKind.Inline, Option.None]:
-                                switch (field.type.follow(source, definitionParameters))
+                                switch (field.type.followOrThrow(source, definitionParameters))
                                 {
                                     case FollowedTypeDefinition.Str:
                                         condition = merge(condition, ConditionKind.Str);
@@ -143,7 +143,7 @@ class DelitllfyGuardCondition
                                 }
                                 
                             case [StructFieldKind.Merge, Option.None]:
-                                switch (field.type.follow(source, definitionParameters))
+                                switch (field.type.followOrThrow(source, definitionParameters))
                                 {
                                     case FollowedTypeDefinition.Struct(elements):
                                         _processStruct(elements);
@@ -338,7 +338,7 @@ class DelitllfyGuardCondition
     
     private function resolveTypeCondition(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):ConditionKind
     {
-        return switch (type.follow(source, definitionParameters))
+        return switch (type.followOrThrow(source, definitionParameters))
         {
             case FollowedTypeDefinition.Struct(elements):
                 ConditionKind.Arr;

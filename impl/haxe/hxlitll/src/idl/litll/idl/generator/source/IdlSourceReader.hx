@@ -8,6 +8,8 @@ import litll.idl.delitllfy.Delitllfier;
 import litll.idl.delitllfy.DelitllfyConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.error.IdlReadErrorKind;
+import litll.idl.generator.source.file.IdlFilePath;
+import litll.idl.generator.source.file.LoadedIdl;
 import litll.idl.std.data.idl.Idl;
 import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.delitllfy.idl.IdlDelitllfier;
@@ -64,7 +66,8 @@ class IdlSourceReader
         
 		for (base in directories)
 		{
-			var filePath = base + "/" + localPath + ".idl.litll";
+			var filePath = new IdlFilePath(base + "/" + localPath + ".idl.litll");
+            
 			inline function errorResult(kind:IdlReadErrorKind):Void
 			{
 				errors.push(new IdlReadError(filePath, kind));

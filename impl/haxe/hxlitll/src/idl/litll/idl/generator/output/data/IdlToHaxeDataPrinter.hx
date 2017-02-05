@@ -4,12 +4,6 @@ import litll.core.ds.Result;
 import litll.idl.ds.ProcessResult;
 import litll.idl.generator.output.IdlToHaxePrintContext;
 import litll.idl.generator.output.data.IdlToHaxeDataConverter;
-import litll.idl.generator.output.data.HaxeDataTypePath;
-import litll.idl.generator.output.data.store.HaxeDataClassInterface;
-import litll.idl.generator.output.data.store.HaxeDataConstructorKind;
-import litll.idl.generator.output.data.store.HaxeDataInterface;
-import litll.idl.generator.output.data.store.HaxeDataInterfaceKind;
-import litll.idl.std.data.idl.TypePath;
 using litll.core.ds.ResultTools;
 
 class IdlToHaxeDataPrinter

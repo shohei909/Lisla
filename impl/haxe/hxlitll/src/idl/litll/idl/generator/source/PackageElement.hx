@@ -5,6 +5,8 @@ import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.idl.exception.SourceException;
 import litll.idl.generator.error.IdlReadErrorKind;
+import litll.idl.generator.source.file.IdlFilePath;
+import litll.idl.generator.source.file.LoadedIdl;
 import litll.idl.generator.source.preprocess.IdlPreprocessor;
 import litll.idl.generator.source.validate.IdlValidator;
 import litll.idl.generator.source.validate.ValidType;
@@ -100,9 +102,9 @@ class PackageElement
 		}
 		
 		var typeMap = getTypeMap(idl.data.typeDefinitions, idl.file);
-		module = ModuleState.Loading(typeMap);
+		module = ModuleState.Loading(typeMap, idl.file);
 		IdlPreprocessor.run(this, idl);
-		module = ModuleState.Loaded(typeMap);
+		module = ModuleState.Loaded(typeMap, idl.file);
 	}
     
     public function validateModule():Void
@@ -113,9 +115,9 @@ class PackageElement
         
         switch (module)
 		{
-			case ModuleState.Loaded(typeMap):
-                module = ModuleState.Validating(typeMap);
-				var validTypeMap = IdlValidator.run(this, typeMap);
+			case ModuleState.Loaded(typeMap, file):
+                module = ModuleState.Validating(typeMap, file);
+				var validTypeMap = IdlValidator.run(file, this, typeMap);
                 module = ModuleState.Validated(validTypeMap);
 				
 			case ModuleState.Empty:
@@ -145,7 +147,7 @@ class PackageElement
 		}
 	}
     
-	private function getTypeMap(types:Array<TypeDefinition>, filePath:String):Map<String, TypeDefinition>
+	private function getTypeMap(types:Array<TypeDefinition>, filePath:IdlFilePath):Map<String, TypeDefinition>
 	{
 		var typeMap:Map<String, TypeDefinition> = new Map<String, TypeDefinition>();
         
@@ -192,7 +194,7 @@ class PackageElement
 			case ModuleState.Validated(data):
                 data.getMaybe(typeName.toString()).map(function (type) return type.definition);
                 
-			case ModuleState.Loaded(data) | ModuleState.Validating(data) | ModuleState.Loading(data):
+			case ModuleState.Loaded(data, _) | ModuleState.Validating(data, _) | ModuleState.Loading(data, _):
 				data.getMaybe(typeName.toString());
 				
 			case ModuleState.Empty:
@@ -255,7 +257,7 @@ class PackageElement
 			case ModuleState.Validated(data):
 				data.exists(typeName.toString());
                 
-			case ModuleState.Loaded(data) | ModuleState.Loading(data) | ModuleState.Validating(data):
+			case ModuleState.Loaded(data, _) | ModuleState.Loading(data, _) | ModuleState.Validating(data, _):
 				data.exists(typeName.toString());
 				
 			case ModuleState.Unloaded:

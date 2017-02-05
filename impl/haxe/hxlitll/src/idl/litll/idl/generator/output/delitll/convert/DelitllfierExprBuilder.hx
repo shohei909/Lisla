@@ -251,7 +251,7 @@ class DelitllfierExprBuilder
     }
     public function createTypeCase(type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr, outputCases:Array<Case>):Void
     {
-        var followedType = type.follow(context.source, definitionParameters);
+        var followedType = type.followOrThrow(context.source, definitionParameters);
         for (caseKind in DelitllfyCaseConditionTools.createForFollowedType(followedType, context.source, definitionParameters))
         {
             var caseData = switch (caseKind)

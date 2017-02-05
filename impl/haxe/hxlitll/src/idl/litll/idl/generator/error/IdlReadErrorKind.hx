@@ -10,6 +10,7 @@ import litll.idl.std.data.idl.StructFieldName;
 import litll.idl.std.data.idl.TypeDependenceName;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.data.idl.TypeReference;
 
 enum IdlReadErrorKind
 {
@@ -32,8 +33,8 @@ enum IdlReadErrorKind
 	ArgumentNameDupplicated(name:ArgumentName);
     StructFieldNameDupplicated(name:StructFieldName);
     EnumConstuctorNameDupplicated(name:EnumConstructorName);
-    InvalidTypeParameterLength(path:TypePath, expected:Int, actual:Int);
     
     // Validate
-    LoopedNewtype(path:TypePath);
+    InvalidTypeParameterLength(typePath:TypePath, expected:Int, actual:Int);
+    LoopedNewtype(typePath:TypePath);
 }

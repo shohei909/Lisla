@@ -1,22 +1,25 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
-import litll.core.Litll;
 import litll.core.ds.Result;
 import litll.core.print.Printer;
 import litll.idl.exception.IdlException;
-import litll.idl.generator.error.IdlReadError;
-import litll.idl.generator.error.IdlReadErrorKind;
+import litll.idl.generator.source.IdlSourceProvider;
+import litll.idl.std.data.idl.FollowedTypeDefinition;
 import litll.idl.std.data.idl.SpecializedTypeDefinition;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeNameDeclaration;
 import litll.idl.std.data.idl.TypeParameterDeclaration;
-import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceDependenceKind;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
+import litll.idl.std.tools.idl.error.TypeFollowErrorKind;
 import litll.idl.std.tools.idl.error.TypeSpecializeErrorKind;
+import litll.idl.std.tools.idl.error.TypeSpecializeErrorKindTools;
+
+using litll.idl.std.tools.idl.TypeReferenceTools;
+using litll.idl.std.data.idl.TypeParameterDeclaration;
 
 class TypeDefinitionTools
 {
@@ -88,7 +91,7 @@ class TypeDefinitionTools
         
         for (i in 0...definitionParameters.length)
         {
-            var referenceParameter = referenceParameters[i];
+            var referenceParameter = TypeReferenceParameterTools.specialize(referenceParameters[i], typeMap, dependenceMap);
             var definitionParameter = definitionParameters[i];
             
             switch [definitionParameter, referenceParameter.processedValue.toOption()]
@@ -109,6 +112,39 @@ class TypeDefinitionTools
         }
         
         return Result.Ok(new TypeSpecializer(typeDefinition, typeMap, dependenceMap).result);
+    }
+    
+    public static function follow(definition:TypeDefinition, startPath:String, source:IdlSourceProvider, referenceParameters:Array<TypeReferenceParameter>, definitionParameters:Array<TypeName>):Result<FollowedTypeDefinition, TypeFollowErrorKind>
+    {
+        return switch(TypeDefinitionTools.specialize(definition, referenceParameters))
+        {
+            case Result.Ok(specializedTypeDefinition):
+                switch (specializedTypeDefinition)
+                {
+                    case SpecializedTypeDefinition.Enum(constuctors):
+                        Result.Ok(FollowedTypeDefinition.Enum(constuctors));
+                        
+                    case SpecializedTypeDefinition.Tuple(arguments):
+                        Result.Ok(FollowedTypeDefinition.Tuple(arguments));
+                        
+                    case SpecializedTypeDefinition.Struct(fields):
+                        Result.Ok(FollowedTypeDefinition.Struct(fields));
+                        
+                    case SpecializedTypeDefinition.Newtype(type):
+                        if (type.getTypePath().toString() == startPath)
+                        {
+                            var path = type.getTypePath();
+                            Result.Err(TypeFollowErrorKind.LoopedNewtype(path));
+                        }
+                        else
+                        {
+                            TypeReferenceTools._follow(type, startPath, source, definitionParameters);
+                        }
+                }
+                
+            case Result.Err(error):
+                throw new IdlException(TypeSpecializeErrorKindTools.toString(error));
+        }
     }
 }
 

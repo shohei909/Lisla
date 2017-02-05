@@ -13,7 +13,7 @@ import litll.idl.generator.output.data.store.HaxeDataInterfaceKindTools;
 import litll.idl.generator.output.haxe.HaxePrinter;
 import litll.idl.generator.output.haxe.HaxePrinterImpl;
 import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.generator.source.IdlSourceProviderImpl;
+import litll.idl.generator.source.RootPackageElement;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 
 class IdlToHaxePrintContext implements IdlToHaxeConvertContext
@@ -45,7 +45,7 @@ class IdlToHaxePrintContext implements IdlToHaxeConvertContext
 		var io = new StandardIoProvider();
 		
 		return new IdlToHaxePrintContext(
-			new IdlSourceProviderImpl(homeDirectory, config.sourceConfig),
+			RootPackageElement.create(homeDirectory, config.sourceConfig),
 			io,
 			new HaxePrinterImpl(io, config.outputConfig),
 			config.outputConfig.dataOutputConfig,

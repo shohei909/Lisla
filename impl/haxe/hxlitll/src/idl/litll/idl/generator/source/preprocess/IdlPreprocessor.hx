@@ -1,7 +1,7 @@
 package litll.idl.generator.source.preprocess;
 import haxe.ds.Option;
 import litll.idl.generator.error.IdlReadErrorKind;
-import litll.idl.generator.source.LoadedIdl;
+import litll.idl.generator.source.file.LoadedIdl;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.ImportDeclaration;
 import litll.idl.std.data.idl.ModulePath;

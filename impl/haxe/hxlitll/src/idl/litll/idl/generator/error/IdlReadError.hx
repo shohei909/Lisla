@@ -3,17 +3,17 @@ import litll.core.LitllTools;
 import litll.core.ds.Maybe;
 import litll.core.ds.SourceRange;
 import litll.core.print.Printer;
-import litll.core.tag.StringTag;
 import litll.core.tag.Tag;
-import litll.idl.std.data.idl.TypePath;
+import litll.idl.generator.source.file.IdlFilePath;
+import litll.idl.std.tools.idl.TypeReferenceTools;
 using litll.core.ds.MaybeTools;
 
 class IdlReadError
 {
-	public var filePath(default, null):String;
+	public var filePath(default, null):IdlFilePath;
 	public var errorKind(default, null):IdlReadErrorKind;
 	
-	public function new(filePath:String, errorKind:IdlReadErrorKind) 
+	public function new(filePath:IdlFilePath, errorKind:IdlReadErrorKind) 
 	{
 		this.filePath = filePath;
 		this.errorKind = errorKind;
@@ -60,7 +60,7 @@ class IdlReadError
 				getRangeStringFromTag(path.tag.upCast()) + "Module " + path.toString() + " is not found";
 				
 			case IdlReadErrorKind.InvalidTypeParameterLength(path, expected, actual):
-				getRangeStringFromTag(path.tag.upCast()) + "Type " + path.toString() + " parameter length is " + expected + " expected but actual " + actual;
+                getRangeStringFromTag(path.tag.upCast()) + "Type " + path.toString() + " parameter length is " + expected + " expected but actual " + actual;
 				
 			case IdlReadErrorKind.LoopedNewtype(path):
 				getRangeStringFromTag(path.tag.upCast()) + "NewType " + path.toString() + " is loop";
