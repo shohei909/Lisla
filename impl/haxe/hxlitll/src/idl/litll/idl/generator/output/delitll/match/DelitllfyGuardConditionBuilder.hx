@@ -32,10 +32,8 @@ class DelitllfyGuardConditionBuilder
         {
             conditions.push(kind);
         }
-        else
-        {
-            _add();
-        }
+        
+        _add();
     }
     
     private inline function _add():Void
