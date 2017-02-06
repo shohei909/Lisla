@@ -11,20 +11,14 @@ using Lambda;
 class DelitllfyArrayContext
 {
 	private var array:LitllArray<Litll>;
-	public var index:Int;
-	
-	private var error:Maybe<DelitllfyError>;
-	private var maybeErrors:Array<DelitllfyError>;
 	private var config:DelitllfyConfig;
+	public var index:Int;
 	
 	public inline function new (array:LitllArray<Litll>, index:Int, config:DelitllfyConfig)
 	{
 		this.config = config;
 		this.array = array;
 		this.index = index;
-		
-		error = Maybe.none();
-		maybeErrors = [];
 	}
     
 	public function nextValue():Option<Litll>
@@ -126,7 +120,7 @@ class DelitllfyArrayContext
 				Result.Ok(data);
 				
 			case Result.Err(error):
-				createErrorResult(error);
+				Result.Err(error);
 		}
 	}
 	
@@ -139,27 +133,10 @@ class DelitllfyArrayContext
                 Result.Ok(true);
                 
             case _:
-                createErrorResult(DelitllfyError.ofLitll(array.data[index - 1], DelitllfyErrorKind.UnmatchedLabel(string)));
+                Result.Err(DelitllfyError.ofLitll(array.data[index - 1], DelitllfyErrorKind.UnmatchedLabel(string)));
         }
     }
     
-	private function createErrorResult<T>(error:DelitllfyError):Result<T, DelitllfyError>
-	{
-		maybeErrors.iter(error.maybeCauses.push);
-		maybeErrors = [];
-		
-		return if (config.persevering)
-		{
-			addFatalError(error);
-			Result.Ok(null);
-		}
-		else
-		{
-			Result.Err(error);
-		}
-	}
-
-	
 	private inline function readData<T>(process:ProcessFunction<T>):Result<T, DelitllfyError>
 	{
 		index++;
@@ -180,51 +157,21 @@ class DelitllfyArrayContext
 		}
 	}
 
-    @:deprecated
-	public inline function close<T>(create:Void->T):Result<T, DelitllfyError>
-	{
-		if (index < array.data.length)
-		{
-			addFatalError(createError(DelitllfyErrorKind.TooLongArray));
-		}
-		
-		return switch (error.toOption())
-		{
-			case Option.Some(error):
-				Result.Err(error);
-			
-			case Option.None:
-				Result.Ok(create());
-		}
-	}
-
 	public inline function closeOrError<T>(?posInfos:PosInfos):Option<DelitllfyError>
 	{
-		if (index < array.data.length)
+		return if (index < array.data.length)
 		{
-			addFatalError(createError(DelitllfyErrorKind.TooLongArray));
+			Option.Some(createError(DelitllfyErrorKind.TooLongArray));
 		}
-		
-		return error.toOption();
+		else
+        {
+            Option.None;
+        }
 	}
 	
 	private function createError(kind:DelitllfyErrorKind):DelitllfyError
 	{
-		var e = DelitllfyError.ofArray(array, index, kind, maybeErrors);
-		maybeErrors = [];
-		return e;
-	}
-	
-	public function addFatalError(nextError:DelitllfyError):Void
-	{
-		switch (error.toOption())
-		{
-			case Option.Some(_error):
-				_error.followings.push(nextError);
-				
-			case Option.None:
-				error = Maybe.some(nextError);
-		}
+		return DelitllfyError.ofArray(array, index, kind);
 	}
 }
 

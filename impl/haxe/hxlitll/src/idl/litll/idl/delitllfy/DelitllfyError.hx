@@ -13,28 +13,20 @@ class DelitllfyError
 	public var target(default, null):DelitllfyErrorTarget;
 	public var kind(default, null):DelitllfyErrorKind;
 	
-    @:deprecated
-    public var maybeCauses(default, null):Array<DelitllfyError>;
-    
-    @:deprecated
-	public var followings(default, null):Array<DelitllfyError>;
-    
-	public function new (target:DelitllfyErrorTarget, kind:DelitllfyErrorKind, maybeCauses:Array<DelitllfyError>)
+	public function new (target:DelitllfyErrorTarget, kind:DelitllfyErrorKind)
 	{
 		this.target = target;
 		this.kind = kind;
-		this.maybeCauses = maybeCauses;
-		this.followings = [];
 	}
 	
 	public static function ofString(string:LitllString, range:Maybe<SourceRange>, kind:DelitllfyErrorKind):DelitllfyError
 	{
-		return new DelitllfyError(DelitllfyErrorTarget.Str(string, range), kind, []);
+		return new DelitllfyError(DelitllfyErrorTarget.Str(string, range), kind);
 	}
 	
-	public static function ofArray(array:LitllArray<Litll>, index:Int, kind:DelitllfyErrorKind, maybeCauses:Array<DelitllfyError>):DelitllfyError
+	public static function ofArray(array:LitllArray<Litll>, index:Int, kind:DelitllfyErrorKind):DelitllfyError
 	{
-		return new DelitllfyError(DelitllfyErrorTarget.Arr(array, index), kind, maybeCauses);
+		return new DelitllfyError(DelitllfyErrorTarget.Arr(array, index), kind);
 	}
 	
 	public static function ofLitll(litll:Litll, kind:DelitllfyErrorKind):DelitllfyError
@@ -45,33 +37,8 @@ class DelitllfyError
 				ofString(string, Maybe.none(), kind);
 				
 			case Litll.Arr(array):
-				ofArray(array, -1, kind, []);
+				ofArray(array, -1, kind);
 		}
-	}
-	
-	public function toString():String
-	{
-		return makeErrorMessages([], false).join("\n");
-	}
-	
-	private function makeErrorMessages(array:Array<String>, warning:Bool):Array<String>
-	{
-		for (error in maybeCauses)
-		{
-			error.makeErrorMessages(array, true);
-		}
-		
-		var str = if (warning) "Warning" else "Error";
-		
-		getRange().iter(function (range) str += ":" + range.toString());
-		array.push(str + ": " + getKindString());
-		
-		for (following in followings)
-		{
-			following.makeErrorMessages(array, warning);
-		}
-		
-		return array;
 	}
 	
 	public function getRange():Maybe<SourceRange>
