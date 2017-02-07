@@ -23,17 +23,20 @@ class IdlValidationErrorKindTools
             case IdlValidationErrorKind.GetCondition(error):
                 GetConditionErrorKindTools.getSummary(error);
                 
-			case IdlValidationErrorKind.ArgumentNameDupplicated(name):
-				summary(name.tag.upCast(), "Argument name " + name.name + " is dupplicated");
+			case IdlValidationErrorKind.ArgumentNameDuplicated(name):
+				summary(name.tag.upCast(), "Argument name " + name.name + " is duplicated");
 				
-			case IdlValidationErrorKind.EnumConstuctorNameDupplicated(name):
-				summary(name.tag.upCast(), "Enum constructor name " + name.name + " is dupplicated");
+			case IdlValidationErrorKind.EnumConstuctorNameDuplicated(name):
+				summary(name.tag.upCast(), "Enum constructor name " + name.name + " is duplicated");
 				
-			case IdlValidationErrorKind.StructFieldNameDupplicated(name):
-				summary(name.tag.upCast(), "Struct field name " + name.name + " is dupplicated");
+			case IdlValidationErrorKind.EnumConstuctorConditionDuplicated(name0, name1):
+				summary(name0.tag.upCast(), "Enum constructor condition is duplicated between " + name0.name + " and " + name1.name);
+                
+			case IdlValidationErrorKind.StructFieldNameDuplicated(name):
+				summary(name.tag.upCast(), "Struct field name " + name.name + " is duplicated");
 				
-			case IdlValidationErrorKind.TypeDependenceNameDupplicated(name):
-				summary(name.tag.upCast(), "Type dependent name " + name.data + " is dupplicated");
+			case IdlValidationErrorKind.TypeDependenceNameDuplicated(name):
+				summary(name.tag.upCast(), "Type dependent name " + name.data + " is duplicated");
         }
     }
     

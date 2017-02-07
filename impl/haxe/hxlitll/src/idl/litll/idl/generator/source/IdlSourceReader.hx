@@ -93,7 +93,7 @@ class IdlSourceReader
 								switch (loadedIdl.toOption())
 								{
 									case Option.Some(prevIdl):
-										errorResult(IdlReadErrorKind.ModuleDupplicated(new ModulePath(path), prevIdl.file));
+										errorResult(IdlReadErrorKind.ModuleDuplicated(new ModulePath(path), prevIdl.file));
 										
 									case Option.None:
 										loadedIdl = Maybe.some(new LoadedIdl(idl, filePath));

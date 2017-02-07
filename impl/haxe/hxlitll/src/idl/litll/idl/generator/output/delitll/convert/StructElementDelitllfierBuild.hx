@@ -32,7 +32,7 @@ class StructElementDelitllfierBuild
                 return litll.core.ds.Result.Err(
                     litll.idl.delitllfy.DelitllfyError.ofLitll(
                         litllData,
-                        litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated($nameExpr)
+                        litll.idl.delitllfy.DelitllfyErrorKind.StructElementDuplicated($nameExpr)
                     )
                 );
                 

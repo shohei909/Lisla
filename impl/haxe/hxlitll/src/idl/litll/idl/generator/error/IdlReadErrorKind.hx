@@ -22,13 +22,13 @@ enum IdlReadErrorKind
 	Delitll(error:DelitllfyError);
 	
     // Preprocess
-    ModuleDupplicated(module:ModulePath, existingPath:String);
+    ModuleDuplicated(module:ModulePath, existingPath:String);
 	TypeNotFound(path:TypePath);
-	TypeNameDupplicated(path:TypePath);
+	TypeNameDuplicated(path:TypePath);
 	InvalidPackage(expected:PackagePath, actual:PackagePath);
 	ModuleNotFound(module:ModulePath);
     InvalidTypeDependenceDescription(path:Litll);
-    TypeParameterNameDupplicated(name:TypeName);
+    TypeParameterNameDuplicated(name:TypeName);
     
     // Validate
     Validation(error:IdlValidationErrorKind);

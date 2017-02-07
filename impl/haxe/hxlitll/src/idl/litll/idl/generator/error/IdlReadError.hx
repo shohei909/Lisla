@@ -36,14 +36,14 @@ class IdlReadError
 			case IdlReadErrorKind.Delitll(error):
 				error.getSummary();
 				
-			case IdlReadErrorKind.ModuleDupplicated(module, existingPath):
-                new LitllErrorSummary(Maybe.none(), "Module " + module.toString() + " is dupplicated with " + existingPath.toString());
+			case IdlReadErrorKind.ModuleDuplicated(module, existingPath):
+                new LitllErrorSummary(Maybe.none(), "Module " + module.toString() + " is duplicated with " + existingPath.toString());
 				
-			case IdlReadErrorKind.TypeNameDupplicated(typePath):
-                summary(typePath.tag.upCast(), "Type " + typePath.toString() + " is dupplicated");
+			case IdlReadErrorKind.TypeNameDuplicated(typePath):
+                summary(typePath.tag.upCast(), "Type " + typePath.toString() + " is duplicated");
 				
-			case IdlReadErrorKind.TypeParameterNameDupplicated(name):
-				summary(name.tag.upCast(), "Type parameter name " + name.toString() + " is dupplicated");
+			case IdlReadErrorKind.TypeParameterNameDuplicated(name):
+				summary(name.tag.upCast(), "Type parameter name " + name.toString() + " is duplicated");
 				
 			case IdlReadErrorKind.InvalidPackage(expected, actual):
 				summary(actual.tag.upCast(), "Package name " + expected.toString() + " is expected but " + actual.toString());

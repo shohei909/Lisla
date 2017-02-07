@@ -61,7 +61,7 @@ class TypeDefinitionPreprocessor
 				case TypeParameterDeclaration.TypeName(typeName):
                     if (typeParameters.exists(typeName.toString()))
 					{
-						addError(IdlReadErrorKind.TypeParameterNameDupplicated(typeName));
+						addError(IdlReadErrorKind.TypeParameterNameDuplicated(typeName));
 					}
 					else
 					{

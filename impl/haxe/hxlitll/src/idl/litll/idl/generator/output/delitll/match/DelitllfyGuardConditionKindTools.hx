@@ -2,6 +2,51 @@ package litll.idl.generator.output.delitll.match;
 
 class DelitllfyGuardConditionKindTools 
 {
+    public static function intersects(kind1:DelitllfyGuardConditionKind, kind2:DelitllfyGuardConditionKind):Bool
+    {
+        return switch [kind1, kind2]
+        {
+            case [_, Never]
+                | [Never, _]:
+                false;
+                
+            case [Always, _]
+                | [_, Always]:
+                true;
+                
+            case [Str, Arr]
+                | [Arr, Str]
+                | [Const(_), Arr]
+                | [Arr, Const(_)]:
+                false;
+                    
+            case [Str, Const(_)]
+                | [Const(_), Str]
+                | [Str, Str]
+                | [Str, ArrOrConst(_)]
+                | [ArrOrConst(_), Str]
+                | [Arr, ArrOrConst(_)]
+                | [ArrOrConst(_), Arr]
+                | [Arr, Arr]:
+                true;
+                
+            case [Const(strings1), Const(strings2)]
+                | [ArrOrConst(strings1), ArrOrConst(strings2)]
+                | [Const(strings1), ArrOrConst(strings2)]
+                | [ArrOrConst(strings1), Const(strings2)]:
+                
+                for (string in strings2.keys())
+                {
+                    if (strings1.exists(string))
+                    {
+                        return true;
+                    }
+                }
+                
+                false;
+        }
+    }
+    
     public static function merge(kind1:DelitllfyGuardConditionKind, kind2:DelitllfyGuardConditionKind):DelitllfyGuardConditionKind
     {
         return switch [kind1, kind2]

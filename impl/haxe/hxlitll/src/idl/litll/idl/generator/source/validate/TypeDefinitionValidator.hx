@@ -1,9 +1,12 @@
 package litll.idl.generator.source.validate;
+import haxe.ds.Option;
 import litll.core.ds.Result;
 import litll.core.ds.Set;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKind;
 import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
+import litll.idl.generator.output.delitll.match.DelitllfyCaseConditionGroup;
+import litll.idl.generator.output.delitll.match.DelitllfyCaseConditionTools;
 import litll.idl.generator.source.PackageElement;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.validate.InlinabilityOnTuple;
@@ -107,16 +110,16 @@ class TypeDefinitionValidator
     
 	private function validateEnum(constructors:Array<EnumConstructor>):Void
 	{
-        var conditionMap = new Map<String, Array<DelitllfyCaseCondition>>();
+        var conditionMap = new Map();
         inline function add(name:EnumConstructorName, conditions:Array<DelitllfyCaseCondition>):Void
         {
             if (conditionMap.exists(name.name))
             {
-                addError(IdlValidationErrorKind.EnumConstuctorNameDupplicated(name));
+                addError(IdlValidationErrorKind.EnumConstuctorNameDuplicated(name));
             }
             else
             {
-                conditionMap.set(name.name, conditions);
+                conditionMap.set(name.name, new DelitllfyCaseConditionGroup(name, conditions));
             }
         }
         
@@ -134,6 +137,15 @@ class TypeDefinitionValidator
         }
         
         if (hasError) return;
+        
+        switch (DelitllfyCaseConditionGroup.intersects(conditionMap))
+        {
+            case Option.Some(groups):
+                addError(IdlValidationErrorKind.EnumConstuctorConditionDuplicated(groups.group0.name, groups.group1.name));
+                
+            case Option.None:
+                // success
+        }
 	}
     
     private function validateStruct(fields:Array<StructElement>):Void
@@ -144,7 +156,7 @@ class TypeDefinitionValidator
         {
             if (usedNames.exists(name.name))
             {
-                addError(IdlValidationErrorKind.StructFieldNameDupplicated(name));
+                addError(IdlValidationErrorKind.StructFieldNameDuplicated(name));
             }
             else
             {
@@ -183,7 +195,7 @@ class TypeDefinitionValidator
                 case TupleElement.Argument(argument):
                     if (usedNames.exists(argument.name.name))
                     {
-                        addError(IdlValidationErrorKind.ArgumentNameDupplicated(argument.name));
+                        addError(IdlValidationErrorKind.ArgumentNameDuplicated(argument.name));
                     }
                     else
                     {
@@ -201,3 +213,5 @@ class TypeDefinitionValidator
 		element.root.addError(file, IdlReadErrorKind.Validation(kind));
 	}
 }
+
+

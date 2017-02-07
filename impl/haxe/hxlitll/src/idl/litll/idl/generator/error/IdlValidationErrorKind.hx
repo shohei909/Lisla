@@ -10,8 +10,9 @@ enum IdlValidationErrorKind
 {
     GetCondition(error:GetConditionErrorKind);
     
-	TypeDependenceNameDupplicated(name:TypeDependenceName);
-	ArgumentNameDupplicated(name:ArgumentName);
-    StructFieldNameDupplicated(name:StructFieldName);
-    EnumConstuctorNameDupplicated(name:EnumConstructorName);
+	TypeDependenceNameDuplicated(name:TypeDependenceName);
+	ArgumentNameDuplicated(name:ArgumentName);
+    StructFieldNameDuplicated(name:StructFieldName);
+    EnumConstuctorNameDuplicated(name:EnumConstructorName);
+    EnumConstuctorConditionDuplicated(name0:EnumConstructorName, name1:EnumConstructorName);
 }

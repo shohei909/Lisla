@@ -14,7 +14,7 @@ class OutputFileDelitllfier {
                     switch litllData {
                         case litll.core.Litll.Arr(array) if (2 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "target")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg0) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("target")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDuplicated("target")));
                             };
                             case haxe.ds.Option.None:{
                                 arg0 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.delitllfy.idl.config.TargetTupleDelitllfier.process(context)) {
@@ -29,7 +29,7 @@ class OutputFileDelitllfier {
                         };
                         case litll.core.Litll.Arr(array) if (array.length == 2 && array.data[0].match(litll.core.Litll.Str(_.data => "filter")) && array.data[1].match(litll.core.Litll.Arr(_))):switch (arg1) {
                             case haxe.ds.Option.Some(_):{
-                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDupplicated("filter")));
+                                return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDuplicated("filter")));
                             };
                             case haxe.ds.Option.None:{
                                 arg1 = haxe.ds.Option.Some({
