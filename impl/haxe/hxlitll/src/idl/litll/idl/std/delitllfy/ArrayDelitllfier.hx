@@ -9,7 +9,7 @@ import litll.idl.delitllfy.DelitllfyErrorKind;
 
 class ArrayDelitllfier
 {
-	public static function process<T>(context:DelitllfyContext, tProcess:DelitllfyContext->Result<T, DelitllfyError>):Result<LitllArray<T>, DelitllfyError> 
+public static function process<T>(context:DelitllfyContext, tDelitllfier):Result<LitllArray<T>, DelitllfyError> 
 	{
 		return switch (context.litll)
 		{
@@ -21,7 +21,7 @@ class ArrayDelitllfier
 				for (litll in array.data)
 				{
 					var tContext = new DelitllfyContext(litll, context.config);
-					switch (tProcess(tContext))
+					switch (tDelitllfier.process(tContext))
 					{
 						case Result.Err(error):
 							Result.Err(error);

@@ -135,13 +135,24 @@ class DelitllfierExprBuilder
 	public function createProcessCallExpr(contextExpr:Expr, parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
 	{
         var funcName = createProcessFuncNameExpr(parameters, destType);
-        var processElements = [contextExpr].concat(createParmetersExpr(destType.parameters));
+        var processElements = [contextExpr].concat(createParmetersExpr(parameters, destType));
         return macro $funcName($a{processElements});
     }
 	public function createProcessFuncExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
 	{
         var funcName = createProcessFuncNameExpr(parameters, destType);
-        var processElements = createParmetersExpr(destType.parameters);
+        return _createProcessFuncExpr(funcName, parameters, destType);
+    }
+    /*
+	public function createFixedInlineProcessFuncExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
+	{
+        var funcName = createFixedInlineProcessFuncNameExpr(parameters, destType);
+        return _createProcessFuncExpr(funcName, destType.parameters);
+    }
+    */
+    private function _createProcessFuncExpr(funcName:Expr, parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
+    {
+        var processElements = createParmetersExpr(parameters, destType);
         
         return if (processElements.length == 0)
         {
@@ -155,15 +166,20 @@ class DelitllfierExprBuilder
     }
     private function createProcessFuncNameExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
     {
+        var typeName = createTypeNameExpr(parameters, destType);
+        return macro $typeName.process;
+    }
+    private function createTypeNameExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
+    {
         return switch (searchTypeParameter(parameters, destType))
         {
             case Option.Some(typeParameter):
-                var funcName = typeParameter.toProcessFunctionName();
-                macro $i{funcName};
+                var typeName = typeParameter.toDelitllfierVariableName();
+                macro $i{typeName};
                 
             case Option.None:
                 var haxePath = config.toHaxeDelitllfierPath(destType.typePath);
-                macro $i{haxePath.toString()}.process;
+                macro $i{haxePath.toString()};
         }
     }
     private function searchTypeParameter(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Option<TypeName>
@@ -178,24 +194,15 @@ class DelitllfierExprBuilder
         
         return Option.None;
     }
-    private function createParmetersExpr(parameters:Array<TypeReferenceParameter>):Array<Expr>
+    private function createParmetersExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Array<Expr>
     {
         var result = [];
-        for (parameter in parameters)
+        for (parameter in destType.parameters)
         {
             var expr = switch (parameter.processedValue.getOrThrow(IdlException.new.bind("parameter must be processed")))
             {
                 case TypeReferenceParameterKind.Type(type):
-                    var typeName = config.toHaxeDelitllfierPath(type.getTypePath()).toString();
-                    switch (type)
-                    {
-                        case TypeReference.Primitive(primitive):
-                            macro $i{typeName}.process;
-                            
-                        case TypeReference.Generic(generic):
-                            var childParametersExpr = [macro _].concat(createParmetersExpr(generic.parameters));
-                            macro $i{typeName}.process.bind($a{childParametersExpr});
-                    }
+                    createTypeNameExpr(parameters, type.generalize());
                     
                 case TypeReferenceParameterKind.Dependence(_, _):
                     // TODO: instantiate dependence value

@@ -76,9 +76,9 @@ abstract TypeName(LitllString)
 		return IdentifierTools.toCamelCase(this.data).getOrThrow();
 	}
     
-    public function toProcessFunctionName():String
+    public function toDelitllfierVariableName():String
     {
-        return toVariableName() + "Process";
+        return toVariableName() + "Delitllfier";
     }
 	
 	public function map(func:String->String):TypeName

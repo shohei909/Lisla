@@ -84,6 +84,7 @@ class TupleTools
                             }
                             else
                             {
+                                // TODO: Check inlinanability
                                 var nextParentTypes = parentTypes.concat([name]);
                                 switch (argument.type.follow(source, definitionParameters))
                                 {

@@ -57,8 +57,8 @@ class TypeParameterDeclarationTools
 					var haxeTypePath = ComplexType.TPath(new HaxeDataTypePath(new TypePath(Maybe.none(), typeName, typeName.tag)).toMacroPath());
 					result.push(
 						{
-							name: typeName.toProcessFunctionName(),
-							type: macro:litll.idl.delitllfy.DelitllfyContext->litll.core.ds.Result<$haxeTypePath, litll.idl.delitllfy.DelitllfyError>,
+							name: typeName.toDelitllfierVariableName(),
+                            type: null
 						}
 					);
 			}
