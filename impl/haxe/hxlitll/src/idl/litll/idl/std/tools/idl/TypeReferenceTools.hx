@@ -6,7 +6,6 @@ import litll.core.LitllString;
 import litll.core.ds.Result;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.data.DataOutputConfig;
-import litll.idl.generator.error.IdlValidationErrorKind;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
@@ -109,10 +108,10 @@ class TypeReferenceTools
     public static function follow(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<FollowedTypeDefinition, TypeFollowErrorKind>
     {
         var startPath = getTypePath(type).toString();
-        return _follow(type, startPath, source, definitionParameters);
+        return _follow(type, [startPath], source, definitionParameters);
     }
     
-    public static function _follow(type:TypeReference, startPath:String, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<FollowedTypeDefinition, TypeFollowErrorKind>
+    public static function _follow(type:TypeReference, history:Array<String>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<FollowedTypeDefinition, TypeFollowErrorKind>
     {
         var parameterNames = [for (p in definitionParameters) p.toString()];
         var generic = generalize(type);
@@ -158,7 +157,7 @@ class TypeReferenceTools
         return switch (source.resolveTypePath(targetPath).toOption())
         {
             case Option.Some(definition):
-                TypeDefinitionTools.follow(definition, startPath, source, generic.parameters, definitionParameters);
+                TypeDefinitionTools.follow(definition, history, source, generic.parameters, definitionParameters);
                 
             case Option.None:
                 throw new IdlException("Type " + generic.typePath.toString() + " not found.");

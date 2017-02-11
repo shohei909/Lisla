@@ -140,16 +140,16 @@ class IdlToHaxeDelitllfierConverter
         var processExpr = switch (definition)
 		{
 			case IdlTypeDefinition.Newtype(name, destType):
-                macro null;
+                macro return null;
 				
 			case IdlTypeDefinition.Tuple(name, elements):
-				macro null;
+				macro return null;
                 
 			case IdlTypeDefinition.Enum(name, constructors):
-		        macro null;
+		        macro return null;
 				
 			case IdlTypeDefinition.Struct(name, elements):
-				macro null;
+				macro return null;
 		}
         
 		var args = [
@@ -179,16 +179,16 @@ class IdlToHaxeDelitllfierConverter
         var processExpr = switch (definition)
 		{
 			case IdlTypeDefinition.Newtype(name, destType):
-                macro null;
+                macro return null;
 				
 			case IdlTypeDefinition.Tuple(name, elements):
-				macro null;
+				macro return null;
                 
 			case IdlTypeDefinition.Enum(name, constructors):
-		        macro null;
+		        macro return null;
 				
 			case IdlTypeDefinition.Struct(name, elements):
-				macro null;
+				macro return null;
 		}
         
 		var args = [

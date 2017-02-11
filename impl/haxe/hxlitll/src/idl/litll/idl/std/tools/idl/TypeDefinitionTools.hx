@@ -113,7 +113,13 @@ class TypeDefinitionTools
         return Result.Ok(new TypeSpecializer(typeDefinition, typeMap, dependenceMap).result);
     }
     
-    public static function follow(definition:TypeDefinition, startPath:String, source:IdlSourceProvider, referenceParameters:Array<TypeReferenceParameter>, definitionParameters:Array<TypeName>):Result<FollowedTypeDefinition, TypeFollowErrorKind>
+    public static function follow(
+        definition:TypeDefinition, 
+        history:Array<String>, 
+        source:IdlSourceProvider, 
+        referenceParameters:Array<TypeReferenceParameter>, 
+        definitionParameters:Array<TypeName>
+    ):Result<FollowedTypeDefinition, TypeFollowErrorKind>
     {
         return switch(TypeDefinitionTools.specialize(definition, referenceParameters))
         {
@@ -130,14 +136,15 @@ class TypeDefinitionTools
                         Result.Ok(FollowedTypeDefinition.Struct(fields));
                         
                     case SpecializedTypeDefinition.Newtype(type):
-                        if (type.getTypePath().toString() == startPath)
+                        var path = type.getTypePath();
+                        var pathName = path.toString();
+                        if (history.indexOf(pathName) != -1)
                         {
-                            var path = type.getTypePath();
                             Result.Err(TypeFollowErrorKind.LoopedNewtype(path));
                         }
                         else
                         {
-                            TypeReferenceTools._follow(type, startPath, source, definitionParameters);
+                            TypeReferenceTools._follow(type, history.concat([pathName]), source, definitionParameters);
                         }
                 }
                 

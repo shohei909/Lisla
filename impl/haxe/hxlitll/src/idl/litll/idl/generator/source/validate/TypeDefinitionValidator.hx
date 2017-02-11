@@ -25,6 +25,7 @@ import litll.idl.std.error.TypeFollowErrorKindTools;
 import litll.idl.std.tools.idl.EnumConstructorTools;
 import litll.idl.std.tools.idl.FollowedTypeDefinitionTools;
 import litll.idl.std.tools.idl.StructElementTools;
+import litll.idl.std.tools.idl.TupleTools;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
 import litll.idl.std.tools.idl.TypeReferenceTools;
 
@@ -78,8 +79,8 @@ class TypeDefinitionValidator
 			case TypeDefinition.Struct(_, fields):
                 validateStruct(fields);
                 
-            case TypeDefinition.Tuple(_, arguments):
-				validateTuple(arguments);
+            case TypeDefinition.Tuple(_, elements):
+				validateTuple(elements);
 		}
     }
     
@@ -109,6 +110,7 @@ class TypeDefinitionValidator
     
 	private function validateEnum(constructors:Array<EnumConstructor>):Void
 	{
+        var conditionArray = [];
         var conditionMap = new Map<String, DelitllfyCaseConditionGroup<EnumConstructorName>>();
         var canInlineFixed = true;
         var canInline = true;
@@ -121,6 +123,10 @@ class TypeDefinitionValidator
             }
             else
             {
+                for (condition in conditions)
+                {
+                    conditionArray.push(condition);
+                }
                 conditionMap.set(name.name, new DelitllfyCaseConditionGroup(name, conditions));
             }
         }
@@ -136,6 +142,14 @@ class TypeDefinitionValidator
                 case Result.Err(error):
                     addError(IdlValidationErrorKind.GetCondition(error));
             }
+            
+            switch (EnumConstructorTools.getOwnedTupleElements(constructor))
+            {
+                case Option.Some(elements):
+                    validateTupleElements(elements);
+                    
+                case Option.None:
+            }
         }
         
         if (hasError) return;
@@ -148,13 +162,11 @@ class TypeDefinitionValidator
             case Option.None:
                 // success
         }
-        
-        if (hasError) return;
-        
-	}
+    }
     
     private function validateStruct(elements:Array<StructElement>):Void
     {
+        var conditionArray = [];
         var conditionMap = new Map<String, DelitllfyCaseConditionGroup<StructElementName>>();
         inline function add(name:StructElementName, conditions:Array<DelitllfyCaseCondition>):Void
         {
@@ -164,6 +176,10 @@ class TypeDefinitionValidator
             }
             else
             {
+                for (condition in conditions)
+                {
+                    conditionArray.push(condition);
+                }
                 conditionMap.set(name.name, new DelitllfyCaseConditionGroup(name, conditions));
             }
         }
@@ -181,6 +197,8 @@ class TypeDefinitionValidator
             }
         }
         
+        if (hasError) return;
+        
         switch (DelitllfyCaseConditionGroup.intersects(conditionMap))
         {
             case Option.Some(groups):
@@ -189,16 +207,30 @@ class TypeDefinitionValidator
             case Option.None:
                 // success
         }
-        
-        
     }
     
-	private function validateTuple(arguments:Array<TupleElement>):Void
+	private function validateTuple(elements:Array<TupleElement>):Void
+	{
+		validateTupleElements(elements);
+        
+        if (hasError) return;
+        
+        switch (TupleTools.getCondition(elements, packageElement.root, parameters))
+        {
+            case Result.Ok(_):
+                inlinabilityOnTuple = Always;
+                
+            case Result.Err(error):
+                addError(IdlValidationErrorKind.GetCondition(error));
+        }
+	}
+    
+    private function validateTupleElements(elements:Array<TupleElement>):Void
 	{
 		var usedNames = new Set<String>(new Map());
-		for (argument in arguments)
+		for (element in elements)
 		{
-            switch (argument)
+            switch (element)
             {
                 case TupleElement.Label(_):
                     // Nothing to do.
@@ -212,13 +244,9 @@ class TypeDefinitionValidator
                     {
                         usedNames.set(argument.name.name);
                     }
-                    
-                    // TODO: validation default value
             }
 		}
-        
-        
-	}
+    }
     
 	private function addError(kind:IdlValidationErrorKind):Void 
 	{
@@ -226,5 +254,3 @@ class TypeDefinitionValidator
 		packageElement.root.addError(file, IdlReadErrorKind.Validation(kind));
 	}
 }
-
-

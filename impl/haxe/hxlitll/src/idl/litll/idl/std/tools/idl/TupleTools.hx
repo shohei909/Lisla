@@ -31,7 +31,7 @@ class TupleTools
     public static function getGuard(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<DelitllfyGuardCondition, GetConditionErrorKind>
     {
         var builder = new DelitllfyGuardConditionBuilder();
-        return switch (_getGuard(elements, source, definitionParameters, builder))
+        return switch (_getGuard(elements, source, definitionParameters, builder, []))
         {
             case Option.None:
                 Result.Ok(builder.build());
@@ -45,10 +45,10 @@ class TupleTools
         elements:Array<TupleElement>, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        builder:DelitllfyGuardConditionBuilder
+        builder:DelitllfyGuardConditionBuilder,
+        parentTypes:Array<String>
     ):Option<GetConditionErrorKind>
     {
-    
         for (element in elements)
         {
             switch (element)
@@ -77,31 +77,39 @@ class TupleTools
                             builder.unlimit();
                         
                         case [ArgumentKind.Inline, Option.None]:
-                            switch (argument.type.follow(source, definitionParameters))
+                            var name = argument.type.getTypePath().toString();
+                            if (parentTypes.indexOf(name) == -1)
                             {
-                                case Result.Ok(data):
-                                    switch (data)
-                                    {
-                                        case FollowedTypeDefinition.Arr(_):
-                                            builder.unlimit();
-                                            
-                                        case FollowedTypeDefinition.Struct(elements):
-                                            StructTools._getGuard(elements, source, definitionParameters, builder);
-                                            
-                                        case FollowedTypeDefinition.Tuple(elements):
-                                            TupleTools._getGuard(elements, source, definitionParameters, builder);
-                                            
-                                        case FollowedTypeDefinition.Str:
-                                            return argumentError(argument.name, ArgumentSuffixErrorKind.InlineString);
-                                            
-                                        case FollowedTypeDefinition.Enum(_):
-                                            builder.unlimit();
-                                    }
-                                    
-                                case Result.Err(error):
-                                    return Option.Some(GetConditionErrorKind.Follow(error));
+                                builder.unlimit();
                             }
-                            
+                            else
+                            {
+                                var nextParentTypes = parentTypes.concat([name]);
+                                switch (argument.type.follow(source, definitionParameters))
+                                {
+                                    case Result.Ok(data):
+                                        switch (data)
+                                        {
+                                            case FollowedTypeDefinition.Arr(_):
+                                                builder.unlimit();
+                                                
+                                            case FollowedTypeDefinition.Struct(elements):
+                                                StructTools._getGuard(elements, source, definitionParameters, builder);
+                                                
+                                            case FollowedTypeDefinition.Tuple(elements):
+                                                TupleTools._getGuard(elements, source, definitionParameters, builder, nextParentTypes);
+                                                
+                                            case FollowedTypeDefinition.Str:
+                                                return argumentError(argument.name, ArgumentSuffixErrorKind.InlineString);
+                                                
+                                            case FollowedTypeDefinition.Enum(_):
+                                                builder.unlimit();
+                                        }
+                                        
+                                    case Result.Err(error):
+                                        return Option.Some(GetConditionErrorKind.Follow(error));
+                                }
+                            }
                         case [ArgumentKind.Rest, Option.Some(_)] 
                             | [ArgumentKind.Inline, Option.Some(_)]
                             | [ArgumentKind.Optional, Option.Some(_)]:

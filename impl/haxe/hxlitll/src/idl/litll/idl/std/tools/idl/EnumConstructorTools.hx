@@ -3,8 +3,6 @@ import haxe.ds.Option;
 import litll.core.LitllString;
 import litll.core.ds.Result;
 import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKindTools;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorKind;
@@ -144,4 +142,26 @@ class EnumConstructorTools
         );
     }
     
+    public static function getOwnedTupleElements(constructor:EnumConstructor):Option<Array<TupleElement>>
+    {
+        return switch (constructor)
+        {
+            case EnumConstructor.Primitive(name):
+                Option.None;
+                
+            case EnumConstructor.Parameterized(parameterized):
+                switch (parameterized.name.kind)
+                {
+                    case EnumConstructorKind.Normal:
+                        var label = TupleElement.Label(new LitllString(parameterized.name.name, parameterized.name.tag));
+                        Option.Some([label].concat(parameterized.elements));
+                        
+                    case EnumConstructorKind.Tuple:
+                        Option.Some(parameterized.elements);
+                        
+                    case EnumConstructorKind.Inline:
+                        Option.None;
+                }
+        }
+    }
 }
