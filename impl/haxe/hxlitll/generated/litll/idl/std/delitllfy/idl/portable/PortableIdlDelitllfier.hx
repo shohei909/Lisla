@@ -2,7 +2,7 @@
 package litll.idl.std.delitllfy.idl.portable;
 class PortableIdlDelitllfier {
     public static function process(context:litll.idl.delitllfy.DelitllfyContext):litll.core.ds.Result<litll.idl.std.data.idl.portable.PortableIdl, litll.idl.delitllfy.DelitllfyError> {
-        return switch (ArrayDelitllfier.process(context, litll.idl.std.delitllfy.idl.portable.PortableIdlElementDelitllfier.process)) {
+        return switch (ArrayDelitllfier.process(context, litll.idl.std.delitllfy.idl.portable.PortableIdlElementDelitllfier)) {
             case litll.core.ds.Result.Ok(data):{
                 {
                     var instance = new litll.idl.std.data.idl.portable.PortableIdl(data);
