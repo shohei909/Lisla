@@ -12,6 +12,9 @@ class EnumConstructorSuffixErrorKindTools
             case EnumConstructorSuffixErrorKind.InlineSuffixForPrimitiveEnumConstructor:
                 "inline is not allowed for primitive enum constructor";
                 
+            case EnumConstructorSuffixErrorKind.LoopedInline(typePath):
+                "inline " + typePath.toString() + " is looped";
+                
             case EnumConstructorSuffixErrorKind.TupleSuffixForPrimitiveEnumConstructor:
                 "tuple is not allowed for primitive enum constructor";
         }

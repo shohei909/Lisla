@@ -14,7 +14,7 @@ class FollowedTypeDefinitionTools
     public static function getConditions(type:FollowedTypeDefinition, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<DelitllfyCaseCondition>, GetConditionErrorKind>
     {
         var result:Array<DelitllfyCaseCondition> = [];
-        return switch (_getConditions(type, source, definitionParameters, result))
+        return switch (_getConditions(type, source, definitionParameters, result, []))
         {
             case Option.None:
                 Result.Ok(result);
@@ -24,7 +24,13 @@ class FollowedTypeDefinitionTools
         }
     }   
     
-    public static function _getConditions(type:FollowedTypeDefinition, source:IdlSourceProvider, definitionParameters:Array<TypeName>, result:Array<DelitllfyCaseCondition>):Option<GetConditionErrorKind>
+    public static function _getConditions(
+        type:FollowedTypeDefinition, 
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        result:Array<DelitllfyCaseCondition>,
+        enumInlineTypeHistory:Array<String>
+    ):Option<GetConditionErrorKind>
     {   
         switch (type)
         {
@@ -47,7 +53,7 @@ class FollowedTypeDefinitionTools
             case FollowedTypeDefinition.Enum(constructors):
                 for (constuctor in constructors)
                 {
-                    switch (EnumConstructorTools._getConditions(constuctor, source, definitionParameters, result))
+                    switch (EnumConstructorTools._getConditions(constuctor, source, definitionParameters, result, enumInlineTypeHistory))
                     {
                         case Option.None:
                             // continue

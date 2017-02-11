@@ -7,7 +7,10 @@ class StructFieldSuffixErrorKindTools
     {
         return switch (kind)
         {
-            case StructFieldSuffixErrorKind.InvelidMargeTarget(type):
+            case StructFieldSuffixErrorKind.LoopedMerge(type):
+                "merging " + type.getTypeReferenceName() + " is looped";
+                
+            case StructFieldSuffixErrorKind.InvalidMergeTarget(type):
                 "merge field is not supported for " + type.getTypeReferenceName();
                 
             case StructFieldSuffixErrorKind.UnsupportedDefault(kind):

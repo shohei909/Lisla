@@ -66,7 +66,8 @@ class EnumConstructorTools
     public static function getConditions(constructor:EnumConstructor, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<DelitllfyCaseCondition>, GetConditionErrorKind>
     {
         var result = [];
-        return switch (_getConditions(constructor, source, definitionParameters, result))
+        
+        return switch (_getConditions(constructor, source, definitionParameters, result, []))
         {
             case Option.None:
                 Result.Ok(result);
@@ -76,12 +77,19 @@ class EnumConstructorTools
         }
     }
        
-    public static function _getConditions(constructor:EnumConstructor, source:IdlSourceProvider, definitionParameters:Array<TypeName>, result:Array<DelitllfyCaseCondition>):Option<GetConditionErrorKind>
+    public static function _getConditions(
+        constructor:EnumConstructor, 
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        result:Array<DelitllfyCaseCondition>,
+        history:Array<String>
+    ):Option<GetConditionErrorKind>
     {
-        switch (constructor)
+        return switch (constructor)
         {
             case EnumConstructor.Primitive(name):
                 result.push(DelitllfyCaseCondition.Const(name.name));
+                Option.None;
                 
             case EnumConstructor.Parameterized(parameterized):
                 switch (parameterized.name.kind)
@@ -92,9 +100,10 @@ class EnumConstructorTools
                         {
                             case Result.Ok(data):
                                 result.push(DelitllfyCaseCondition.Arr(data));
+                                Option.None;
                                 
                             case Result.Err(error):
-                                return Option.Some(error);
+                                Option.Some(error);
                         }
                         
                     case EnumConstructorKind.Tuple:
@@ -102,37 +111,54 @@ class EnumConstructorTools
                         {
                             case Result.Ok(data):
                                 result.push(DelitllfyCaseCondition.Arr(data));
+                                Option.None;
                                 
                             case Result.Err(error):
-                                return Option.Some(error);
+                                Option.Some(error);
                         }
                         
                     case EnumConstructorKind.Inline:
                         var elements = parameterized.elements;
                         if (elements.length != 1)
                         {
-                            return Option.Some(errorKind(parameterized.name, EnumConstructorSuffixErrorKind.InvalidInlineEnumConstructorParameterLength(elements.length)));
+                            Option.Some(errorKind(parameterized.name, EnumConstructorSuffixErrorKind.InvalidInlineEnumConstructorParameterLength(elements.length)));
                         }
-                        
-                        switch (elements[0])
+                        else
                         {
-                            case TupleElement.Argument(argument):
-                                switch (argument.type.follow(source, definitionParameters))
-                                {
-                                    case Result.Ok(followedType):
-                                        FollowedTypeDefinitionTools._getConditions(followedType, source, definitionParameters, result);
-                                        
-                                    case Result.Err(error):
-                                        return Option.Some(GetConditionErrorKind.Follow(error));
-                                }
-                                
-                            case TupleElement.Label(litllString):
-                                result.push(DelitllfyCaseCondition.Const(litllString.data));
+                            switch (elements[0])
+                            {
+                                case TupleElement.Argument(argument):
+                                    var path = argument.type.getTypePath();
+                                    var pathName = path.toString();
+                                    if (history.indexOf(pathName) != -1)
+                                    {
+                                        Option.Some(errorKind(parameterized.name, EnumConstructorSuffixErrorKind.LoopedInline(path)));
+                                    }
+                                    else
+                                    {
+                                        switch (argument.type.follow(source, definitionParameters))
+                                        {
+                                            case Result.Ok(followedType):
+                                                FollowedTypeDefinitionTools._getConditions(
+                                                    followedType, 
+                                                    source, 
+                                                    definitionParameters, 
+                                                    result,
+                                                    history.concat([pathName])
+                                                );
+                                                
+                                            case Result.Err(error):
+                                                Option.Some(GetConditionErrorKind.Follow(error));
+                                        }
+                                    }
+                                    
+                                case TupleElement.Label(litllString):
+                                    result.push(DelitllfyCaseCondition.Const(litllString.data));
+                                    Option.None;
+                            }
                         }
                 }
         }
-        
-        return Option.None;
     }
     
     private static inline function errorKind(name:EnumConstructorName, kind:EnumConstructorSuffixErrorKind):GetConditionErrorKind

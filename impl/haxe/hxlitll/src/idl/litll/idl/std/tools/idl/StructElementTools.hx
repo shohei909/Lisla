@@ -126,7 +126,7 @@ class StructElementTools
     public static function getConditions(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<DelitllfyCaseCondition>, GetConditionErrorKind>
     {
         var conditions = [];
-        return switch (_getConditions(element, source, definitionParameters, conditions))
+        return switch (_getConditions(element, source, definitionParameters, conditions, []))
         {
             case Option.Some(error):
                 Result.Err(error);
@@ -136,27 +136,34 @@ class StructElementTools
         }
     }
     
-    public static function _getConditions(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>, conditions:Array<DelitllfyCaseCondition>):Option<GetConditionErrorKind>
+    public static function _getConditions(
+        element:StructElement, 
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        conditions:Array<DelitllfyCaseCondition>,
+        history:Array<String>
+    ):Option<GetConditionErrorKind>
     {
-        switch (element)
+        return switch (element)
         {
             case StructElement.Label(name):
                 switch (name.kind)
                 {
                     case StructFieldKind.Normal | StructFieldKind.Array | StructFieldKind.Optional:
                         conditions.push(DelitllfyCaseCondition.Const(name.name));
+                        Option.None;
                         
                     case StructFieldKind.Inline:
-                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
+                        Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
                         
                     case StructFieldKind.ArrayInline:
-                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
+                        Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
                         
                     case StructFieldKind.OptionalInline:
-                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
+                        Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
                         
                     case StructFieldKind.Merge:
-                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
+                        Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
                 }
                 
             case StructElement.NestedLabel(name):
@@ -166,25 +173,24 @@ class StructElementTools
                         var builder = new DelitllfyGuardConditionBuilder();
                         builder.add(DelitllfyGuardConditionKind.Const([name.name => true]));
                         conditions.push(DelitllfyCaseCondition.Arr(builder.build()));
-                    
+                        Option.None;
+                        
                     case StructFieldKind.Inline:
-                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
+                        Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
                         
                     case StructFieldKind.ArrayInline:
-                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
+                        Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
                         
                     case StructFieldKind.OptionalInline:
-                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
+                        Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
                         
                     case StructFieldKind.Merge:
-                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
+                        Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
                 }
             
             case StructElement.Field(field):
-                StructFieldTools._getConditions(field, source, definitionParameters, conditions);
+                StructFieldTools._getConditions(field, source, definitionParameters, conditions, history);
         }
-        
-        return Option.None;
     }
     
     public static function getName(field:StructElement):StructElementName

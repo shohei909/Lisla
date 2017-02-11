@@ -54,11 +54,17 @@ class StructTools
         }
     }
     
-    public static function _getConditionsForMerge(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>, conditions:Array<DelitllfyCaseCondition>):Option<GetConditionErrorKind>
+    public static function _getConditionsForMerge(
+        elements:Array<StructElement>, 
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        conditions:Array<DelitllfyCaseCondition>,
+        history:Array<String>
+    ):Option<GetConditionErrorKind>
     {
         for (element in elements)
         {
-            switch (StructElementTools._getConditions(element, source, definitionParameters, conditions))
+            switch (StructElementTools._getConditions(element, source, definitionParameters, conditions, history))
             {
                 case Option.None:
                     // continue

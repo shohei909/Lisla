@@ -9,6 +9,7 @@ enum StructFieldSuffixErrorKind
     MergeForLabel;
     OptionalInlineForLabel;
     ArrayInlineForLabel;
-    InvelidMargeTarget(type:TypeReference);
+    InvalidMergeTarget(type:TypeReference);
+    LoopedMerge(type:TypeReference);
     UnsupportedDefault(kind:StructFieldKind);
 }
