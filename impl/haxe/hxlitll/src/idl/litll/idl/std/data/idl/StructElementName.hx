@@ -9,7 +9,7 @@ using litll.core.ds.ResultTools;
 using litll.core.string.IdentifierTools;
 using StringTools;
 
-class StructFieldName
+class StructElementName
 {
     public var kind(default, null):StructFieldKind;
 	public var name(default, null):String;
@@ -57,10 +57,11 @@ class StructFieldName
 		}
 		
 		this.name = name;
+        this.tag = tag;
     }
     
 	@:delitllfy
-	public static function delitllfy(string:LitllString):Result<StructFieldName, DelitllfyErrorKind>
+	public static function delitllfy(string:LitllString):Result<StructElementName, DelitllfyErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -71,11 +72,11 @@ class StructFieldName
 				Result.Err(DelitllfyErrorKind.Fatal(data));
 		}
 	}
-	public static function create(string:String, ?tag:Maybe<StringTag>):Result<StructFieldName, String>
+	public static function create(string:String, ?tag:Maybe<StringTag>):Result<StructElementName, String>
 	{
 		return try 
 		{
-			Result.Ok(new StructFieldName(string, tag));
+			Result.Ok(new StructElementName(string, tag));
 		}
 		catch (err:String)
 		{

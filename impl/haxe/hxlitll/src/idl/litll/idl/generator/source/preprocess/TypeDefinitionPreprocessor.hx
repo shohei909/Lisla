@@ -14,7 +14,7 @@ import litll.idl.generator.source.preprocess.IdlPreprocessor;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.StructElement;
-import litll.idl.std.data.idl.StructFieldName;
+import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeDependenceName;

@@ -20,7 +20,7 @@ import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.data.idl.PackagePath;
-import litll.idl.std.data.idl.StructFieldName;
+import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.TypeDependenceName;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
@@ -80,7 +80,7 @@ class DataOutputConfig
 		this.addPredefinedType(TypePath);
 		this.addPredefinedType(TypeDependenceName);
 		this.addPredefinedType(TypeReferenceParameter);
-		this.addPredefinedType(StructFieldName);
+		this.addPredefinedType(StructElementName);
 		this.addPredefinedType(TypeGroupPath);
 		this.addPredefinedType(TypePathFilter);
 	}

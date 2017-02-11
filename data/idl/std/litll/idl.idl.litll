@@ -103,16 +103,16 @@
 [enum StructElement
     [label<
         /// 'and unfolding suffix are disabled'
-        [name StructFieldName]
+        [name StructElementName]
     ]
     [nested_label: 
         /// 'and unfolding suffix are disabled'
-        [name StructFieldName]
+        [name StructElementName]
     ]
     [field< [field StructField]]
 ]
 [tuple StructField
-    [name StructFieldName]
+    [name StructElementName]
     [type TypeReference]
     [default_value? Any]
 ]
@@ -146,7 +146,7 @@
 /// * Tuple
 /// * Enum
 /// '''
-[newtype StructFieldName String]
+[newtype StructElementName String]
 
 /// [completion_self]
 [newtype LibraryPath String]

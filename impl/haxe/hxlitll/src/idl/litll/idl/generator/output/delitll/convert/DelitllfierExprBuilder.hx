@@ -20,7 +20,7 @@ import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.GenericTypeReference;
-import litll.idl.std.data.idl.StructFieldName;
+import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
@@ -214,7 +214,7 @@ class DelitllfierExprBuilder
     {
         return elements.getGuard(context.source, definitionParameters).getOrThrow(GetConditionErrorKindTools.toIdlException);
     }
-    public function createFieldGuardConditions(name:StructFieldName, type:TypeReference, definitionParameters:Array<TypeName>):DelitllfyGuardCondition
+    public function createFieldGuardConditions(name:StructElementName, type:TypeReference, definitionParameters:Array<TypeName>):DelitllfyGuardCondition
     {
         return createTupleGuardConditions(
             [
@@ -234,7 +234,7 @@ class DelitllfierExprBuilder
     // ==============================================================
     // case
     // ==============================================================
-    public function createFieldCase(name:StructFieldName, type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr):Case
+    public function createFieldCase(name:StructElementName, type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr):Case
     {
         var guard = createTupleGuardConditions(
             [

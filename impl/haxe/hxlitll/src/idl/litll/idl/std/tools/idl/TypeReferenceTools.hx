@@ -6,7 +6,9 @@ import litll.core.LitllString;
 import litll.core.ds.Result;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.data.DataOutputConfig;
+import litll.idl.generator.error.IdlValidationErrorKind;
 import litll.idl.generator.output.data.HaxeDataTypePath;
+import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.FollowedTypeDefinition;
@@ -226,6 +228,18 @@ class TypeReferenceTools
                     case FollowedTypeDefinition.Enum(constructors):
                         constructors.getGuardConditionKind(source, definitionParameters);
                 }
+                
+            case Result.Err(error):
+                Result.Err(GetConditionErrorKind.Follow(error));
+        }
+    }
+    
+    public static function getConditions(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<DelitllfyCaseCondition>, GetConditionErrorKind>
+    {
+        return switch (type.follow(source, definitionParameters))
+        {
+            case Result.Ok(type):
+                FollowedTypeDefinitionTools.getConditions(type, source, definitionParameters);
                 
             case Result.Err(error):
                 Result.Err(GetConditionErrorKind.Follow(error));

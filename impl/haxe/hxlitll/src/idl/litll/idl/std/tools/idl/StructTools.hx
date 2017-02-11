@@ -29,7 +29,7 @@ class StructTools
         var position = builder.position;
         for (element in elements)
         {
-            switch (StructElementTools._getGuard(element, source, definitionParameters, builder))
+            switch (StructElementTools._getGuardForStruct(element, source, definitionParameters, builder))
             {
                 case Option.None:
                     
@@ -52,5 +52,22 @@ class StructTools
             case Result.Err(error):
                 Result.Err(error);
         }
-    }    
+    }
+    
+    public static function _getConditionsForMerge(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>, conditions:Array<DelitllfyCaseCondition>):Option<GetConditionErrorKind>
+    {
+        for (element in elements)
+        {
+            switch (StructElementTools._getConditions(element, source, definitionParameters, conditions))
+            {
+                case Option.None:
+                    // continue
+                    
+                case Option.Some(err):
+                    return Option.Some(err);
+            }
+        }
+        
+        return Option.None;
+    }
 }

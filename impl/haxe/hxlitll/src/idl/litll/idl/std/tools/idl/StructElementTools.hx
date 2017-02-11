@@ -1,6 +1,7 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import litll.core.ds.Result;
+import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionBuilder;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
 import litll.idl.generator.source.IdlSourceProvider;
@@ -8,7 +9,7 @@ import litll.idl.std.data.idl.FollowedTypeDefinition;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructField;
 import litll.idl.std.data.idl.StructFieldKind;
-import litll.idl.std.data.idl.StructFieldName;
+import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.error.GetConditionErrorKind;
@@ -47,95 +48,25 @@ class StructElementTools
         }
     }
     
-    private static inline function errorKind(name:StructFieldName, kind:StructFieldSuffixErrorKind):GetConditionErrorKind
+    private static inline function errorKind(name:StructElementName, kind:StructFieldSuffixErrorKind):GetConditionErrorKind
     {
         return GetConditionErrorKind.StructFieldSuffix(
             new StructFieldSuffixError(name, kind)
         );
     }
     
-    public static function _getGuard(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:DelitllfyGuardConditionBuilder):Option<GetConditionErrorKind>
+    public static function _getGuardForStruct(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:DelitllfyGuardConditionBuilder):Option<GetConditionErrorKind>
     {
         switch (element)
         {
             case StructElement.Field(field):
-                switch [field.name.kind, field.defaultValue]
+                switch (StructFieldTools._getGuardForStruct(field, source, definitionParameters, builder))
                 {
-                    case [StructFieldKind.Normal, Option.None]:
-                        builder.add(DelitllfyGuardConditionKind.Arr);
+                    case Option.None:
+                        // continue
                         
-                    case [StructFieldKind.Normal, Option.Some(_)]
-                        | [StructFieldKind.Optional, Option.None]
-                        | [StructFieldKind.Inline, Option.Some(_)]
-                        | [StructFieldKind.OptionalInline, Option.None] :
-                        builder.addMax();
-                        
-                    case [StructFieldKind.Array, Option.None]
-                        | [StructFieldKind.ArrayInline, Option.None]:
-                        builder.unlimit();
-                        
-                    case [StructFieldKind.Inline, Option.None]:
-                        switch (field.type.follow(source, definitionParameters))
-                        {
-                            case Result.Ok(data):
-                                switch (data)
-                                {
-                                    case FollowedTypeDefinition.Str:
-                                        builder.add(DelitllfyGuardConditionKind.Str);
-                                        
-                                    case FollowedTypeDefinition.Struct(_)
-                                        | FollowedTypeDefinition.Arr(_)
-                                        | FollowedTypeDefinition.Tuple(_):
-                                        builder.add(DelitllfyGuardConditionKind.Arr);
-                                        
-                                    case FollowedTypeDefinition.Enum(constructors):
-                                        switch (constructors.getGuardConditionKind(source, definitionParameters))
-                                        {
-                                            case Result.Ok(data):
-                                                builder.add(data);
-                                                
-                                            case Result.Err(error):
-                                                return Option.Some(error);
-                                        }
-                                }
-                                
-                            case Result.Err(error):
-                                return Option.Some(GetConditionErrorKind.Follow(error));
-                        }
-                        
-                    case [StructFieldKind.Merge, Option.None]:
-                        switch (field.type.follow(source, definitionParameters))
-                        {
-                            case Result.Ok(data):
-                                switch (data)
-                                {
-                                    case FollowedTypeDefinition.Struct(elements):
-                                        switch (elements._getGuard(source, definitionParameters, builder))
-                                        {
-                                            case Option.None:
-                                                // continue
-                                                
-                                            case Option.Some(error):
-                                                return Option.Some(error);
-                                        }
-                                        
-                                    case FollowedTypeDefinition.Enum(_)
-                                        | FollowedTypeDefinition.Arr(_)
-                                        | FollowedTypeDefinition.Tuple(_)
-                                        | FollowedTypeDefinition.Str:
-                                        return Option.Some(errorKind(field.name, StructFieldSuffixErrorKind.InvelidMargeTarget(field.type)));
-                                }
-                                
-                            case Result.Err(error):
-                                return Option.Some(GetConditionErrorKind.Follow(error));
-                        }
-                       
-                    case [StructFieldKind.ArrayInline, Option.Some(_)]
-                        | [StructFieldKind.OptionalInline, Option.Some(_)]
-                        | [StructFieldKind.Array, Option.Some(_)]
-                        | [StructFieldKind.Optional, Option.Some(_)]
-                        | [StructFieldKind.Merge, Option.Some(_)]:
-                        return Option.Some(errorKind(field.name, StructFieldSuffixErrorKind.UnsupportedDefault(field.name.kind)));
+                    case Option.Some(error):
+                        return Option.Some(error);
                 }
                 
             case StructElement.Label(name):
@@ -190,5 +121,81 @@ class StructElementTools
         }
         
         return Option.None;
+    }
+    
+    public static function getConditions(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<DelitllfyCaseCondition>, GetConditionErrorKind>
+    {
+        var conditions = [];
+        return switch (_getConditions(element, source, definitionParameters, conditions))
+        {
+            case Option.Some(error):
+                Result.Err(error);
+                
+            case Option.None:
+                Result.Ok(conditions);
+        }
+    }
+    
+    public static function _getConditions(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>, conditions:Array<DelitllfyCaseCondition>):Option<GetConditionErrorKind>
+    {
+        switch (element)
+        {
+            case StructElement.Label(name):
+                switch (name.kind)
+                {
+                    case StructFieldKind.Normal | StructFieldKind.Array | StructFieldKind.Optional:
+                        conditions.push(DelitllfyCaseCondition.Const(name.name));
+                        
+                    case StructFieldKind.Inline:
+                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
+                        
+                    case StructFieldKind.ArrayInline:
+                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
+                        
+                    case StructFieldKind.OptionalInline:
+                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
+                        
+                    case StructFieldKind.Merge:
+                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
+                }
+                
+            case StructElement.NestedLabel(name):
+                switch (name.kind)
+                {
+                    case StructFieldKind.Normal | StructFieldKind.Array | StructFieldKind.Optional:
+                        var builder = new DelitllfyGuardConditionBuilder();
+                        builder.add(DelitllfyGuardConditionKind.Const([name.name => true]));
+                        conditions.push(DelitllfyCaseCondition.Arr(builder.build()));
+                    
+                    case StructFieldKind.Inline:
+                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
+                        
+                    case StructFieldKind.ArrayInline:
+                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
+                        
+                    case StructFieldKind.OptionalInline:
+                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
+                        
+                    case StructFieldKind.Merge:
+                        return Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
+                }
+            
+            case StructElement.Field(field):
+                StructFieldTools._getConditions(field, source, definitionParameters, conditions);
+        }
+        
+        return Option.None;
+    }
+    
+    public static function getName(field:StructElement):StructElementName
+    {
+        return switch (field)
+        {
+            case StructElement.Label(name) | StructElement.NestedLabel(name):
+                name;
+            
+            case StructElement.Field(field):
+                field.name;
+        }
     }
 }

@@ -74,11 +74,11 @@ class IdlToHaxeDelitllfierConverter
             case InlinabilityOnTuple.Never:
                 
             case InlinabilityOnTuple.FixedLength:
-                createFixedInlineProcessFunction();
+                fields.push(createFixedInlineProcessFunction());
                 
             case InlinabilityOnTuple.Always:
-                createFixedInlineProcessFunction();
-                createVariableInlineProcessFunction();
+                fields.push(createFixedInlineProcessFunction());
+                fields.push(createVariableInlineProcessFunction());
         }
         
 		return {

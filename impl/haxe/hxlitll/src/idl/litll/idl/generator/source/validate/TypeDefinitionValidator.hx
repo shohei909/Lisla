@@ -14,7 +14,7 @@ import litll.idl.generator.source.validate.TypeDefinitionValidator;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.StructElement;
-import litll.idl.std.data.idl.StructFieldName;
+import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeName;
@@ -23,13 +23,16 @@ import litll.idl.std.error.GetConditionErrorKind;
 import litll.idl.std.error.GetConditionErrorKindTools;
 import litll.idl.std.error.TypeFollowErrorKindTools;
 import litll.idl.std.tools.idl.EnumConstructorTools;
+import litll.idl.std.tools.idl.FollowedTypeDefinitionTools;
+import litll.idl.std.tools.idl.StructElementTools;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
+import litll.idl.std.tools.idl.TypeReferenceTools;
 
 class TypeDefinitionValidator 
 {
     private var definition:TypeDefinition;
-    private var element:PackageElement;
-    private var inlinablityOnTuple:InlinabilityOnTuple;
+    private var packageElement:PackageElement;
+    private var inlinabilityOnTuple:InlinabilityOnTuple;
     private var file:IdlFilePath;
     private var parameters:Array<TypeName>;
     private var hasError:Bool;
@@ -44,16 +47,16 @@ class TypeDefinitionValidator
             file,
             element.getTypePath(name),
             definition,
-            validator.inlinablityOnTuple
+            validator.inlinabilityOnTuple
         );
     }
     
     private function new(file:IdlFilePath, element:PackageElement, definition:TypeDefinition)
     {
         this.file = file;
-        this.element = element;
+        this.packageElement = element;
         this.definition = definition;
-        this.inlinablityOnTuple = InlinabilityOnTuple.Never;
+        this.inlinabilityOnTuple = InlinabilityOnTuple.Never;
         hasError = false;
     }
     
@@ -83,7 +86,7 @@ class TypeDefinitionValidator
     private function validateTypeRefernce(reference:TypeReference):Void
     {
         var typePath = reference.getTypePath();
-        element.root.getElement(typePath.getModuleArray()).iter(
+        packageElement.root.getElement(typePath.getModuleArray()).iter(
             function (referedElement:PackageElement):Void
             {
                 referedElement.validateModule();
@@ -94,28 +97,27 @@ class TypeDefinitionValidator
 	private function validateNewtype(underlyType:TypeReference):Void
 	{
         var typePath = underlyType.getTypePath();
-        switch (underlyType.follow(element.root, parameters))
+        switch (underlyType.getConditions(packageElement.root, parameters))
         {
-            case Result.Ok(data):
-                // nothing to do.
+            case Result.Ok(conditions):
+                inlinabilityOnTuple = DelitllfyCaseConditionTools.getInlinability(conditions);
                 
             case Result.Err(error):
-                addError(
-                    IdlValidationErrorKind.GetCondition(
-                        GetConditionErrorKind.Follow(error)
-                    )
-                );
+                addError(IdlValidationErrorKind.GetCondition(error));
         }
 	}
     
 	private function validateEnum(constructors:Array<EnumConstructor>):Void
 	{
-        var conditionMap = new Map();
+        var conditionMap = new Map<String, DelitllfyCaseConditionGroup<EnumConstructorName>>();
+        var canInlineFixed = true;
+        var canInline = true;
+        
         inline function add(name:EnumConstructorName, conditions:Array<DelitllfyCaseCondition>):Void
         {
             if (conditionMap.exists(name.name))
             {
-                addError(IdlValidationErrorKind.EnumConstuctorNameDuplicated(name));
+                addError(IdlValidationErrorKind.EnumConstuctorNameDuplicated(conditionMap[name.name].name, name));
             }
             else
             {
@@ -126,7 +128,7 @@ class TypeDefinitionValidator
         for (constructor in constructors)
 		{
             var name = EnumConstructorTools.getConstructorName(constructor);
-            switch (EnumConstructorTools.getConditions(constructor, element.root, parameters))
+            switch (EnumConstructorTools.getConditions(constructor, packageElement.root, parameters))
             {
                 case Result.Ok(conditions):
                     add(name, conditions);
@@ -146,44 +148,53 @@ class TypeDefinitionValidator
             case Option.None:
                 // success
         }
+        
+        if (hasError) return;
+        
 	}
     
-    private function validateStruct(fields:Array<StructElement>):Void
+    private function validateStruct(elements:Array<StructElement>):Void
     {
-        // TODO: validation condition dupplication
-    	var usedNames = new Set<String>(new Map());
-        inline function add(name:StructFieldName):Void
+        var conditionMap = new Map<String, DelitllfyCaseConditionGroup<StructElementName>>();
+        inline function add(name:StructElementName, conditions:Array<DelitllfyCaseCondition>):Void
         {
-            if (usedNames.exists(name.name))
+            if (conditionMap.exists(name.name))
             {
-                addError(IdlValidationErrorKind.StructFieldNameDuplicated(name));
+                addError(IdlValidationErrorKind.StructElementNameDuplicated(conditionMap[name.name].name, name));
             }
             else
             {
-                usedNames.set(name.name);
+                conditionMap.set(name.name, new DelitllfyCaseConditionGroup(name, conditions));
             }
         }
         
-        for (field in fields)
+        for (element in elements)
         {
-            switch (field)
+            var name = StructElementTools.getName(element);
+            switch (StructElementTools.getConditions(element, packageElement.root, parameters))
             {
-                case StructElement.Label(name) | StructElement.NestedLabel(name):
-                    add(name);
-                    // TODO: validation kind
+                case Result.Ok(conditions):
+                    add(name, conditions);
                     
-                case StructElement.Field(field):
-                    add(field.name);
-                    
-                    // TODO: validation default value
+                case Result.Err(error):
+                    addError(IdlValidationErrorKind.GetCondition(error));
             }
         }
+        
+        switch (DelitllfyCaseConditionGroup.intersects(conditionMap))
+        {
+            case Option.Some(groups):
+                addError(IdlValidationErrorKind.StructElementConditionDuplicated(groups.group0.name, groups.group1.name));
+                
+            case Option.None:
+                // success
+        }
+        
+        
     }
     
 	private function validateTuple(arguments:Array<TupleElement>):Void
 	{
-        // TODO: validation condition dupplication
-        
 		var usedNames = new Set<String>(new Map());
 		for (argument in arguments)
 		{
@@ -205,12 +216,14 @@ class TypeDefinitionValidator
                     // TODO: validation default value
             }
 		}
+        
+        
 	}
     
 	private function addError(kind:IdlValidationErrorKind):Void 
 	{
         hasError = true;
-		element.root.addError(file, IdlReadErrorKind.Validation(kind));
+		packageElement.root.addError(file, IdlReadErrorKind.Validation(kind));
 	}
 }
 

@@ -17,7 +17,7 @@ import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructField;
 import litll.idl.std.data.idl.StructFieldKind;
-import litll.idl.std.data.idl.StructFieldName;
+import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.generator.data.DataOutputConfig;
@@ -202,7 +202,7 @@ class IdlToHaxeDataConverter
 	private static function convertStructElements(fields:Array<StructElement>, config:DataOutputConfig):Array<FunctionArg>
 	{
 		var args:Array<FunctionArg> = [];
-        inline function addLabel(name:StructFieldName, tagKind:ComplexType):Void
+        inline function addLabel(name:StructElementName, tagKind:ComplexType):Void
         {
             var typePath = switch (name.kind)
             {

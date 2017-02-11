@@ -1,14 +1,14 @@
 package litll.idl.std.error;
 import litll.core.error.LitllErrorSummary;
-import litll.idl.std.data.idl.StructFieldName;
+import litll.idl.std.data.idl.StructElementName;
 using litll.core.ds.MaybeTools;
 
 class StructFieldSuffixError 
 {
     private var kind:StructFieldSuffixErrorKind;
-    private var name:StructFieldName;
+    private var name:StructElementName;
     
-    public function new(name:StructFieldName, kind:StructFieldSuffixErrorKind) 
+    public function new(name:StructElementName, kind:StructFieldSuffixErrorKind) 
     {
         this.name = name;
         this.kind = kind;
