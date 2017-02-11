@@ -12,7 +12,7 @@ class InputFileDelitllfier {
                 for (litllData in array.data) {
                     var context = new litll.idl.delitllfy.DelitllfyContext(litllData, context.config);
                     switch litllData {
-                        case litll.core.Litll.Arr(array) if (2 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "target")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg0) {
+                        case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "target"))):switch (arg0) {
                             case haxe.ds.Option.Some(_):{
                                 return litll.core.ds.Result.Err(litll.idl.delitllfy.DelitllfyError.ofLitll(litllData, litll.idl.delitllfy.DelitllfyErrorKind.StructElementDuplicated("target")));
                             };

@@ -3,7 +3,7 @@ package litll.idl.std.delitllfy.idl;
 class StructElementDelitllfier {
     public static function process(context:litll.idl.delitllfy.DelitllfyContext):litll.core.ds.Result<litll.idl.std.data.idl.StructElement, litll.idl.delitllfy.DelitllfyError> return switch context.litll {
         case litll.core.Litll.Str(_):{
-            litll.core.ds.Result.Ok(litll.idl.std.data.idl.StructElement.Label(switch (litll.idl.std.delitllfy.idl.StructFieldNameDelitllfier.process(context)) {
+            litll.core.ds.Result.Ok(litll.idl.std.data.idl.StructElement.Label(switch (litll.idl.std.delitllfy.idl.StructElementNameDelitllfier.process(context)) {
                 case litll.core.ds.Result.Ok(data):{
                     data;
                 };
@@ -15,7 +15,7 @@ class StructElementDelitllfier {
         case litll.core.Litll.Arr(array) if (array.length == 1 && array.data[0].match(litll.core.Litll.Str(_))):{
             var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(array, 0, context.config);
             var data = {
-                var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.StructFieldNameDelitllfier.process)) {
+                var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.StructElementNameDelitllfier.process)) {
                     case litll.core.ds.Result.Ok(data):{
                         data;
                     };

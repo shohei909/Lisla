@@ -39,4 +39,6 @@ class TypeDependenceDeclarationDelitllfier {
             };
         };
     }
+    public static function fixedInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.idl.TypeDependenceDeclaration, litll.idl.delitllfy.DelitllfyError> return null;
+    public static function valiableInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.idl.TypeDependenceDeclaration, litll.idl.delitllfy.DelitllfyError> return null;
 }

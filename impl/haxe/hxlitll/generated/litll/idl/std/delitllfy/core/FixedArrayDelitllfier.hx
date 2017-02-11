@@ -14,4 +14,6 @@ class FixedArrayDelitllfier {
             };
         };
     }
+    public static function fixedInlineProcess<T>(context:litll.idl.delitllfy.DelitllfyArrayContext, tProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<T, litll.idl.delitllfy.DelitllfyError>, dependenceLength:litll.idl.std.data.core.LitllInt64):litll.core.ds.Result<litll.idl.std.data.core.FixedArray<T>, litll.idl.delitllfy.DelitllfyError> return null;
+    public static function valiableInlineProcess<T>(context:litll.idl.delitllfy.DelitllfyArrayContext, tProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<T, litll.idl.delitllfy.DelitllfyError>, dependenceLength:litll.idl.std.data.core.LitllInt64, tProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<T, litll.idl.delitllfy.DelitllfyError>, dependenceLength:litll.idl.std.data.core.LitllInt64):litll.core.ds.Result<litll.idl.std.data.core.FixedArray<T>, litll.idl.delitllfy.DelitllfyError> return null;
 }

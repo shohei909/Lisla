@@ -39,4 +39,6 @@ class PairDelitllfier {
             };
         };
     }
+    public static function fixedInlineProcess<K, V>(context:litll.idl.delitllfy.DelitllfyArrayContext, kProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<K, litll.idl.delitllfy.DelitllfyError>, vProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<V, litll.idl.delitllfy.DelitllfyError>):litll.core.ds.Result<litll.idl.std.data.core.Pair<K, V>, litll.idl.delitllfy.DelitllfyError> return null;
+    public static function valiableInlineProcess<K, V>(context:litll.idl.delitllfy.DelitllfyArrayContext, kProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<K, litll.idl.delitllfy.DelitllfyError>, vProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<V, litll.idl.delitllfy.DelitllfyError>, kProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<K, litll.idl.delitllfy.DelitllfyError>, vProcess:litll.idl.delitllfy.DelitllfyContext -> litll.core.ds.Result<V, litll.idl.delitllfy.DelitllfyError>):litll.core.ds.Result<litll.idl.std.data.core.Pair<K, V>, litll.idl.delitllfy.DelitllfyError> return null;
 }

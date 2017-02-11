@@ -9,7 +9,7 @@ class StructFieldDelitllfier {
             case litll.core.Litll.Arr(data):{
                 var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
                 var instance = {
-                    var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.StructFieldNameDelitllfier.process)) {
+                    var arg0 = switch (arrayContext.read(litll.idl.std.delitllfy.idl.StructElementNameDelitllfier.process)) {
                         case litll.core.ds.Result.Ok(data):{
                             data;
                         };
@@ -53,4 +53,6 @@ class StructFieldDelitllfier {
             };
         };
     }
+    public static function fixedInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.idl.StructField, litll.idl.delitllfy.DelitllfyError> return null;
+    public static function valiableInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.idl.StructField, litll.idl.delitllfy.DelitllfyError> return null;
 }
