@@ -30,7 +30,19 @@ class LixmlElementDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg2 = null;
+                    var arg2 = switch (arrayContext.readValiableOptionalInline(litll.idl.std.delitllfy.xml.lixml.LixmlChildrenTupleDelitllfier.variableInlineProcess, function(data) {
+                            return switch data {
+                                case litll.core.Litll.Str(string) if (string.data == ">"):true;
+                                case _:false;
+                            };
+                        })) {
+                        case litll.core.ds.Result.Ok(data):{
+                            data;
+                        };
+                        case litll.core.ds.Result.Err(data):{
+                            return litll.core.ds.Result.Err(data);
+                        };
+                    };
                     var instance = new litll.idl.std.data.xml.lixml.LixmlElement(arg0, arg1, arg2);
                     litll.core.ds.Result.Ok(instance);
                 };

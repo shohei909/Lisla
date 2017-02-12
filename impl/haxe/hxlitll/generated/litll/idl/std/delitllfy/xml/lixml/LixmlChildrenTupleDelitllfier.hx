@@ -10,7 +10,20 @@ class LixmlChildrenTupleDelitllfier {
                 var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
                 var instance = {
                     arrayContext.readLabel(">");
-                    var arg0 = null;
+                    var arg0 = switch (arrayContext.readRest(litll.idl.std.delitllfy.xml.lixml.LixmlContentDelitllfier.process, function(data) {
+                            return switch data {
+                                case litll.core.Litll.Str(_):true;
+                                case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_))):true;
+                                case _:false;
+                            };
+                        })) {
+                        case litll.core.ds.Result.Ok(data):{
+                            data;
+                        };
+                        case litll.core.ds.Result.Err(data):{
+                            return litll.core.ds.Result.Err(data);
+                        };
+                    };
                     var instance = new litll.idl.std.data.xml.lixml.LixmlChildrenTuple(arg0);
                     litll.core.ds.Result.Ok(instance);
                 };

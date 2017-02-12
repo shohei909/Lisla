@@ -18,7 +18,14 @@ class CommandArgumentDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg1 = null;
+                    var arg1 = switch (arrayContext.readFixedInline(litll.idl.std.delitllfy.cli.clidl.CommandArgumentConfigDelitllfier.fixedInlineProcess, arrayContext.length - 0)) {
+                        case litll.core.ds.Result.Ok(data):{
+                            data;
+                        };
+                        case litll.core.ds.Result.Err(data):{
+                            return litll.core.ds.Result.Err(data);
+                        };
+                    };
                     var instance = new litll.idl.std.data.cli.clidl.CommandArgument(arg0, arg1);
                     litll.core.ds.Result.Ok(instance);
                 };

@@ -17,7 +17,14 @@ class LibraryReferenceDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg1 = null;
+                    var arg1 = switch (arrayContext.readFixedInline(litll.idl.std.delitllfy.idl.library.LibraryRootDirectoryDelitllfier.fixedInlineProcess, 2)) {
+                        case litll.core.ds.Result.Ok(data):{
+                            data;
+                        };
+                        case litll.core.ds.Result.Err(data):{
+                            return litll.core.ds.Result.Err(data);
+                        };
+                    };
                     var instance = new litll.idl.std.data.idl.library.LibraryReference(arg0, arg1);
                     litll.core.ds.Result.Ok(instance);
                 };

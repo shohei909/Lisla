@@ -10,7 +10,14 @@ class TargetTupleDelitllfier {
                 var arrayContext = new litll.idl.delitllfy.DelitllfyArrayContext(data, 0, context.config);
                 var instance = {
                     arrayContext.readLabel("target");
-                    var arg0 = null;
+                    var arg0 = switch (arrayContext.readFixedInline(litll.idl.std.delitllfy.idl.library.LibraryReferenceDelitllfier.fixedInlineProcess, arrayContext.length - 0)) {
+                        case litll.core.ds.Result.Ok(data):{
+                            data;
+                        };
+                        case litll.core.ds.Result.Err(data):{
+                            return litll.core.ds.Result.Err(data);
+                        };
+                    };
                     var instance = new litll.idl.hxlitll.data.idl.config.TargetTuple(arg0);
                     litll.core.ds.Result.Ok(instance);
                 };

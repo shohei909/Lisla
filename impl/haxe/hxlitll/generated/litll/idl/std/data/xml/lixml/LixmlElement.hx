@@ -3,10 +3,10 @@ package litll.idl.std.data.xml.lixml;
 class LixmlElement {
     public var name : litll.idl.std.data.xml.lixml.LixmlElementName;
     public var attribute : Array<litll.idl.std.data.xml.lixml.LixmlAttribute>;
-    public var children? : litll.idl.std.data.xml.lixml.LixmlChildrenTuple;
-    public function new(name:litll.idl.std.data.xml.lixml.LixmlElementName, attribute:Array<litll.idl.std.data.xml.lixml.LixmlAttribute>, children?:litll.idl.std.data.xml.lixml.LixmlChildrenTuple) {
+    public var children : haxe.ds.Option<litll.idl.std.data.xml.lixml.LixmlChildrenTuple>;
+    public function new(name:litll.idl.std.data.xml.lixml.LixmlElementName, attribute:Array<litll.idl.std.data.xml.lixml.LixmlAttribute>, children:haxe.ds.Option<litll.idl.std.data.xml.lixml.LixmlChildrenTuple>) {
         this.name = name;
         this.attribute = attribute;
-        this.children? = children?;
+        this.children = children;
     }
 }
