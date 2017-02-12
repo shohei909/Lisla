@@ -204,7 +204,7 @@ class IdlToHaxeDelitllfierConverter
 		}
         
         return {
-            name : "valiableInlineProcess",
+            name : "variableInlineProcess",
             kind : FieldType.FFun(
                 {
                     args: args,

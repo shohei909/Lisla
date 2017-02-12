@@ -1,20 +1,14 @@
-import haxe.ds.Option;
 import haxe.io.Path;
 import litll.core.ds.Maybe;
-import litll.core.ds.Result;
-import litll.core.parse.Parser;
-import litll.idl.delitllfy.Delitllfier;
 import litll.idl.generator.IdlProject;
 import litll.idl.generator.data.DataOutputConfig;
 import litll.idl.generator.data.DelitllfierOutputConfig;
 import litll.idl.generator.data.OutputConfig;
 import litll.idl.generator.data.ProjectConfig;
 import litll.idl.generator.data.SourceConfig;
-import litll.idl.read.litll.LitllStringToData;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.std.tools.idl.path.TypePathFilterTools;
 import sys.FileSystem;
-import sys.io.File;
 using litll.core.ds.ResultTools;
 
 // import litll.idl.hxlitll.delitllfy.idl.config.InputFileDelitllfier;
@@ -25,7 +19,7 @@ class Main
 	{
 //        var hxinputData = File.getContent("litll/hxlitll/hxlitll.hxinput.litll");
 //        LitllStringToData.run(InputFileDelitllfier, hxinputData);
-        
+
         remove("../../migration/litll");
 		var config = new ProjectConfig(
 			new SourceConfig(

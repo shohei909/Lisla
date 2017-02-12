@@ -30,7 +30,7 @@ class LixmlElementDelitllfier {
                             return litll.core.ds.Result.Err(data);
                         };
                     };
-                    var arg2 = switch (arrayContext.readValiableOptionalInline(litll.idl.std.delitllfy.xml.lixml.LixmlChildrenTupleDelitllfier.variableInlineProcess, function(data) {
+                    var arg2 = switch (arrayContext.readVariableOptionalInline(litll.idl.std.delitllfy.xml.lixml.LixmlChildrenTupleDelitllfier.variableInlineProcess, function(data) {
                             return switch data {
                                 case litll.core.Litll.Str(string) if (string.data == ">"):true;
                                 case _:false;
@@ -58,5 +58,5 @@ class LixmlElementDelitllfier {
         };
     }
     public static function fixedInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.xml.lixml.LixmlElement, litll.idl.delitllfy.DelitllfyError> return null;
-    public static function valiableInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.xml.lixml.LixmlElement, litll.idl.delitllfy.DelitllfyError> return null;
+    public static function variableInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.xml.lixml.LixmlElement, litll.idl.delitllfy.DelitllfyError> return null;
 }

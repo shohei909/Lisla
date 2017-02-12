@@ -41,5 +41,5 @@ class CommandArgumentDelitllfier {
         };
     }
     public static function fixedInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.cli.clidl.CommandArgument, litll.idl.delitllfy.DelitllfyError> return null;
-    public static function valiableInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.cli.clidl.CommandArgument, litll.idl.delitllfy.DelitllfyError> return null;
+    public static function variableInlineProcess(context:litll.idl.delitllfy.DelitllfyArrayContext):litll.core.ds.Result<litll.idl.std.data.cli.clidl.CommandArgument, litll.idl.delitllfy.DelitllfyError> return null;
 }

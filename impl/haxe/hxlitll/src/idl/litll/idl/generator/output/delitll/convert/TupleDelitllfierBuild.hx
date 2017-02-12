@@ -85,7 +85,7 @@ class TupleDelitllfierBuild
                                             
                                         case Option.None:
                                             var processFunc = builder.createVariableInlineProcessFuncExpr(parameters, destType);
-                                            ExprBuilder.createGetOrReturnExpr(macro arrayContext.readValiableInline($processFunc)); 
+                                            ExprBuilder.createGetOrReturnExpr(macro arrayContext.readVariableInline($processFunc)); 
                                     }
                             }
                             
@@ -100,7 +100,7 @@ class TupleDelitllfierBuild
                                     
                                 case Option.None:
                                     var processFunc = builder.createVariableInlineProcessFuncExpr(parameters, destType);
-                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readValiableRestInline($processFunc, $guardFunction)); 
+                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readVariableRestInline($processFunc, $guardFunction)); 
                             }
                             
                         case [ArgumentKind.OptionalInline, Option.None]:
@@ -114,7 +114,7 @@ class TupleDelitllfierBuild
                                     
                                 case Option.None:
                                     var processFunc = builder.createVariableInlineProcessFuncExpr(parameters, destType);
-                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readValiableOptionalInline($processFunc, $guardFunction)); 
+                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readVariableOptionalInline($processFunc, $guardFunction)); 
                             }
                             
                         case [ArgumentKind.Rest, Option.Some(_)] 
