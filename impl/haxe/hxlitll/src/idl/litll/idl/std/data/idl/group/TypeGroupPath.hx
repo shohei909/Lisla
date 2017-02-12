@@ -4,7 +4,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.litllToBackend.LitllToBackendErrorKind;
+import litll.idl.litll2backend.LitllToBackendErrorKind;
 import litll.idl.std.data.idl.PackagePath;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;

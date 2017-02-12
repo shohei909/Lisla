@@ -16,6 +16,7 @@ import litll.idl.generator.output.delitll.match.LitllToBackendGuardCondition;
 import litll.idl.generator.output.delitll.path.HaxeLitllToBackendTypePathPair;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.generator.tools.ExprBuilder;
+import litll.idl.litll2backend.LitllToBackendError;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructorName;
@@ -96,7 +97,7 @@ class LitllToBackendExprBuilder
                                 
                             case litll.core.ds.Result.Err(data):
                                 litll.core.ds.Result.Err(
-                                    litll.idl.litllToBackend.LitllToBackendError.ofLitll(
+                                    litll.idl.litll2backend.LitllToBackendError.ofLitll(
                                         $contextExpr.litll, 
                                         data
                                     )

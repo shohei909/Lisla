@@ -22,7 +22,7 @@ class LitllToBackendOutputConfig
 		this.filters = [
 			TypePathFilter.Prefix(
 				TypeGroupPath.create("litll").getOrThrow(), 
-				TypeGroupPath.create("litll.idl.std.litllToBackend").getOrThrow()
+				TypeGroupPath.create("litll.idl.std.litll2backend").getOrThrow()
 			)
 		].concat(filters);
 	}	

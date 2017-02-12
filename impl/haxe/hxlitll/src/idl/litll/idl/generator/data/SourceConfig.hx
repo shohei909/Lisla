@@ -1,5 +1,5 @@
 package litll.idl.generator.data;
-import litll.idl.litllToBackend.LitllToBackendConfig;
+import litll.idl.litll2backend.LitllToBackendConfig;
 
 class SourceConfig
 {

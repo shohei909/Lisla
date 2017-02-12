@@ -2,6 +2,9 @@ package litll.idl.generator.output.delitll.convert;
 import haxe.macro.Expr;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.tools.ExprBuilder;
+import litll.idl.litll2backend.LitllToBackendContext;
+import litll.idl.litll2backend.LitllToBackendError;
+import litll.idl.litll2backend.LitllToBackendErrorKind;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
@@ -46,10 +49,10 @@ class StructLitllToBackendBuild
                 // case data:
                 values : [macro litllData],
                 expr: macro return litll.core.ds.Result.Err(
-                    litll.idl.litllToBackend.LitllToBackendError.ofLitll(
+                    litll.idl.litll2backend.LitllToBackendError.ofLitll(
                         litllData, 
                         // TODO: target list
-                        litll.idl.litllToBackend.LitllToBackendErrorKind.UnmatchedStructElement([])
+                        litll.idl.litll2backend.LitllToBackendErrorKind.UnmatchedStructElement([])
                     )
                 )
             }
@@ -58,7 +61,7 @@ class StructLitllToBackendBuild
         declarations.push(
             macro for (litllData in array.data)
             {
-                var context = new litll.idl.litllToBackend.LitllToBackendContext(litllData, context.config);
+                var context = new litll.idl.litll2backend.LitllToBackendContext(litllData, context.config);
                 $switchExpr;
             }
         );

@@ -4,14 +4,14 @@ import haxe.io.Path;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.parse.Parser;
-import litll.idl.litllToBackend.LitllToBackend;
-import litll.idl.litllToBackend.LitllToBackendConfig;
+import litll.idl.litll2backend.LitllToBackend;
+import litll.idl.litll2backend.LitllToBackendConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.file.LoadedIdl;
 import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.litllToBackend.idl.IdlLitllToBackend;
+import litll.idl.std.litll2backend.idl.IdlLitllToBackend;
 import sys.FileSystem;
 import sys.io.File;
 

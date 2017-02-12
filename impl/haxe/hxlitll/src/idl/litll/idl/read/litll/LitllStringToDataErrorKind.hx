@@ -1,6 +1,6 @@
 package litll.idl.read.litll;
 import litll.core.parse.ParseError;
-import litll.idl.litllToBackend.LitllToBackendError;
+import litll.idl.litll2backend.LitllToBackendError;
 
 enum LitllStringToDataErrorKind 
 {

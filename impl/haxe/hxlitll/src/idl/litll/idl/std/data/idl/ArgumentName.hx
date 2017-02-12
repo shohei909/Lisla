@@ -3,7 +3,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.litllToBackend.LitllToBackendErrorKind;
+import litll.idl.litll2backend.LitllToBackendErrorKind;
 using litll.core.ds.ResultTools;
 using litll.core.string.IdentifierTools;
 using StringTools;

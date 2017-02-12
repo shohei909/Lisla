@@ -4,6 +4,9 @@ import haxe.macro.Expr;
 import litll.core.Litll;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.tools.ExprBuilder;
+import litll.idl.litll2backend.LitllToBackendContext;
+import litll.idl.litll2backend.LitllToBackendError;
+import litll.idl.litll2backend.LitllToBackendErrorKind;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructField;
 import litll.idl.std.data.idl.StructFieldKind;
@@ -30,9 +33,9 @@ class StructElementLitllToBackendBuild
         {
             case haxe.ds.Option.Some(_):
                 return litll.core.ds.Result.Err(
-                    litll.idl.litllToBackend.LitllToBackendError.ofLitll(
+                    litll.idl.litll2backend.LitllToBackendError.ofLitll(
                         litllData,
-                        litll.idl.litllToBackend.LitllToBackendErrorKind.StructElementDuplicated($nameExpr)
+                        litll.idl.litll2backend.LitllToBackendErrorKind.StructElementDuplicated($nameExpr)
                     )
                 );
                 
@@ -54,7 +57,7 @@ class StructElementLitllToBackendBuild
             field.type.generalize()
         );
         return macro {
-            var context = new litll.idl.litllToBackend.LitllToBackendContext(array.data[1], context.config);
+            var context = new litll.idl.litll2backend.LitllToBackendContext(array.data[1], context.config);
             ${ExprBuilder.createGetOrReturnExpr(callExpr)}
         }
     }
@@ -88,9 +91,9 @@ class StructElementLitllToBackendBuild
                     
                 case haxe.ds.Option.None:
                     return litll.core.ds.Result.Err(
-                        litll.idl.litllToBackend.LitllToBackendError.ofLitll(
+                        litll.idl.litll2backend.LitllToBackendError.ofLitll(
                             context.litll,
-                            litll.idl.litllToBackend.LitllToBackendErrorKind.StructElementNotFound($nameExpr)
+                            litll.idl.litll2backend.LitllToBackendErrorKind.StructElementNotFound($nameExpr)
                         )
                     );
             }

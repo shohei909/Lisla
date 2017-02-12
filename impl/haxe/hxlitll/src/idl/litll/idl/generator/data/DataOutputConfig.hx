@@ -206,11 +206,11 @@ class DataOutputConfig
                                     {
                                         switch (err.toString())
                                         {
-                                            case "litll.idl.litllToBackend.LitllToBackendErrorKind":
+                                            case "litll.idl.litll2backend.LitllToBackendErrorKind":
                                                 macro HaxeDataConstructorKind.Function($v{field.name}, HaxeDataConstructorReturnKind.Result);	
                                                 
                                             case _:
-                                                Context.error("Error type must be litll.idl.litllToBackend.LitllToBackendErrorKind", field.pos);
+                                                Context.error("Error type must be litll.idl.litll2backend.LitllToBackendErrorKind", field.pos);
                                                 return null;
                                         }
                                     }
