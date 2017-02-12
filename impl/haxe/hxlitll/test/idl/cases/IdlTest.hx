@@ -4,14 +4,14 @@ import TestCore;
 import file.FileTools;
 import litll.core.LitllArray;
 import litll.core.ds.Result;
-import litll.idl.delitllfy.Delitllfier;
-import litll.idl.std.delitllfy.idl.IdlDelitllfier;
+import litll.idl.litllToBackend.LitllToBackend;
+import litll.idl.std.litllToBackend.idl.IdlLitllToBackend;
 import litll.core.parse.Parser;
 import sys.io.File;
 
 class IdlTest extends LitllTestCase
 {
-	public function testDelitllfy():Void
+	public function testLitllToBackend():Void
 	{
 		for (file in FileTools.readRecursively(TestIdl.IDL_DIRECTORY))
 		{
@@ -28,13 +28,13 @@ class IdlTest extends LitllTestCase
 						continue;
 				}
 				
-				var idl = switch (Delitllfier.run(IdlDelitllfier.process, caseData))
+				var idl = switch (LitllToBackend.run(IdlLitllToBackend.process, caseData))
 				{
 					case Result.Ok(data):
 						data;
 						
 					case Result.Err(error):
-						fail("failed to delitllfy file:  \n" + error).label(file);
+						fail("failed to litllToBackend file:  \n" + error).label(file);
 						continue;
 				}
 			}

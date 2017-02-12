@@ -2,7 +2,7 @@ package litll.idl.std.data.idl;
 import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.tag.StringTag;
-import litll.idl.delitllfy.DelitllfyErrorKind;
+import litll.idl.litllToBackend.LitllToBackendErrorKind;
 import litll.idl.std.data.idl.PackagePath;
 import litll.core.ds.Result;
 
@@ -20,8 +20,8 @@ class ModulePath
 		PackagePath.validateElement(fileName);
 	}
 	
-	@:delitllfy
-	public static function delitllfy(string:LitllString):Result<ModulePath, DelitllfyErrorKind>
+	@:litllToBackend
+	public static function litllToBackend(string:LitllString):Result<ModulePath, LitllToBackendErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -29,7 +29,7 @@ class ModulePath
 				Result.Ok(data);
 				
 			case Result.Err(err):
-				Result.Err(DelitllfyErrorKind.Fatal(err));
+				Result.Err(LitllToBackendErrorKind.Fatal(err));
 		}
 	}
 	

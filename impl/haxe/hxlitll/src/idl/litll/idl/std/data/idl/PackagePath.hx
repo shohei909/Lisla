@@ -3,7 +3,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.delitllfy.DelitllfyErrorKind;
+import litll.idl.litllToBackend.LitllToBackendErrorKind;
 
 class PackagePath
 {
@@ -39,8 +39,8 @@ class PackagePath
 		}
 	}
 	
-	@:delitllfy
-	public static function delitllfy(string:LitllString):Result<PackagePath, DelitllfyErrorKind>
+	@:litllToBackend
+	public static function litllToBackend(string:LitllString):Result<PackagePath, LitllToBackendErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -48,7 +48,7 @@ class PackagePath
 				Result.Ok(data);
 				
 			case Result.Err(err):
-				Result.Err(DelitllfyErrorKind.Fatal(err));
+				Result.Err(LitllToBackendErrorKind.Fatal(err));
 		}
 	}
 	

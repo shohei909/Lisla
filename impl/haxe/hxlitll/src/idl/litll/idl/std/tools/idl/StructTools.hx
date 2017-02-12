@@ -1,9 +1,9 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import litll.core.ds.Result;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionBuilder;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionBuilder;
 import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.ArgumentName;
@@ -15,9 +15,9 @@ import litll.idl.std.error.GetConditionErrorKind;
 
 class StructTools 
 {    
-    public static function getGuard(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<DelitllfyGuardCondition, GetConditionErrorKind>
+    public static function getGuard(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToBackendGuardCondition, GetConditionErrorKind>
     {
-        var builder = new DelitllfyGuardConditionBuilder();
+        var builder = new LitllToBackendGuardConditionBuilder();
         return switch (_getGuard(elements, source, definitionParameters, builder))
         {
             case Option.None:
@@ -28,7 +28,7 @@ class StructTools
         }
     }
     
-    public static function _getGuard(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:DelitllfyGuardConditionBuilder):Option<GetConditionErrorKind>
+    public static function _getGuard(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LitllToBackendGuardConditionBuilder):Option<GetConditionErrorKind>
     {
         var position = builder.position;
         for (element in elements)
@@ -46,12 +46,12 @@ class StructTools
         return Option.None;
     }
     
-    public static function getCondition(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<DelitllfyCaseCondition, GetConditionErrorKind>
+    public static function getCondition(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToBackendCaseCondition, GetConditionErrorKind>
     {
         return switch (getGuard(elements, source, definitionParameters))
         {
             case Result.Ok(data):
-                Result.Ok(DelitllfyCaseCondition.Arr(data));
+                Result.Ok(LitllToBackendCaseCondition.Arr(data));
                 
             case Result.Err(error):
                 Result.Err(error);
@@ -62,7 +62,7 @@ class StructTools
         elements:Array<StructElement>, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        conditions:Array<DelitllfyCaseCondition>,
+        conditions:Array<LitllToBackendCaseCondition>,
         history:Array<String>
     ):Option<GetConditionErrorKind>
     {

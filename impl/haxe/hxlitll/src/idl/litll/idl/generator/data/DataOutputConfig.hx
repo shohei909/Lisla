@@ -160,7 +160,7 @@ class DataOutputConfig
 		var createFunc = Maybe.none();
 		for (field in fields)
 		{
-			if (field.meta.has(":delitllfy"))
+			if (field.meta.has(":litllToBackend"))
 			{
 				createFunc = Maybe.some(field);
 				break;
@@ -170,7 +170,7 @@ class DataOutputConfig
 		var expr = switch (createFunc.toOption())
 		{
 			case Option.Some(field):
-				resolveDelitllfy(type, field.type, field);
+				resolveLitllToBackend(type, field.type, field);
 				
 			case Option.None:
 				macro HaxeDataConstructorKind.New;
@@ -181,7 +181,7 @@ class DataOutputConfig
 		);
 	}
     
-    private static function resolveDelitllfy(selfType:Type, type:Type, field:ClassField):Expr
+    private static function resolveLitllToBackend(selfType:Type, type:Type, field:ClassField):Expr
     {
         return switch (type)
         {
@@ -200,17 +200,17 @@ class DataOutputConfig
                                 case [TPType(ok), TPType(err)]:
                                     if (ok.toString() != selfPath)
                                     {
-                                        Context.error("@:delitllfy function requires Result<" + selfPath + ", DelitllfyErrorKind>", field.pos);
+                                        Context.error("@:litllToBackend function requires Result<" + selfPath + ", LitllToBackendErrorKind>", field.pos);
                                     }
                                     else
                                     {
                                         switch (err.toString())
                                         {
-                                            case "litll.idl.delitllfy.DelitllfyErrorKind":
+                                            case "litll.idl.litllToBackend.LitllToBackendErrorKind":
                                                 macro HaxeDataConstructorKind.Function($v{field.name}, HaxeDataConstructorReturnKind.Result);	
                                                 
                                             case _:
-                                                Context.error("Error type must be litll.idl.delitllfy.DelitllfyErrorKind", field.pos);
+                                                Context.error("Error type must be litll.idl.litllToBackend.LitllToBackendErrorKind", field.pos);
                                                 return null;
                                         }
                                     }
@@ -229,15 +229,15 @@ class DataOutputConfig
                 }
                 else
                 {
-                    Context.error("@:delitllfy function return type must be Result<" + selfPath + ", DelitllfyErrorKind> or " + selfPath, field.pos);
+                    Context.error("@:litllToBackend function return type must be Result<" + selfPath + ", LitllToBackendErrorKind> or " + selfPath, field.pos);
                     null;
                 }
                 
             case TLazy(func):
-                resolveDelitllfy(selfType, func(), field);
+                resolveLitllToBackend(selfType, func(), field);
                 
             case _:
-                Context.error("@:delitllfy function must be function:", field.pos);
+                Context.error("@:litllToBackend function must be function:", field.pos);
                 null;
         }
     }

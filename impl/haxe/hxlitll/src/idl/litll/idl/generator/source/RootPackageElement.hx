@@ -2,7 +2,7 @@ package litll.idl.generator.source;
 import haxe.ds.Option;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
-import litll.idl.delitllfy.DelitllfyConfig;
+import litll.idl.litllToBackend.LitllToBackendConfig;
 import litll.idl.generator.data.SourceConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.error.IdlReadErrorKind;
@@ -154,7 +154,7 @@ class RootPackageElement extends PackageElement implements IdlSourceProvider
 			directories.push(source);
 		}
         
-		var reader = new IdlSourceReader(directories, sourceConfig.delitllfyConfig);
+		var reader = new IdlSourceReader(directories, sourceConfig.litllToBackendConfig);
 		return new RootPackageElement(reader);
 	}
 }

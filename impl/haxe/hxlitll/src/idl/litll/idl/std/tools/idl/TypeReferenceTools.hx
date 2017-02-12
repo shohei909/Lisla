@@ -7,8 +7,8 @@ import litll.core.ds.Result;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.data.DataOutputConfig;
 import litll.idl.generator.output.data.HaxeDataTypePath;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionKind;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.FollowedTypeDefinition;
 import litll.idl.std.data.idl.GenericTypeReference;
@@ -209,7 +209,7 @@ class TypeReferenceTools
         }
     }
     
-    public static function getGuardConditionKind(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<DelitllfyGuardConditionKind, GetConditionErrorKind>
+    public static function getGuardConditionKind(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToBackendGuardConditionKind, GetConditionErrorKind>
     {
         return switch (type.follow(source, definitionParameters))
         {
@@ -217,12 +217,12 @@ class TypeReferenceTools
                 switch (data)
                 {
                     case FollowedTypeDefinition.Str:
-                        Result.Ok(DelitllfyGuardConditionKind.Str);
+                        Result.Ok(LitllToBackendGuardConditionKind.Str);
                         
                     case FollowedTypeDefinition.Struct(_)
                         | FollowedTypeDefinition.Arr(_)
                         | FollowedTypeDefinition.Tuple(_):
-                        Result.Ok(DelitllfyGuardConditionKind.Arr);
+                        Result.Ok(LitllToBackendGuardConditionKind.Arr);
                         
                     case FollowedTypeDefinition.Enum(constructors):
                         constructors.getGuardConditionKind(source, definitionParameters);
@@ -233,7 +233,7 @@ class TypeReferenceTools
         }
     }
     
-    public static function getConditions(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<DelitllfyCaseCondition>, GetConditionErrorKind>
+    public static function getConditions(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToBackendCaseCondition>, GetConditionErrorKind>
     {
         return switch (type.follow(source, definitionParameters))
         {

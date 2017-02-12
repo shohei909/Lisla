@@ -4,7 +4,7 @@ import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.string.IdentifierTools;
 import litll.core.tag.StringTag;
-import litll.idl.delitllfy.DelitllfyErrorKind;
+import litll.idl.litllToBackend.LitllToBackendErrorKind;
 using litll.core.ds.ResultTools;
 
 @:forward(tag, data)
@@ -19,8 +19,8 @@ abstract TypeDependenceName(LitllString)
 		this = string;
 	}
 	
-	@:delitllfy
-	public static function delitllfy(string:LitllString):Result<TypeDependenceName, DelitllfyErrorKind>
+	@:litllToBackend
+	public static function litllToBackend(string:LitllString):Result<TypeDependenceName, LitllToBackendErrorKind>
 	{
 		return try
 		{
@@ -28,7 +28,7 @@ abstract TypeDependenceName(LitllString)
 		}
 		catch (err:String)
 		{
-			Result.Err(DelitllfyErrorKind.Fatal(err));
+			Result.Err(LitllToBackendErrorKind.Fatal(err));
 		}
 	}
 	

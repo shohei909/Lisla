@@ -3,7 +3,7 @@ import haxe.ds.Option;
 import litll.idl.ds.ProcessResult;
 import litll.idl.generator.output.IdlToHaxePrintContext;
 import litll.idl.generator.output.data.IdlToHaxeDataPrinter;
-import litll.idl.generator.output.delitll.IdlToHaxeDelitllfierPrinter;
+import litll.idl.generator.output.delitll.IdlToHaxeLitllToBackendPrinter;
 
 class IdlToHaxePrinter
 {
@@ -11,10 +11,10 @@ class IdlToHaxePrinter
 	{
 		if (IdlToHaxeDataPrinter.run(context)) return ProcessResult.Failure;
 		
-		switch (context.delitllfierOutputConfig.toOption())
+		switch (context.litllToBackendOutputConfig.toOption())
 		{
-			case Option.Some(delitllfierOutputConfig):
-				if (IdlToHaxeDelitllfierPrinter.print(context, delitllfierOutputConfig)) return ProcessResult.Failure;
+			case Option.Some(litllToBackendOutputConfig):
+				if (IdlToHaxeLitllToBackendPrinter.print(context, litllToBackendOutputConfig)) return ProcessResult.Failure;
 				
 			case Option.None:
 				// nothing to do...

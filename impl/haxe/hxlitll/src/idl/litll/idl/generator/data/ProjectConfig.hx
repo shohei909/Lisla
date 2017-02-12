@@ -1,7 +1,7 @@
 package litll.idl.generator.data;
 import haxe.ds.Option;
 import litll.idl.generator.data.OutputConfig;
-import litll.idl.generator.data.DelitllfierOutputConfig;
+import litll.idl.generator.data.LitllToBackendOutputConfig;
 import litll.idl.generator.data.SourceConfig;
 
 class ProjectConfig

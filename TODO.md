@@ -51,7 +51,7 @@ Later
     - [ ] code generation 
         - [ ] data structure
         - [ ] instance
-        - [ ] delitllfy
+        - [ ] litllToBackend
         - [ ] litllfy
         - [ ] debitllfy
         - [ ] bitllfy
@@ -80,7 +80,7 @@ Later
     - [p] code generation 
         - [p] data structure
         - [ ] instance
-        - [p] delitllfy
+        - [p] litllToBackend
         - [ ] litllfy
         - [ ] debitllfy
         - [ ] bitllfy

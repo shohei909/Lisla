@@ -2,7 +2,7 @@ package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import litll.core.LitllString;
 import litll.core.ds.Result;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
 import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.ArgumentName;
@@ -66,7 +66,7 @@ class EnumConstructorTools
         }
     }
     
-    public static function getConditions(constructor:EnumConstructor, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<DelitllfyCaseCondition>, GetConditionErrorKind>
+    public static function getConditions(constructor:EnumConstructor, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToBackendCaseCondition>, GetConditionErrorKind>
     {
         var result = [];
         return switch (_getConditions(constructor, source, definitionParameters, result, []))
@@ -83,14 +83,14 @@ class EnumConstructorTools
         constructor:EnumConstructor, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        result:Array<DelitllfyCaseCondition>,
+        result:Array<LitllToBackendCaseCondition>,
         history:Array<String>
     ):Option<GetConditionErrorKind>
     {
         return switch (constructor)
         {
             case EnumConstructor.Primitive(name):
-                result.push(DelitllfyCaseCondition.Const(name.name));
+                result.push(LitllToBackendCaseCondition.Const(name.name));
                 Option.None;
                 
             case EnumConstructor.Parameterized(parameterized):
@@ -101,7 +101,7 @@ class EnumConstructorTools
                         switch (TupleTools.getGuard([label].concat(parameterized.elements), source, definitionParameters))
                         {
                             case Result.Ok(data):
-                                result.push(DelitllfyCaseCondition.Arr(data));
+                                result.push(LitllToBackendCaseCondition.Arr(data));
                                 Option.None;
                                 
                             case Result.Err(error):
@@ -112,7 +112,7 @@ class EnumConstructorTools
                         switch (TupleTools.getGuard(parameterized.elements, source, definitionParameters))
                         {
                             case Result.Ok(data):
-                                result.push(DelitllfyCaseCondition.Arr(data));
+                                result.push(LitllToBackendCaseCondition.Arr(data));
                                 Option.None;
                                 
                             case Result.Err(error):
@@ -211,7 +211,7 @@ class EnumConstructorTools
                 switch (parameterized.name.kind)
                 {
                     case EnumConstructorKind.Normal:
-                        condition.conditions.push(DelitllfyCaseCondition.Const(parameterized.name.name));
+                        condition.conditions.push(LitllToBackendCaseCondition.Const(parameterized.name.name));
                         Option.None;
                         
                     case EnumConstructorKind.Tuple:

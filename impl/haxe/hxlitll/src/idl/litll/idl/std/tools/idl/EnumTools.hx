@@ -1,9 +1,9 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import litll.core.ds.Result;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKindTools;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionKind;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionKindTools;
 import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.ArgumentName;
@@ -25,10 +25,10 @@ class EnumTools
         );
     }
     
-    public static function getGuardConditionKind(constructors:Array<EnumConstructor>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<DelitllfyGuardConditionKind, GetConditionErrorKind>
+    public static function getGuardConditionKind(constructors:Array<EnumConstructor>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToBackendGuardConditionKind, GetConditionErrorKind>
     {
-        var kind1 = DelitllfyGuardConditionKind.Never;
-        inline function error(name:EnumConstructorName, kind:EnumConstructorSuffixErrorKind):Result<DelitllfyGuardConditionKind, GetConditionErrorKind>
+        var kind1 = LitllToBackendGuardConditionKind.Never;
+        inline function error(name:EnumConstructorName, kind:EnumConstructorSuffixErrorKind):Result<LitllToBackendGuardConditionKind, GetConditionErrorKind>
         {
             return Result.Err(errorKind(name, kind));
         }
@@ -41,7 +41,7 @@ class EnumTools
                     switch (name.kind)
                     {
                         case EnumConstructorKind.Normal:
-                            DelitllfyGuardConditionKind.Const([name.name => true]);
+                            LitllToBackendGuardConditionKind.Const([name.name => true]);
                     
                         case EnumConstructorKind.Tuple:
                             return error(name, EnumConstructorSuffixErrorKind.TupleSuffixForPrimitiveEnumConstructor);
@@ -54,7 +54,7 @@ class EnumTools
                     switch (parameterized.name.kind)
                     {
                         case EnumConstructorKind.Normal | EnumConstructorKind.Tuple:
-                            DelitllfyGuardConditionKind.Arr;
+                            LitllToBackendGuardConditionKind.Arr;
                     
                         case EnumConstructorKind.Inline:
                             var elements = parameterized.elements;
@@ -76,12 +76,12 @@ class EnumTools
                                     }
                                     
                                 case TupleElement.Label(litllString):
-                                    DelitllfyGuardConditionKind.Const([litllString.data => true]);
+                                    LitllToBackendGuardConditionKind.Const([litllString.data => true]);
                             }
                     }
             }
             
-            kind1 = DelitllfyGuardConditionKindTools.merge(kind1, kind2);
+            kind1 = LitllToBackendGuardConditionKindTools.merge(kind1, kind2);
         }
         
         return Result.Ok(kind1);

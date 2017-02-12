@@ -6,7 +6,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.ds.Set;
-import litll.idl.delitllfy.DelitllfyContext;
+import litll.idl.litllToBackend.LitllToBackendContext;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKindTools;
@@ -26,7 +26,7 @@ import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceDependenceKind;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
-import litll.idl.std.delitllfy.idl.TypeReferenceDelitllfier;
+import litll.idl.std.litllToBackend.idl.TypeReferenceLitllToBackend;
 import litll.idl.std.error.GetConditionErrorKind;
 import litll.idl.std.error.TypeFollowErrorKind;
 using litll.idl.std.tools.idl.TypeDefinitionTools;
@@ -201,8 +201,8 @@ class TypeDefinitionPreprocessor
                     TypeReferenceParameterKind.Dependence(data, dependence.type);
 					
 				case TypeParameterDeclaration.TypeName(_):
-					var context = new DelitllfyContext(referenceParameter.value, parent.element.root.reader.config);
-					switch (TypeReferenceDelitllfier.process(context))
+					var context = new LitllToBackendContext(referenceParameter.value, parent.element.root.reader.config);
+					switch (TypeReferenceLitllToBackend.process(context))
 					{
 						case Result.Ok(reference):
 							processTypeReference(reference);

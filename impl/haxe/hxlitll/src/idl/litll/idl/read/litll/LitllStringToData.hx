@@ -2,16 +2,16 @@ package litll.idl.read.litll;
 import litll.core.ds.Result;
 import litll.core.parse.Parser;
 import litll.core.parse.ParserConfig;
-import litll.idl.delitllfy.DelitllfyConfig;
-import litll.idl.delitllfy.DelitllfyProcessor;
+import litll.idl.litllToBackend.LitllToBackendConfig;
+import litll.idl.litllToBackend.LitllToBackendProcessor;
 
 class LitllStringToData
 {
     public static function run<T>(
-        process:DelitllfyProcessor<T>, 
+        process:LitllToBackendProcessor<T>, 
         text:String,
         ?parserConfig:ParserConfig,
-        ?delitllfyConfig:DelitllfyConfig
+        ?litllToBackendConfig:LitllToBackendConfig
     ):Result<T, LitllStringToDataErrorKind>
     {
         Parser.run(text, parserConfig);

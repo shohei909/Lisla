@@ -4,7 +4,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.delitllfy.DelitllfyErrorKind;
+import litll.idl.litllToBackend.LitllToBackendErrorKind;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 
 class TypePath
@@ -20,8 +20,8 @@ class TypePath
 		this.tag = tag;
 	}
 	
-	@:delitllfy
-	public static function delitllfy(string:LitllString):Result<TypePath, DelitllfyErrorKind>
+	@:litllToBackend
+	public static function litllToBackend(string:LitllString):Result<TypePath, LitllToBackendErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -29,7 +29,7 @@ class TypePath
 				Result.Ok(data);
 			
 			case Result.Err(data):
-				Result.Err(DelitllfyErrorKind.Fatal(data));
+				Result.Err(LitllToBackendErrorKind.Fatal(data));
 		}
 	}
 	

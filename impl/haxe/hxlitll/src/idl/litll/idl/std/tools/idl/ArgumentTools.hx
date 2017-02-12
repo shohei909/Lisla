@@ -1,8 +1,8 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import litll.core.ds.Result;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionKind;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.ArgumentName;
@@ -36,7 +36,7 @@ class ArgumentTools
                 {
                     switch (condition)
                     {
-                        case DelitllfyCaseCondition.Arr(guard):
+                        case LitllToBackendCaseCondition.Arr(guard):
                             switch [length, guard.getFixedLength()]
                             {
                                 case [_, Option.None]:
@@ -54,7 +54,7 @@ class ArgumentTools
                                     }
                             }
                             
-                        case DelitllfyCaseCondition.Str | DelitllfyCaseCondition.Const(_):
+                        case LitllToBackendCaseCondition.Str | LitllToBackendCaseCondition.Const(_):
                             return Result.Err(errorKind(argument.name, ArgumentSuffixErrorKind.InlineString));
                     }
                 }

@@ -4,9 +4,9 @@ import litll.core.ds.Result;
 import litll.core.ds.Set;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKind;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseConditionGroup;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseConditionTools;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseConditionGroup;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseConditionTools;
 import litll.idl.generator.source.PackageElement;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.validate.InlinabilityOnTuple;
@@ -101,7 +101,7 @@ class TypeDefinitionValidator
         switch (underlyType.getConditions(packageElement.root, parameters))
         {
             case Result.Ok(conditions):
-                inlinabilityOnTuple = DelitllfyCaseConditionTools.getInlinability(conditions);
+                inlinabilityOnTuple = LitllToBackendCaseConditionTools.getInlinability(conditions);
                 
             case Result.Err(error):
                 addError(IdlValidationErrorKind.GetCondition(error));
@@ -111,11 +111,11 @@ class TypeDefinitionValidator
 	private function validateEnum(constructors:Array<EnumConstructor>):Void
 	{
         var conditionArray = [];
-        var conditionMap = new Map<String, DelitllfyCaseConditionGroup<EnumConstructorName>>();
+        var conditionMap = new Map<String, LitllToBackendCaseConditionGroup<EnumConstructorName>>();
         var canInlineFixed = true;
         var canInline = true;
         
-        inline function add(name:EnumConstructorName, conditions:Array<DelitllfyCaseCondition>):Void
+        inline function add(name:EnumConstructorName, conditions:Array<LitllToBackendCaseCondition>):Void
         {
             if (conditionMap.exists(name.name))
             {
@@ -127,7 +127,7 @@ class TypeDefinitionValidator
                 {
                     conditionArray.push(condition);
                 }
-                conditionMap.set(name.name, new DelitllfyCaseConditionGroup(name, conditions));
+                conditionMap.set(name.name, new LitllToBackendCaseConditionGroup(name, conditions));
             }
         }
         
@@ -154,7 +154,7 @@ class TypeDefinitionValidator
         
         if (hasError) return;
         
-        switch (DelitllfyCaseConditionGroup.intersects(conditionMap))
+        switch (LitllToBackendCaseConditionGroup.intersects(conditionMap))
         {
             case Option.Some(groups):
                 addError(IdlValidationErrorKind.EnumConstuctorConditionDuplicated(groups.group0.name, groups.group1.name));
@@ -167,8 +167,8 @@ class TypeDefinitionValidator
     private function validateStruct(elements:Array<StructElement>):Void
     {
         var conditionArray = [];
-        var conditionMap = new Map<String, DelitllfyCaseConditionGroup<StructElementName>>();
-        inline function add(name:StructElementName, conditions:Array<DelitllfyCaseCondition>):Void
+        var conditionMap = new Map<String, LitllToBackendCaseConditionGroup<StructElementName>>();
+        inline function add(name:StructElementName, conditions:Array<LitllToBackendCaseCondition>):Void
         {
             if (conditionMap.exists(name.name))
             {
@@ -180,7 +180,7 @@ class TypeDefinitionValidator
                 {
                     conditionArray.push(condition);
                 }
-                conditionMap.set(name.name, new DelitllfyCaseConditionGroup(name, conditions));
+                conditionMap.set(name.name, new LitllToBackendCaseConditionGroup(name, conditions));
             }
         }
         
@@ -199,7 +199,7 @@ class TypeDefinitionValidator
         
         if (hasError) return;
         
-        switch (DelitllfyCaseConditionGroup.intersects(conditionMap))
+        switch (LitllToBackendCaseConditionGroup.intersects(conditionMap))
         {
             case Option.Some(groups):
                 addError(IdlValidationErrorKind.StructElementConditionDuplicated(groups.group0.name, groups.group1.name));

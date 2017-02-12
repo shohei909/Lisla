@@ -1,9 +1,9 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import litll.core.ds.Result;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionBuilder;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionBuilder;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionKind;
 import litll.idl.std.data.idl.FollowedTypeDefinition;
 import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.StructField;
@@ -28,7 +28,7 @@ class StructFieldTools
         field:StructField, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        conditions:Array<DelitllfyCaseCondition>,
+        conditions:Array<LitllToBackendCaseCondition>,
         history:Array<String>
     ):Option<GetConditionErrorKind>
     {
@@ -41,13 +41,13 @@ class StructFieldTools
                 | [StructFieldKind.OptionalInline, Option.None]
                 | [StructFieldKind.Array, Option.None]
                 | [StructFieldKind.ArrayInline, Option.None]:
-                var builder = new DelitllfyGuardConditionBuilder();
-                builder.add(DelitllfyGuardConditionKind.Const([field.name.name => true]));
+                var builder = new LitllToBackendGuardConditionBuilder();
+                builder.add(LitllToBackendGuardConditionKind.Const([field.name.name => true]));
                 switch (field.type.getGuardConditionKind(source, definitionParameters))
                 {
                     case Result.Ok(data):
                         builder.add(data);
-                        conditions.push(DelitllfyCaseCondition.Arr(builder.build()));
+                        conditions.push(LitllToBackendCaseCondition.Arr(builder.build()));
                         Option.None;
                         
                     case Result.Err(error):
@@ -122,12 +122,12 @@ class StructFieldTools
         }
     }
     
-    public static function _getGuardForStruct(field:StructField, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:DelitllfyGuardConditionBuilder):Option<GetConditionErrorKind>
+    public static function _getGuardForStruct(field:StructField, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LitllToBackendGuardConditionBuilder):Option<GetConditionErrorKind>
     {
         return switch [field.name.kind, field.defaultValue]
         {
             case [StructFieldKind.Normal, Option.None]:
-                builder.add(DelitllfyGuardConditionKind.Arr);
+                builder.add(LitllToBackendGuardConditionKind.Arr);
                 Option.None;
                 
             case [StructFieldKind.Normal, Option.Some(_)]
@@ -149,13 +149,13 @@ class StructFieldTools
                         switch (data)
                         {
                             case FollowedTypeDefinition.Str:
-                                builder.add(DelitllfyGuardConditionKind.Str);
+                                builder.add(LitllToBackendGuardConditionKind.Str);
                                 Option.None;
                                 
                             case FollowedTypeDefinition.Struct(_)
                                 | FollowedTypeDefinition.Arr(_)
                                 | FollowedTypeDefinition.Tuple(_):
-                                builder.add(DelitllfyGuardConditionKind.Arr);
+                                builder.add(LitllToBackendGuardConditionKind.Arr);
                                 Option.None;
                                 
                             case FollowedTypeDefinition.Enum(constructors):

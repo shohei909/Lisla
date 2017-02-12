@@ -2,10 +2,10 @@ package litll.idl.std.tools.idl;
 
 import haxe.ds.Option;
 import litll.core.ds.Result;
-import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardCondition;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionBuilder;
-import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
+import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardCondition;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionBuilder;
+import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionKind;
 import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.ArgumentKind;
@@ -30,9 +30,9 @@ class TupleTools
         );
     }
     
-    public static function getGuard(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<DelitllfyGuardCondition, GetConditionErrorKind>
+    public static function getGuard(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToBackendGuardCondition, GetConditionErrorKind>
     {
-        var builder = new DelitllfyGuardConditionBuilder();
+        var builder = new LitllToBackendGuardConditionBuilder();
         return switch (_getGuard(elements, source, definitionParameters, builder, []))
         {
             case Option.None:
@@ -47,7 +47,7 @@ class TupleTools
         elements:Array<TupleElement>, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        builder:DelitllfyGuardConditionBuilder,
+        builder:LitllToBackendGuardConditionBuilder,
         parentTypes:Array<String>
     ):Option<GetConditionErrorKind>
     {
@@ -56,7 +56,7 @@ class TupleTools
             switch (element)
             {
                 case TupleElement.Label(value):
-                    builder.add(DelitllfyGuardConditionKind.Const([value.data => true]));
+                    builder.add(LitllToBackendGuardConditionKind.Const([value.data => true]));
                     
                 case TupleElement.Argument(argument):
                     switch [argument.name.kind, argument.defaultValue]
@@ -164,12 +164,12 @@ class TupleTools
         return Option.None;
     }
     
-    public static function getCondition(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<DelitllfyCaseCondition, GetConditionErrorKind>
+    public static function getCondition(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToBackendCaseCondition, GetConditionErrorKind>
     {
         return switch (getGuard(elements, source, definitionParameters))
         {
             case Result.Ok(data):
-                Result.Ok(DelitllfyCaseCondition.Arr(data));
+                Result.Ok(LitllToBackendCaseCondition.Arr(data));
                 
             case Result.Err(error):
                 Result.Err(error);

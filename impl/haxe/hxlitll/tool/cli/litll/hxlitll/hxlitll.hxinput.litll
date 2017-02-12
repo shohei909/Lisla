@@ -32,10 +32,10 @@
     [filter hxlitll litll.idl.hxlitll.data]
 ]
 
-[delitllfy
+[litllToBackend
     // for Litll Standard Library
-    [filter litll litll.idl.std.delitllfy]
+    [filter litll litll.idl.std.litllToBackend]
 
     // for hxlitll
-    [filter hxlitll litll.idl.hxlitll.delitllfy]
+    [filter hxlitll litll.idl.hxlitll.litllToBackend]
 ] 

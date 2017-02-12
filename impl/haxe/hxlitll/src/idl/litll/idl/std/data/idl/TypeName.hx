@@ -4,8 +4,8 @@ import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.string.IdentifierTools;
 import litll.core.tag.StringTag;
-import litll.idl.delitllfy.DelitllfyError;
-import litll.idl.delitllfy.DelitllfyErrorKind;
+import litll.idl.litllToBackend.LitllToBackendError;
+import litll.idl.litllToBackend.LitllToBackendErrorKind;
 using litll.core.ds.ResultTools;
 
 @:forward(tag)
@@ -26,8 +26,8 @@ abstract TypeName(LitllString)
 		this = string;
 	}
 	
-	@:delitllfy
-	public static function delitllfy(string:LitllString):Result<TypeName, DelitllfyErrorKind>
+	@:litllToBackend
+	public static function litllToBackend(string:LitllString):Result<TypeName, LitllToBackendErrorKind>
 	{
 		return try
 		{
@@ -35,7 +35,7 @@ abstract TypeName(LitllString)
 		}
 		catch (err:String)
 		{
-			Result.Err(DelitllfyErrorKind.Fatal(err));
+			Result.Err(LitllToBackendErrorKind.Fatal(err));
 		}
 	}
 	
@@ -76,9 +76,9 @@ abstract TypeName(LitllString)
 		return IdentifierTools.toCamelCase(this.data).getOrThrow();
 	}
     
-    public function toDelitllfierVariableName():String
+    public function toLitllToBackendVariableName():String
     {
-        return toVariableName() + "Delitllfier";
+        return toVariableName() + "LitllToBackend";
     }
 	
 	public function map(func:String->String):TypeName

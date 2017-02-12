@@ -2,7 +2,7 @@ package litll.idl.generator.output;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.idl.generator.data.DataOutputConfig;
-import litll.idl.generator.data.DelitllfierOutputConfig;
+import litll.idl.generator.data.LitllToBackendOutputConfig;
 import litll.idl.generator.data.ProjectConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.io.IoProvider;
@@ -23,17 +23,17 @@ class IdlToHaxePrintContext implements IdlToHaxeConvertContext
     public var io(default, null):IoProvider;
 	public var printer(default, null):HaxePrinter;
 	public var dataOutputConfig(default, null):DataOutputConfig;
-	public var delitllfierOutputConfig(default, null):Maybe<DelitllfierOutputConfig>;
+	public var litllToBackendOutputConfig(default, null):Maybe<LitllToBackendOutputConfig>;
 	
 	public function new(
 		source:IdlSourceProvider,
 		io:IoProvider,
 		printer:HaxePrinter,
 		dataOutputConfig:DataOutputConfig,
-		delitllfierOutputConfig:Maybe<DelitllfierOutputConfig>
+		litllToBackendOutputConfig:Maybe<LitllToBackendOutputConfig>
 	)
 	{
-		this.delitllfierOutputConfig = delitllfierOutputConfig;
+		this.litllToBackendOutputConfig = litllToBackendOutputConfig;
 		this.dataOutputConfig = dataOutputConfig;
 		this.io = io;
 		this.printer = printer;
@@ -49,7 +49,7 @@ class IdlToHaxePrintContext implements IdlToHaxeConvertContext
 			io,
 			new HaxePrinterImpl(io, config.outputConfig),
 			config.outputConfig.dataOutputConfig,
-			config.outputConfig.delitllfierOutputConfig
+			config.outputConfig.litllToBackendOutputConfig
 		);
 	}
     
