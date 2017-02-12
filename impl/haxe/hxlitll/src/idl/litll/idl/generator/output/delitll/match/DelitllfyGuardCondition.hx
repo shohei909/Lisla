@@ -107,4 +107,16 @@ class DelitllfyGuardCondition
                 false;
         }
     }
+    
+    public function getFixedLength():Option<Int>
+    {
+        return if (isSolid())
+        {
+            Option.Some(min);
+        }
+        else
+        {
+            Option.None;
+        }
+    }
 }

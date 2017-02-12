@@ -236,6 +236,7 @@ class TypeDefinitionValidator
                     // Nothing to do.
                 
                 case TupleElement.Argument(argument):
+                    // TODO: validate for rest condition
                     if (usedNames.exists(argument.name.name))
                     {
                         addError(IdlValidationErrorKind.ArgumentNameDuplicated(argument.name));

@@ -6,4 +6,6 @@ enum ArgumentKind
 	Optional;
 	Rest;
 	Inline;
+    OptionalInline;
+    RestInline;
 }

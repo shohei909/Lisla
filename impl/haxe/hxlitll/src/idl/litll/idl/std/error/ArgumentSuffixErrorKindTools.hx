@@ -1,4 +1,5 @@
 package litll.idl.std.error;
+import litll.idl.exception.IdlException;
 
 class ArgumentSuffixErrorKindTools 
 {
@@ -11,6 +12,14 @@ class ArgumentSuffixErrorKindTools
                 
             case ArgumentSuffixErrorKind.UnsupportedDefault(kind):
                 "Default is unsupported for value kind " + kind + ".";
+                
+            case ArgumentSuffixErrorKind.FirstElementRequired:
+                "First element is required for the argument's type.";
         }
     }   
+    
+    public static function toIdlException(kind:ArgumentSuffixErrorKind):IdlException
+    {
+        return new IdlException(toString(kind));
+    }
 }

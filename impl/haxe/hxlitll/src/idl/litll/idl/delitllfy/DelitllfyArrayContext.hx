@@ -6,6 +6,8 @@ import litll.core.Litll;
 import litll.core.LitllArray;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
+import litll.core.parse.array.ArrayContext;
+import litll.idl.delitllfy.DelitllfyError;
 using Lambda;
 
 class DelitllfyArrayContext
@@ -112,6 +114,22 @@ class DelitllfyArrayContext
         }
 	}
     
+    public inline function readFixedInline<T>(fixedInlineProcess:InlineProcessFunction<T>, length:Int):Result<T, DelitllfyError>
+    {
+        var localContext = new DelitllfyArrayContext(
+            array.slice(0, array.length - length), 
+            index,
+            config
+        );
+        
+        return fixedInlineProcess(localContext);
+    }
+    
+    public inline function readVariableInline<T>(variableInlineProcess:InlineProcessFunction<T>):Result<T, DelitllfyError>
+    {
+        return variableInlineProcess(this);
+    }
+    
 	public inline function read<T>(process:ProcessFunction<T>):Result<T, DelitllfyError>
 	{
 		return switch (readData(process))
@@ -176,3 +194,4 @@ class DelitllfyArrayContext
 }
 
 private typedef ProcessFunction<T> = DelitllfyContext->Result<T, DelitllfyError>;
+private typedef InlineProcessFunction<T> = DelitllfyArrayContext->Result<T, DelitllfyError>;

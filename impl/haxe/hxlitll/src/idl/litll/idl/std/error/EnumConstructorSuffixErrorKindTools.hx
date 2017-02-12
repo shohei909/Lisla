@@ -7,16 +7,19 @@ class EnumConstructorSuffixErrorKindTools
         return switch(kind)
         {
             case EnumConstructorSuffixErrorKind.InvalidInlineEnumConstructorParameterLength(actual):
-                "inline target type number must be one. but actual " + actual;
+                "Inline target type number must be one. but actual " + actual + ".";
+                
+            case EnumConstructorSuffixErrorKind.InvalidInlineEnumConstructorLabel:
+                "Inline target must not be label.";
                 
             case EnumConstructorSuffixErrorKind.InlineSuffixForPrimitiveEnumConstructor:
-                "inline is not allowed for primitive enum constructor";
+                "Inline is not allowed for primitive enum constructor.";
                 
             case EnumConstructorSuffixErrorKind.LoopedInline(typePath):
-                "inline " + typePath.toString() + " is looped";
+                "Inline " + typePath.toString() + " is looped.";
                 
             case EnumConstructorSuffixErrorKind.TupleSuffixForPrimitiveEnumConstructor:
-                "tuple is not allowed for primitive enum constructor";
+                "Tuple is not allowed for primitive enum constructor.";
         }
     }
 }                            

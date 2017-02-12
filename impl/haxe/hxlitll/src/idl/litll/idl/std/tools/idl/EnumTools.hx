@@ -1,8 +1,12 @@
 package litll.idl.std.tools.idl;
+import haxe.ds.Option;
 import litll.core.ds.Result;
+import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKindTools;
+import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
+import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorKind;
 import litll.idl.std.data.idl.EnumConstructorName;
@@ -81,5 +85,69 @@ class EnumTools
         }
         
         return Result.Ok(kind1);
-    }   
+    }
+    
+    public static function getFirstElementCondition(
+        constructors:Array<EnumConstructor>,
+        argumentName:ArgumentName, 
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        tupleInlineTypeHistory:Array<String>,
+        enumInlineTypeHistory:Array<String>
+    ):Result<FirstElementCondition, GetConditionErrorKind>
+    {
+        var condition = new FirstElementCondition(false, []);
+        return switch (
+            applyFirstElementCondition(
+                constructors, 
+                argumentName, 
+                source, 
+                definitionParameters, 
+                condition, 
+                tupleInlineTypeHistory, 
+                enumInlineTypeHistory
+            )
+        )
+        {
+            case Option.None:
+                Result.Ok(condition);
+                
+            case Option.Some(error):
+                Result.Err(error);
+        }
+    }
+    
+    public static function applyFirstElementCondition(
+        constructors:Array<EnumConstructor>,
+        argumentName:ArgumentName,  
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        condition:FirstElementCondition, 
+        tupleInlineTypeHistory:Array<String>,
+        enumInlineTypeHistory:Array<String>
+    ):Option<GetConditionErrorKind>
+    {
+        for (constructor in constructors)
+        {
+            switch (
+                constructor.applyFirstElementCondition(
+                    argumentName, 
+                    source, 
+                    definitionParameters, 
+                    condition, 
+                    tupleInlineTypeHistory, 
+                    enumInlineTypeHistory
+                )
+            )
+            {
+                case Option.None:
+                    // continue
+                    
+                case Option.Some(error):
+                    return Option.Some(error);
+            }
+        }
+        
+        return Option.None;
+    }
 }

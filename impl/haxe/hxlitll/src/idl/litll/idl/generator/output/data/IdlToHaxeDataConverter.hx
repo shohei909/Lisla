@@ -136,7 +136,7 @@ class IdlToHaxeDataConverter
             case ArgumentKind.Normal | ArgumentKind.Inline:
                 typePath;
                 
-            case ArgumentKind.Optional:
+            case ArgumentKind.Optional | ArgumentKind.OptionalInline:
                 ComplexType.TPath(
                     {
                         pack : ["haxe", "ds"],
@@ -146,7 +146,7 @@ class IdlToHaxeDataConverter
                     }
                 );
                 
-            case ArgumentKind.Rest:
+            case ArgumentKind.Rest | ArgumentKind.RestInline:
                 ComplexType.TPath(
                     {
                         pack : [],

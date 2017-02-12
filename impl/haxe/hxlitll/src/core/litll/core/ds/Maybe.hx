@@ -14,7 +14,7 @@ abstract Maybe<T>(Null<T>) from Null<T>
 		return new Maybe(u);
 	}
 	
-	private function new (t:Null<T>)
+	private inline function new (t:Null<T>)
 	{
 		this = t;
 	}

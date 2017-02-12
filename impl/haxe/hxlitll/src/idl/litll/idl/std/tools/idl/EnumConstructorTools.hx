@@ -3,7 +3,9 @@ import haxe.ds.Option;
 import litll.core.LitllString;
 import litll.core.ds.Result;
 import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
+import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
+import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorKind;
 import litll.idl.std.data.idl.EnumConstructorName;
@@ -11,6 +13,7 @@ import litll.idl.std.data.idl.ParameterizedEnumConstructor;
 import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.error.ArgumentSuffixErrorKind;
 import litll.idl.std.error.EnumConstructorSuffixError;
 import litll.idl.std.error.EnumConstructorSuffixErrorKind;
 import litll.idl.std.error.GetConditionErrorKind;
@@ -66,7 +69,6 @@ class EnumConstructorTools
     public static function getConditions(constructor:EnumConstructor, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<DelitllfyCaseCondition>, GetConditionErrorKind>
     {
         var result = [];
-        
         return switch (_getConditions(constructor, source, definitionParameters, result, []))
         {
             case Option.None:
@@ -153,8 +155,7 @@ class EnumConstructorTools
                                     }
                                     
                                 case TupleElement.Label(litllString):
-                                    result.push(DelitllfyCaseCondition.Const(litllString.data));
-                                    Option.None;
+                                    Option.Some(errorKind(parameterized.name, EnumConstructorSuffixErrorKind.InvalidInlineEnumConstructorLabel));
                             }
                         }
                 }
@@ -187,6 +188,86 @@ class EnumConstructorTools
                         
                     case EnumConstructorKind.Inline:
                         Option.None;
+                }
+        }
+    }
+    
+    public static function applyFirstElementCondition(
+        constructor:EnumConstructor, 
+        argumentName:ArgumentName,  
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        condition:FirstElementCondition, 
+        tupleInlineTypeHistory:Array<String>,
+        enumInlineTypeHistory:Array<String>
+    ):Option<GetConditionErrorKind>
+    {
+        return switch (constructor)
+        {
+            case EnumConstructor.Primitive(name):
+                Option.Some(argumentName.errorKind(ArgumentSuffixErrorKind.InlineString));
+                
+            case EnumConstructor.Parameterized(parameterized):
+                switch (parameterized.name.kind)
+                {
+                    case EnumConstructorKind.Normal:
+                        condition.conditions.push(DelitllfyCaseCondition.Const(parameterized.name.name));
+                        Option.None;
+                        
+                    case EnumConstructorKind.Tuple:
+                        switch (parameterized.elements.getFirstElementCondition(source, definitionParameters, tupleInlineTypeHistory))
+                        {
+                            case Result.Ok(tupleCondition):
+                                if (tupleCondition.canBeEmpty) condition.canBeEmpty = true;
+                                condition.addConditions(tupleCondition.conditions);
+                                Option.None;
+                                
+                            case Result.Err(error):
+                                Option.Some(error);
+                        }
+                        
+                    case EnumConstructorKind.Inline:
+                        var elements = parameterized.elements;
+                        if (elements.length != 1)
+                        {
+                            Option.Some(errorKind(parameterized.name, EnumConstructorSuffixErrorKind.InvalidInlineEnumConstructorParameterLength(elements.length)));
+                        }
+                        else
+                        {
+                            switch (elements[0])
+                            {
+                                case TupleElement.Argument(argument):
+                                    var path = argument.type.getTypePath();
+                                    var pathName = path.toString();
+                                    if (enumInlineTypeHistory.indexOf(pathName) != -1)
+                                    {
+                                        Option.Some(errorKind(parameterized.name, EnumConstructorSuffixErrorKind.LoopedInline(path)));
+                                    }
+                                    else
+                                    {
+                                        switch (argument.type.follow(source, definitionParameters))
+                                        {
+                                            case Result.Ok(followedType):
+                                                switch followedType.getFirstElementCondition(argument.name, source, definitionParameters, tupleInlineTypeHistory, enumInlineTypeHistory)
+                                                {
+                                                    case Result.Ok(tupleCondition):
+                                                        if (tupleCondition.canBeEmpty) condition.canBeEmpty = true;
+                                                        condition.addConditions(tupleCondition.conditions);
+                                                        Option.None;
+                                                        
+                                                    case Result.Err(error):
+                                                        Option.Some(error);
+                                                }
+                                                
+                                            case Result.Err(error):
+                                                Option.Some(GetConditionErrorKind.Follow(error));
+                                        }
+                                    }
+                                    
+                                case TupleElement.Label(_):
+                                    Option.Some(errorKind(parameterized.name, EnumConstructorSuffixErrorKind.InvalidInlineEnumConstructorLabel));
+                            }
+                        }
                 }
         }
     }

@@ -16,7 +16,17 @@ class ArgumentName
 	
 	public function new (name:String, ?tag:Maybe<StringTag>)
 	{
-		if (name.endsWith(".."))
+        if (name.endsWith("..<"))
+		{
+			name = name.substr(0, name.length - 3);
+			kind = ArgumentKind.RestInline;
+		}
+		else if (name.endsWith("?<"))
+		{
+			name = name.substr(0, name.length - 2);
+			kind = ArgumentKind.OptionalInline;
+		}
+		else if (name.endsWith(".."))
 		{
 			name = name.substr(0, name.length - 2);
 			kind = ArgumentKind.Rest;

@@ -2,12 +2,15 @@
 
 [package litll.xml]
 
+[enum LixmlContent
+    [string< [string String]]
+    [element< [element LixmlElement]]
+]
 [tuple LixmlElement
     [name LixmlElementName]
     [attribute.. LixmlAttribute]
     [children?< LixmlChildrenTuple]
 ]
-
 [tuple LixmlAttribute
     [name LixmlAttributeName]
     [value? LixmlAttributeValue]
@@ -17,6 +20,6 @@
 
 [tuple LixmlChildrenTuple
     >
-    [children..< LixmlElement]
+    [children.. LixmlContent]
 ]
 [newtype LixmlElementName String]

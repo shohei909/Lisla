@@ -1,10 +1,12 @@
 package litll.idl.std.tools.idl;
+
 import haxe.ds.Option;
 import litll.core.ds.Result;
 import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardCondition;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionBuilder;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionKind;
+import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.ArgumentKind;
 import litll.idl.std.data.idl.ArgumentName;
@@ -76,6 +78,10 @@ class TupleTools
                         case [ArgumentKind.Rest, Option.None]:
                             builder.unlimit();
                         
+                        case [ArgumentKind.RestInline, Option.None]:
+                            // TODO: Check inlinanability
+                            builder.unlimit();
+                            
                         case [ArgumentKind.Inline, Option.None]:
                             var name = argument.type.getTypePath().toString();
                             if (parentTypes.indexOf(name) == -1)
@@ -84,8 +90,6 @@ class TupleTools
                             }
                             else
                             {
-                                // TODO: Check inlinanability
-                                var nextParentTypes = parentTypes.concat([name]);
                                 switch (argument.type.follow(source, definitionParameters))
                                 {
                                     case Result.Ok(data):
@@ -98,12 +102,13 @@ class TupleTools
                                                 StructTools._getGuard(elements, source, definitionParameters, builder);
                                                 
                                             case FollowedTypeDefinition.Tuple(elements):
-                                                TupleTools._getGuard(elements, source, definitionParameters, builder, nextParentTypes);
+                                                TupleTools._getGuard(elements, source, definitionParameters, builder, parentTypes.concat([name]));
                                                 
                                             case FollowedTypeDefinition.Str:
                                                 return argumentError(argument.name, ArgumentSuffixErrorKind.InlineString);
                                                 
                                             case FollowedTypeDefinition.Enum(_):
+                                                // TODO: Check inlinanability
                                                 builder.unlimit();
                                         }
                                         
@@ -111,9 +116,46 @@ class TupleTools
                                         return Option.Some(GetConditionErrorKind.Follow(error));
                                 }
                             }
+                            
+                        case [ArgumentKind.OptionalInline, Option.None]:
+                            var name = argument.type.getTypePath().toString();
+                            builder.unlimit();
+                            
+                            if (parentTypes.indexOf(name) != -1)
+                            {
+                                switch (argument.type.follow(source, definitionParameters))
+                                {
+                                    case Result.Ok(data):
+                                        switch (data)
+                                        {
+                                            case FollowedTypeDefinition.Arr(_):
+                                                // nothing to do
+                                                
+                                            case FollowedTypeDefinition.Struct(elements):
+                                                builder.unlimit();
+                                                StructTools._getGuard(elements, source, definitionParameters, builder);
+                                                
+                                            case FollowedTypeDefinition.Tuple(elements):
+                                                builder.unlimit();
+                                                TupleTools._getGuard(elements, source, definitionParameters, builder, parentTypes.concat([name]));
+                                                
+                                            case FollowedTypeDefinition.Str:
+                                                return argumentError(argument.name, ArgumentSuffixErrorKind.InlineString);
+                                                
+                                            case FollowedTypeDefinition.Enum(_):
+                                                // TODO: Check inlinanability
+                                        }
+                                        
+                                    case Result.Err(error):
+                                        return Option.Some(GetConditionErrorKind.Follow(error));
+                                }
+                            }
+                            
                         case [ArgumentKind.Rest, Option.Some(_)] 
                             | [ArgumentKind.Inline, Option.Some(_)]
-                            | [ArgumentKind.Optional, Option.Some(_)]:
+                            | [ArgumentKind.Optional, Option.Some(_)]
+                            | [ArgumentKind.OptionalInline, Option.Some(_)]
+                            | [ArgumentKind.RestInline, Option.Some(_)]:
                             return argumentError(argument.name, ArgumentSuffixErrorKind.UnsupportedDefault(argument.name.kind));
                     }
             }
@@ -132,5 +174,61 @@ class TupleTools
             case Result.Err(error):
                 Result.Err(error);
         }
+    }
+    
+    public static function getFixedLength(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Option<Int>, GetConditionErrorKind>
+    {
+        return switch (getGuard(elements, source, definitionParameters))
+        {
+            case Result.Ok(condition):
+                Result.Ok(condition.getFixedLength());
+                
+            case Result.Err(error):
+                Result.Err(error);
+        }
+    }
+    
+    public static function getFirstElementCondition(
+        elements:Array<TupleElement>, 
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        history:Array<String>
+    ):Result<FirstElementCondition, GetConditionErrorKind>
+    {
+        var condition = new FirstElementCondition(true, []);
+        return switch (applyFirstElementCondition(elements, source, definitionParameters, condition, history))
+        {
+            case Option.None:
+                Result.Ok(condition);
+                
+            case Option.Some(error):
+                Result.Err(error);
+        }
+    }
+    
+    public static function applyFirstElementCondition(
+        elements:Array<TupleElement>, 
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        condition:FirstElementCondition, 
+        history:Array<String>
+    ):Option<GetConditionErrorKind>
+    {
+        for (element in elements)
+        {
+            switch (element.applyFirstElementCondition(source, definitionParameters, condition, []))
+            {
+                case Option.None:
+                    if (!condition.canBeEmpty)
+                    {
+                        return Option.None;
+                    }
+                    
+                case Option.Some(error):
+                    return Option.Some(error);
+            }
+        }
+        
+        return Option.None;
     }
 }

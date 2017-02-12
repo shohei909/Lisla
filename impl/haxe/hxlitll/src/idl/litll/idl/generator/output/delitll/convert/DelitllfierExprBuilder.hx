@@ -27,6 +27,7 @@ import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.TypeReferenceParameterKind;
+import litll.idl.std.error.ArgumentSuffixErrorKindTools;
 import litll.idl.std.error.GetConditionErrorKindTools;
 import litll.idl.std.tools.idl.FollowedTypeDefinitionTools;
 import litll.idl.std.tools.idl.TupleTools;
@@ -134,24 +135,29 @@ class DelitllfierExprBuilder
     }
 	public function createProcessCallExpr(contextExpr:Expr, parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
 	{
-        var funcName = createProcessFuncNameExpr(parameters, destType);
+        return createCallExpr("process", contextExpr, parameters, destType);
+    }
+	private function createCallExpr(functionName:String, contextExpr:Expr, parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
+    {
+        var funcName = createProcessFuncNameExpr(functionName, parameters, destType);
         var processElements = [contextExpr].concat(createParmetersExpr(parameters, destType));
         return macro $funcName($a{processElements});
     }
 	public function createProcessFuncExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
 	{
-        var funcName = createProcessFuncNameExpr(parameters, destType);
-        return _createProcessFuncExpr(funcName, parameters, destType);
+        return createFuncExpr("process", parameters, destType);
     }
-    /*
 	public function createFixedInlineProcessFuncExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
 	{
-        var funcName = createFixedInlineProcessFuncNameExpr(parameters, destType);
-        return _createProcessFuncExpr(funcName, destType.parameters);
+        return createFuncExpr("fixedInlineProcess", parameters, destType);
     }
-    */
-    private function _createProcessFuncExpr(funcName:Expr, parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
-    {
+	public function createVariableInlineProcessFuncExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
+	{
+        return createFuncExpr("variableInlineProcess", parameters, destType);
+    }
+	private function createFuncExpr(functionName:String, parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
+	{
+        var funcName = createProcessFuncNameExpr(functionName, parameters, destType);
         var processElements = createParmetersExpr(parameters, destType);
         
         return if (processElements.length == 0)
@@ -164,10 +170,10 @@ class DelitllfierExprBuilder
             macro $funcName.bind($a{args});
         }
     }
-    private function createProcessFuncNameExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
+    private function createProcessFuncNameExpr(functionName:String, parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
     {
         var typeName = createTypeNameExpr(parameters, destType);
-        return macro $typeName.process;
+        return macro $typeName.$functionName;
     }
     private function createTypeNameExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
     {
@@ -237,6 +243,14 @@ class DelitllfierExprBuilder
             definitionParameters
         );
     }
+    public function getFixedLength(elements:Array<TupleElement>, definitionParameters:Array<TypeName>):Option<Int>
+    {
+        return elements.getFixedLength(context.source, definitionParameters).getOrThrow(GetConditionErrorKindTools.toIdlException);
+    }
+    public function getInlineFixedLength(argument:Argument, definitionParameters:Array<TypeName>):Option<Int>
+    {
+        return argument.getFixedLength(context.source, definitionParameters).getOrThrow(GetConditionErrorKindTools.toIdlException);
+    }
     
     // ==============================================================
     // case
@@ -262,9 +276,40 @@ class DelitllfierExprBuilder
     public function createTypeCase(type:TypeReference, definitionParameters:Array<TypeName>, caseExpr:Expr, outputCases:Array<Case>):Void
     {
         var followedType = type.followOrThrow(context.source, definitionParameters);
-        for (caseKind in followedType.getConditions(context.source, definitionParameters).getOrThrow(GetConditionErrorKindTools.toIdlException))
+        var conditions = followedType.getConditions(context.source, definitionParameters).getOrThrow(GetConditionErrorKindTools.toIdlException);
+        createConditionsCase(conditions, caseExpr, outputCases);
+    }
+    
+    public static function createTupleCase(guard:DelitllfyGuardCondition, caseExpr:Expr):Case
+    {
+        var guardConditions = guard.getConditionExprs(macro array);
+        return {
+            values: [macro litll.core.Litll.Arr(array)],
+            guard: if (guardConditions.length == 0) null else ExprBuilder.createAndExpr(guardConditions),
+            expr: caseExpr,
+        }
+    }
+    
+    public function createFirstTypeCase(argument:Argument, definitionParameters:Array<TypeName>, caseExpr:Expr, outputCases:Array<Case>):Void
+    {
+        var path = argument.type.getTypePath().toString();
+        var followedType = argument.type.followOrThrow(context.source, definitionParameters);
+        var conditions = followedType.getNotEmptyFirstElementCondition(
+            argument.name, 
+            context.source, 
+            definitionParameters, 
+            [path],
+            []
+        ).getOrThrow(GetConditionErrorKindTools.toIdlException);
+        
+        createConditionsCase(conditions, caseExpr, outputCases);
+    }
+    
+    private function createConditionsCase(conditions:Array<DelitllfyCaseCondition>, caseExpr:Expr, outputCases:Array<Case>):Void
+    {
+        for (condition in conditions)
         {
-            var caseData = switch (caseKind)
+            var caseData = switch (condition)
             {
                 case DelitllfyCaseCondition.Arr(guard):
                     createTupleCase(guard, caseExpr);
@@ -285,15 +330,6 @@ class DelitllfierExprBuilder
             }
             
             outputCases.push(caseData);
-        }
-    }
-    public static function createTupleCase(guard:DelitllfyGuardCondition, caseExpr:Expr):Case
-    {
-        var guardConditions = guard.getConditionExprs(macro array);
-        return {
-            values: [macro litll.core.Litll.Arr(array)],
-            guard: if (guardConditions.length == 0) null else ExprBuilder.createAndExpr(guardConditions),
-            expr: caseExpr,
         }
     }
 }

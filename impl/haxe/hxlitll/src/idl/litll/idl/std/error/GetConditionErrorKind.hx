@@ -7,5 +7,5 @@ enum GetConditionErrorKind
     StructFieldSuffix(error:StructFieldSuffixError);
     TupleArgumentSuffix(error:ArgumentSuffixError);
     EnumConstructorSuffix(error:EnumConstructorSuffixError);
-    Follow(error:TypeFollowErrorKind);    
+    Follow(error:TypeFollowErrorKind);
 }

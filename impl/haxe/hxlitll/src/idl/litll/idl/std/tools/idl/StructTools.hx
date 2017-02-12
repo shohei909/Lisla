@@ -4,9 +4,13 @@ import litll.core.ds.Result;
 import litll.idl.generator.output.delitll.match.DelitllfyCaseCondition;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardCondition;
 import litll.idl.generator.output.delitll.match.DelitllfyGuardConditionBuilder;
+import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
+import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.StructElement;
+import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.error.ArgumentSuffixErrorKind;
 import litll.idl.std.error.GetConditionErrorKind;
 
 class StructTools 
@@ -71,6 +75,60 @@ class StructTools
                     
                 case Option.Some(err):
                     return Option.Some(err);
+            }
+        }
+        
+        return Option.None;
+    }
+    
+    public static function getFixedLength(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Option<Int>, GetConditionErrorKind>
+    {
+        return switch (getGuard(elements, source, definitionParameters))
+        {
+            case Result.Ok(condition):
+                Result.Ok(condition.getFixedLength());
+                
+            case Result.Err(error):
+                Result.Err(error);
+        }
+    }
+    
+    public static function getFirstElementCondition(
+        elements:Array<StructElement>, 
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>,
+        history:Array<String>
+    ):Result<FirstElementCondition, GetConditionErrorKind>
+    {
+        var condition = new FirstElementCondition(true, []);
+        return switch (applyFirstElementCondition(elements, source, definitionParameters, condition, history))
+        {
+            case Option.None:
+                Result.Ok(condition);
+                
+            case Option.Some(error):
+                Result.Err(error);
+        }
+    }
+    
+    
+    public static function applyFirstElementCondition(
+        elements:Array<StructElement>, 
+        source:IdlSourceProvider, 
+        definitionParameters:Array<TypeName>, 
+        condition:FirstElementCondition,
+        history:Array<String>
+    ):Option<GetConditionErrorKind>
+    {
+        for (element in elements)
+        {
+            switch (StructElementTools.applyFirstElementCondition(element, source, definitionParameters, condition, history))
+            {
+                case Option.None:
+                    // continue
+                    
+                case Option.Some(error):
+                    return Option.Some(error);
             }
         }
         

@@ -58,53 +58,28 @@ class StructFieldTools
                 switch (field.type.follow(source, definitionParameters))
                 {
                     case Result.Ok(data):
-                        switch (FollowedTypeDefinitionTools._getConditions(data, source, definitionParameters, conditions, []))
-                        {
-                            case Option.None:
-                                Option.None;
-                                
-                            case Option.Some(error):
-                                Option.Some(error);
-                        }
+                        FollowedTypeDefinitionTools._getConditions(data, source, definitionParameters, conditions, []);
                         
                     case Result.Err(error):
                         Option.Some(GetConditionErrorKind.Follow(error));
                 }
                 
             case [StructFieldKind.Merge, Option.None]:
-                var path = field.type.getTypePath();
-                var pathName = path.toString();
-                
-                if (history.indexOf(pathName) != -1)
+                switch (getStruct(field, source, definitionParameters, history))
                 {
-                    Option.Some(errorKind(field.name, StructFieldSuffixErrorKind.LoopedMerge(field.type)));
-                }
-                else
-                {
-                    switch (field.type.follow(source, definitionParameters))
-                    {
-                        case Result.Ok(data):
-                            switch (data)
-                            {
-                                case FollowedTypeDefinition.Struct(elements):
-                                    StructTools._getConditionsForMerge(
-                                        elements, 
-                                        source, 
-                                        definitionParameters, 
-                                        conditions,
-                                        history.concat([pathName])
-                                    );
-                                    
-                                case FollowedTypeDefinition.Enum(_)
-                                    | FollowedTypeDefinition.Arr(_)
-                                    | FollowedTypeDefinition.Tuple(_)
-                                    | FollowedTypeDefinition.Str:
-                                    Option.Some(errorKind(field.name, StructFieldSuffixErrorKind.InvalidMergeTarget(field.type)));
-                            }
+                    case Result.Ok(elements):
+                        var path = field.type.getTypePath();
+                        var pathName = path.toString();
+                        StructTools._getConditionsForMerge(
+                            elements, 
+                            source, 
+                            definitionParameters, 
+                            conditions,
+                            history.concat([pathName])
+                        );
                             
-                        case Result.Err(error):
-                            Option.Some(GetConditionErrorKind.Follow(error));
-                    }
+                    case Result.Err(error):
+                        Option.Some(error);
                 }
                
             case [StructFieldKind.ArrayInline, Option.Some(_)]
@@ -113,6 +88,37 @@ class StructFieldTools
                 | [StructFieldKind.Optional, Option.Some(_)]
                 | [StructFieldKind.Merge, Option.Some(_)]:
                 Option.Some(errorKind(field.name, StructFieldSuffixErrorKind.UnsupportedDefault(field.name.kind)));
+        }
+    }
+    
+    public static function getStruct(field:StructField, source:IdlSourceProvider, definitionParameters:Array<TypeName>, history:Array<String>):Result<Array<StructElement>, GetConditionErrorKind>
+    {
+        var path = field.type.getTypePath();
+        var pathName = path.toString();
+        return if (history.indexOf(pathName) != -1)
+        {
+            Result.Err(errorKind(field.name, StructFieldSuffixErrorKind.LoopedMerge(field.type)));
+        }
+        else
+        {
+            switch (field.type.follow(source, definitionParameters))
+            {
+                case Result.Ok(data):
+                    switch (data)
+                    {
+                        case FollowedTypeDefinition.Struct(elements):
+                            Result.Ok(elements);
+                            
+                        case FollowedTypeDefinition.Enum(_)
+                            | FollowedTypeDefinition.Arr(_)
+                            | FollowedTypeDefinition.Tuple(_)
+                            | FollowedTypeDefinition.Str:
+                            Result.Err(errorKind(field.name, StructFieldSuffixErrorKind.InvalidMergeTarget(field.type)));
+                    }
+                    
+                case Result.Err(error):
+                    Result.Err(GetConditionErrorKind.Follow(error));
+            }
         }
     }
     

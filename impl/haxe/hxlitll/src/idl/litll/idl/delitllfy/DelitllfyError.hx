@@ -59,11 +59,11 @@ class DelitllfyError
 			case DelitllfyErrorTarget.Arr(arr, index):
 				if (index < 0)
 				{
-					arr.tag.position;
+					arr.tag.flatMap(function (tag) return tag.position);
 				}
 				else if (index >= arr.data.length)
 				{
-					arr.tag.position;
+					arr.tag.flatMap(function (tag) return tag.position);
 				}
 				else
 				{

@@ -48,4 +48,11 @@ class ExprBuilder
             pos: null,
         };
     }
+    
+    public static function getIntConstExpr(value:Int) {
+        return {
+            expr: ExprDef.EConst(Constant.CInt(Std.string(value))),
+            pos: null,
+        };
+    }
 }

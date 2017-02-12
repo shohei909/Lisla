@@ -61,6 +61,8 @@
 /// "?"   : Optional argument. (default value is disabled)
 /// ".."  : Rest arguments. (default value is disabled)
 /// "<"   : Inlined argument. (default value is disabled)
+/// "?<"  : Optional inlining argument. (default value is disabled)
+/// "..<" : Multiple inlining argument. (default value is disabled)
 /// 
 /// ## Restriction
 /// ### Inlinable type
@@ -83,10 +85,10 @@
 ]
 
 /// '''
+/// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
 /// Additionally, the following suffixes are supported.
-/// ":"  : Tuple style. Its first element have not to be label.
-/// "<"   : Inlining argument. Its argument must be one and the argument is inlined
-/// "_"   : Explicit normal field.
+/// ":"   : Tuple style . Its first element have not to be label.
+/// "<"   : Inlining constructor. Its argument must be one and the argument will be inlined.
 /// 
 /// ## Restriction
 /// ### Inlinable type
@@ -102,11 +104,9 @@
 
 [enum StructElement
     [label<
-        /// 'and unfolding suffix are disabled'
         [name StructElementName]
     ]
     [nested_label: 
-        /// 'and unfolding suffix are disabled'
         [name StructElementName]
     ]
     [field< [field StructField]]
@@ -118,14 +118,14 @@
 ]
 
 /// ''' 
-/// The following suffixes are supported
+/// Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
+/// Additionally, the following suffixes are supported
 /// "?"   : Optional field. (default value is disabled)
 /// ".."  : Multiple field. (default value is disabled)
 /// "<"   : Inlining field. 
-/// "?<"  : Optional unfolding field. (default value is disabled)
-/// "..<" : Multiple unfolding field. (default value is disabled)
+/// "?<"  : Optional inlining field. (default value is disabled)
+/// "..<" : Multiple inlining field. (default value is disabled)
 /// "<<"  : Merge struct fields. (default value is disabled)
-/// "_"   : Explicit normal field.
 /// 
 /// ## Restriction
 /// ### Inlinable type
