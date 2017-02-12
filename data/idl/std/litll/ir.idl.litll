@@ -1,0 +1,28 @@
+[package litll]
+[import litll.core]
+
+[enum Ir
+    [array [data.. Ir]]
+    [option [data [Option Ir]]]
+    [enum [data< EnumIr]]
+    [tuple [data.. Ir]]
+    [struct [data< [Map String Ir]]]
+    [map [data< [Map PrimitiveIr Ir]]]
+    [primitive< [data PrimitiveIr]]
+]
+
+[tuple EnumIr
+    [name String]
+    [data.. Ir]
+]
+
+[enum PrimitiveIr
+    [fixed_int [size UInt64] [data BigInt]]
+    [fixed_uint [size UInt64] [data BigUInt]]
+    [variable_int [data BigInt]]
+    [variable_uint [data BigUInt]]
+    [float64 [data Float64]]
+    [boolean [data Boolean]]
+    [string [data String]]
+    [binary [data Binary]]
+]

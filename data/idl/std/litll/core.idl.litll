@@ -12,6 +12,9 @@
 /// '8 bit integer.'
 [newtype Int8 [FixedInt [const 8]]]
 
+[newtype BigInt [VariableInt [const 0xFFFFFFFF]]]
+
+
 /// 'unsigned 64 bit integer'
 [newtype UInt64 [VariableUInt [const 64]]]
 /// 'unsigned 32 bit integer'
@@ -21,15 +24,17 @@
 /// 'unsigned 8 bit integer'
 [newtype UInt8 [FixedUInt [const 8]]]
 
+[newtype BigUInt [VariableUInt [const 0xFFFFFFFF]]]
+
 /// 'Signed integer serialized in variable length in binary(bitll) mode.'
-[newtype [VariableInt [bit_length UInt64]] String]
+[newtype [VariableInt [bit_length UInt32]] String]
 /// 'Usigned integer serialized in variable length in binary(bitll) mode.'
-[newtype [VariableUInt [bit_length UInt64]] String]
+[newtype [VariableUInt [bit_length UInt32]] String]
 
 /// 'Signed integer serialized in fixed length in binary(bitll) mode.'
-[newtype [FixedInt [bit_length UInt64]] String]
+[newtype [FixedInt [bit_length UInt32]] String]
 /// 'Unsigned integer serialized in fixed length in binary(bitll) mode.'
-[newtype [FixedUInt [bit_length UInt64]] String]
+[newtype [FixedUInt [bit_length UInt32]] String]
 
 /// '''
 /// 64 bit floating point number
@@ -77,9 +82,6 @@
     [some: [data T]]
 ]
 
-[newtype [Const [string String]] 
-    String
-]
 [newtype [FixedArray T [length Int64]]
     [Array T]
 ]

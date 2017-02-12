@@ -6,3 +6,4 @@
 [extension project.litll  litll.idl.project.LitllProject]
 [extension clidl.litll    litll.cli.clidl.Clidl]
 [extension libref.litll   litll.idl.library.LibraryRootDirectory]
+[extension ir.litll       litll.ir.Ir]
