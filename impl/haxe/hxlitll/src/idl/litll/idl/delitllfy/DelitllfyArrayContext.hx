@@ -15,7 +15,12 @@ class DelitllfyArrayContext
 	private var array:LitllArray<Litll>;
 	private var config:DelitllfyConfig;
 	public var index:Int;
-	
+	public var length(get, never):Int;
+    private inline function get_length():Int 
+    {
+        return array.length;
+    }
+    
 	public inline function new (array:LitllArray<Litll>, index:Int, config:DelitllfyConfig)
 	{
 		this.config = config;
@@ -44,6 +49,51 @@ class DelitllfyArrayContext
         else
         {
             match(array.data[index]);
+        }
+    }
+    
+	private inline function readData<T>(process:ProcessFunction<T>):Result<T, DelitllfyError>
+	{
+		index++;
+		
+		if (array.data.length < index)
+		{
+			return Result.Err(createError(DelitllfyErrorKind.EndOfArray));
+		}
+		
+		var context = new DelitllfyContext(array.data[index - 1], config);
+		return switch (process(context))
+		{
+			case Result.Err(childError):
+				Result.Err(childError);
+				
+			case Result.Ok(data):
+				Result.Ok(data);
+		}
+	}
+
+	public inline function read<T>(process:ProcessFunction<T>):Result<T, DelitllfyError>
+	{
+		return switch (readData(process))
+		{
+			case Result.Ok(data):
+				Result.Ok(data);
+				
+			case Result.Err(error):
+				Result.Err(error);
+		}
+	}
+	
+    public function readLabel(string:String):Result<Bool, DelitllfyError>
+    {
+        index++;
+        return switch (array.data[index - 1])
+        {
+            case Litll.Str(data) if (data.data == string):
+                Result.Ok(true);
+                
+            case _:
+                Result.Err(DelitllfyError.ofLitll(array.data[index - 1], DelitllfyErrorKind.UnmatchedLabel(string)));
         }
     }
     
@@ -117,7 +167,7 @@ class DelitllfyArrayContext
     public inline function readFixedInline<T>(fixedInlineProcess:InlineProcessFunction<T>, length:Int):Result<T, DelitllfyError>
     {
         var localContext = new DelitllfyArrayContext(
-            array.slice(0, array.length - length), 
+            array.slice(0, length), 
             index,
             config
         );
@@ -130,51 +180,102 @@ class DelitllfyArrayContext
         return variableInlineProcess(this);
     }
     
-	public inline function read<T>(process:ProcessFunction<T>):Result<T, DelitllfyError>
-	{
-		return switch (readData(process))
-		{
-			case Result.Ok(data):
-				Result.Ok(data);
-				
-			case Result.Err(error):
-				Result.Err(error);
-		}
-	}
-	
-    public function readLabel(string:String):Result<Bool, DelitllfyError>
+    public inline function readVariableOptionalInline<T>(variableInlineProcess:InlineProcessFunction<T>, match:Litll->Bool):Result<Option<T>, DelitllfyError>
     {
-        index++;
-        return switch (array.data[index - 1])
+        return if (matchNext(match))
         {
-            case Litll.Str(data) if (data.data == string):
-                Result.Ok(true);
-                
-            case _:
-                Result.Err(DelitllfyError.ofLitll(array.data[index - 1], DelitllfyErrorKind.UnmatchedLabel(string)));
+            switch (variableInlineProcess(this))
+            {
+                case Result.Ok(data):
+                    Result.Ok(Option.Some(data));
+                    
+                case Result.Err(error):
+                    Result.Err(error);
+            }
+        }
+        else
+        {
+            Result.Ok(Option.None);
         }
     }
     
-	private inline function readData<T>(process:ProcessFunction<T>):Result<T, DelitllfyError>
+    public inline function readFixedOptionalInline<T>(fixedInlineProcess:InlineProcessFunction<T>, length:Int, match:Litll->Bool):Result<Option<T>, DelitllfyError>
+    {
+        return if (matchNext(match))
+        {
+            switch (readFixedInline(fixedInlineProcess, length))
+            {
+                case Result.Ok(data):
+                    Result.Ok(Option.Some(data));
+                    
+                case Result.Err(error):
+                    Result.Err(error);
+            }
+        }
+        else
+        {
+            Result.Ok(Option.None);
+        };
+    }
+    
+    public inline function readVariableRestInline<T>(process:InlineProcessFunction<T>, match:Litll->Bool):Result<Array<T>, DelitllfyError> 
 	{
-		index++;
+		var array = [];
+		var result = null;
 		
-		if (array.data.length < index)
+		while (true)
 		{
-			return Result.Err(createError(DelitllfyErrorKind.EndOfArray));
+			if (matchNext(match))
+			{
+                switch (process(this))
+                {
+                    case Result.Ok(data):
+                        array.push(data);
+                        
+                    case Result.Err(error):
+                        result = Result.Err(error);
+                        break;
+                }
+			}
+            else
+            {
+                result = Result.Ok(array);
+                break;
+            }
 		}
-		
-		var context = new DelitllfyContext(array.data[index - 1], config);
-		return switch (process(context))
-		{
-			case Result.Err(childError):
-				Result.Err(childError);
-				
-			case Result.Ok(data):
-				Result.Ok(data);
-		}
+        
+        return result;
 	}
-
+    
+    public inline function readFixedRestInline<T>(process:InlineProcessFunction<T>, length:Int, match:Litll->Bool):Result<Array<T>, DelitllfyError> 
+	{
+		var array = [];
+		var result = null;
+		
+		while (true)
+		{
+			if (matchNext(match))
+			{
+                switch (readFixedInline(process, length))
+                {
+                    case Result.Ok(data):
+                        array.push(data);
+                        
+                    case Result.Err(error):
+                        result = Result.Err(error);
+                        break;
+                }
+			}
+            else
+            {
+                result = Result.Ok(array);
+                break;
+            }
+		}
+        
+        return result;
+	}
+    
 	public inline function closeOrError<T>(?posInfos:PosInfos):Option<DelitllfyError>
 	{
 		return if (index < array.data.length)
