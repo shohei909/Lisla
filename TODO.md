@@ -78,12 +78,19 @@ Later
 - [ ] minify
 - [p] IDL on Litll
     - [p] code generation 
-        - [p] data structure
-        - [ ] instance
-        - [p] litllToBackend
-        - [ ] litllfy
-        - [ ] debitllfy
-        - [ ] bitllfy
+        - [x] backend data structure
+        - [ ] litll to Haxe backend
+        - [ ] IR to Haxe backend
+        - [ ] Haxe backend to IR
+        - [ ] bitll to Haxe backend
+        - [ ] Haxe backend to bitll
+    - [p] convertion
+        - [p] litll to IR
+        - [ ] IR to litll
+        - [ ] JSON to IR
+        - [ ] IR to JSON
+        - [ ] bitll to IR
+        - [ ] IR to bitll
 
 # Haxe CLI tool ()
 - [ ] help

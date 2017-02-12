@@ -1,0 +1,27 @@
+[package '']
+[import litll.core]
+
+[enum Expr0
+    [value< value]
+    [expr< Expr2]
+]
+
+[tuple Expr1
+    [expr Expr0]
+    [op..< Op1]
+]
+
+[enum Op1
+    [mutiply: * [expr Expr0]]
+    [divide: / [expr Expr0]]
+]
+
+[tuple Expr2
+    [expr< Expr1]
+    [op..< Op2]
+]
+
+[enum Op2
+    [plus: + [expr< Expr1]]
+    [minus: - [expr< Expr1]]
+]
