@@ -4,16 +4,11 @@
 [enum Ir
     [array [data.. Ir]]
     [option [data [Option Ir]]]
-    [enum [data< EnumIr]]
+    [enum [name String] [data.. Ir]]
     [tuple [data.. Ir]]
     [struct [data< [Map String Ir]]]
     [map [data< [Map PrimitiveIr Ir]]]
     [primitive< [data PrimitiveIr]]
-]
-
-[tuple EnumIr
-    [name String]
-    [data.. Ir]
 ]
 
 [enum PrimitiveIr
