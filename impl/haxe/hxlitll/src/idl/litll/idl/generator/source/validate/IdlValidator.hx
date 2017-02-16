@@ -7,6 +7,7 @@ class IdlValidator
 {
     public static function run(file:IdlFilePath, element:PackageElement, types:Map<String, TypeDefinition>):Map<String, ValidType>
     {
+        
         var result = new Map();
 		for (name in types.keys())
 		{

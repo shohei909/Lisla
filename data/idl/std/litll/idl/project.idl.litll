@@ -1,3 +1,13 @@
 /// 'Types for Litll Project'
-/// /// [license "Public Domain"]
+/// [license "Public Domain"]
 [package litll.idl]
+
+[import litll.util.file]
+[import litll.idl.library]
+
+[struct Project
+    [litll_home? DirectoryPath]
+    [description? String]
+    [idl.. DirectoryPath]
+    [extension<.. FileExtensionDeclaration]
+]

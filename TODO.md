@@ -78,12 +78,12 @@ Later
 - [ ] minify
 - [p] IDL on Litll
     - [p] code generation 
-        - [x] backend data structure
-        - [ ] litll to Haxe backend
-        - [ ] IR to Haxe backend
-        - [ ] Haxe backend to IR
-        - [ ] bitll to Haxe backend
-        - [ ] Haxe backend to bitll
+        - [x] Entity data structure
+        - [p] Litll to Haxe Entity
+        - [ ] IR to Haxe Entity
+        - [ ] Haxe Entity to IR
+        - [ ] bitll to Haxe Entity
+        - [ ] Haxe Entity to bitll
     - [p] convertion
         - [p] litll to IR
         - [ ] IR to litll

@@ -4,8 +4,8 @@ import TestCore;
 import file.FileTools;
 import litll.core.LitllArray;
 import litll.core.ds.Result;
-import litll.idl.litllToBackend.LitllToBackend;
-import litll.idl.std.litllToBackend.idl.IdlLitllToBackend;
+import litll.idl.litll2backend.LitllToBackend;
+import litll.idl.std.litll2backend.idl.IdlLitllToBackend;
 import litll.core.parse.Parser;
 import sys.io.File;
 
@@ -28,7 +28,7 @@ class IdlTest extends LitllTestCase
 						continue;
 				}
 				
-				var idl = switch (LitllToBackend.run(IdlLitllToBackend.process, caseData))
+				var idl = switch (LitllToBackend.run(IdlLitllToBackend, caseData))
 				{
 					case Result.Ok(data):
 						data;

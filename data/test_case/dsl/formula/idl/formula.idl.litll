@@ -1,27 +1,27 @@
 [package '']
 [import litll.core]
 
-[enum Expr0
-    [value< value]
-    [expr< Expr2]
+[enum BracketExpr
+    [value< [value Float64]]
+    [expr< [expr SumExpr]]
 ]
 
-[tuple Expr1
-    [expr Expr0]
-    [op..< Op1]
+[tuple ProductExpr
+    [expr BracketExpr]
+    [op..< ProductOp]
 ]
 
-[enum Op1
-    [mutiply: * [expr Expr0]]
-    [divide: / [expr Expr0]]
+[enum ProductOp
+    [mutiply: * [expr BracketExpr]]
+    [divide: / [expr BracketExpr]]
 ]
 
-[tuple Expr2
-    [expr< Expr1]
-    [op..< Op2]
+[tuple SumExpr
+    [expr< ProductExpr]
+    [op..< SumOp]
 ]
 
-[enum Op2
-    [plus: + [expr< Expr1]]
-    [minus: - [expr< Expr1]]
+[enum SumOp
+    [plus: + [expr< ProductExpr]]
+    [minus: - [expr< ProductExpr]]
 ]

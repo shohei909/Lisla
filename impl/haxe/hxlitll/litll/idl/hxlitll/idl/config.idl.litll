@@ -1,0 +1,68 @@
+[package hxlitll.idl]
+
+[import litll.util.version]
+[import litll.idl]
+[import litll.idl.group]
+
+[struct InputFile
+    [target< TargetDeclaration]
+    [entity< EntityDeclaration 
+        [entity]
+    ]
+    [litll_to_entity< LitllToEntityDeclaration 
+        [litll_to_entity]
+    ]
+    [entity_to_litll< EntityToLitllDeclaration 
+        [entity_to_litll]
+    ]
+]
+
+[tuple TargetDeclaration
+    target [data< TargetConfig]
+]
+[struct TargetConfig
+    [version Version]
+    [haxe_package PackagePath]
+]
+
+[tuple FilterDeclaration
+    filter [data< TypeGroupFilter]
+]
+
+[tuple EntityDeclaration
+    entity [data< EntityConfig]
+]
+[struct EntityConfig
+    [filter..< FilterDeclaration]
+]
+
+[enum LitllToEntityDeclaration 
+    [litll_to_entity [data< LitllToEntityConfig]]
+    [no_litll_to_entity]
+]
+[struct LitllToEntityConfig
+    [filter..< FilterDeclaration]
+]
+
+[enum EntityToLitllDeclaration 
+    [entity_to_bitll [data< EntityToLitllConfig]]
+    [no_entity_to_bitll]
+]
+[struct EntityToLitllConfig
+    [filter..< FilterDeclaration]
+]
+
+[enum BitllToEntityDeclaration 
+    [bitll_to_entity [data< BitllToEntityConfig]]
+    [no_bitll_to_entity]
+]
+[struct BitllToEntityConfig
+    [filter..< FilterDeclaration]
+]
+[enum EntityToBitllDeclaration 
+    [entity_to_bitll [data< EntityToBitllConfig]]
+    [no_entity_to_bitll]
+]
+[struct EntityToBitllConfig
+    [filter..< FilterDeclaration]
+]

@@ -156,7 +156,7 @@ class PackageElement
 			var name = TypeDefinitionTools.getTypeName(type);
 			if (typeMap.exists(name.toString()))
 			{
-				var path = new TypePath(Maybe.some(getModulePath()), name);
+				var path = new TypePath(Maybe.some(getModulePath()), name, name.tag);
 				root.addError(filePath, IdlReadErrorKind.TypeNameDuplicated(path));
 			}
 			else

@@ -1,0 +1,8 @@
+[target hxlitll 
+    [version 0.0.0]
+    [haxe_package litll.idl.hxlitll]
+]
+
+[import litll 
+    [haxe_source ../../migration]
+]

@@ -8,26 +8,26 @@
 
 [struct LibraryConfig
     [version? Version]
-    [extension..< FileExtensionTuple]
-    [lib..< LibraryDependenceTuple]
+    [description String]
+    [extension..< FileExtensionDeclaration]
+    [library..< LibraryDependenceDeclaration]
 ]
 
-[tuple FileExtensionTuple
+[tuple FileExtensionDeclaration
     extension [target FileExtension] [type TypeReference]
 ]
 
-[tuple LibraryDependenceTuple
-    lib [library< LibraryReference]
+[tuple LibraryDependenceDeclaration
+    library [library< LibraryReference]
 ]
 
 /// [completion_self]
 [newtype LibraryName String]
 
-[enum LibraryRootDirectory
-    [ver Version]
-    [path DirectoryPath]
+[enum LibraryVersion
+    [version Version]
 ]
 
 [tuple LibraryReference
-    [name LibraryName] [directory< LibraryRootDirectory]
+    [name LibraryName] [version LibraryVersion]
 ]

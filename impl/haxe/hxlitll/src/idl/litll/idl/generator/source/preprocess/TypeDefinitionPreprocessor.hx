@@ -114,7 +114,7 @@ class TypeDefinitionPreprocessor
 				}
 				
 			case Option.None:
-				if (path.typeName.toString() == "Array")
+                if (path.typeName.toString() == "Array")
 				{
 					processTypeReferenceParameters(
 						path, 
@@ -123,6 +123,7 @@ class TypeDefinitionPreprocessor
 					);
 					return;
 				}
+                
 				if (path.isCoreType() || typeParameters.exists(path.typeName.toString())) 
 				{
 					if (parameters.length != 0)
@@ -137,7 +138,7 @@ class TypeDefinitionPreprocessor
 					return;
 				}
 				
-				for (importedElement in parent.importedElements)
+                for (importedElement in parent.importedElements)
 				{
 					switch (importedElement.getTypeDefinition(path.typeName).toOption())
 					{
@@ -145,7 +146,7 @@ class TypeDefinitionPreprocessor
 							var module = importedElement.getModulePath();
 							path.modulePath = Maybe.some(module);
 					        processTypeReferenceParameters(path, type.getTypeParameters(), parameters);
-							break;
+                            break;
 							
 						case Option.None:
 					}

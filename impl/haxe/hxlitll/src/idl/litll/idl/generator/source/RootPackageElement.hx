@@ -2,6 +2,7 @@ package litll.idl.generator.source;
 import haxe.ds.Option;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
+import litll.idl.exception.IdlException;
 import litll.idl.litll2backend.LitllToBackendConfig;
 import litll.idl.generator.data.SourceConfig;
 import litll.idl.generator.error.IdlReadError;
@@ -112,8 +113,21 @@ class RootPackageElement extends PackageElement implements IdlSourceProvider
 	public function resolveGroups(targets:Array<TypeGroupPath>):Result<Array<ValidType>, Array<IdlReadError>>
 	{
 		var array = [];
-		fetchGroups(array, targets);
-		
+		try 
+        {
+            fetchGroups(array, targets);
+        }
+        catch (e:IdlException)
+        {
+            if (root.hasError())
+            {
+                return Result.Err(root.clearErrors());
+            }
+            else
+            {
+                throw e;
+            }
+        }
 		return if (root.hasError())
 		{
 			Result.Err(root.clearErrors());

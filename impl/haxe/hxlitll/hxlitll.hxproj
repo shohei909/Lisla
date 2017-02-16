@@ -27,9 +27,9 @@
     <option directives="" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="TestIdl" />
+    <option mainClass="Preprocess" />
     <option enabledebug="False" />
-    <option additional="" />
+    <option additional="--interp " />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
@@ -51,7 +51,7 @@
   <postBuildCommand alwaysRun="False" />
   <!-- Other project options -->
   <options>
-    <option showHiddenPaths="False" />
+    <option showHiddenPaths="True" />
     <option testMovie="Custom" />
     <option testMovieCommand="" />
   </options>
