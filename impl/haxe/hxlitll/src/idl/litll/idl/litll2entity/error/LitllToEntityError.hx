@@ -1,12 +1,14 @@
-package litll.idl.litll2entity;
+package litll.idl.litll2entity.error;
 import haxe.ds.Option;
+import hxext.ds.Maybe;
 import litll.core.Litll;
 import litll.core.LitllArray;
 import litll.core.LitllString;
 import litll.core.LitllTools;
-import hxext.ds.Maybe;
 import litll.core.ds.SourceRange;
 import litll.core.error.LitllErrorSummary;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
+import litll.idl.litll2entity.error.LitllToEntityErrorTarget;
 
 class LitllToEntityError 
 {

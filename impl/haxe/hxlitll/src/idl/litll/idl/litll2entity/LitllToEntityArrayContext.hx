@@ -7,7 +7,8 @@ import litll.core.LitllArray;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
 import litll.core.parse.array.ArrayContext;
-import litll.idl.litll2entity.LitllToEntityError;
+import litll.idl.litll2entity.error.LitllToEntityError;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 using Lambda;
 
 class LitllToEntityArrayContext

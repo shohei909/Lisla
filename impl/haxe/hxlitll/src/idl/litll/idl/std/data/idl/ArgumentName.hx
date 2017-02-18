@@ -3,7 +3,7 @@ import litll.core.LitllString;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.litll2entity.LitllToEntityErrorKind;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 using hxext.ds.ResultTools;
 using litll.core.string.IdentifierTools;
 using StringTools;

@@ -1,4 +1,4 @@
-package litll.idl.litll2entity;
+package litll.idl.litll2entity.error;
 import litll.core.Litll;
 
 enum LitllToEntityErrorKind

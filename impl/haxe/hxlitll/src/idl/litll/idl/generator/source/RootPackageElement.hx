@@ -56,7 +56,7 @@ class RootPackageElement extends PackageElement implements IdlSourceProvider
 		}
 	}
 
-	public function addError(filePath:IdlFilePath, kind:IdlReadErrorKind):Void
+	public function addError(filePath:String, kind:IdlReadErrorKind):Void
 	{
 		errors.push(new IdlReadError(filePath, kind));
 	}

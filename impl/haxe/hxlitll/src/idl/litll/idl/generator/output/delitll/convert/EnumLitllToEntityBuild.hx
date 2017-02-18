@@ -7,8 +7,8 @@ import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.output.data.store.HaxeDataInterface;
 import litll.idl.generator.tools.ExprBuilder;
 import litll.idl.litll2entity.LitllToEntityArrayContext;
-import litll.idl.litll2entity.LitllToEntityError;
-import litll.idl.litll2entity.LitllToEntityErrorKind;
+import litll.idl.litll2entity.error.LitllToEntityError;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorKind;
 import litll.idl.std.data.idl.EnumConstructorName;
@@ -90,9 +90,9 @@ class EnumLitllToEntityBuild
                 // case data:
                 values : [macro data],
                 expr: macro hxext.ds.Result.Err(
-                    litll.idl.litll2entity.LitllToEntityError.ofLitll(
+                    litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
                         context.litll, 
-                        litll.idl.litll2entity.LitllToEntityErrorKind.UnmatchedEnumConstructor([$a{targetList}])
+                        litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedEnumConstructor([$a{targetList}])
                     )
                 )
             }

@@ -4,8 +4,8 @@ import hxext.ds.Result;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.tools.ExprBuilder;
 import litll.idl.litll2entity.LitllToEntityContext;
-import litll.idl.litll2entity.LitllToEntityError;
-import litll.idl.litll2entity.LitllToEntityErrorKind;
+import litll.idl.litll2entity.error.LitllToEntityError;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
@@ -50,10 +50,10 @@ class StructLitllToEntityBuild
                 // case data:
                 values : [macro litllData],
                 expr: macro return hxext.ds.Result.Err(
-                    litll.idl.litll2entity.LitllToEntityError.ofLitll(
+                    litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
                         litllData, 
                         // TODO: target list
-                        litll.idl.litll2entity.LitllToEntityErrorKind.UnmatchedStructElement([])
+                        litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement([])
                     )
                 )
             }

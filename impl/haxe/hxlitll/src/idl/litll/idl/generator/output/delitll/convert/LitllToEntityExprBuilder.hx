@@ -17,7 +17,7 @@ import litll.idl.generator.output.delitll.match.LitllToEntityGuardCondition;
 import litll.idl.generator.output.delitll.path.HaxeLitllToEntityTypePathPair;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.generator.tools.ExprBuilder;
-import litll.idl.litll2entity.LitllToEntityError;
+import litll.idl.litll2entity.error.LitllToEntityError;
 import litll.idl.std.data.idl.Argument;
 import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructorName;
@@ -98,7 +98,7 @@ class LitllToEntityExprBuilder
                                 
                             case hxext.ds.Result.Err(data):
                                 hxext.ds.Result.Err(
-                                    litll.idl.litll2entity.LitllToEntityError.ofLitll(
+                                    litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
                                         $contextExpr.litll, 
                                         data
                                     )

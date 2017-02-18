@@ -3,7 +3,7 @@ import LitllTestCase;
 import file.FileTools;
 import hxext.ds.Result;
 import litll.core.parse.Parser;
-import litll.idl.litll2entity.LitllToEntity;
+import litll.idl.litll2entity.LitllToEntityRunner;
 import litll.idl.std.litll2entity.idl.IdlLitllToEntity;
 import sys.io.File;
 
@@ -26,7 +26,7 @@ class IdlTest extends LitllTestCase
 						continue;
 				}
 				
-				var idl = switch (LitllToEntity.run(IdlLitllToEntity, caseData))
+				var idl = switch (LitllToEntityRunner.run(IdlLitllToEntity, caseData))
 				{
 					case Result.Ok(data):
 						data;

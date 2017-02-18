@@ -4,7 +4,7 @@ import litll.core.LitllString;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.litll2entity.LitllToEntityErrorKind;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.PackagePath;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;

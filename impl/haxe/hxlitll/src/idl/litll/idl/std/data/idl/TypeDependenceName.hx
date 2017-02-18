@@ -4,7 +4,7 @@ import hxext.ds.Maybe;
 import hxext.ds.Result;
 import litll.core.string.IdentifierTools;
 import litll.core.tag.StringTag;
-import litll.idl.litll2entity.LitllToEntityErrorKind;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 using hxext.ds.ResultTools;
 
 @:forward(tag, data)

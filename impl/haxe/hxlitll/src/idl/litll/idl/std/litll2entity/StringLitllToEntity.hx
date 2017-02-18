@@ -1,10 +1,10 @@
 package litll.idl.std.litll2entity;
+import hxext.ds.Result;
 import litll.core.Litll;
 import litll.core.LitllString;
-import hxext.ds.Result;
 import litll.idl.litll2entity.LitllToEntityContext;
-import litll.idl.litll2entity.LitllToEntityError;
-import litll.idl.litll2entity.LitllToEntityErrorKind;
+import litll.idl.litll2entity.error.LitllToEntityError;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 
 class StringLitllToEntity
 {

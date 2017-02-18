@@ -4,12 +4,14 @@ import haxe.io.Path;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
 import litll.core.parse.Parser;
-import litll.idl.litll2entity.LitllToEntity;
+import litll.idl.litll2entity.LitllToEntityRunner;
 import litll.idl.litll2entity.LitllToEntityConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.file.LoadedIdl;
+import litll.idl.litlltext2entity.LitllTextToEntityRunner;
+import litll.idl.litlltext2entity.LitllTextToEntityRunner;
 import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.litll2entity.idl.IdlLitllToEntity;
 import sys.FileSystem;
@@ -75,31 +77,24 @@ class IdlSourceReader
 			if (FileSystem.exists(filePath) && !FileSystem.isDirectory(filePath))
 			{
 				var content = File.getContent(filePath);
-				switch (Parser.run(content))
-				{
-					case Result.Err(error):
-                        for (errorEntry in error.entries)
+                switch (LitllTextToEntityRunner.run(IdlLitllToEntity, content, null, config))
+                {
+                    case Result.Err(errors):
+                        for (error in errors)
                         {
-                            errorResult(IdlReadErrorKind.Parse(errorEntry));
+                            errorResult(IdlReadErrorKind.LitllTextToEntity(error));
                         }
-						
-					case Result.Ok(litllArray):
-						switch (LitllToEntity.run(IdlLitllToEntity, litllArray, config))
+                        
+                    case Result.Ok(idl):
+                        switch (loadedIdl.toOption())
                         {
-							case Result.Err(error):
-								errorResult(IdlReadErrorKind.Delitll(error));
-								
-							case Result.Ok(idl):
-								switch (loadedIdl.toOption())
-								{
-									case Option.Some(prevIdl):
-										errorResult(IdlReadErrorKind.ModuleDuplicated(new ModulePath(path), prevIdl.file));
-										
-									case Option.None:
-										loadedIdl = Maybe.some(new LoadedIdl(idl, filePath));
-								}
-						}
-				}
+                            case Option.Some(prevIdl):
+                                errorResult(IdlReadErrorKind.ModuleDuplicated(new ModulePath(path), prevIdl.file));
+                                
+                            case Option.None:
+                                loadedIdl = Maybe.some(new LoadedIdl(idl, filePath));
+                        }
+                }
 			}
 		}
 		

@@ -2,7 +2,16 @@ package litll.project;
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Maybe;
+import hxext.ds.Result;
+import litll.core.parse.Parser;
+import litll.idl.litll2entity.LitllToEntityRunner;
+import litll.idl.litlltext2entity.LitllFileToEntityRunner;
+import litll.idl.litlltext2entity.error.LitllFileToEntityError;
+import litll.idl.litlltext2entity.error.LitllFileToEntityErrorKind;
+import litll.idl.std.data.idl.project.ProjectConfig;
+import litll.idl.std.litll2entity.idl.project.ProjectConfigLitllToEntity;
 import sys.FileSystem;
+import sys.io.File;
 
 #if sys
 class LitllProjectSystem
@@ -11,7 +20,7 @@ class LitllProjectSystem
     
     public static function getCurrentProject():LitllProject
     {
-        return switch (findProjectPath().toOption())
+        return switch (findProjectHome().toOption())
         {
             case Option.Some(path):
                 openProject(path);
@@ -21,7 +30,7 @@ class LitllProjectSystem
         }
     }
     
-    public static function findProjectPath():Maybe<String>
+    public static function findProjectHome():Maybe<String>
     {
         var path = Path.normalize(Sys.getCwd());
         
@@ -30,7 +39,7 @@ class LitllProjectSystem
             if (path == "") break;
             
             var projectPath = path + "/.project.litll";
-            if (FileSystem.exists(projectPath)) return Maybe.some(projectPath);
+            if (FileSystem.exists(projectPath)) return Maybe.some(path);
             
             path = Path.normalize(path + "/..");
         }
@@ -38,11 +47,21 @@ class LitllProjectSystem
         return Maybe.none();
     }
     
-    public static function openProject(filePath:String):LitllProject
+    public static function openProject(projectHome:String):LitllProject
     {
         var project = new LitllProject();
+        if (FileSystem.exists(projectHome + "/.project.litll"))
+        {
+            var config = readProjectConfig(projectHome + "/.project.litll");
+        }
         
         return project;
     }
+    
+    public static function readProjectConfig(filePath:String):Result<ProjectConfig, Array<LitllFileToEntityError>>
+    {
+        return LitllFileToEntityRunner.run(ProjectConfigLitllToEntity, filePath);
+    }
 }
+
 #end

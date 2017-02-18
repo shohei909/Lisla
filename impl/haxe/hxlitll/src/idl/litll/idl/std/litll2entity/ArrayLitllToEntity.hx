@@ -4,12 +4,12 @@ import litll.core.LitllArray;
 import hxext.ds.Result;
 import litll.idl.litll2entity.LitllToEntityArrayContext;
 import litll.idl.litll2entity.LitllToEntityContext;
-import litll.idl.litll2entity.LitllToEntityError;
-import litll.idl.litll2entity.LitllToEntityErrorKind;
+import litll.idl.litll2entity.error.LitllToEntityError;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 
 class ArrayLitllToEntity
 {
-public static function process<T>(context:LitllToEntityContext, tLitllToEntity):Result<LitllArray<T>, LitllToEntityError> 
+    public static function process<T>(context:LitllToEntityContext, tLitllToEntity):Result<LitllArray<T>, LitllToEntityError> 
 	{
 		return switch (context.litll)
 		{

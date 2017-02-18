@@ -6,8 +6,8 @@ import litll.core.Litll;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.tools.ExprBuilder;
 import litll.idl.litll2entity.LitllToEntityContext;
-import litll.idl.litll2entity.LitllToEntityError;
-import litll.idl.litll2entity.LitllToEntityErrorKind;
+import litll.idl.litll2entity.error.LitllToEntityError;
+import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructField;
 import litll.idl.std.data.idl.StructFieldKind;
@@ -34,9 +34,9 @@ class StructElementLitllToEntityBuild
         {
             case haxe.ds.Option.Some(_):
                 return hxext.ds.Result.Err(
-                    litll.idl.litll2entity.LitllToEntityError.ofLitll(
+                    litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
                         litllData,
-                        litll.idl.litll2entity.LitllToEntityErrorKind.StructElementDuplicated($nameExpr)
+                        litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementDuplicated($nameExpr)
                     )
                 );
                 
@@ -92,9 +92,9 @@ class StructElementLitllToEntityBuild
                     
                 case haxe.ds.Option.None:
                     return hxext.ds.Result.Err(
-                        litll.idl.litll2entity.LitllToEntityError.ofLitll(
+                        litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
                             context.litll,
-                            litll.idl.litll2entity.LitllToEntityErrorKind.StructElementNotFound($nameExpr)
+                            litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementNotFound($nameExpr)
                         )
                     );
             }

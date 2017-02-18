@@ -11,6 +11,7 @@ import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKindTools;
 import litll.idl.generator.source.preprocess.IdlPreprocessor;
+import litll.idl.litlltext2entity.error.LitllTextToEntityErrorKind;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.StructElement;
@@ -210,7 +211,7 @@ class TypeDefinitionPreprocessor
 							TypeReferenceParameterKind.Type(reference);
 							
 						case Result.Err(err):
-							addError(IdlReadErrorKind.Delitll(err));
+							addError(IdlReadErrorKind.LitllTextToEntity(LitllTextToEntityErrorKind.LitllToEntity(err)));
 							continue;
 					}
 			}

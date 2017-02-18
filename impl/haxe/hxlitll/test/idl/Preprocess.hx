@@ -55,7 +55,7 @@ class Preprocess
         if (IdlProject.run("../../../data/idl", config))
 		{
 			Sys.exit(1);
-		}   
+		}
         
         // new
         var litllProject = LitllProjectSystem.getCurrentProject();

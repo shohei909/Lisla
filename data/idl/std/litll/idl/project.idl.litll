@@ -5,9 +5,9 @@
 [import litll.util.file]
 [import litll.idl.library]
 
-[struct Project
+[struct ProjectConfig
     [litll_home? DirectoryPath]
     [description? String]
     [idl.. DirectoryPath]
-    [extension<.. FileExtensionDeclaration]
+    [extension..< FileExtensionDeclaration]
 ]
