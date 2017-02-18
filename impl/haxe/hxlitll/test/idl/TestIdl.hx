@@ -10,7 +10,7 @@ class TestIdl
 	public static function main():Void
 	{
 		var runner = new NanoTestRunner();
-		runner.add(new ParseTest());
+        runner.add(new ParseTest());
 		runner.add(new IdlTest());
 		runner.run();
 	}

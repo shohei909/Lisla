@@ -1,5 +1,6 @@
 package litll.idl.generator.io;
 
+#if sys
 /**
  * Standard IO implemention of IoProvider.
  */
@@ -28,3 +29,4 @@ class StandardIoProvider implements IoProvider
 		Sys.stdout().writeString("Debug: " + message + "\n");
 	}
 }
+#end
