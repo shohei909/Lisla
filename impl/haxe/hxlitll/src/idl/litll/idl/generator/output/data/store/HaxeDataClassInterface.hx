@@ -2,10 +2,10 @@ package litll.idl.generator.output.data.store;
 
 class HaxeDataClassInterface
 {
-	public var litllToBackend(default, null):HaxeDataConstructorKind;
+	public var litllToEntity(default, null):HaxeDataConstructorKind;
 
-	public function new(litllToBackend:HaxeDataConstructorKind) 
+	public function new(litllToEntity:HaxeDataConstructorKind) 
 	{
-		this.litllToBackend = litllToBackend;
+		this.litllToEntity = litllToEntity;
 	}
 }

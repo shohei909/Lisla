@@ -1,9 +1,9 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import litll.core.ds.Result;
-import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
-import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionBuilder;
-import litll.idl.generator.output.delitll.match.LitllToBackendGuardConditionKind;
+import litll.idl.generator.output.delitll.match.LitllToEntityCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToEntityGuardConditionBuilder;
+import litll.idl.generator.output.delitll.match.LitllToEntityGuardConditionKind;
 import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.FollowedTypeDefinition;
@@ -56,7 +56,7 @@ class StructElementTools
         );
     }
     
-    public static function _getGuardForStruct(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LitllToBackendGuardConditionBuilder):Option<GetConditionErrorKind>
+    public static function _getGuardForStruct(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LitllToEntityGuardConditionBuilder):Option<GetConditionErrorKind>
     {
         switch (element)
         {
@@ -74,7 +74,7 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructFieldKind.Normal:
-                        builder.add(LitllToBackendGuardConditionKind.Const([name.name => true]));
+                        builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
                         
                     case StructFieldKind.Array:
                         builder.unlimit();
@@ -99,7 +99,7 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructFieldKind.Normal:
-                        builder.add(LitllToBackendGuardConditionKind.Arr);
+                        builder.add(LitllToEntityGuardConditionKind.Arr);
                         
                     case StructFieldKind.Array:
                         builder.unlimit();
@@ -124,7 +124,7 @@ class StructElementTools
         return Option.None;
     }
     
-    public static function getConditions(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToBackendCaseCondition>, GetConditionErrorKind>
+    public static function getConditions(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToEntityCaseCondition>, GetConditionErrorKind>
     {
         var conditions = [];
         return switch (_getConditions(element, source, definitionParameters, conditions, []))
@@ -141,7 +141,7 @@ class StructElementTools
         element:StructElement, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        conditions:Array<LitllToBackendCaseCondition>,
+        conditions:Array<LitllToEntityCaseCondition>,
         history:Array<String>
     ):Option<GetConditionErrorKind>
     {
@@ -151,7 +151,7 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructFieldKind.Normal | StructFieldKind.Array | StructFieldKind.Optional:
-                        conditions.push(LitllToBackendCaseCondition.Const(name.name));
+                        conditions.push(LitllToEntityCaseCondition.Const(name.name));
                         Option.None;
                         
                     case StructFieldKind.Inline:
@@ -171,9 +171,9 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructFieldKind.Normal | StructFieldKind.Array | StructFieldKind.Optional:
-                        var builder = new LitllToBackendGuardConditionBuilder();
-                        builder.add(LitllToBackendGuardConditionKind.Const([name.name => true]));
-                        conditions.push(LitllToBackendCaseCondition.Arr(builder.build()));
+                        var builder = new LitllToEntityGuardConditionBuilder();
+                        builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
+                        conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
                     case StructFieldKind.Inline:
@@ -209,11 +209,11 @@ class StructElementTools
                 {
                     case StructFieldKind.Normal:
                         condition.canBeEmpty = false;
-                        condition.conditions.push(LitllToBackendCaseCondition.Const(name.name));
+                        condition.conditions.push(LitllToEntityCaseCondition.Const(name.name));
                         Option.None;
                         
                     case StructFieldKind.Array | StructFieldKind.Optional:
-                        condition.conditions.push(LitllToBackendCaseCondition.Const(name.name));
+                        condition.conditions.push(LitllToEntityCaseCondition.Const(name.name));
                         Option.None;
                         
                     case StructFieldKind.Inline:
@@ -233,16 +233,16 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructFieldKind.Normal:
-                        var builder = new LitllToBackendGuardConditionBuilder();
-                        builder.add(LitllToBackendGuardConditionKind.Const([name.name => true]));
+                        var builder = new LitllToEntityGuardConditionBuilder();
+                        builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
                         condition.canBeEmpty = false;
-                        condition.conditions.push(LitllToBackendCaseCondition.Arr(builder.build()));
+                        condition.conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
                     case StructFieldKind.Array | StructFieldKind.Optional:
-                        var builder = new LitllToBackendGuardConditionBuilder();
-                        builder.add(LitllToBackendGuardConditionKind.Const([name.name => true]));
-                        condition.conditions.push(LitllToBackendCaseCondition.Arr(builder.build()));
+                        var builder = new LitllToEntityGuardConditionBuilder();
+                        builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
+                        condition.conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
                     case StructFieldKind.Inline:

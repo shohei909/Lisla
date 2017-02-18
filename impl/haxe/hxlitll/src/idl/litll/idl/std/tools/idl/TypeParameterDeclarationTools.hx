@@ -38,7 +38,7 @@ class TypeParameterDeclarationTools
         }
     }
 	
-	public static function toHaxeLitllToBackendArgs(params:Array<TypeParameterDeclaration>, config:DataOutputConfig):Array<FunctionArg>
+	public static function toHaxeLitllToEntityArgs(params:Array<TypeParameterDeclaration>, config:DataOutputConfig):Array<FunctionArg>
 	{
 		var result:Array<FunctionArg>  = [];
 		for (param in params)
@@ -57,7 +57,7 @@ class TypeParameterDeclarationTools
 					var haxeTypePath = ComplexType.TPath(new HaxeDataTypePath(new TypePath(Maybe.none(), typeName, typeName.tag)).toMacroPath());
 					result.push(
 						{
-							name: typeName.toLitllToBackendVariableName(),
+							name: typeName.toLitllToEntityVariableName(),
                             type: null
 						}
 					);

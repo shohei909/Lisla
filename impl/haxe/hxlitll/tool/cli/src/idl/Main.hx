@@ -2,7 +2,7 @@ import haxe.io.Path;
 import litll.core.ds.Maybe;
 import litll.idl.generator.IdlProject;
 import litll.idl.generator.data.DataOutputConfig;
-import litll.idl.generator.data.LitllToBackendOutputConfig;
+import litll.idl.generator.data.LitllToEntityOutputConfig;
 import litll.idl.generator.data.OutputConfig;
 import litll.idl.generator.data.ProjectConfig;
 import litll.idl.generator.data.SourceConfig;
@@ -11,14 +11,14 @@ import litll.idl.std.tools.idl.path.TypePathFilterTools;
 import sys.FileSystem;
 using litll.core.ds.ResultTools;
 
-// import litll.idl.hxlitll.litll2backend.idl.config.InputFileLitllToBackend;
+// import litll.idl.hxlitll.litll2backend.idl.config.InputFileLitllToEntity;
 
 class Main 
 {
 	public static function main():Void
 	{
 //        var hxinputData = File.getContent("litll/hxlitll/hxlitll.hxinput.litll");
-//        LitllStringToData.run(InputFileLitllToBackend, hxinputData);
+//        LitllStringToData.run(InputFileLitllToEntity, hxinputData);
 
         remove("../../migration/litll");
 		var config = new ProjectConfig(
@@ -41,7 +41,7 @@ class Main
                     ]
 				),
 				Maybe.some(
-					new LitllToBackendOutputConfig(
+					new LitllToEntityOutputConfig(
 						[
 							TypeGroupPath.create("litll").getOrThrow(),
 							TypeGroupPath.create("hxlitll").getOrThrow(),

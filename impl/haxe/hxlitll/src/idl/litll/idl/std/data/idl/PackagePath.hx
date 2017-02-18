@@ -3,7 +3,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.litll2backend.LitllToBackendErrorKind;
+import litll.idl.litll2backend.LitllToEntityErrorKind;
 
 class PackagePath
 {
@@ -39,8 +39,8 @@ class PackagePath
 		}
 	}
 	
-	@:litllToBackend
-	public static function litllToBackend(string:LitllString):Result<PackagePath, LitllToBackendErrorKind>
+	@:litllToEntity
+	public static function litllToEntity(string:LitllString):Result<PackagePath, LitllToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -48,7 +48,7 @@ class PackagePath
 				Result.Ok(data);
 				
 			case Result.Err(err):
-				Result.Err(LitllToBackendErrorKind.Fatal(err));
+				Result.Err(LitllToEntityErrorKind.Fatal(err));
 		}
 	}
 	

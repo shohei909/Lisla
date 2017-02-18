@@ -4,7 +4,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.litll2backend.LitllToBackendErrorKind;
+import litll.idl.litll2backend.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.PackagePath;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
@@ -50,8 +50,8 @@ class TypeGroupPath
 		}
 	}
 	
-	@:litllToBackend
-	public static function litllToBackend(string:LitllString):Result<TypeGroupPath, LitllToBackendErrorKind>
+	@:litllToEntity
+	public static function litllToEntity(string:LitllString):Result<TypeGroupPath, LitllToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -59,7 +59,7 @@ class TypeGroupPath
 				Result.Ok(data);
 				
 			case Result.Err(err):
-				Result.Err(LitllToBackendErrorKind.Fatal(err));
+				Result.Err(LitllToEntityErrorKind.Fatal(err));
 		}
 	}
 	

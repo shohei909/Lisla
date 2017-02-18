@@ -2,7 +2,7 @@ package litll.idl.generator.error;
 import litll.core.Litll;
 import litll.core.parse.ParseError;
 import litll.core.parse.ParseErrorEntry;
-import litll.idl.litll2backend.LitllToBackendError;
+import litll.idl.litll2backend.LitllToEntityError;
 import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.ModulePath;
@@ -19,7 +19,7 @@ enum IdlReadErrorKind
     Parse(error:ParseErrorEntry);
     
     // Delitll
-	Delitll(error:LitllToBackendError);
+	Delitll(error:LitllToEntityError);
 	
     // Preprocess
     ModuleDuplicated(module:ModulePath, existingPath:String);

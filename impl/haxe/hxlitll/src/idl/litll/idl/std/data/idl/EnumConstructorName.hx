@@ -3,7 +3,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.litll2backend.LitllToBackendErrorKind;
+import litll.idl.litll2backend.LitllToEntityErrorKind;
 using litll.core.string.IdentifierTools;
 using StringTools;
 
@@ -38,8 +38,8 @@ class EnumConstructorName
         this.name = name;
 	}
 	
-	@:litllToBackend
-	public static function litllToBackend(string:LitllString):Result<EnumConstructorName, LitllToBackendErrorKind>
+	@:litllToEntity
+	public static function litllToEntity(string:LitllString):Result<EnumConstructorName, LitllToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -47,7 +47,7 @@ class EnumConstructorName
 				Result.Ok(data);
 			
 			case Result.Err(data):
-				Result.Err(LitllToBackendErrorKind.Fatal(data));
+				Result.Err(LitllToEntityErrorKind.Fatal(data));
 		}
 	}
 	public static function create(string:String, ?tag:Maybe<StringTag>):Result<EnumConstructorName, String>

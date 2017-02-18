@@ -160,7 +160,7 @@ class DataOutputConfig
 		var createFunc = Maybe.none();
 		for (field in fields)
 		{
-			if (field.meta.has(":litllToBackend"))
+			if (field.meta.has(":litllToEntity"))
 			{
 				createFunc = Maybe.some(field);
 				break;
@@ -170,7 +170,7 @@ class DataOutputConfig
 		var expr = switch (createFunc.toOption())
 		{
 			case Option.Some(field):
-				resolveLitllToBackend(type, field.type, field);
+				resolveLitllToEntity(type, field.type, field);
 				
 			case Option.None:
 				macro HaxeDataConstructorKind.New;
@@ -181,7 +181,7 @@ class DataOutputConfig
 		);
 	}
     
-    private static function resolveLitllToBackend(selfType:Type, type:Type, field:ClassField):Expr
+    private static function resolveLitllToEntity(selfType:Type, type:Type, field:ClassField):Expr
     {
         return switch (type)
         {
@@ -200,17 +200,17 @@ class DataOutputConfig
                                 case [TPType(ok), TPType(err)]:
                                     if (ok.toString() != selfPath)
                                     {
-                                        Context.error("@:litllToBackend function requires Result<" + selfPath + ", LitllToBackendErrorKind>", field.pos);
+                                        Context.error("@:litllToEntity function requires Result<" + selfPath + ", LitllToEntityErrorKind>", field.pos);
                                     }
                                     else
                                     {
                                         switch (err.toString())
                                         {
-                                            case "litll.idl.litll2backend.LitllToBackendErrorKind":
+                                            case "litll.idl.litll2backend.LitllToEntityErrorKind":
                                                 macro HaxeDataConstructorKind.Function($v{field.name}, HaxeDataConstructorReturnKind.Result);	
                                                 
                                             case _:
-                                                Context.error("Error type must be litll.idl.litll2backend.LitllToBackendErrorKind", field.pos);
+                                                Context.error("Error type must be litll.idl.litll2backend.LitllToEntityErrorKind", field.pos);
                                                 return null;
                                         }
                                     }
@@ -229,15 +229,15 @@ class DataOutputConfig
                 }
                 else
                 {
-                    Context.error("@:litllToBackend function return type must be Result<" + selfPath + ", LitllToBackendErrorKind> or " + selfPath, field.pos);
+                    Context.error("@:litllToEntity function return type must be Result<" + selfPath + ", LitllToEntityErrorKind> or " + selfPath, field.pos);
                     null;
                 }
                 
             case TLazy(func):
-                resolveLitllToBackend(selfType, func(), field);
+                resolveLitllToEntity(selfType, func(), field);
                 
             case _:
-                Context.error("@:litllToBackend function must be function:", field.pos);
+                Context.error("@:litllToEntity function must be function:", field.pos);
                 null;
         }
     }

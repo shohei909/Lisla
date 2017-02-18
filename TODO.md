@@ -51,7 +51,7 @@ Later
     - [ ] code generation 
         - [ ] data structure
         - [ ] instance
-        - [ ] litllToBackend
+        - [ ] litllToEntity
         - [ ] litllfy
         - [ ] debitllfy
         - [ ] bitllfy

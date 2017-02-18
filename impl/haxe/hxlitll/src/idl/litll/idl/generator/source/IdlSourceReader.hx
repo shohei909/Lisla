@@ -4,14 +4,14 @@ import haxe.io.Path;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.parse.Parser;
-import litll.idl.litll2backend.LitllToBackend;
-import litll.idl.litll2backend.LitllToBackendConfig;
+import litll.idl.litll2backend.LitllToEntity;
+import litll.idl.litll2backend.LitllToEntityConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.file.LoadedIdl;
 import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.litll2backend.idl.IdlLitllToBackend;
+import litll.idl.std.litll2backend.idl.IdlLitllToEntity;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -19,9 +19,9 @@ class IdlSourceReader
 {
 	public static var suffix = ".idl.litll";
 	public var directories(default, null):Array<String>;
-	public var config(default, null):LitllToBackendConfig;
+	public var config(default, null):LitllToEntityConfig;
 	
-	public function new (directories:Array<String>, config:LitllToBackendConfig)
+	public function new (directories:Array<String>, config:LitllToEntityConfig)
 	{
 		this.directories = directories;
 		this.config = config;
@@ -84,7 +84,7 @@ class IdlSourceReader
                         }
 						
 					case Result.Ok(litllArray):
-						switch (LitllToBackend.run(IdlLitllToBackend, litllArray, config))
+						switch (LitllToEntity.run(IdlLitllToEntity, litllArray, config))
                         {
 							case Result.Err(error):
 								errorResult(IdlReadErrorKind.Delitll(error));

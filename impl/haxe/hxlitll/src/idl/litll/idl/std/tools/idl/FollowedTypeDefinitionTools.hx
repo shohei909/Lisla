@@ -1,8 +1,8 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import litll.core.ds.Result;
-import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
-import litll.idl.generator.output.delitll.match.LitllToBackendGuardCondition;
+import litll.idl.generator.output.delitll.match.LitllToEntityCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToEntityGuardCondition;
 import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.ArgumentName;
@@ -14,9 +14,9 @@ import litll.idl.std.error.GetConditionErrorKind;
 
 class FollowedTypeDefinitionTools 
 {
-    public static function getConditions(type:FollowedTypeDefinition, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToBackendCaseCondition>, GetConditionErrorKind>
+    public static function getConditions(type:FollowedTypeDefinition, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToEntityCaseCondition>, GetConditionErrorKind>
     {
-        var result:Array<LitllToBackendCaseCondition> = [];
+        var result:Array<LitllToEntityCaseCondition> = [];
         return switch (_getConditions(type, source, definitionParameters, result, []))
         {
             case Option.None:
@@ -31,17 +31,17 @@ class FollowedTypeDefinitionTools
         type:FollowedTypeDefinition, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        result:Array<LitllToBackendCaseCondition>,
+        result:Array<LitllToEntityCaseCondition>,
         enumInlineTypeHistory:Array<String>
     ):Option<GetConditionErrorKind>
     {   
         switch (type)
         {
             case FollowedTypeDefinition.Arr(_):
-                result.push(LitllToBackendCaseCondition.Arr(LitllToBackendGuardCondition.any()));
+                result.push(LitllToEntityCaseCondition.Arr(LitllToEntityGuardCondition.any()));
                 
             case FollowedTypeDefinition.Str:
-                result.push(LitllToBackendCaseCondition.Str);
+                result.push(LitllToEntityCaseCondition.Str);
                 
             case FollowedTypeDefinition.Tuple(elements):
                 switch (TupleTools.getCondition(elements, source, definitionParameters))
@@ -115,7 +115,7 @@ class FollowedTypeDefinitionTools
         definitionParameters:Array<TypeName>,
         tupleInlineTypeHistory:Array<String>,
         enumInlineTypeHistory:Array<String>
-    ):Result<Array<LitllToBackendCaseCondition>, GetConditionErrorKind>
+    ):Result<Array<LitllToEntityCaseCondition>, GetConditionErrorKind>
     {
         return switch (getFirstElementCondition(type, argumentName, source, definitionParameters, tupleInlineTypeHistory, enumInlineTypeHistory))
         {

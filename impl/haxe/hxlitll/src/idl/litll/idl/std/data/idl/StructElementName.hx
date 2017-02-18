@@ -4,7 +4,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.litll2backend.LitllToBackendErrorKind;
+import litll.idl.litll2backend.LitllToEntityErrorKind;
 using litll.core.ds.ResultTools;
 using litll.core.string.IdentifierTools;
 using StringTools;
@@ -60,8 +60,8 @@ class StructElementName
         this.tag = tag;
     }
     
-	@:litllToBackend
-	public static function litllToBackend(string:LitllString):Result<StructElementName, LitllToBackendErrorKind>
+	@:litllToEntity
+	public static function litllToEntity(string:LitllString):Result<StructElementName, LitllToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -69,7 +69,7 @@ class StructElementName
 				Result.Ok(data);
 			
 			case Result.Err(data):
-				Result.Err(LitllToBackendErrorKind.Fatal(data));
+				Result.Err(LitllToEntityErrorKind.Fatal(data));
 		}
 	}
 	public static function create(string:String, ?tag:Maybe<StringTag>):Result<StructElementName, String>

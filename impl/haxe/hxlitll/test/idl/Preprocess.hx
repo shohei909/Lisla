@@ -2,7 +2,7 @@ import haxe.io.Path;
 import litll.core.ds.Maybe;
 import litll.idl.generator.IdlProject;
 import litll.idl.generator.data.DataOutputConfig;
-import litll.idl.generator.data.LitllToBackendOutputConfig;
+import litll.idl.generator.data.LitllToEntityOutputConfig;
 import litll.idl.generator.data.OutputConfig;
 import litll.idl.generator.data.ProjectConfig;
 import litll.idl.generator.data.SourceConfig;
@@ -37,7 +37,7 @@ class Preprocess
                     ]
 				),
 				Maybe.some(
-					new LitllToBackendOutputConfig(
+					new LitllToEntityOutputConfig(
 						[
 							TypeGroupPath.create("litll").getOrThrow(),
 							TypeGroupPath.create("hxlitll").getOrThrow(),

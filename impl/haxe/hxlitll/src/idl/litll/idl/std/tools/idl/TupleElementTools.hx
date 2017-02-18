@@ -1,7 +1,7 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import litll.core.ds.Result;
-import litll.idl.generator.output.delitll.match.LitllToBackendCaseCondition;
+import litll.idl.generator.output.delitll.match.LitllToEntityCaseCondition;
 import litll.idl.generator.output.delitll.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.ArgumentKind;
@@ -52,7 +52,7 @@ class TupleElementTools
         {
             case TupleElement.Label(value):
                 condition.canBeEmpty = false;
-                condition.conditions.push(LitllToBackendCaseCondition.Const(value.data));
+                condition.conditions.push(LitllToEntityCaseCondition.Const(value.data));
                 Option.None;
                 
             case TupleElement.Argument(argument):
