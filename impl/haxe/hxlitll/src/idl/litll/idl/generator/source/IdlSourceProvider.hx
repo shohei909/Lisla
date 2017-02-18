@@ -1,6 +1,6 @@
 package litll.idl.generator.source;
-import litll.core.ds.Maybe;
-import litll.core.ds.Result;
+import hxext.ds.Maybe;
+import hxext.ds.Result;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.TypeDefinition;

@@ -1,5 +1,6 @@
 package litll.idl.generator.output.delitll.convert;
 import haxe.macro.Expr;
+import hxext.ds.Result;
 import litll.core.LitllString;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.output.data.HaxeDataTypePath;
@@ -88,7 +89,7 @@ class EnumLitllToEntityBuild
             {
                 // case data:
                 values : [macro data],
-                expr: macro litll.core.ds.Result.Err(
+                expr: macro hxext.ds.Result.Err(
                     litll.idl.litll2entity.LitllToEntityError.ofLitll(
                         context.litll, 
                         litll.idl.litll2entity.LitllToEntityErrorKind.UnmatchedEnumConstructor([$a{targetList}])
@@ -119,7 +120,7 @@ class EnumLitllToEntityBuild
                     data;
                     
                 case haxe.ds.Option.Some(error):
-                    litll.core.ds.Result.Err(error);
+                    hxext.ds.Result.Err(error);
             }
         }
         

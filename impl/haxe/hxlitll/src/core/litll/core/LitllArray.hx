@@ -1,6 +1,6 @@
 package litll.core;
 import litll.core.Litll;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.tag.ArrayTag;
 import litll.core.tag.StringTag;
 

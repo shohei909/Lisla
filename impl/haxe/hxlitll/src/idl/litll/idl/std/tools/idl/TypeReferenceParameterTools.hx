@@ -1,6 +1,6 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.idl.exception.IdlException;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;

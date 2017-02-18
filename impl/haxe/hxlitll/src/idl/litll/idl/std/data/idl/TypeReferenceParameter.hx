@@ -2,7 +2,7 @@ package litll.idl.std.data.idl;
 
 import haxe.ds.Option;
 import litll.core.Litll;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 
 class TypeReferenceParameter
 {

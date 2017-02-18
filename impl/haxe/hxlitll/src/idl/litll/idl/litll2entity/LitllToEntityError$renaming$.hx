@@ -4,7 +4,7 @@ import litll.core.Litll;
 import litll.core.LitllArray;
 import litll.core.LitllString;
 import litll.core.LitllTools;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.ds.SourceRange;
 import litll.core.error.LitllErrorSummary;
 

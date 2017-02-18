@@ -1,14 +1,14 @@
 package litll.idl.std.data.idl.group;
 import haxe.ds.Option;
 import litll.core.LitllString;
-import litll.core.ds.Maybe;
-import litll.core.ds.Result;
+import hxext.ds.Maybe;
+import hxext.ds.Result;
 import litll.core.tag.StringTag;
 import litll.idl.litll2entity.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.PackagePath;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
-using litll.core.ds.MaybeTools;
+using hxext.ds.MaybeTools;
 
 class TypeGroupPath
 {

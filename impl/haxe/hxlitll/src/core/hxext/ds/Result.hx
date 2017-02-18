@@ -1,4 +1,4 @@
-package litll.core.ds;
+package hxext.ds;
 
 enum Result<OkType, ErrType>
 {

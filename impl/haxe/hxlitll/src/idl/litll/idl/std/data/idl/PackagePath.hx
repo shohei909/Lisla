@@ -1,7 +1,7 @@
 package litll.idl.std.data.idl;
 import litll.core.LitllString;
-import litll.core.ds.Maybe;
-import litll.core.ds.Result;
+import hxext.ds.Maybe;
+import hxext.ds.Result;
 import litll.core.tag.StringTag;
 import litll.idl.litll2entity.LitllToEntityErrorKind;
 

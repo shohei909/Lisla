@@ -1,4 +1,5 @@
-package litll.core.ds;
+package hxext.ds;
+import hxext.ds.Result;
 
 class ResultTools 
 {

@@ -1,6 +1,6 @@
 package litll.idl.generator.data;
 import haxe.ds.Option;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.idl.generator.data.DataOutputConfig;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
 

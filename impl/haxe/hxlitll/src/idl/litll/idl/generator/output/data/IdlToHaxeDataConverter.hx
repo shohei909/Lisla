@@ -6,6 +6,7 @@ import haxe.macro.Expr.Field;
 import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeDefKind;
+import hxext.ds.Maybe;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.output.DataTypeInfomation;
@@ -29,8 +30,8 @@ import litll.idl.std.tools.idl.TypeParameterDeclarationTools;
 import haxe.macro.Expr.TypeDefinition in HaxeTypeDefinition;
 import litll.idl.std.data.idl.TypeDefinition in IdlTypeDefinition;
 
-using litll.core.ds.MaybeTools;
-using litll.core.ds.ResultTools;
+using hxext.ds.MaybeTools;
+using hxext.ds.ResultTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 
 class IdlToHaxeDataConverter
@@ -243,10 +244,10 @@ class IdlToHaxeDataConverter
                     args.push(convertField(field, config));
                     
                 case StructElement.Label(name):
-                    addLabel(name, macro:litll.core.ds.Maybe<litll.core.tag.StringTag>);
+                    addLabel(name, macro:hxext.ds.Maybe<litll.core.tag.StringTag>);
                     
                 case StructElement.NestedLabel(name):
-                    addLabel(name, macro:litll.core.ds.Maybe<litll.core.tag.ArrayTag>);
+                    addLabel(name, macro:hxext.ds.Maybe<litll.core.tag.ArrayTag>);
             }
         }
         

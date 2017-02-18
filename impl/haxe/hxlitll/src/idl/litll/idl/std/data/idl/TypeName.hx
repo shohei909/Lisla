@@ -1,12 +1,12 @@
 package litll.idl.std.data.idl;
 import litll.core.LitllString;
-import litll.core.ds.Maybe;
-import litll.core.ds.Result;
+import hxext.ds.Maybe;
+import hxext.ds.Result;
 import litll.core.string.IdentifierTools;
 import litll.core.tag.StringTag;
 import litll.idl.litll2entity.LitllToEntityError;
 import litll.idl.litll2entity.LitllToEntityErrorKind;
-using litll.core.ds.ResultTools;
+using hxext.ds.ResultTools;
 
 @:forward(tag)
 abstract TypeName(LitllString)

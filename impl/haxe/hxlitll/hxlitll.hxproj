@@ -21,6 +21,7 @@
     <class path="src\core" />
     <class path="src\idl" />
     <class path="generated" />
+    <class path="migration" />
   </classpaths>
   <!-- Build options -->
   <build>

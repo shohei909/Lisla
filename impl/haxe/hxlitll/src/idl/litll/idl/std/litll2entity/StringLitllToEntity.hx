@@ -1,7 +1,7 @@
 package litll.idl.std.litll2entity;
 import litll.core.Litll;
 import litll.core.LitllString;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.idl.litll2entity.LitllToEntityContext;
 import litll.idl.litll2entity.LitllToEntityError;
 import litll.idl.litll2entity.LitllToEntityErrorKind;

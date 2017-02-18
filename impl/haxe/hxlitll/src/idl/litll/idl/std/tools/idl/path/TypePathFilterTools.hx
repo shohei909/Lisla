@@ -1,9 +1,9 @@
 package litll.idl.std.tools.idl.path;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.std.data.idl.group.TypePathFilter;
-using litll.core.ds.ResultTools;
+using hxext.ds.ResultTools;
 
 class TypePathFilterTools
 {

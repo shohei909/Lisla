@@ -1,6 +1,6 @@
 package litll.idl.generator.source;
 import haxe.ds.Option;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.core.parse.Parser;
 import litll.idl.litll2entity.LitllToEntityConfig;
 import litll.idl.generator.error.IdlReadErrorKind;

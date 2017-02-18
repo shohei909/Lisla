@@ -1,5 +1,5 @@
 package litll.core.string;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 
 class IdentifierTools
 {

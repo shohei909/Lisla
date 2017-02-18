@@ -1,7 +1,7 @@
 package litll.idl.generator.source;
 import haxe.ds.Option;
-import litll.core.ds.Maybe;
-import litll.core.ds.Result;
+import hxext.ds.Maybe;
+import hxext.ds.Result;
 import litll.idl.exception.IdlException;
 import litll.idl.litll2entity.LitllToEntityConfig;
 import litll.idl.generator.data.SourceConfig;
@@ -12,7 +12,7 @@ import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.group.TypeGroupPath;
-using litll.core.ds.MaybeTools;
+using hxext.ds.MaybeTools;
 
 class RootPackageElement extends PackageElement implements IdlSourceProvider
 {

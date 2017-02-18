@@ -1,12 +1,12 @@
 package litll.idl.generator.output.delitll;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.idl.ds.ProcessResult;
 import litll.idl.generator.output.IdlToHaxePrintContext;
 import litll.idl.generator.output.delitll.convert.IdlToHaxeLitllToEntityConverter;
 import litll.idl.generator.output.delitll.path.HaxeLitllToEntityTypePathPair;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
-using litll.core.ds.ResultTools;
+using hxext.ds.ResultTools;
 
 class IdlToHaxeLitllToEntityPrinter
 {

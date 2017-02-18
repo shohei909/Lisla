@@ -9,7 +9,7 @@ import litll.idl.generator.data.SourceConfig;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.std.tools.idl.path.TypePathFilterTools;
 import sys.FileSystem;
-using litll.core.ds.ResultTools;
+using hxext.ds.ResultTools;
 
 // import litll.idl.hxlitll.litll2entity.idl.config.InputFileLitllToEntity;
 

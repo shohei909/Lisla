@@ -2,6 +2,7 @@ package litll.idl.generator.output.delitll.convert;
 import haxe.ds.Option;
 import haxe.macro.Expr;
 import haxe.macro.Expr.Case;
+import hxext.ds.Result;
 import litll.core.LitllString;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
@@ -73,7 +74,7 @@ class LitllToEntityExprBuilder
                 var blockBody = argumentDeclarations.concat(
                     [
                         (macro var instance = new $sourceTypePath($a{argumentReferences})),
-                        (macro litll.core.ds.Result.Ok(instance)),
+                        (macro hxext.ds.Result.Ok(instance)),
                     ]
                 );
                 macro { $a{blockBody} }
@@ -82,7 +83,7 @@ class LitllToEntityExprBuilder
                 var blockBody = argumentDeclarations.concat(
                     [
                         (macro var instance = $i{sourcePath.toString()}.$name($a{argumentReferences})),
-                        (macro litll.core.ds.Result.Ok(instance)),
+                        (macro hxext.ds.Result.Ok(instance)),
                     ]
                 );
                 macro { $a{blockBody} }
@@ -92,11 +93,11 @@ class LitllToEntityExprBuilder
                     [
                         macro switch ($i{sourcePath.toString()}.$name($a{argumentReferences}))
                         {
-                            case litll.core.ds.Result.Ok(data):
-                                litll.core.ds.Result.Ok(data);
+                            case hxext.ds.Result.Ok(data):
+                                hxext.ds.Result.Ok(data);
                                 
-                            case litll.core.ds.Result.Err(data):
-                                litll.core.ds.Result.Err(
+                            case hxext.ds.Result.Err(data):
+                                hxext.ds.Result.Err(
                                     litll.idl.litll2entity.LitllToEntityError.ofLitll(
                                         $contextExpr.litll, 
                                         data
@@ -121,13 +122,13 @@ class LitllToEntityExprBuilder
         
         return if (argumentReferences.length == 0)
         {
-            macro litll.core.ds.Result.Ok($i{sourceTypePath}.$constructorName);
+            macro hxext.ds.Result.Ok($i{sourceTypePath}.$constructorName);
         }
         else
         {
             var blockBody = argumentDeclaration.concat(
                 [
-                    (macro litll.core.ds.Result.Ok($i{sourceTypePath}.$constructorName($a{argumentReferences})))
+                    (macro hxext.ds.Result.Ok($i{sourceTypePath}.$constructorName($a{argumentReferences})))
                 ]
             );
             

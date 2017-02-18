@@ -1,5 +1,6 @@
-package litll.core.ds;
+package hxext.ds;
 import haxe.ds.Option;
+import hxext.ds.Maybe;
 
 class MaybeTools
 {

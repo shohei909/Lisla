@@ -3,7 +3,7 @@ import haxe.ds.Option;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeParamDecl;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeDependenceDeclaration;

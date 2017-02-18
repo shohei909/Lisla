@@ -1,5 +1,5 @@
 package litll.idl.generator.source;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.TypeDefinition;

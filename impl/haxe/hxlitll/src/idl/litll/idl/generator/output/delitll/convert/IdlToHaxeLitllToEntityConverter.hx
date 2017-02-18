@@ -6,7 +6,7 @@ import haxe.macro.Expr.Access;
 import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.TypeDefKind;
 import litll.core.Litll;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.idl.litll2entity.LitllToEntityArrayContext;
 import litll.idl.litll2entity.LitllToEntityContext;
 import litll.idl.litll2entity.LitllToEntityError;
@@ -128,7 +128,7 @@ class IdlToHaxeLitllToEntityConverter
             kind : FieldType.FFun(
                 {
                     args: args,
-                    ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.litll2entity.LitllToEntityError>,
+                    ret: macro:hxext.ds.Result<$dataTypePath, litll.idl.litll2entity.LitllToEntityError>,
                     expr: processExpr,
                     params : TypeNameTools.toHaxeParamDecls(parameters.parameters),
                 }
@@ -167,7 +167,7 @@ class IdlToHaxeLitllToEntityConverter
             kind : FieldType.FFun(
                 {
                     args: args,
-                    ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.litll2entity.LitllToEntityError>,
+                    ret: macro:hxext.ds.Result<$dataTypePath, litll.idl.litll2entity.LitllToEntityError>,
                     expr: processExpr,
                     params : TypeNameTools.toHaxeParamDecls(parameters.parameters),
                 }
@@ -211,7 +211,7 @@ class IdlToHaxeLitllToEntityConverter
             kind : FieldType.FFun(
                 {
                     args: args,
-                    ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.litll2entity.LitllToEntityError>,
+                    ret: macro:hxext.ds.Result<$dataTypePath, litll.idl.litll2entity.LitllToEntityError>,
                     expr: processExpr,
                     params : TypeNameTools.toHaxeParamDecls(parameters.parameters),
                 }
@@ -232,11 +232,11 @@ class IdlToHaxeLitllToEntityConverter
 		return macro {
 			return switch ($callExpr)
 			{
-				case litll.core.ds.Result.Ok(data):
+				case hxext.ds.Result.Ok(data):
 					$instantiationExpr;
 					
-				case litll.core.ds.Result.Err(data):
-					litll.core.ds.Result.Err(data);
+				case hxext.ds.Result.Err(data):
+					hxext.ds.Result.Err(data);
 			}
 		}
 	}
@@ -253,7 +253,7 @@ class IdlToHaxeLitllToEntityConverter
             return switch (context.litll)
             {
                 case litll.core.Litll.Str(_):
-                    litll.core.ds.Result.Err(
+                    hxext.ds.Result.Err(
                         litll.idl.litll2entity.LitllToEntityError.ofLitll(
                             context.litll,
                             litll.idl.litll2entity.LitllToEntityErrorKind.CantBeString
@@ -269,7 +269,7 @@ class IdlToHaxeLitllToEntityConverter
                             instance;
                             
                         case haxe.ds.Option.Some(data):
-                            litll.core.ds.Result.Err(data);
+                            hxext.ds.Result.Err(data);
                     }
             }
 		}
@@ -296,7 +296,7 @@ class IdlToHaxeLitllToEntityConverter
         return macro return switch (context.litll)
         {
             case litll.core.Litll.Str(_):
-                litll.core.ds.Result.Err(
+                hxext.ds.Result.Err(
                     litll.idl.litll2entity.LitllToEntityError.ofLitll(
                         context.litll,
                         litll.idl.litll2entity.LitllToEntityErrorKind.CantBeString

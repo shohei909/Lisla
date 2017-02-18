@@ -1,6 +1,6 @@
 package litll.idl.generator.error;
 import litll.core.LitllTools;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.error.LitllErrorSummary;
 import litll.core.tag.Tag;
 import litll.idl.std.data.idl.TypePath;

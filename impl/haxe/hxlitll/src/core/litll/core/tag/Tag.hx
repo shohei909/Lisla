@@ -1,6 +1,6 @@
 package litll.core.tag;
 import haxe.ds.Option;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.ds.SourceRange;
 import litll.core.tag.entry.DocumentTagEntry;
 

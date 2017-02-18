@@ -1,10 +1,10 @@
 package litll.idl.generator.output.data;
 
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.idl.ds.ProcessResult;
 import litll.idl.generator.output.IdlToHaxePrintContext;
 import litll.idl.generator.output.data.IdlToHaxeDataConverter;
-using litll.core.ds.ResultTools;
+using hxext.ds.ResultTools;
 
 class IdlToHaxeDataPrinter
 {

@@ -1,7 +1,7 @@
 package cases;
 import LitllTestCase;
 import file.FileTools;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.core.parse.Parser;
 import litll.idl.litll2entity.LitllToEntity;
 import litll.idl.std.litll2entity.idl.IdlLitllToEntity;
@@ -11,7 +11,7 @@ class IdlTest extends LitllTestCase
 {
 	public function testLitllToEntity():Void
 	{
-		for (file in FileTools.readRecursively(TestIdl.IDL_DIRECTORY))
+    	for (file in FileTools.readRecursively(TestIdl.IDL_DIRECTORY))
 		{
 			if (StringTools.endsWith(file, ".idl.litll"))
 			{

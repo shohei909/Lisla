@@ -1,7 +1,7 @@
 package litll.core.parse;
 import litll.core.LitllArray;
 import haxe.ds.Option;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.error.LitllErrorSummary;
 
 class ParseError

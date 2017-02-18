@@ -1,5 +1,5 @@
 import haxe.io.Path;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.idl.generator.IdlProject;
 import litll.idl.generator.data.DataOutputConfig;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
@@ -8,8 +8,9 @@ import litll.idl.generator.data.ProjectConfig;
 import litll.idl.generator.data.SourceConfig;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.std.tools.idl.path.TypePathFilterTools;
+import litll.project.LitllProjectSystem;
 import sys.FileSystem;
-using litll.core.ds.ResultTools;
+using hxext.ds.ResultTools;
 
 class Preprocess 
 {
@@ -17,6 +18,7 @@ class Preprocess
     {
         remove("migration/litll");
         
+        // old
 		var config = new ProjectConfig(
 			new SourceConfig(
                 [
@@ -54,6 +56,18 @@ class Preprocess
 		{
 			Sys.exit(1);
 		}   
+        
+        // new
+        var litllProject = LitllProjectSystem.getCurrentProject();
+        if (litllProject.generateHaxe("litll/hxlitll/litll.hxinput.litll"))
+		{
+			Sys.exit(1);
+		}
+        
+        if (litllProject.generateHaxe("litll/hxlitll/hxlitll.hxinput.litll"))
+		{
+			Sys.exit(1);
+		}
 	}
 	
 	public static function remove(file:String):Void 

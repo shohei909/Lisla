@@ -2,9 +2,9 @@
 package litll.idl.std.data.idl.library;
 class LibraryReference {
     public var name : litll.idl.std.data.idl.library.LibraryName;
-    public var directory : litll.idl.std.data.idl.library.LibraryRootDirectory;
-    public function new(name:litll.idl.std.data.idl.library.LibraryName, directory:litll.idl.std.data.idl.library.LibraryRootDirectory) {
+    public var version : litll.idl.std.data.idl.library.LibraryVersion;
+    public function new(name:litll.idl.std.data.idl.library.LibraryName, version:litll.idl.std.data.idl.library.LibraryVersion) {
         this.name = name;
-        this.directory = directory;
+        this.version = version;
     }
 }

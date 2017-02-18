@@ -3,7 +3,7 @@ import haxe.ds.Option;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
 import litll.core.LitllString;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.data.DataOutputConfig;
 import litll.idl.generator.output.data.HaxeDataTypePath;
@@ -30,7 +30,7 @@ using litll.idl.std.tools.idl.EnumConstructorTools;
 using litll.idl.std.tools.idl.TypeReferenceParameterTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 using litll.idl.std.tools.idl.StructElementTools;
-using litll.core.ds.ResultTools;
+using hxext.ds.ResultTools;
 
 class TypeReferenceTools
 {

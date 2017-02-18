@@ -1,6 +1,6 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.idl.generator.output.delitll.match.LitllToEntityCaseCondition;
 import litll.idl.generator.output.delitll.match.LitllToEntityGuardConditionKind;
 import litll.idl.generator.source.IdlSourceProvider;

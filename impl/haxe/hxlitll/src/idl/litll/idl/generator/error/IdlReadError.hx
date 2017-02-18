@@ -1,6 +1,6 @@
 package litll.idl.generator.error;
 import litll.core.LitllTools;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.ds.SourceRange;
 import litll.core.error.LitllErrorSummary;
 import litll.core.print.Printer;

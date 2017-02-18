@@ -1,9 +1,9 @@
 package litll.core;
 import litll.core.Litll;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.print.Printer;
 import litll.core.tag.Tag;
-using litll.core.ds.MaybeTools;
+using hxext.ds.MaybeTools;
 
 class LitllTools
 {

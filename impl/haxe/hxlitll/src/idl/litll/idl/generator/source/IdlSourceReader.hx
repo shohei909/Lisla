@@ -1,8 +1,8 @@
 package litll.idl.generator.source;
 import haxe.ds.Option;
 import haxe.io.Path;
-import litll.core.ds.Maybe;
-import litll.core.ds.Result;
+import hxext.ds.Maybe;
+import hxext.ds.Result;
 import litll.core.parse.Parser;
 import litll.idl.litll2entity.LitllToEntity;
 import litll.idl.litll2entity.LitllToEntityConfig;

@@ -1,5 +1,5 @@
 package litll.core.parse;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.ds.SourceRange;
 import litll.core.error.LitllErrorSummary;
 

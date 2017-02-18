@@ -1,10 +1,10 @@
 package litll.idl.std.data.idl;
 import litll.core.LitllString;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.tag.StringTag;
 import litll.idl.litll2entity.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.PackagePath;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 
 class ModulePath 
 {

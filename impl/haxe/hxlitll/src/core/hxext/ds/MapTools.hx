@@ -1,4 +1,4 @@
-package litll.core.ds;
+package hxext.ds;
 import haxe.ds.Option;
 
 class MapTools

@@ -1,5 +1,6 @@
 package litll.idl.generator.output.delitll.convert;
 import haxe.macro.Expr;
+import hxext.ds.Result;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.tools.ExprBuilder;
 import litll.idl.litll2entity.LitllToEntityContext;
@@ -48,7 +49,7 @@ class StructLitllToEntityBuild
             {
                 // case data:
                 values : [macro litllData],
-                expr: macro return litll.core.ds.Result.Err(
+                expr: macro return hxext.ds.Result.Err(
                     litll.idl.litll2entity.LitllToEntityError.ofLitll(
                         litllData, 
                         // TODO: target list

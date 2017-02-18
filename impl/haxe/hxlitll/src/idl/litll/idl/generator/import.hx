@@ -1,5 +1,5 @@
-using litll.core.ds.ResultTools;
-using litll.core.ds.MaybeTools;
+using hxext.ds.ResultTools;
+using hxext.ds.MaybeTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 using litll.idl.std.tools.idl.TypeDefinitionTools;
 using litll.idl.std.tools.idl.TypeParameterDeclarationTools;

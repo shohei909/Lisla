@@ -1,7 +1,7 @@
 package litll.idl.generator.output.delitll.convert;
 import haxe.ds.Option;
 import haxe.macro.Expr;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.tools.ExprBuilder;

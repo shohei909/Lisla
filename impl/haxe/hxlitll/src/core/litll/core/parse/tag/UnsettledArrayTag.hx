@@ -1,5 +1,5 @@
 package litll.core.parse.tag;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import unifill.CodePoint;
 import haxe.ds.Option;
 import litll.core.ds.SourceRange;

@@ -2,7 +2,7 @@ package litll.idl.std.error;
 import litll.core.error.LitllErrorSummary;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.error.IdlReadErrorKind;
-using litll.core.ds.MaybeTools;
+using hxext.ds.MaybeTools;
 
 class TypeFollowErrorKindTools
 {

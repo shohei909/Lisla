@@ -1,5 +1,5 @@
 package litll.core.tag;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.ds.SourceMap;
 import litll.core.ds.SourceRange;
 import litll.core.tag.entry.StringFormatTagEntry;

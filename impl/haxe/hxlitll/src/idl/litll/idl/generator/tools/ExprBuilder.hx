@@ -1,5 +1,6 @@
 package litll.idl.generator.tools;
 import haxe.macro.Expr;
+import hxext.ds.Result;
 
 class ExprBuilder 
 {
@@ -7,8 +8,8 @@ class ExprBuilder
     {
         return macro switch ($expr)
         {
-            case litll.core.ds.Result.Ok(data): data;
-            case litll.core.ds.Result.Err(data): return litll.core.ds.Result.Err(data);
+            case hxext.ds.Result.Ok(data): data;
+            case hxext.ds.Result.Err(data): return hxext.ds.Result.Err(data);
         }
     }
     

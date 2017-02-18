@@ -8,7 +8,7 @@ import haxe.macro.Type.BaseType;
 import litll.core.Litll;
 import litll.core.LitllArray;
 import litll.core.LitllString;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.output.data.store.HaxeDataClassInterface;
 import litll.idl.generator.output.data.store.HaxeDataConstructorKind;
@@ -28,11 +28,11 @@ import litll.idl.std.data.idl.TypeReferenceParameter;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.std.data.idl.group.TypePathFilter;
 
-using litll.core.ds.ResultTools;
+using hxext.ds.ResultTools;
 using litll.idl.std.tools.idl.path.TypePathFilterTools;
 using haxe.macro.TypeTools;
 using haxe.macro.ComplexTypeTools;
-using litll.core.ds.MaybeTools;
+using hxext.ds.MaybeTools;
 
 class DataOutputConfig
 {
@@ -190,7 +190,7 @@ class DataOutputConfig
                 var typePath = complexType.toString();
                 var selfPath = selfType.toComplexType().toString();
                 
-                if (typePath.split("<")[0] == "litll.core.ds.Result")
+                if (typePath.split("<")[0] == "hxext.ds.Result")
                 {
                     switch (complexType)
                     {

@@ -1,6 +1,6 @@
 package litll.idl.generator.output.delitll.match;
 import haxe.ds.Option;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.tag.StringTag;
 
 class LitllToEntityCaseConditionGroup<T>

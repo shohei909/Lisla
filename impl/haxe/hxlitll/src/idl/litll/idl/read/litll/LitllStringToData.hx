@@ -1,5 +1,5 @@
 package litll.idl.read.litll;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.core.parse.Parser;
 import litll.core.parse.ParserConfig;
 import litll.idl.litll2entity.LitllToEntityConfig;

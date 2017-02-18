@@ -1,5 +1,5 @@
 package litll.idl.generator.output;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.idl.generator.data.DataOutputConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.source.IdlSourceProvider;

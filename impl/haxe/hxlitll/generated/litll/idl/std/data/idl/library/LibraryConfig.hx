@@ -2,11 +2,13 @@
 package litll.idl.std.data.idl.library;
 class LibraryConfig {
     public var version : haxe.ds.Option<litll.idl.std.data.util.version.Version>;
-    public var extension : litll.idl.std.data.idl.library.FileExtensionTuple;
-    public var lib : litll.idl.std.data.idl.library.LibraryDependenceTuple;
-    public function new(version:haxe.ds.Option<litll.idl.std.data.util.version.Version>, extension:litll.idl.std.data.idl.library.FileExtensionTuple, lib:litll.idl.std.data.idl.library.LibraryDependenceTuple) {
+    public var description : litll.core.LitllString;
+    public var extension : litll.idl.std.data.idl.library.FileExtensionDeclaration;
+    public var library : litll.idl.std.data.idl.library.LibraryDependenceDeclaration;
+    public function new(version:haxe.ds.Option<litll.idl.std.data.util.version.Version>, description:litll.core.LitllString, extension:litll.idl.std.data.idl.library.FileExtensionDeclaration, library:litll.idl.std.data.idl.library.LibraryDependenceDeclaration) {
         this.version = version;
+        this.description = description;
         this.extension = extension;
-        this.lib = lib;
+        this.library = library;
     }
 }

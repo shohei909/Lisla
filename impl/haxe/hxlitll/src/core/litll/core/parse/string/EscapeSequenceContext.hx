@@ -1,6 +1,6 @@
 package litll.core.parse.string;
 import litll.core.char.CodePointTools;
-import litll.core.ds.Maybe;
+import hxext.ds.Maybe;
 import litll.core.ds.SourceRange;
 import litll.core.parse.ParseContext;
 import litll.core.parse.array.ArrayContext;

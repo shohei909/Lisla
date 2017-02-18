@@ -2,7 +2,7 @@ package litll.idl.litll2entity;
 import haxe.ds.Option;
 import litll.core.Litll;
 import litll.core.LitllArray;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 
 class LitllToEntity
 {

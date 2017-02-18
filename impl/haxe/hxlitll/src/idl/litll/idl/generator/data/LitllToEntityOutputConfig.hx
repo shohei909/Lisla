@@ -7,8 +7,8 @@ import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.std.data.idl.group.TypePathFilter;
 
-using litll.core.ds.ResultTools;
-using litll.core.ds.MaybeTools;
+using hxext.ds.ResultTools;
+using hxext.ds.MaybeTools;
 using litll.idl.std.tools.idl.path.TypePathFilterTools;
 
 class LitllToEntityOutputConfig

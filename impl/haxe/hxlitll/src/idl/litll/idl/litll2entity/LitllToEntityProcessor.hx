@@ -1,5 +1,5 @@
 package litll.idl.litll2entity;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 
 typedef LitllToEntityProcessor<T> =
 {

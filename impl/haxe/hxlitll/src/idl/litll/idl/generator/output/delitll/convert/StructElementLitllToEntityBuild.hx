@@ -1,6 +1,7 @@
 package litll.idl.generator.output.delitll.convert;
 import haxe.ds.Option;
 import haxe.macro.Expr;
+import hxext.ds.Result;
 import litll.core.Litll;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.tools.ExprBuilder;
@@ -32,7 +33,7 @@ class StructElementLitllToEntityBuild
         return macro switch ($i{id})
         {
             case haxe.ds.Option.Some(_):
-                return litll.core.ds.Result.Err(
+                return hxext.ds.Result.Err(
                     litll.idl.litll2entity.LitllToEntityError.ofLitll(
                         litllData,
                         litll.idl.litll2entity.LitllToEntityErrorKind.StructElementDuplicated($nameExpr)
@@ -90,7 +91,7 @@ class StructElementLitllToEntityBuild
                     data;
                     
                 case haxe.ds.Option.None:
-                    return litll.core.ds.Result.Err(
+                    return hxext.ds.Result.Err(
                         litll.idl.litll2entity.LitllToEntityError.ofLitll(
                             context.litll,
                             litll.idl.litll2entity.LitllToEntityErrorKind.StructElementNotFound($nameExpr)

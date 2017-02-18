@@ -1,7 +1,7 @@
 package litll.idl.generator.source.validate;
 import haxe.ds.Option;
-import litll.core.ds.Result;
-import litll.core.ds.Set;
+import hxext.ds.Result;
+import hxext.ds.Set;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKind;
 import litll.idl.generator.output.delitll.match.LitllToEntityCaseCondition;
@@ -227,7 +227,7 @@ class TypeDefinitionValidator
     
     private function validateTupleElements(elements:Array<TupleElement>):Void
 	{
-		var usedNames = new Set<String>(new Map());
+		var usedNames = new Set<String>();
 		for (element in elements)
 		{
             switch (element)
@@ -243,7 +243,7 @@ class TypeDefinitionValidator
                     }
                     else
                     {
-                        usedNames.set(argument.name.name);
+                        usedNames.add(argument.name.name);
                     }
             }
 		}

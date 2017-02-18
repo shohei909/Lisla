@@ -2,7 +2,7 @@ package cases;
 import litll.core.Litll;
 import litll.core.LitllArray;
 import litll.core.LitllString;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.core.parse.Parser;
 import haxe.Json;
 import haxe.PosInfos;

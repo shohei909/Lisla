@@ -1,6 +1,6 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.core.print.Printer;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.source.IdlSourceProvider;

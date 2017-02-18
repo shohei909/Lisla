@@ -2,7 +2,7 @@ package litll.core.parse.array;
 import haxe.ds.Option;
 import litll.core.LitllArray;
 import litll.core.LitllString;
-import litll.core.ds.Result;
+import hxext.ds.Result;
 import litll.core.ds.SourceRange;
 import litll.core.parse.string.QuotedStringContext;
 import litll.core.parse.string.QuotedStringArrayPair;

@@ -1,8 +1,8 @@
 package litll.idl.generator.source;
 
 import haxe.ds.Option;
-import litll.core.ds.Maybe;
-import litll.core.ds.Result;
+import hxext.ds.Maybe;
+import hxext.ds.Result;
 import litll.idl.exception.SourceException;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.source.file.IdlFilePath;
@@ -17,8 +17,8 @@ import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
 
 using litll.idl.generator.source.ModuleStateTools;
-using litll.core.ds.MapTools;
-using litll.core.ds.ResultTools;
+using hxext.ds.MapTools;
+using hxext.ds.ResultTools;
 
 class PackageElement
 {
