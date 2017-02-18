@@ -11,7 +11,7 @@ import litll.idl.std.tools.idl.path.TypePathFilterTools;
 import sys.FileSystem;
 using litll.core.ds.ResultTools;
 
-// import litll.idl.hxlitll.litll2backend.idl.config.InputFileLitllToEntity;
+// import litll.idl.hxlitll.litll2entity.idl.config.InputFileLitllToEntity;
 
 class Main 
 {
@@ -47,7 +47,7 @@ class Main
 							TypeGroupPath.create("hxlitll").getOrThrow(),
 						],
 						[
-                            TypePathFilterTools.createPrefix("hxlitll", "litll.idl.hxlitll.litll2backend"),
+                            TypePathFilterTools.createPrefix("hxlitll", "litll.idl.hxlitll.litll2entity"),
                         ]
 					)
 				)

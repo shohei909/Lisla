@@ -4,7 +4,7 @@ import litll.core.LitllString;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.tag.StringTag;
-import litll.idl.litll2backend.LitllToEntityErrorKind;
+import litll.idl.litll2entity.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 
 class TypePath

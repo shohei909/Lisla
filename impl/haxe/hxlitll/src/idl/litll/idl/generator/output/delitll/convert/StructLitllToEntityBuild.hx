@@ -2,9 +2,9 @@ package litll.idl.generator.output.delitll.convert;
 import haxe.macro.Expr;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.tools.ExprBuilder;
-import litll.idl.litll2backend.LitllToEntityContext;
-import litll.idl.litll2backend.LitllToEntityError;
-import litll.idl.litll2backend.LitllToEntityErrorKind;
+import litll.idl.litll2entity.LitllToEntityContext;
+import litll.idl.litll2entity.LitllToEntityError;
+import litll.idl.litll2entity.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
@@ -49,10 +49,10 @@ class StructLitllToEntityBuild
                 // case data:
                 values : [macro litllData],
                 expr: macro return litll.core.ds.Result.Err(
-                    litll.idl.litll2backend.LitllToEntityError.ofLitll(
+                    litll.idl.litll2entity.LitllToEntityError.ofLitll(
                         litllData, 
                         // TODO: target list
-                        litll.idl.litll2backend.LitllToEntityErrorKind.UnmatchedStructElement([])
+                        litll.idl.litll2entity.LitllToEntityErrorKind.UnmatchedStructElement([])
                     )
                 )
             }
@@ -61,7 +61,7 @@ class StructLitllToEntityBuild
         declarations.push(
             macro for (litllData in array.data)
             {
-                var context = new litll.idl.litll2backend.LitllToEntityContext(litllData, context.config);
+                var context = new litll.idl.litll2entity.LitllToEntityContext(litllData, context.config);
                 $switchExpr;
             }
         );

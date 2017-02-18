@@ -7,16 +7,16 @@ import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.TypeDefKind;
 import litll.core.Litll;
 import litll.core.ds.Result;
-import litll.idl.litll2backend.LitllToEntityArrayContext;
-import litll.idl.litll2backend.LitllToEntityContext;
-import litll.idl.litll2backend.LitllToEntityError;
+import litll.idl.litll2entity.LitllToEntityArrayContext;
+import litll.idl.litll2entity.LitllToEntityContext;
+import litll.idl.litll2entity.LitllToEntityError;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
 import litll.idl.generator.output.IdlToHaxeConvertContext;
 import litll.idl.generator.output.data.store.HaxeDataInterface;
 import litll.idl.generator.output.delitll.path.HaxeLitllToEntityTypePathPair;
 import litll.idl.generator.source.validate.InlinabilityOnTuple;
 import litll.idl.generator.tools.ExprBuilder;
-import litll.idl.litll2backend.LitllToEntityErrorKind;
+import litll.idl.litll2entity.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.GenericTypeReference;
 import litll.idl.std.data.idl.StructElement;
@@ -114,7 +114,7 @@ class IdlToHaxeLitllToEntityConverter
 		var args = [
 			{
 				name: "context",
-				type: (macro : litll.idl.litll2backend.LitllToEntityContext)
+				type: (macro : litll.idl.litll2entity.LitllToEntityContext)
 			}
 		];
         
@@ -128,7 +128,7 @@ class IdlToHaxeLitllToEntityConverter
             kind : FieldType.FFun(
                 {
                     args: args,
-                    ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.litll2backend.LitllToEntityError>,
+                    ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.litll2entity.LitllToEntityError>,
                     expr: processExpr,
                     params : TypeNameTools.toHaxeParamDecls(parameters.parameters),
                 }
@@ -158,7 +158,7 @@ class IdlToHaxeLitllToEntityConverter
 		var args = [
 			{
 				name: "context",
-				type: (macro : litll.idl.litll2backend.LitllToEntityArrayContext)
+				type: (macro : litll.idl.litll2entity.LitllToEntityArrayContext)
 			}
 		].concat(addtionalArgs);
         
@@ -167,7 +167,7 @@ class IdlToHaxeLitllToEntityConverter
             kind : FieldType.FFun(
                 {
                     args: args,
-                    ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.litll2backend.LitllToEntityError>,
+                    ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.litll2entity.LitllToEntityError>,
                     expr: processExpr,
                     params : TypeNameTools.toHaxeParamDecls(parameters.parameters),
                 }
@@ -197,7 +197,7 @@ class IdlToHaxeLitllToEntityConverter
 		var args = [
 			{
 				name: "context",
-				type: (macro : litll.idl.litll2backend.LitllToEntityArrayContext)
+				type: (macro : litll.idl.litll2entity.LitllToEntityArrayContext)
 			}
 		].concat(addtionalArgs);
         
@@ -211,7 +211,7 @@ class IdlToHaxeLitllToEntityConverter
             kind : FieldType.FFun(
                 {
                     args: args,
-                    ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.litll2backend.LitllToEntityError>,
+                    ret: macro:litll.core.ds.Result<$dataTypePath, litll.idl.litll2entity.LitllToEntityError>,
                     expr: processExpr,
                     params : TypeNameTools.toHaxeParamDecls(parameters.parameters),
                 }
@@ -254,14 +254,14 @@ class IdlToHaxeLitllToEntityConverter
             {
                 case litll.core.Litll.Str(_):
                     litll.core.ds.Result.Err(
-                        litll.idl.litll2backend.LitllToEntityError.ofLitll(
+                        litll.idl.litll2entity.LitllToEntityError.ofLitll(
                             context.litll,
-                            litll.idl.litll2backend.LitllToEntityErrorKind.CantBeString
+                            litll.idl.litll2entity.LitllToEntityErrorKind.CantBeString
                         )
                     );
                     
                 case litll.core.Litll.Arr(data):
-                    var arrayContext = new litll.idl.litll2backend.LitllToEntityArrayContext(data, 0, context.config);
+                    var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(data, 0, context.config);
                     var instance = $instantiationExpr;
                     switch (arrayContext.closeOrError())
                     {
@@ -297,9 +297,9 @@ class IdlToHaxeLitllToEntityConverter
         {
             case litll.core.Litll.Str(_):
                 litll.core.ds.Result.Err(
-                    litll.idl.litll2backend.LitllToEntityError.ofLitll(
+                    litll.idl.litll2entity.LitllToEntityError.ofLitll(
                         context.litll,
-                        litll.idl.litll2backend.LitllToEntityErrorKind.CantBeString
+                        litll.idl.litll2entity.LitllToEntityErrorKind.CantBeString
                     )
                 );
                 

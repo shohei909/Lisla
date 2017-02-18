@@ -1,5 +1,5 @@
 package litll.idl.generator.data;
-import litll.idl.litll2backend.LitllToEntityConfig;
+import litll.idl.litll2entity.LitllToEntityConfig;
 
 class SourceConfig
 {

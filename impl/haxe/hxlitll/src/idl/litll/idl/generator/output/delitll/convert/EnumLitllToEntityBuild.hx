@@ -5,9 +5,9 @@ import litll.idl.exception.IdlException;
 import litll.idl.generator.output.data.HaxeDataTypePath;
 import litll.idl.generator.output.data.store.HaxeDataInterface;
 import litll.idl.generator.tools.ExprBuilder;
-import litll.idl.litll2backend.LitllToEntityArrayContext;
-import litll.idl.litll2backend.LitllToEntityError;
-import litll.idl.litll2backend.LitllToEntityErrorKind;
+import litll.idl.litll2entity.LitllToEntityArrayContext;
+import litll.idl.litll2entity.LitllToEntityError;
+import litll.idl.litll2entity.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorKind;
 import litll.idl.std.data.idl.EnumConstructorName;
@@ -89,9 +89,9 @@ class EnumLitllToEntityBuild
                 // case data:
                 values : [macro data],
                 expr: macro litll.core.ds.Result.Err(
-                    litll.idl.litll2backend.LitllToEntityError.ofLitll(
+                    litll.idl.litll2entity.LitllToEntityError.ofLitll(
                         context.litll, 
-                        litll.idl.litll2backend.LitllToEntityErrorKind.UnmatchedEnumConstructor([$a{targetList}])
+                        litll.idl.litll2entity.LitllToEntityErrorKind.UnmatchedEnumConstructor([$a{targetList}])
                     )
                 )
             }
@@ -111,7 +111,7 @@ class EnumLitllToEntityBuild
     {
         var guard = builder.createTupleGuardConditions(elements, parameters.parameters);
         var caseExpr = macro  {
-            var arrayContext = new litll.idl.litll2backend.LitllToEntityArrayContext(array, 0, context.config);
+            var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
             var data = $instantiationExpr;
             switch (arrayContext.closeOrError())
             {

@@ -4,7 +4,7 @@ import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.core.string.IdentifierTools;
 import litll.core.tag.StringTag;
-import litll.idl.litll2backend.LitllToEntityErrorKind;
+import litll.idl.litll2entity.LitllToEntityErrorKind;
 using litll.core.ds.ResultTools;
 
 @:forward(tag, data)

@@ -3,7 +3,7 @@ import haxe.ds.Option;
 import litll.core.ds.Maybe;
 import litll.core.ds.Result;
 import litll.idl.exception.IdlException;
-import litll.idl.litll2backend.LitllToEntityConfig;
+import litll.idl.litll2entity.LitllToEntityConfig;
 import litll.idl.generator.data.SourceConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.error.IdlReadErrorKind;

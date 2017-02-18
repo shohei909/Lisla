@@ -22,7 +22,7 @@ class LitllToEntityOutputConfig
 		this.filters = [
 			TypePathFilter.Prefix(
 				TypeGroupPath.create("litll").getOrThrow(), 
-				TypeGroupPath.create("litll.idl.std.litll2backend").getOrThrow()
+				TypeGroupPath.create("litll.idl.std.litll2entity").getOrThrow()
 			)
 		].concat(filters);
 	}	

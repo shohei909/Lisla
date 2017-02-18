@@ -4,9 +4,9 @@ import haxe.macro.Expr;
 import litll.core.Litll;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.tools.ExprBuilder;
-import litll.idl.litll2backend.LitllToEntityContext;
-import litll.idl.litll2backend.LitllToEntityError;
-import litll.idl.litll2backend.LitllToEntityErrorKind;
+import litll.idl.litll2entity.LitllToEntityContext;
+import litll.idl.litll2entity.LitllToEntityError;
+import litll.idl.litll2entity.LitllToEntityErrorKind;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructField;
 import litll.idl.std.data.idl.StructFieldKind;
@@ -33,9 +33,9 @@ class StructElementLitllToEntityBuild
         {
             case haxe.ds.Option.Some(_):
                 return litll.core.ds.Result.Err(
-                    litll.idl.litll2backend.LitllToEntityError.ofLitll(
+                    litll.idl.litll2entity.LitllToEntityError.ofLitll(
                         litllData,
-                        litll.idl.litll2backend.LitllToEntityErrorKind.StructElementDuplicated($nameExpr)
+                        litll.idl.litll2entity.LitllToEntityErrorKind.StructElementDuplicated($nameExpr)
                     )
                 );
                 
@@ -57,7 +57,7 @@ class StructElementLitllToEntityBuild
             field.type.generalize()
         );
         return macro {
-            var context = new litll.idl.litll2backend.LitllToEntityContext(array.data[1], context.config);
+            var context = new litll.idl.litll2entity.LitllToEntityContext(array.data[1], context.config);
             ${ExprBuilder.createGetOrReturnExpr(callExpr)}
         }
     }
@@ -91,9 +91,9 @@ class StructElementLitllToEntityBuild
                     
                 case haxe.ds.Option.None:
                     return litll.core.ds.Result.Err(
-                        litll.idl.litll2backend.LitllToEntityError.ofLitll(
+                        litll.idl.litll2entity.LitllToEntityError.ofLitll(
                             context.litll,
-                            litll.idl.litll2backend.LitllToEntityErrorKind.StructElementNotFound($nameExpr)
+                            litll.idl.litll2entity.LitllToEntityErrorKind.StructElementNotFound($nameExpr)
                         )
                     );
             }

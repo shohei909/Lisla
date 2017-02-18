@@ -3,8 +3,8 @@ import LitllTestCase;
 import file.FileTools;
 import litll.core.ds.Result;
 import litll.core.parse.Parser;
-import litll.idl.litll2backend.LitllToEntity;
-import litll.idl.std.litll2backend.idl.IdlLitllToEntity;
+import litll.idl.litll2entity.LitllToEntity;
+import litll.idl.std.litll2entity.idl.IdlLitllToEntity;
 import sys.io.File;
 
 class IdlTest extends LitllTestCase

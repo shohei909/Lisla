@@ -2,8 +2,8 @@ package litll.idl.read.litll;
 import litll.core.ds.Result;
 import litll.core.parse.Parser;
 import litll.core.parse.ParserConfig;
-import litll.idl.litll2backend.LitllToEntityConfig;
-import litll.idl.litll2backend.LitllToEntityProcessor;
+import litll.idl.litll2entity.LitllToEntityConfig;
+import litll.idl.litll2entity.LitllToEntityProcessor;
 
 class LitllStringToData
 {

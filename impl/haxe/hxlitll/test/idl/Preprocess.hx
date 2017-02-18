@@ -43,7 +43,7 @@ class Preprocess
 							TypeGroupPath.create("hxlitll").getOrThrow(),
 						],
 						[
-                            TypePathFilterTools.createPrefix("hxlitll", "litll.idl.hxlitll.litll2backend"),
+                            TypePathFilterTools.createPrefix("hxlitll", "litll.idl.hxlitll.litll2entity"),
                         ]
 					)
 				)
