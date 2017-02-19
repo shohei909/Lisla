@@ -19,6 +19,20 @@ class OrderedMapImpl<Key, Value>
     
     public function set(key:Key, value:Value):Void
     {
+        if (!map.exists(key))
+        {
+            rawKeys.push(key);
+            map.set(key, value);
+        }
+    }
+    
+    public function push(key:Key, value:Value):Void
+    {
+        if (map.exists(key))
+        {
+            remove(key);
+        }
+        
         rawKeys.push(key);
         map.set(key, value);
     }

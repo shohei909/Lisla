@@ -1,7 +1,7 @@
 package litll.idl.generator.data;
 import haxe.ds.Option;
-import litll.idl.generator.output.data.HaxeDataTypePath;
-import litll.idl.generator.output.delitll.path.HaxeLitllToEntityTypePath;
+import litll.idl.generator.output.entity.EntityHaxeTypePath;
+import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePath;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.group.TypeGroupPath;

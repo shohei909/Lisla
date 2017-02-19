@@ -1,15 +1,15 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.delitll.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.delitll.match.LitllToEntityGuardConditionBuilder;
-import litll.idl.generator.output.delitll.match.LitllToEntityGuardConditionKind;
-import litll.idl.generator.output.delitll.match.FirstElementCondition;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionBuilder;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
+import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.FollowedTypeDefinition;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructField;
-import litll.idl.std.data.idl.StructFieldKind;
+import litll.idl.std.data.idl.StructElementKind;
 import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeReference;
@@ -73,50 +73,50 @@ class StructElementTools
             case StructElement.Label(name):
                 switch (name.kind)
                 {
-                    case StructFieldKind.Normal:
+                    case StructElementKind.Normal:
                         builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
                         
-                    case StructFieldKind.Array:
+                    case StructElementKind.Array:
                         builder.unlimit();
                         
-                    case StructFieldKind.Optional:
+                    case StructElementKind.Optional:
                         builder.addMax();
                         
-                    case StructFieldKind.Inline:
+                    case StructElementKind.Inline:
                         return Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
                         
-                    case StructFieldKind.ArrayInline:
+                    case StructElementKind.ArrayInline:
                         return Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
                         
-                    case StructFieldKind.OptionalInline:
+                    case StructElementKind.OptionalInline:
                         return Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
                         
-                    case StructFieldKind.Merge:
+                    case StructElementKind.Merge:
                         return Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
                 }
                 
             case StructElement.NestedLabel(name):
                 switch (name.kind)
                 {
-                    case StructFieldKind.Normal:
+                    case StructElementKind.Normal:
                         builder.add(LitllToEntityGuardConditionKind.Arr);
                         
-                    case StructFieldKind.Array:
+                    case StructElementKind.Array:
                         builder.unlimit();
                         
-                    case StructFieldKind.Optional:
+                    case StructElementKind.Optional:
                         builder.addMax();
                         
-                    case StructFieldKind.Inline:
+                    case StructElementKind.Inline:
                         return Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
                         
-                    case StructFieldKind.ArrayInline:
+                    case StructElementKind.ArrayInline:
                         return Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
                         
-                    case StructFieldKind.OptionalInline:
+                    case StructElementKind.OptionalInline:
                         return Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
                         
-                    case StructFieldKind.Merge:
+                    case StructElementKind.Merge:
                         return Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
                 }
         }
@@ -150,42 +150,42 @@ class StructElementTools
             case StructElement.Label(name):
                 switch (name.kind)
                 {
-                    case StructFieldKind.Normal | StructFieldKind.Array | StructFieldKind.Optional:
+                    case StructElementKind.Normal | StructElementKind.Array | StructElementKind.Optional:
                         conditions.push(LitllToEntityCaseCondition.Const(name.name));
                         Option.None;
                         
-                    case StructFieldKind.Inline:
+                    case StructElementKind.Inline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
                         
-                    case StructFieldKind.ArrayInline:
+                    case StructElementKind.ArrayInline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
                         
-                    case StructFieldKind.OptionalInline:
+                    case StructElementKind.OptionalInline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
                         
-                    case StructFieldKind.Merge:
+                    case StructElementKind.Merge:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
                 }
                 
             case StructElement.NestedLabel(name):
                 switch (name.kind)
                 {
-                    case StructFieldKind.Normal | StructFieldKind.Array | StructFieldKind.Optional:
+                    case StructElementKind.Normal | StructElementKind.Array | StructElementKind.Optional:
                         var builder = new LitllToEntityGuardConditionBuilder();
                         builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
                         conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
-                    case StructFieldKind.Inline:
+                    case StructElementKind.Inline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
                         
-                    case StructFieldKind.ArrayInline:
+                    case StructElementKind.ArrayInline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
                         
-                    case StructFieldKind.OptionalInline:
+                    case StructElementKind.OptionalInline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
                         
-                    case StructFieldKind.Merge:
+                    case StructElementKind.Merge:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
                 }
             
@@ -207,68 +207,68 @@ class StructElementTools
             case StructElement.Label(name):
                 switch (name.kind)
                 {
-                    case StructFieldKind.Normal:
+                    case StructElementKind.Normal:
                         condition.canBeEmpty = false;
                         condition.conditions.push(LitllToEntityCaseCondition.Const(name.name));
                         Option.None;
                         
-                    case StructFieldKind.Array | StructFieldKind.Optional:
+                    case StructElementKind.Array | StructElementKind.Optional:
                         condition.conditions.push(LitllToEntityCaseCondition.Const(name.name));
                         Option.None;
                         
-                    case StructFieldKind.Inline:
+                    case StructElementKind.Inline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
                         
-                    case StructFieldKind.ArrayInline:
+                    case StructElementKind.ArrayInline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
                         
-                    case StructFieldKind.OptionalInline:
+                    case StructElementKind.OptionalInline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
                         
-                    case StructFieldKind.Merge:
+                    case StructElementKind.Merge:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
                 }
                 
             case StructElement.NestedLabel(name):
                 switch (name.kind)
                 {
-                    case StructFieldKind.Normal:
+                    case StructElementKind.Normal:
                         var builder = new LitllToEntityGuardConditionBuilder();
                         builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
                         condition.canBeEmpty = false;
                         condition.conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
-                    case StructFieldKind.Array | StructFieldKind.Optional:
+                    case StructElementKind.Array | StructElementKind.Optional:
                         var builder = new LitllToEntityGuardConditionBuilder();
                         builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
                         condition.conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
-                    case StructFieldKind.Inline:
+                    case StructElementKind.Inline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.InlineForLabel));
                         
-                    case StructFieldKind.ArrayInline:
+                    case StructElementKind.ArrayInline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.ArrayInlineForLabel));
                         
-                    case StructFieldKind.OptionalInline:
+                    case StructElementKind.OptionalInline:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.OptionalInlineForLabel));
                         
-                    case StructFieldKind.Merge:
+                    case StructElementKind.Merge:
                         Option.Some(errorKind(name, StructFieldSuffixErrorKind.MergeForLabel));
                 }
             
             case StructElement.Field(field):
                 switch (field.name.kind)
                 {
-                    case StructFieldKind.Normal | StructFieldKind.Inline:
+                    case StructElementKind.Normal | StructElementKind.Inline:
                         condition.canBeEmpty = false;
                         StructFieldTools._getConditions(field, source, definitionParameters, condition.conditions, history);
                         
-                    case StructFieldKind.Array | StructFieldKind.Optional | StructFieldKind.ArrayInline | StructFieldKind.OptionalInline:
+                    case StructElementKind.Array | StructElementKind.Optional | StructElementKind.ArrayInline | StructElementKind.OptionalInline:
                         StructFieldTools._getConditions(field, source, definitionParameters, condition.conditions, history);
                         
-                    case StructFieldKind.Merge:
+                    case StructElementKind.Merge:
                         switch (StructFieldTools.getStruct(field, source, definitionParameters, history))
                         {
                             case Result.Ok(elements):

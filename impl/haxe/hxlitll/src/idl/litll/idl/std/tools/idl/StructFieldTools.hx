@@ -1,13 +1,13 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.delitll.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.delitll.match.LitllToEntityGuardConditionBuilder;
-import litll.idl.generator.output.delitll.match.LitllToEntityGuardConditionKind;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionBuilder;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
 import litll.idl.std.data.idl.FollowedTypeDefinition;
 import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.StructField;
-import litll.idl.std.data.idl.StructFieldKind;
+import litll.idl.std.data.idl.StructElementKind;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.StructElement;
@@ -34,13 +34,13 @@ class StructFieldTools
     {
         return switch [field.name.kind, field.defaultValue]
         {
-            case [StructFieldKind.Normal, Option.None]
-                | [StructFieldKind.Normal, Option.Some(_)]
-                | [StructFieldKind.Optional, Option.None]
-                | [StructFieldKind.Inline, Option.Some(_)]
-                | [StructFieldKind.OptionalInline, Option.None]
-                | [StructFieldKind.Array, Option.None]
-                | [StructFieldKind.ArrayInline, Option.None]:
+            case [StructElementKind.Normal, Option.None]
+                | [StructElementKind.Normal, Option.Some(_)]
+                | [StructElementKind.Optional, Option.None]
+                | [StructElementKind.Inline, Option.Some(_)]
+                | [StructElementKind.OptionalInline, Option.None]
+                | [StructElementKind.Array, Option.None]
+                | [StructElementKind.ArrayInline, Option.None]:
                 var builder = new LitllToEntityGuardConditionBuilder();
                 builder.add(LitllToEntityGuardConditionKind.Const([field.name.name => true]));
                 switch (field.type.getGuardConditionKind(source, definitionParameters))
@@ -54,7 +54,7 @@ class StructFieldTools
                         Option.Some(error);
                 }                
                 
-            case [StructFieldKind.Inline, Option.None]:
+            case [StructElementKind.Inline, Option.None]:
                 switch (field.type.follow(source, definitionParameters))
                 {
                     case Result.Ok(data):
@@ -64,7 +64,7 @@ class StructFieldTools
                         Option.Some(GetConditionErrorKind.Follow(error));
                 }
                 
-            case [StructFieldKind.Merge, Option.None]:
+            case [StructElementKind.Merge, Option.None]:
                 switch (getStruct(field, source, definitionParameters, history))
                 {
                     case Result.Ok(elements):
@@ -82,11 +82,11 @@ class StructFieldTools
                         Option.Some(error);
                 }
                
-            case [StructFieldKind.ArrayInline, Option.Some(_)]
-                | [StructFieldKind.OptionalInline, Option.Some(_)]
-                | [StructFieldKind.Array, Option.Some(_)]
-                | [StructFieldKind.Optional, Option.Some(_)]
-                | [StructFieldKind.Merge, Option.Some(_)]:
+            case [StructElementKind.ArrayInline, Option.Some(_)]
+                | [StructElementKind.OptionalInline, Option.Some(_)]
+                | [StructElementKind.Array, Option.Some(_)]
+                | [StructElementKind.Optional, Option.Some(_)]
+                | [StructElementKind.Merge, Option.Some(_)]:
                 Option.Some(errorKind(field.name, StructFieldSuffixErrorKind.UnsupportedDefault(field.name.kind)));
         }
     }
@@ -126,23 +126,23 @@ class StructFieldTools
     {
         return switch [field.name.kind, field.defaultValue]
         {
-            case [StructFieldKind.Normal, Option.None]:
+            case [StructElementKind.Normal, Option.None]:
                 builder.add(LitllToEntityGuardConditionKind.Arr);
                 Option.None;
                 
-            case [StructFieldKind.Normal, Option.Some(_)]
-                | [StructFieldKind.Optional, Option.None]
-                | [StructFieldKind.Inline, Option.Some(_)]
-                | [StructFieldKind.OptionalInline, Option.None] :
+            case [StructElementKind.Normal, Option.Some(_)]
+                | [StructElementKind.Optional, Option.None]
+                | [StructElementKind.Inline, Option.Some(_)]
+                | [StructElementKind.OptionalInline, Option.None] :
                 builder.addMax();
                 Option.None;
                 
-            case [StructFieldKind.Array, Option.None]
-                | [StructFieldKind.ArrayInline, Option.None]:
+            case [StructElementKind.Array, Option.None]
+                | [StructElementKind.ArrayInline, Option.None]:
                 builder.unlimit();
                 Option.None;
                 
-            case [StructFieldKind.Inline, Option.None]:
+            case [StructElementKind.Inline, Option.None]:
                 switch (field.type.follow(source, definitionParameters))
                 {
                     case Result.Ok(data):
@@ -174,7 +174,7 @@ class StructFieldTools
                         Option.Some(GetConditionErrorKind.Follow(error));
                 }
                 
-            case [StructFieldKind.Merge, Option.None]:
+            case [StructElementKind.Merge, Option.None]:
                 switch (field.type.follow(source, definitionParameters))
                 {
                     case Result.Ok(data):
@@ -194,11 +194,11 @@ class StructFieldTools
                         Option.Some(GetConditionErrorKind.Follow(error));
                 }
                
-            case [StructFieldKind.ArrayInline, Option.Some(_)]
-                | [StructFieldKind.OptionalInline, Option.Some(_)]
-                | [StructFieldKind.Array, Option.Some(_)]
-                | [StructFieldKind.Optional, Option.Some(_)]
-                | [StructFieldKind.Merge, Option.Some(_)]:
+            case [StructElementKind.ArrayInline, Option.Some(_)]
+                | [StructElementKind.OptionalInline, Option.Some(_)]
+                | [StructElementKind.Array, Option.Some(_)]
+                | [StructElementKind.Optional, Option.Some(_)]
+                | [StructElementKind.Merge, Option.Some(_)]:
                 Option.Some(errorKind(field.name, StructFieldSuffixErrorKind.UnsupportedDefault(field.name.kind)));
         }
     }

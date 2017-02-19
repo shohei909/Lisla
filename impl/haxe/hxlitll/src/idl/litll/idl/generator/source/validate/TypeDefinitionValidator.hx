@@ -4,9 +4,9 @@ import hxext.ds.Result;
 import hxext.ds.Set;
 import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKind;
-import litll.idl.generator.output.delitll.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.delitll.match.LitllToEntityCaseConditionGroup;
-import litll.idl.generator.output.delitll.match.LitllToEntityCaseConditionTools;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseConditionGroup;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseConditionTools;
 import litll.idl.generator.source.PackageElement;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.validate.InlinabilityOnTuple;
@@ -154,6 +154,8 @@ class TypeDefinitionValidator
         
         if (hasError) return;
         
+        inlinabilityOnTuple = LitllToEntityCaseConditionTools.getInlinability(conditionArray);
+        
         switch (LitllToEntityCaseConditionGroup.intersects(conditionMap))
         {
             case Option.Some(groups):
@@ -198,6 +200,8 @@ class TypeDefinitionValidator
         }
         
         if (hasError) return;
+        
+        inlinabilityOnTuple = LitllToEntityCaseConditionTools.getInlinability(conditionArray);
         
         switch (LitllToEntityCaseConditionGroup.intersects(conditionMap))
         {

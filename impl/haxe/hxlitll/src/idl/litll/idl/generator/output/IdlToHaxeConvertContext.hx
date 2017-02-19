@@ -9,5 +9,5 @@ interface IdlToHaxeConvertContext
 {
     public var source(default, null):IdlSourceProvider;
 	public var dataOutputConfig(default, null):DataOutputConfig;
-    public function resolveGroups(targets:Array<TypeGroupPath>):Result<Array<DataTypeInfomation>, Array<IdlReadError>>;
+    public function resolveGroups(targets:Array<TypeGroupPath>):Result<Array<EntityTypeInfomation>, Array<IdlReadError>>;
 }

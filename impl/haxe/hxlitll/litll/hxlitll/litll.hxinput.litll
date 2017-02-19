@@ -16,7 +16,7 @@
     [filter litll.core.Int8     litll.core.LitllInt8]
     [filter litll.core.UInt64   litll.core.LitllUInt64]
     [filter litll.core.UInt32   litll.core.LitllUInt32]
-    [filter litll.core.UInt16   litll.core.LitllUInt16]
+    [filter litll.core.UInt16   litll.core.LitllUInt16  ]
     [filter litll.core.UInt8    litll.core.LitllUInt8]
     [filter litll.core.Map      litll.core.LitllMap]
     [filter litll.core.Boolean  litll.core.LitllBoolean]

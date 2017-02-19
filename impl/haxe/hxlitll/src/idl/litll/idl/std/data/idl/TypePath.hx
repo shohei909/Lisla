@@ -94,6 +94,18 @@ class TypePath
 				false;
 		}
 	}
+    
+    public function isStringType():Bool
+    {
+    	return switch (modulePath.toOption())
+		{
+			case Option.None if (typeName.toString() == "String"):
+				true;
+				
+			case _:
+				false;
+		}
+    }
 	
 	public function getModuleArray():Array<String>
 	{

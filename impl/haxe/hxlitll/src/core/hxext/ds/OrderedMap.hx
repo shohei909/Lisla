@@ -2,7 +2,7 @@ package hxext.ds;
 import haxe.ds.StringMap;
 
 @:multiType(@:followWithAbstracts Key)
-@:follow
+@:forward
 abstract OrderedMap<Key, Value>(OrderedMapImpl<Key, Value>) 
 {
     public function new();

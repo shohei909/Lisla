@@ -4,8 +4,8 @@ class ProjectConfig {
     public var litllHome : haxe.ds.Option<litll.idl.std.data.util.file.DirectoryPath>;
     public var description : haxe.ds.Option<litll.core.LitllString>;
     public var idl : Array<litll.idl.std.data.util.file.DirectoryPath>;
-    public var extension : litll.idl.std.data.idl.library.FileExtensionDeclaration;
-    public function new(litllHome:haxe.ds.Option<litll.idl.std.data.util.file.DirectoryPath>, description:haxe.ds.Option<litll.core.LitllString>, idl:Array<litll.idl.std.data.util.file.DirectoryPath>, extension:litll.idl.std.data.idl.library.FileExtensionDeclaration) {
+    public var extension : Array<litll.idl.std.data.idl.library.FileExtensionDeclaration>;
+    public function new(litllHome:haxe.ds.Option<litll.idl.std.data.util.file.DirectoryPath>, description:haxe.ds.Option<litll.core.LitllString>, idl:Array<litll.idl.std.data.util.file.DirectoryPath>, extension:Array<litll.idl.std.data.idl.library.FileExtensionDeclaration>) {
         this.litllHome = litllHome;
         this.description = description;
         this.idl = idl;

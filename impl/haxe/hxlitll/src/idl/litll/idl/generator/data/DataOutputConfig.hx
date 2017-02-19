@@ -9,13 +9,13 @@ import litll.core.Litll;
 import litll.core.LitllArray;
 import litll.core.LitllString;
 import hxext.ds.Maybe;
-import litll.idl.generator.output.data.HaxeDataTypePath;
-import litll.idl.generator.output.data.store.HaxeDataClassInterface;
-import litll.idl.generator.output.data.store.HaxeDataConstructorKind;
-import litll.idl.generator.output.data.store.HaxeDataConstructorReturnKind;
-import litll.idl.generator.output.data.store.HaxeDataEnumInterface;
-import litll.idl.generator.output.data.store.HaxeDataInterface;
-import litll.idl.generator.output.data.store.HaxeDataInterfaceKind;
+import litll.idl.generator.output.entity.EntityHaxeTypePath;
+import litll.idl.generator.output.entity.store.HaxeEntityClassInterface;
+import litll.idl.generator.output.entity.store.HaxeEntityConstructorKind;
+import litll.idl.generator.output.entity.store.HaxeEntityConstructorReturnKind;
+import litll.idl.generator.output.entity.store.HaxeEntityEnumInterface;
+import litll.idl.generator.output.entity.store.HaxeEntityInterface;
+import litll.idl.generator.output.entity.store.HaxeEntityInterfaceKind;
 import litll.idl.std.data.idl.ArgumentName;
 import litll.idl.std.data.idl.EnumConstructorName;
 import litll.idl.std.data.idl.ModulePath;
@@ -38,7 +38,7 @@ class DataOutputConfig
 {
 	public var targets(default, null):Array<TypeGroupPath>;
 	public var filters(default, null):Array<TypePathFilter>;
-	public var predefinedTypes(default, null):Map<String, HaxeDataInterface>;
+	public var predefinedTypes(default, null):Map<String, HaxeEntityInterface>;
 	
 	#if !macro
 	public function new(targets:Array<TypeGroupPath>, filters:Array<TypePathFilter>) 
@@ -86,7 +86,7 @@ class DataOutputConfig
 	}
 	#end
 	
-	public function toHaxeDataPath(typePath:TypePath):HaxeDataTypePath
+	public function toHaxeDataPath(typePath:TypePath):EntityHaxeTypePath
 	{
 		var l = filters.length;
 		for (i in 0...l)
@@ -102,10 +102,10 @@ class DataOutputConfig
 			}
 		}
 		
-		return new HaxeDataTypePath(typePath);
+		return new EntityHaxeTypePath(typePath);
 	}
 	
-	public function addPredefinedTypeDirectly(path:String, data:litll.idl.generator.output.data.store.HaxeDataInterface):Void
+	public function addPredefinedTypeDirectly(path:String, data:litll.idl.generator.output.entity.store.HaxeEntityInterface):Void
 	{
 		predefinedTypes[path] = data;
 	}
@@ -129,8 +129,8 @@ class DataOutputConfig
 		
 			case TEnum(ref, params):
 				baseType = ref.get();
-				macro HaxeDataInterfaceKind.Enum(
-					new HaxeDataEnumInterface()
+				macro HaxeEntityInterfaceKind.Enum(
+					new HaxeEntityEnumInterface()
 				);
 						
 			case _: 
@@ -140,8 +140,8 @@ class DataOutputConfig
 		var typePathString:String = baseType.pack.concat([baseType.name]).join(".");
 		return macro $_this.addPredefinedTypeDirectly(
 			$v{typePathString}, 
-			new HaxeDataInterface(
-				new HaxeDataTypePath(
+			new HaxeEntityInterface(
+				new EntityHaxeTypePath(
 					new TypePath(
 						Maybe.some(new ModulePath($v{baseType.pack})), 
 						new TypeName(new LitllString($v{baseType.name}))
@@ -173,11 +173,11 @@ class DataOutputConfig
 				resolveLitllToEntity(type, field.type, field);
 				
 			case Option.None:
-				macro HaxeDataConstructorKind.New;
+				macro HaxeEntityConstructorKind.New;
 		}
 		
-		return macro HaxeDataInterfaceKind.Class(
-			new HaxeDataClassInterface($expr)
+		return macro HaxeEntityInterfaceKind.Class(
+			new HaxeEntityClassInterface($expr)
 		);
 	}
     
@@ -207,7 +207,7 @@ class DataOutputConfig
                                         switch (err.toString())
                                         {
                                             case "litll.idl.litll2entity.error.LitllToEntityErrorKind":
-                                                macro HaxeDataConstructorKind.Function($v{field.name}, HaxeDataConstructorReturnKind.Result);	
+                                                macro HaxeEntityConstructorKind.Function($v{field.name}, HaxeEntityConstructorReturnKind.Result);	
                                                 
                                             case _:
                                                 Context.error("Error type must be litll.idl.litll2entity.error.LitllToEntityErrorKind", field.pos);
@@ -225,7 +225,7 @@ class DataOutputConfig
                 }
                 else if (typePath == selfPath)
                 {
-                    macro HaxeDataConstructorKind.Function($v{field.name}, HaxeDataConstructorReturnKind.Direct);
+                    macro HaxeEntityConstructorKind.Function($v{field.name}, HaxeEntityConstructorReturnKind.Direct);
                 }
                 else
                 {

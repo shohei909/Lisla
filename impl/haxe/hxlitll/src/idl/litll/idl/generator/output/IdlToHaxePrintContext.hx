@@ -7,9 +7,9 @@ import litll.idl.generator.data.ProjectConfig;
 import litll.idl.generator.error.IdlReadError;
 import litll.idl.generator.io.IoProvider;
 import litll.idl.generator.io.StandardIoProvider;
-import litll.idl.generator.output.DataTypeInfomation;
-import litll.idl.generator.output.data.store.HaxeDataInterface;
-import litll.idl.generator.output.data.store.HaxeDataInterfaceKindTools;
+import litll.idl.generator.output.EntityTypeInfomation;
+import litll.idl.generator.output.entity.store.HaxeEntityInterface;
+import litll.idl.generator.output.entity.store.HaxeEntityInterfaceKindTools;
 import litll.idl.generator.output.haxe.HaxePrinter;
 import litll.idl.generator.output.haxe.HaxePrinterImpl;
 import litll.idl.generator.source.IdlSourceProvider;
@@ -53,7 +53,7 @@ class IdlToHaxePrintContext implements IdlToHaxeConvertContext
 		);
 	}
     
-    public function resolveGroups(targets:Array<TypeGroupPath>):Result<Array<DataTypeInfomation>, Array<IdlReadError>>
+    public function resolveGroups(targets:Array<TypeGroupPath>):Result<Array<EntityTypeInfomation>, Array<IdlReadError>>
     {
         return switch (source.resolveGroups(targets))
         {
@@ -68,12 +68,12 @@ class IdlToHaxePrintContext implements IdlToHaxeConvertContext
                     }
                     else
                     {
-                        var kind = HaxeDataInterfaceKindTools.createDefault(type.definition);
-                        new HaxeDataInterface(haxePath, kind);
+                        var kind = HaxeEntityInterfaceKindTools.createDefault(type.definition);
+                        new HaxeEntityInterface(haxePath, kind);
                     }
                     
                     result.push(
-                        new DataTypeInfomation(
+                        new EntityTypeInfomation(
                             type, interf
                         )
                     );

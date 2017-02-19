@@ -1,8 +1,8 @@
 package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.delitll.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.delitll.match.FirstElementCondition;
+import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
+import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.std.data.idl.ArgumentKind;
 import litll.idl.std.data.idl.TupleElement;

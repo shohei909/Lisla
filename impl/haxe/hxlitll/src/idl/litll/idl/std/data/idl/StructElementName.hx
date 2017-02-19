@@ -11,7 +11,7 @@ using StringTools;
 
 class StructElementName
 {
-    public var kind(default, null):StructFieldKind;
+    public var kind(default, null):StructElementKind;
 	public var name(default, null):String;
 	public var tag(default, null):Maybe<StringTag>;
 	
@@ -20,36 +20,36 @@ class StructElementName
         if (name.endsWith("?<"))
 		{
 			name = name.substr(0, name.length - 2);
-			kind = StructFieldKind.OptionalInline;
+			kind = StructElementKind.OptionalInline;
 		}
 		else if (name.endsWith("..<"))
 		{
 			name = name.substr(0, name.length - 3);
-			kind = StructFieldKind.ArrayInline;
+			kind = StructElementKind.ArrayInline;
 		}
-		if (name.endsWith(".."))
+		else if (name.endsWith(".."))
 		{
 			name = name.substr(0, name.length - 2);
-			kind = StructFieldKind.Array;
+			kind = StructElementKind.Array;
 		}
 		else if (name.endsWith("?"))
 		{
 			name = name.substr(0, name.length - 1);
-			kind = StructFieldKind.Optional;
+			kind = StructElementKind.Optional;
 		}
 		else if (name.endsWith("<<"))
 		{
 			name = name.substr(0, name.length - 2);
-			kind = StructFieldKind.Merge;
+			kind = StructElementKind.Merge;
 		}
 		else if (name.endsWith("<"))
 		{
 			name = name.substr(0, name.length - 1);
-			kind = StructFieldKind.Inline;
+			kind = StructElementKind.Inline;
 		}
 		else
 		{
-			kind = StructFieldKind.Normal;
+			kind = StructElementKind.Normal;
 		}
 		if (!name.isSnakeCase())
 		{

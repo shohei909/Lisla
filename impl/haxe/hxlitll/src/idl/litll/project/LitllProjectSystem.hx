@@ -18,7 +18,7 @@ class LitllProjectSystem
 {
     private static var MAX_DEPTH = 4096;
     
-    public static function getCurrentProject():LitllProject
+    public static function getCurrentProject():Result<LitllProject, Array<LitllFileToEntityError>>
     {
         return switch (findProjectHome().toOption())
         {
@@ -26,7 +26,7 @@ class LitllProjectSystem
                 openProject(path);
                 
             case Option.None:
-                new LitllProject();
+                Result.Ok(new LitllProject());
         }
     }
     
@@ -47,15 +47,34 @@ class LitllProjectSystem
         return Maybe.none();
     }
     
-    public static function openProject(projectHome:String):LitllProject
+    public static function openProject(projectHome:String):Result<LitllProject, Array<LitllFileToEntityError>>
     {
         var project = new LitllProject();
+        
         if (FileSystem.exists(projectHome + "/.project.litll"))
         {
-            var config = readProjectConfig(projectHome + "/.project.litll");
+            switch (readProjectConfig(projectHome + "/.project.litll"))
+            {
+                case Result.Ok(config):
+                    project.apply(projectHome, config);
+                    
+                case Result.Err(errors):
+                    return Result.Err(errors);
+            }
+        }
+        if (FileSystem.exists(projectHome + "/user.project.litll"))
+        {
+            switch (readProjectConfig(projectHome + "/user.project.litll"))
+            {
+                case Result.Ok(config):
+                    project.apply(projectHome, config);
+                    
+                case Result.Err(errors):
+                    return Result.Err(errors);
+            }
         }
         
-        return project;
+        return Result.Ok(project);
     }
     
     public static function readProjectConfig(filePath:String):Result<ProjectConfig, Array<LitllFileToEntityError>>

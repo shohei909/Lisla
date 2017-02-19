@@ -4,7 +4,7 @@ import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeParamDecl;
 import hxext.ds.Maybe;
-import litll.idl.generator.output.data.HaxeDataTypePath;
+import litll.idl.generator.output.entity.EntityHaxeTypePath;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeDependenceDeclaration;
 import litll.idl.std.data.idl.TypeName;
@@ -54,7 +54,7 @@ class TypeParameterDeclarationTools
 					);
 					
 				case TypeParameterDeclaration.TypeName(typeName):
-					var haxeTypePath = ComplexType.TPath(new HaxeDataTypePath(new TypePath(Maybe.none(), typeName, typeName.tag)).toMacroPath());
+					var haxeTypePath = ComplexType.TPath(new EntityHaxeTypePath(new TypePath(Maybe.none(), typeName, typeName.tag)).toMacroPath());
 					result.push(
 						{
 							name: typeName.toLitllToEntityVariableName(),

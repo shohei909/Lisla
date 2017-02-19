@@ -17,6 +17,7 @@ class LitllToEntityArrayContext
 	private var config:LitllToEntityConfig;
 	public var index:Int;
 	public var length(get, never):Int;
+    
     private inline function get_length():Int 
     {
         return array.length;
@@ -165,11 +166,11 @@ class LitllToEntityArrayContext
         }
 	}
     
-    public inline function readFixedInline<T>(fixedInlineProcess:InlineProcessFunction<T>, length:Int):Result<T, LitllToEntityError>
+    public function readFixedInline<T>(fixedInlineProcess:InlineProcessFunction<T>, length:Int):Result<T, LitllToEntityError>
     {
         var localContext = new LitllToEntityArrayContext(
             array.slice(0, length), 
-            index,
+            this.index,
             config
         );
         

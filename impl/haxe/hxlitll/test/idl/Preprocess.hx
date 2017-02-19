@@ -1,11 +1,15 @@
 import haxe.io.Path;
 import hxext.ds.Maybe;
+import hxext.ds.Result;
+import litll.core.error.ErrorSummary;
+import litll.core.error.ErrorSummaryTools;
 import litll.idl.generator.IdlProject;
 import litll.idl.generator.data.DataOutputConfig;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
 import litll.idl.generator.data.OutputConfig;
 import litll.idl.generator.data.ProjectConfig;
 import litll.idl.generator.data.SourceConfig;
+import litll.idl.generator.io.StandardIoProvider;
 import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.std.tools.idl.path.TypePathFilterTools;
 import litll.project.LitllProjectSystem;
@@ -58,19 +62,32 @@ class Preprocess
 		}
         
         // new
-        var litllProject = LitllProjectSystem.getCurrentProject();
-        if (litllProject.generateHaxe("litll/hxlitll/litll.hxinput.litll"))
-		{
-			Sys.exit(1);
-		}
+        var litllProject = switch (LitllProjectSystem.getCurrentProject())
+        {
+            case Result.Ok(litllProject):
+                litllProject;
+                
+            case Result.Err(error):
+                outputErrorAndClose(ErrorSummaryTools.summarize(error));
+                return;
+        }
         
-        if (litllProject.generateHaxe("litll/hxlitll/hxlitll.hxinput.litll"))
-		{
-			Sys.exit(1);
-		}
-	}
+        litllProject.generateHaxe("litll/hxlitll/litll.hxinput.litll").iter(outputErrorAndClose);
+        litllProject.generateHaxe("litll/hxlitll/hxlitll.hxinput.litll").iter(outputErrorAndClose);
+    }
 	
-	public static function remove(file:String):Void 
+    private static function outputErrorAndClose(errors:Array<ErrorSummary>):Void
+    {
+        var io = new StandardIoProvider();
+        for (error in errors)
+        {
+            io.printErrorLine(error.toString());
+        }
+        
+        Sys.exit(1);
+    }
+    
+	private static function remove(file:String):Void 
 	{
 		if (FileSystem.exists(file)) 
 		{
