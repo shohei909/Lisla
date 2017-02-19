@@ -34,7 +34,7 @@ class NameConfigLitllToEntity {
                                 };
                             };
                         });
-                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement([])));
+                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement(["short", "long"])));
                     };
                 };
                 var instance = new litll.idl.std.data.cli.clidl.NameConfig(arg0, arg1);
@@ -42,5 +42,4 @@ class NameConfigLitllToEntity {
             };
         };
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.cli.clidl.NameConfig, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

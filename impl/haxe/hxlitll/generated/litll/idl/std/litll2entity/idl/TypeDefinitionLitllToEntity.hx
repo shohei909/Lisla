@@ -147,5 +147,4 @@ class TypeDefinitionLitllToEntity {
         };
         case data:hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedEnumConstructor(["newtype", "tuple", "enum", "struct"])));
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.idl.TypeDefinition, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

@@ -6,8 +6,8 @@ class PairLitllToEntity {
             case litll.core.Litll.Str(_):{
                 hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.CantBeString));
             };
-            case litll.core.Litll.Arr(data):{
-                var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(data, 0, context.config);
+            case litll.core.Litll.Arr(array):{
+                var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
                 var instance = {
                     var arg0 = switch (arrayContext.read(kLitllToEntity.process)) {
                         case hxext.ds.Result.Ok(data):{
@@ -39,6 +39,5 @@ class PairLitllToEntity {
             };
         };
     }
-    public static function fixedInlineProcess<K, V>(context:litll.idl.litll2entity.LitllToEntityArrayContext, kLitllToEntity, vLitllToEntity):hxext.ds.Result<litll.idl.std.data.core.Pair<K, V>, litll.idl.litll2entity.error.LitllToEntityError> return null;
-    public static function variableInlineProcess<K, V>(context:litll.idl.litll2entity.LitllToEntityArrayContext, kLitllToEntity, vLitllToEntity, kLitllToEntity, vLitllToEntity):hxext.ds.Result<litll.idl.std.data.core.Pair<K, V>, litll.idl.litll2entity.error.LitllToEntityError> return null;
+    public static function variableInlineProcess<K, V>(arrayContext:litll.idl.litll2entity.LitllToEntityArrayContext, kLitllToEntity, vLitllToEntity, kLitllToEntity, vLitllToEntity):hxext.ds.Result<litll.idl.std.data.core.Pair<K, V>, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

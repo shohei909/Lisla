@@ -149,10 +149,6 @@ class LitllToEntityExprBuilder
 	{
         return createFuncExpr("process", parameters, destType);
     }
-	public function createFixedInlineProcessFuncExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
-	{
-        return createFuncExpr("fixedInlineProcess", parameters, destType);
-    }
 	public function createVariableInlineProcessFuncExpr(parameters:TypeParameterDeclarationCollection, destType:GenericTypeReference):Expr
 	{
         return createFuncExpr("variableInlineProcess", parameters, destType);

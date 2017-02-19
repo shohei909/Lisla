@@ -39,7 +39,7 @@ class ProjectConfigLitllToEntity {
                             case haxe.ds.Option.None:{
                                 arg1 = haxe.ds.Option.Some({
                                     var context = new litll.idl.litll2entity.LitllToEntityContext(array.data[1], context.config);
-                                    switch (StringLitllToEntity.process(context)) {
+                                    switch (litll.idl.std.litll2entity.StringLitllToEntity.process(context)) {
                                         case hxext.ds.Result.Ok(data):{
                                             data;
                                         };
@@ -69,7 +69,7 @@ class ProjectConfigLitllToEntity {
                                 return hxext.ds.Result.Err(data);
                             };
                         });
-                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement([])));
+                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement(["litll_home", "description", "idl", "extension"])));
                     };
                 };
                 var instance = new litll.idl.std.data.idl.project.ProjectConfig(arg0, arg1, arg2, arg3);
@@ -77,5 +77,4 @@ class ProjectConfigLitllToEntity {
             };
         };
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.idl.project.ProjectConfig, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

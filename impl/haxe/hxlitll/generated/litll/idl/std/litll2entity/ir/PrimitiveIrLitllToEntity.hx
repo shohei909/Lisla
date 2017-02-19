@@ -160,7 +160,7 @@ class PrimitiveIrLitllToEntity {
             var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
             var data = {
                 arrayContext.readLabel("string");
-                var arg0 = switch (arrayContext.read(StringLitllToEntity.process)) {
+                var arg0 = switch (arrayContext.read(litll.idl.std.litll2entity.StringLitllToEntity.process)) {
                     case hxext.ds.Result.Ok(data):{
                         data;
                     };
@@ -204,5 +204,4 @@ class PrimitiveIrLitllToEntity {
         };
         case data:hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedEnumConstructor(["fixed_int", "fixed_uint", "variable_int", "variable_uint", "float64", "boolean", "string", "binary"])));
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.ir.PrimitiveIr, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

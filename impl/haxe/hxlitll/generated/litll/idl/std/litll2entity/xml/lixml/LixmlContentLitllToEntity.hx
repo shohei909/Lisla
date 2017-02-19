@@ -3,7 +3,7 @@ package litll.idl.std.litll2entity.xml.lixml;
 class LixmlContentLitllToEntity {
     public static function process(context:litll.idl.litll2entity.LitllToEntityContext):hxext.ds.Result<litll.idl.std.data.xml.lixml.LixmlContent, litll.idl.litll2entity.error.LitllToEntityError> return switch context.litll {
         case litll.core.Litll.Str(_):{
-            hxext.ds.Result.Ok(litll.idl.std.data.xml.lixml.LixmlContent.String(switch (StringLitllToEntity.process(context)) {
+            hxext.ds.Result.Ok(litll.idl.std.data.xml.lixml.LixmlContent.String(switch (litll.idl.std.litll2entity.StringLitllToEntity.process(context)) {
                 case hxext.ds.Result.Ok(data):{
                     data;
                 };

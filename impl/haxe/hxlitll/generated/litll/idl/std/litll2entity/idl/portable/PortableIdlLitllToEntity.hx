@@ -2,7 +2,7 @@
 package litll.idl.std.litll2entity.idl.portable;
 class PortableIdlLitllToEntity {
     public static function process(context:litll.idl.litll2entity.LitllToEntityContext):hxext.ds.Result<litll.idl.std.data.idl.portable.PortableIdl, litll.idl.litll2entity.error.LitllToEntityError> {
-        return switch (ArrayLitllToEntity.process(context, litll.idl.std.litll2entity.idl.portable.PortableIdlElementLitllToEntity)) {
+        return switch (litll.idl.std.litll2entity.ArrayLitllToEntity.process(context, litll.idl.std.litll2entity.idl.portable.PortableIdlElementLitllToEntity)) {
             case hxext.ds.Result.Ok(data):{
                 {
                     var instance = new litll.idl.std.data.idl.portable.PortableIdl(data);
@@ -14,6 +14,5 @@ class PortableIdlLitllToEntity {
             };
         };
     }
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.idl.portable.PortableIdl, litll.idl.litll2entity.error.LitllToEntityError> return null;
-    public static function variableInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.idl.portable.PortableIdl, litll.idl.litll2entity.error.LitllToEntityError> return null;
+    public static function variableInlineProcess(arrayContext:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.idl.portable.PortableIdl, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

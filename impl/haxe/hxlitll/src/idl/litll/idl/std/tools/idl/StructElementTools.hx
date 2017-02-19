@@ -19,6 +19,18 @@ import litll.idl.std.error.StructFieldSuffixErrorKind;
 
 class StructElementTools 
 {
+    public static function getElementName(element:StructElement):StructElementName
+    {
+        return switch (element)
+        {
+            case StructElement.Field(field):
+                field.name;
+                
+            case StructElement.Label(name) | StructElement.NestedLabel(name):
+                name;
+        }
+    }
+    
     public static function mapOverTypeReference(element:StructElement, func:TypeReference->TypeReference):StructElement
     {
         return switch (element)

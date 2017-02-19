@@ -16,7 +16,7 @@ class StandardIoProvider implements IoProvider
 	
 	public function printErrorLine(message:String):Void
 	{
-		Sys.stderr().writeString("Error: " + message + "\n");
+		Sys.stdout().writeString("Error: " + message + "\n");
 	}
 	
 	public function printInfoLine(message:String):Void

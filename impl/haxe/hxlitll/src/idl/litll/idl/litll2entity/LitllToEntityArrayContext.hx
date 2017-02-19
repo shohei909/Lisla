@@ -13,11 +13,11 @@ using Lambda;
 
 class LitllToEntityArrayContext
 {
-	private var array:LitllArray<Litll>;
 	private var config:LitllToEntityConfig;
-	public var index:Int;
+	public var index(default, null):Int;
 	public var length(get, never):Int;
-    
+    private var array:LitllArray<Litll>;
+	
     private inline function get_length():Int 
     {
         return array.length;
@@ -166,15 +166,14 @@ class LitllToEntityArrayContext
         }
 	}
     
-    public function readFixedInline<T>(fixedInlineProcess:InlineProcessFunction<T>, length:Int):Result<T, LitllToEntityError>
+    public inline function readFixedInline<T>(process:ProcessFunction<T>, end:Int):Result<T, LitllToEntityError>
     {
-        var localContext = new LitllToEntityArrayContext(
-            array.slice(0, length), 
-            this.index,
+        var localContext = new LitllToEntityContext(
+            Litll.Arr(array.slice(index, end)), 
             config
         );
-        
-        return fixedInlineProcess(localContext);
+        index = end;
+        return process(localContext);
     }
     
     public inline function readVariableInline<T>(variableInlineProcess:InlineProcessFunction<T>):Result<T, LitllToEntityError>
@@ -201,11 +200,11 @@ class LitllToEntityArrayContext
         }
     }
     
-    public inline function readFixedOptionalInline<T>(fixedInlineProcess:InlineProcessFunction<T>, length:Int, match:Litll->Bool):Result<Option<T>, LitllToEntityError>
+    public inline function readFixedOptionalInline<T>(process:ProcessFunction<T>, end:Int, match:Litll->Bool):Result<Option<T>, LitllToEntityError>
     {
         return if (matchNext(match))
         {
-            switch (readFixedInline(fixedInlineProcess, length))
+            switch (readFixedInline(process, end))
             {
                 case Result.Ok(data):
                     Result.Ok(Option.Some(data));
@@ -249,7 +248,7 @@ class LitllToEntityArrayContext
         return result;
 	}
     
-    public inline function readFixedRestInline<T>(process:InlineProcessFunction<T>, length:Int, match:Litll->Bool):Result<Array<T>, LitllToEntityError> 
+    public inline function readFixedRestInline<T>(process:ProcessFunction<T>, end:Int, match:Litll->Bool):Result<Array<T>, LitllToEntityError> 
 	{
 		var array = [];
 		var result = null;

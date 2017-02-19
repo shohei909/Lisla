@@ -35,7 +35,7 @@ class TypeReferenceDocumentLitllToEntity {
                                 };
                             };
                         });
-                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement([])));
+                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement(["completion", "completion_const", "completion_type"])));
                     };
                 };
                 var instance = new litll.idl.std.data.idl.document.TypeReferenceDocument(arg0, arg1, arg2);
@@ -43,5 +43,4 @@ class TypeReferenceDocumentLitllToEntity {
             };
         };
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.idl.document.TypeReferenceDocument, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

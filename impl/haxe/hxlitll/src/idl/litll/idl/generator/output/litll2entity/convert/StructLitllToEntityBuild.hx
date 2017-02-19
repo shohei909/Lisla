@@ -39,11 +39,14 @@ class StructLitllToEntityBuild
     
     private function run():Void
     {
+        var targets = [];
         for (element in elements)
         {
+            targets.push(element.getElementName().name);
             var id = "arg" + references.length;
             new StructElementLitllToEntityBuild(this, element, id).run();
         }
+        var targetsExpr = ExprBuilder.getStringArrayExpr(targets);
         
         cases.push(
             {
@@ -52,8 +55,7 @@ class StructLitllToEntityBuild
                 expr: macro return hxext.ds.Result.Err(
                     litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
                         litllData, 
-                        // TODO: target list
-                        litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement([])
+                        litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement(${targetsExpr})
                     )
                 )
             }

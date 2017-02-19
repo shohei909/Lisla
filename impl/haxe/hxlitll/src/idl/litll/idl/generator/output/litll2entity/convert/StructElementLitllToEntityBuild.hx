@@ -13,7 +13,7 @@ import litll.idl.std.data.idl.StructField;
 import litll.idl.std.data.idl.StructElementKind;
 
 class StructElementLitllToEntityBuild
-{
+{       
     private var element:StructElement;
     private var id:String;
     private var parent:StructLitllToEntityBuild;

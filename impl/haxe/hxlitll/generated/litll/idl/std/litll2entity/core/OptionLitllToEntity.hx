@@ -38,5 +38,4 @@ class OptionLitllToEntity {
         };
         case data:hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedEnumConstructor(["none", "some"])));
     };
-    public static function fixedInlineProcess<T>(context:litll.idl.litll2entity.LitllToEntityArrayContext, tLitllToEntity):hxext.ds.Result<litll.idl.std.data.core.LitllOption<T>, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

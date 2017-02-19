@@ -20,12 +20,11 @@ class LitllToEntityOutputConfig
 	{
 		this.targets = targets;
 		this.filters = [
-			TypePathFilter.Prefix(
-				TypeGroupPath.create("litll").getOrThrow(), 
-				TypeGroupPath.create("litll.idl.std.litll2entity").getOrThrow()
-			)
+			TypePathFilterTools.createPrefix("ArrayLitllToEntity", "litll.idl.std.litll2entity.ArrayLitllToEntity"),
+			TypePathFilterTools.createPrefix("StringLitllToEntity", "litll.idl.std.litll2entity.StringLitllToEntity"),
+			TypePathFilterTools.createPrefix("litll", "litll.idl.std.litll2entity"),
 		].concat(filters);
-	}	
+	}
 	
 	public function toHaxeLitllToEntityPath(sourcePath:TypePath):HaxeLitllToEntityTypePath
 	{

@@ -6,11 +6,11 @@ class EntityDeclarationLitllToEntity {
             case litll.core.Litll.Str(_):{
                 hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.CantBeString));
             };
-            case litll.core.Litll.Arr(data):{
-                var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(data, 0, context.config);
+            case litll.core.Litll.Arr(array):{
+                var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
                 var instance = {
                     arrayContext.readLabel("entity");
-                    var arg0 = switch (arrayContext.readFixedInline(litll.idl.hxlitll.litll2entity.config.EntityConfigLitllToEntity.fixedInlineProcess, arrayContext.length - 0)) {
+                    var arg0 = switch (arrayContext.readFixedInline(litll.idl.hxlitll.litll2entity.config.EntityConfigLitllToEntity.process, arrayContext.length - 0)) {
                         case hxext.ds.Result.Ok(data):{
                             data;
                         };
@@ -32,6 +32,5 @@ class EntityDeclarationLitllToEntity {
             };
         };
     }
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.hxlitll.data.config.EntityDeclaration, litll.idl.litll2entity.error.LitllToEntityError> return null;
-    public static function variableInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.hxlitll.data.config.EntityDeclaration, litll.idl.litll2entity.error.LitllToEntityError> return null;
+    public static function variableInlineProcess(arrayContext:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.hxlitll.data.config.EntityDeclaration, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

@@ -2,11 +2,13 @@
 package litll.idl.hxlitll.data.config;
 class InputConfig {
     public var target : litll.idl.hxlitll.data.config.TargetDeclaration;
+    public var _import : Array<litll.idl.hxlitll.data.config.ImportDeclaration>;
     public var entity : litll.idl.hxlitll.data.config.EntityDeclaration;
     public var litllToEntity : litll.idl.hxlitll.data.config.LitllToEntityDeclaration;
     public var entityToLitll : litll.idl.hxlitll.data.config.EntityToLitllDeclaration;
-    public function new(target:litll.idl.hxlitll.data.config.TargetDeclaration, entity:litll.idl.hxlitll.data.config.EntityDeclaration, litllToEntity:litll.idl.hxlitll.data.config.LitllToEntityDeclaration, entityToLitll:litll.idl.hxlitll.data.config.EntityToLitllDeclaration) {
+    public function new(target:litll.idl.hxlitll.data.config.TargetDeclaration, _import:Array<litll.idl.hxlitll.data.config.ImportDeclaration>, entity:litll.idl.hxlitll.data.config.EntityDeclaration, litllToEntity:litll.idl.hxlitll.data.config.LitllToEntityDeclaration, entityToLitll:litll.idl.hxlitll.data.config.EntityToLitllDeclaration) {
         this.target = target;
+        this._import = _import;
         this.entity = entity;
         this.litllToEntity = litllToEntity;
         this.entityToLitll = entityToLitll;

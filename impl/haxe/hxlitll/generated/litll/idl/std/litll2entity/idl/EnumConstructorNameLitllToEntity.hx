@@ -2,7 +2,7 @@
 package litll.idl.std.litll2entity.idl;
 class EnumConstructorNameLitllToEntity {
     public static function process(context:litll.idl.litll2entity.LitllToEntityContext):hxext.ds.Result<litll.idl.std.data.idl.EnumConstructorName, litll.idl.litll2entity.error.LitllToEntityError> {
-        return switch (StringLitllToEntity.process(context)) {
+        return switch (litll.idl.std.litll2entity.StringLitllToEntity.process(context)) {
             case hxext.ds.Result.Ok(data):{
                 {
                     switch (litll.idl.std.data.idl.EnumConstructorName.litllToEntity(data)) {

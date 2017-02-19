@@ -10,7 +10,7 @@ class SubcommandConfigLitllToEntity {
                 for (litllData in array.data) {
                     var context = new litll.idl.litll2entity.LitllToEntityContext(litllData, context.config);
                     switch litllData {
-                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement([])));
+                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement(["name_config", "common"])));
                     };
                 };
                 var instance = new litll.idl.std.data.cli.clidl.SubcommandConfig();
@@ -18,5 +18,4 @@ class SubcommandConfigLitllToEntity {
             };
         };
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.cli.clidl.SubcommandConfig, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

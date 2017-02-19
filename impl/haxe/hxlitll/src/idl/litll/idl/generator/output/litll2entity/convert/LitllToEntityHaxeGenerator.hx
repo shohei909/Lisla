@@ -77,10 +77,8 @@ class LitllToEntityHaxeGenerator
             case InlinabilityOnTuple.Never:
                 
             case InlinabilityOnTuple.FixedLength:
-                fields.push(createFixedInlineProcessFunction());
                 
             case InlinabilityOnTuple.Always:
-                fields.push(createFixedInlineProcessFunction());
                 fields.push(createVariableInlineProcessFunction());
         }
         
@@ -138,45 +136,6 @@ class LitllToEntityHaxeGenerator
         }
     }
 
-	private function createFixedInlineProcessFunction():Field
-    {
-        var processExpr = switch (definition)
-		{
-			case IdlTypeDefinition.Newtype(name, destType):
-                macro return null;
-				
-			case IdlTypeDefinition.Tuple(name, elements):
-				macro return null;
-                
-			case IdlTypeDefinition.Enum(name, constructors):
-		        macro return null;
-				
-			case IdlTypeDefinition.Struct(name, elements):
-				macro return null;
-		}
-        
-		var args = [
-			{
-				name: "context",
-				type: (macro : litll.idl.litll2entity.LitllToEntityArrayContext)
-			}
-		].concat(addtionalArgs);
-        
-        return {
-            name : "fixedInlineProcess",
-            kind : FieldType.FFun(
-                {
-                    args: args,
-                    ret: macro:hxext.ds.Result<$dataTypePath, litll.idl.litll2entity.error.LitllToEntityError>,
-                    expr: processExpr,
-                    params : TypeNameTools.toHaxeParamDecls(parameters.parameters),
-                }
-            ),
-            access: [Access.APublic, Access.AStatic],
-            pos: null,
-        }
-    }
-    
 	private function createVariableInlineProcessFunction():Field
     {
         var processExpr = switch (definition)
@@ -196,7 +155,7 @@ class LitllToEntityHaxeGenerator
         
 		var args = [
 			{
-				name: "context",
+				name: "arrayContext",
 				type: (macro : litll.idl.litll2entity.LitllToEntityArrayContext)
 			}
 		].concat(addtionalArgs);
@@ -221,6 +180,9 @@ class LitllToEntityHaxeGenerator
         }
     }
     
+    // --------------------------------------------------------------
+    // process expr
+    // --------------------------------------------------------------
     // ==============================================================
     // newtype
     // ==============================================================
@@ -240,7 +202,6 @@ class LitllToEntityHaxeGenerator
 			}
 		}
 	}
-    
     // ==============================================================
     // tuple
     // ==============================================================
@@ -260,8 +221,8 @@ class LitllToEntityHaxeGenerator
                         )
                     );
                     
-                case litll.core.Litll.Arr(data):
-                    var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(data, 0, context.config);
+                case litll.core.Litll.Arr(array):
+                    var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
                     var instance = $instantiationExpr;
                     switch (arrayContext.closeOrError())
                     {
@@ -274,7 +235,6 @@ class LitllToEntityHaxeGenerator
             }
 		}
 	}
-    
     // ==============================================================
     // enum
     // ==============================================================
@@ -284,7 +244,6 @@ class LitllToEntityHaxeGenerator
         var switchExpr = ExprBuilder.createSwitchExpr(macro context.litll, build.cases);
         return macro return $switchExpr;
 	}
-    
     // ==============================================================
     // struct
     // ==============================================================

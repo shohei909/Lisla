@@ -2,7 +2,7 @@
 package litll.idl.std.litll2entity.cli.clidl;
 class CommandNameLitllToEntity {
     public static function process(context:litll.idl.litll2entity.LitllToEntityContext):hxext.ds.Result<litll.idl.std.data.cli.clidl.CommandName, litll.idl.litll2entity.error.LitllToEntityError> {
-        return switch (StringLitllToEntity.process(context)) {
+        return switch (litll.idl.std.litll2entity.StringLitllToEntity.process(context)) {
             case hxext.ds.Result.Ok(data):{
                 {
                     var instance = new litll.idl.std.data.cli.clidl.CommandName(data);

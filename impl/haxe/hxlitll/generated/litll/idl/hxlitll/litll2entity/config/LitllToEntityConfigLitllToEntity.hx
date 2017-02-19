@@ -19,7 +19,7 @@ class LitllToEntityConfigLitllToEntity {
                                 return hxext.ds.Result.Err(data);
                             };
                         });
-                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement([])));
+                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement(["filter"])));
                     };
                 };
                 var instance = new litll.idl.hxlitll.data.config.LitllToEntityConfig(arg0);
@@ -27,6 +27,5 @@ class LitllToEntityConfigLitllToEntity {
             };
         };
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.hxlitll.data.config.LitllToEntityConfig, litll.idl.litll2entity.error.LitllToEntityError> return null;
-    public static function variableInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.hxlitll.data.config.LitllToEntityConfig, litll.idl.litll2entity.error.LitllToEntityError> return null;
+    public static function variableInlineProcess(arrayContext:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.hxlitll.data.config.LitllToEntityConfig, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

@@ -70,7 +70,7 @@ class IrLitllToEntity {
             var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
             var data = {
                 arrayContext.readLabel("enum");
-                var arg0 = switch (arrayContext.read(StringLitllToEntity.process)) {
+                var arg0 = switch (arrayContext.read(litll.idl.std.litll2entity.StringLitllToEntity.process)) {
                     case hxext.ds.Result.Ok(data):{
                         data;
                     };
@@ -160,7 +160,7 @@ class IrLitllToEntity {
             var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
             var data = {
                 arrayContext.readLabel("struct");
-                var arg0 = switch (arrayContext.readFixedInline(litll.idl.std.litll2entity.core.MapLitllToEntity.fixedInlineProcess.bind(_, StringLitllToEntity, litll.idl.std.litll2entity.ir.IrLitllToEntity), arrayContext.length - 0)) {
+                var arg0 = switch (arrayContext.readFixedInline(litll.idl.std.litll2entity.core.MapLitllToEntity.process.bind(_, litll.idl.std.litll2entity.StringLitllToEntity, litll.idl.std.litll2entity.ir.IrLitllToEntity), arrayContext.length - 0)) {
                     case hxext.ds.Result.Ok(data):{
                         data;
                     };
@@ -183,7 +183,7 @@ class IrLitllToEntity {
             var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
             var data = {
                 arrayContext.readLabel("map");
-                var arg0 = switch (arrayContext.readFixedInline(litll.idl.std.litll2entity.core.MapLitllToEntity.fixedInlineProcess.bind(_, litll.idl.std.litll2entity.ir.PrimitiveIrLitllToEntity, litll.idl.std.litll2entity.ir.IrLitllToEntity), arrayContext.length - 0)) {
+                var arg0 = switch (arrayContext.readFixedInline(litll.idl.std.litll2entity.core.MapLitllToEntity.process.bind(_, litll.idl.std.litll2entity.ir.PrimitiveIrLitllToEntity, litll.idl.std.litll2entity.ir.IrLitllToEntity), arrayContext.length - 0)) {
                     case hxext.ds.Result.Ok(data):{
                         data;
                     };
@@ -284,5 +284,4 @@ class IrLitllToEntity {
         };
         case data:hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedEnumConstructor(["array", "option", "enum", "tuple", "struct", "map"])));
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.ir.Ir, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

@@ -6,7 +6,7 @@ class BitllToEntityDeclarationLitllToEntity {
             var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
             var data = {
                 arrayContext.readLabel("bitll_to_entity");
-                var arg0 = switch (arrayContext.readFixedInline(litll.idl.hxlitll.litll2entity.config.BitllToEntityConfigLitllToEntity.fixedInlineProcess, arrayContext.length - 0)) {
+                var arg0 = switch (arrayContext.readFixedInline(litll.idl.hxlitll.litll2entity.config.BitllToEntityConfigLitllToEntity.process, arrayContext.length - 0)) {
                     case hxext.ds.Result.Ok(data):{
                         data;
                     };
@@ -39,5 +39,4 @@ class BitllToEntityDeclarationLitllToEntity {
         };
         case data:hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedEnumConstructor(["bitll_to_entity", "no_bitll_to_entity"])));
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.hxlitll.data.config.BitllToEntityDeclaration, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

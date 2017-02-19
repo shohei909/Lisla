@@ -110,7 +110,7 @@ class HeaderDocumentLitllToEntity {
                                 });
                             };
                         };
-                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement([])));
+                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement(["encoding", "license", "author", "type", "type_note", "document_markup"])));
                     };
                 };
                 var instance = new litll.idl.std.data.document.HeaderDocument(arg0, arg1, arg2, arg3, arg4, arg5);
@@ -118,5 +118,4 @@ class HeaderDocumentLitllToEntity {
             };
         };
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.document.HeaderDocument, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

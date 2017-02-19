@@ -1,11 +1,13 @@
 [package hxlitll]
 
 [import litll.util.version]
+[import litll.util.file]
 [import litll.idl]
 [import litll.idl.group]
 
 [struct InputConfig
     [target< TargetDeclaration]
+    [import..< ImportDeclaration]
     [entity< EntityDeclaration 
         [entity]
     ]
@@ -18,11 +20,18 @@
 ]
 
 [tuple TargetDeclaration
-    target [data< TargetConfig]
+    target [name String] [data< TargetConfig]
 ]
 [struct TargetConfig
     [version Version]
     [haxe_package PackagePath]
+]
+
+[tuple ImportDeclaration
+    import [name String] [data< ImportConfig]
+]
+[struct ImportConfig
+    [haxe_source DirectoryPath]
 ]
 
 [tuple FilterDeclaration

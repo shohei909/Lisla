@@ -56,4 +56,10 @@ class ExprBuilder
             pos: null,
         };
     }
+    
+    public static function getStringArrayExpr(values:Array<String>):Expr
+    {
+        var exprs = [for (v in values) getStringConstExpr(v)];
+        return macro [$a{exprs}];
+    }
 }

@@ -6,8 +6,8 @@ class LixmlElementLitllToEntity {
             case litll.core.Litll.Str(_):{
                 hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.CantBeString));
             };
-            case litll.core.Litll.Arr(data):{
-                var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(data, 0, context.config);
+            case litll.core.Litll.Arr(array):{
+                var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
                 var instance = {
                     var arg0 = switch (arrayContext.read(litll.idl.std.litll2entity.xml.lixml.LixmlElementNameLitllToEntity.process)) {
                         case hxext.ds.Result.Ok(data):{
@@ -57,6 +57,5 @@ class LixmlElementLitllToEntity {
             };
         };
     }
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.xml.lixml.LixmlElement, litll.idl.litll2entity.error.LitllToEntityError> return null;
-    public static function variableInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.xml.lixml.LixmlElement, litll.idl.litll2entity.error.LitllToEntityError> return null;
+    public static function variableInlineProcess(arrayContext:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.xml.lixml.LixmlElement, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

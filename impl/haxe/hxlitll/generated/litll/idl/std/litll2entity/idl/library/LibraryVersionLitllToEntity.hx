@@ -16,6 +16,5 @@ class LibraryVersionLitllToEntity {
         };
         case data:hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedEnumConstructor(["version"])));
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.idl.library.LibraryVersion, litll.idl.litll2entity.error.LitllToEntityError> return null;
-    public static function variableInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.idl.library.LibraryVersion, litll.idl.litll2entity.error.LitllToEntityError> return null;
+    public static function variableInlineProcess(arrayContext:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.std.data.idl.library.LibraryVersion, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

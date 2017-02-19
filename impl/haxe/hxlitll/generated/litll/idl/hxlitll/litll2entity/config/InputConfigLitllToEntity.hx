@@ -8,13 +8,14 @@ class InputConfigLitllToEntity {
         case litll.core.Litll.Arr(array):{
             {
                 var arg0 = haxe.ds.Option.None;
-                var arg1 = haxe.ds.Option.None;
+                var arg1 = [];
                 var arg2 = haxe.ds.Option.None;
                 var arg3 = haxe.ds.Option.None;
+                var arg4 = haxe.ds.Option.None;
                 for (litllData in array.data) {
                     var context = new litll.idl.litll2entity.LitllToEntityContext(litllData, context.config);
                     switch litllData {
-                        case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "target"))):switch (arg0) {
+                        case litll.core.Litll.Arr(array) if (2 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "target")) && array.data[1].match(litll.core.Litll.Str(_))):switch (arg0) {
                             case haxe.ds.Option.Some(_):{
                                 return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementDuplicated("target")));
                             };
@@ -29,12 +30,20 @@ class InputConfigLitllToEntity {
                                 });
                             };
                         };
-                        case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "entity"))):switch (arg1) {
+                        case litll.core.Litll.Arr(array) if (2 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "import")) && array.data[1].match(litll.core.Litll.Str(_))):arg1.push(switch (litll.idl.hxlitll.litll2entity.config.ImportDeclarationLitllToEntity.process(context)) {
+                            case hxext.ds.Result.Ok(data):{
+                                data;
+                            };
+                            case hxext.ds.Result.Err(data):{
+                                return hxext.ds.Result.Err(data);
+                            };
+                        });
+                        case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "entity"))):switch (arg2) {
                             case haxe.ds.Option.Some(_):{
                                 return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementDuplicated("entity")));
                             };
                             case haxe.ds.Option.None:{
-                                arg1 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.EntityDeclarationLitllToEntity.process(context)) {
+                                arg2 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.EntityDeclarationLitllToEntity.process(context)) {
                                     case hxext.ds.Result.Ok(data):{
                                         data;
                                     };
@@ -44,12 +53,12 @@ class InputConfigLitllToEntity {
                                 });
                             };
                         };
-                        case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "litll_to_entity"))):switch (arg2) {
+                        case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "litll_to_entity"))):switch (arg3) {
                             case haxe.ds.Option.Some(_):{
                                 return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementDuplicated("litll_to_entity")));
                             };
                             case haxe.ds.Option.None:{
-                                arg2 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.LitllToEntityDeclarationLitllToEntity.process(context)) {
+                                arg3 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.LitllToEntityDeclarationLitllToEntity.process(context)) {
                                     case hxext.ds.Result.Ok(data):{
                                         data;
                                     };
@@ -59,12 +68,12 @@ class InputConfigLitllToEntity {
                                 });
                             };
                         };
-                        case litll.core.Litll.Arr(array) if (array.length == 1 && array.data[0].match(litll.core.Litll.Str(_.data => "no_litll_to_entity"))):switch (arg2) {
+                        case litll.core.Litll.Arr(array) if (array.length == 1 && array.data[0].match(litll.core.Litll.Str(_.data => "no_litll_to_entity"))):switch (arg3) {
                             case haxe.ds.Option.Some(_):{
                                 return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementDuplicated("litll_to_entity")));
                             };
                             case haxe.ds.Option.None:{
-                                arg2 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.LitllToEntityDeclarationLitllToEntity.process(context)) {
+                                arg3 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.LitllToEntityDeclarationLitllToEntity.process(context)) {
                                     case hxext.ds.Result.Ok(data):{
                                         data;
                                     };
@@ -74,12 +83,12 @@ class InputConfigLitllToEntity {
                                 });
                             };
                         };
-                        case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "entity_to_bitll"))):switch (arg3) {
+                        case litll.core.Litll.Arr(array) if (1 <= array.length && array.data[0].match(litll.core.Litll.Str(_.data => "entity_to_bitll"))):switch (arg4) {
                             case haxe.ds.Option.Some(_):{
                                 return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementDuplicated("entity_to_litll")));
                             };
                             case haxe.ds.Option.None:{
-                                arg3 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.EntityToLitllDeclarationLitllToEntity.process(context)) {
+                                arg4 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.EntityToLitllDeclarationLitllToEntity.process(context)) {
                                     case hxext.ds.Result.Ok(data):{
                                         data;
                                     };
@@ -89,12 +98,12 @@ class InputConfigLitllToEntity {
                                 });
                             };
                         };
-                        case litll.core.Litll.Arr(array) if (array.length == 1 && array.data[0].match(litll.core.Litll.Str(_.data => "no_entity_to_bitll"))):switch (arg3) {
+                        case litll.core.Litll.Arr(array) if (array.length == 1 && array.data[0].match(litll.core.Litll.Str(_.data => "no_entity_to_bitll"))):switch (arg4) {
                             case haxe.ds.Option.Some(_):{
                                 return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementDuplicated("entity_to_litll")));
                             };
                             case haxe.ds.Option.None:{
-                                arg3 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.EntityToLitllDeclarationLitllToEntity.process(context)) {
+                                arg4 = haxe.ds.Option.Some(switch (litll.idl.hxlitll.litll2entity.config.EntityToLitllDeclarationLitllToEntity.process(context)) {
                                     case hxext.ds.Result.Ok(data):{
                                         data;
                                     };
@@ -104,7 +113,7 @@ class InputConfigLitllToEntity {
                                 });
                             };
                         };
-                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement([])));
+                        case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement(["target", "import", "entity", "litll_to_entity", "entity_to_litll"])));
                     };
                 };
                 var instance = new litll.idl.hxlitll.data.config.InputConfig(switch (arg0) {
@@ -114,14 +123,7 @@ class InputConfigLitllToEntity {
                     case haxe.ds.Option.None:{
                         return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementNotFound("target")));
                     };
-                }, switch (arg1) {
-                    case haxe.ds.Option.Some(data):{
-                        data;
-                    };
-                    case haxe.ds.Option.None:{
-                        null;
-                    };
-                }, switch (arg2) {
+                }, arg1, switch (arg2) {
                     case haxe.ds.Option.Some(data):{
                         data;
                     };
@@ -135,10 +137,16 @@ class InputConfigLitllToEntity {
                     case haxe.ds.Option.None:{
                         null;
                     };
+                }, switch (arg4) {
+                    case haxe.ds.Option.Some(data):{
+                        data;
+                    };
+                    case haxe.ds.Option.None:{
+                        null;
+                    };
                 });
                 hxext.ds.Result.Ok(instance);
             };
         };
     };
-    public static function fixedInlineProcess(context:litll.idl.litll2entity.LitllToEntityArrayContext):hxext.ds.Result<litll.idl.hxlitll.data.config.InputConfig, litll.idl.litll2entity.error.LitllToEntityError> return null;
 }

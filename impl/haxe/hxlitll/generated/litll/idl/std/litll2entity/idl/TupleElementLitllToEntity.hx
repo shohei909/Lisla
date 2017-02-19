@@ -3,7 +3,7 @@ package litll.idl.std.litll2entity.idl;
 class TupleElementLitllToEntity {
     public static function process(context:litll.idl.litll2entity.LitllToEntityContext):hxext.ds.Result<litll.idl.std.data.idl.TupleElement, litll.idl.litll2entity.error.LitllToEntityError> return switch context.litll {
         case litll.core.Litll.Str(_):{
-            hxext.ds.Result.Ok(litll.idl.std.data.idl.TupleElement.Label(switch (StringLitllToEntity.process(context)) {
+            hxext.ds.Result.Ok(litll.idl.std.data.idl.TupleElement.Label(switch (litll.idl.std.litll2entity.StringLitllToEntity.process(context)) {
                 case hxext.ds.Result.Ok(data):{
                     data;
                 };

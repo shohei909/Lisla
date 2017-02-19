@@ -3,7 +3,7 @@ package litll.idl.std.litll2entity.core;
 class AnyLitllToEntity {
     public static function process(context:litll.idl.litll2entity.LitllToEntityContext):hxext.ds.Result<litll.core.Litll, litll.idl.litll2entity.error.LitllToEntityError> return switch context.litll {
         case litll.core.Litll.Str(_):{
-            hxext.ds.Result.Ok(litll.core.Litll.Str(switch (StringLitllToEntity.process(context)) {
+            hxext.ds.Result.Ok(litll.core.Litll.Str(switch (litll.idl.std.litll2entity.StringLitllToEntity.process(context)) {
                 case hxext.ds.Result.Ok(data):{
                     data;
                 };
@@ -13,7 +13,7 @@ class AnyLitllToEntity {
             }));
         };
         case litll.core.Litll.Arr(array):{
-            hxext.ds.Result.Ok(litll.core.Litll.Arr(switch (ArrayLitllToEntity.process(context, litll.idl.std.litll2entity.core.AnyLitllToEntity)) {
+            hxext.ds.Result.Ok(litll.core.Litll.Arr(switch (litll.idl.std.litll2entity.ArrayLitllToEntity.process(context, litll.idl.std.litll2entity.core.AnyLitllToEntity)) {
                 case hxext.ds.Result.Ok(data):{
                     data;
                 };

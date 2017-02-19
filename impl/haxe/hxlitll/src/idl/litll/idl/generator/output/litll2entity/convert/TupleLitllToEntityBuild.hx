@@ -71,15 +71,15 @@ class TupleLitllToEntityBuild
                             switch (builder.getInlineFixedLength(data, parameters.parameters))
                             {
                                 case Option.Some(length):
-                                    var processFunc = builder.createFixedInlineProcessFuncExpr(parameters, destType);
+                                    var processFunc = builder.createProcessFuncExpr(parameters, destType);
                                     var lengthExpr = ExprBuilder.getIntConstExpr(length);
-                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readFixedInline($processFunc, $lengthExpr)); 
+                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readFixedInline($processFunc, arrayContext.index + $lengthExpr)); 
                                     
                                 case Option.None:
                                     switch (builder.getFixedLength(elements.slice(i + 1), parameters.parameters))
                                     {
                                         case Option.Some(length):
-                                            var processFunc = builder.createFixedInlineProcessFuncExpr(parameters, destType);
+                                            var processFunc = builder.createProcessFuncExpr(parameters, destType);
                                             var lengthExpr = ExprBuilder.getIntConstExpr(length);
                                             ExprBuilder.createGetOrReturnExpr(macro arrayContext.readFixedInline($processFunc, arrayContext.length - $lengthExpr)); 
                                             
@@ -94,9 +94,9 @@ class TupleLitllToEntityBuild
                             switch (builder.getInlineFixedLength(data, parameters.parameters))
                             {
                                 case Option.Some(length):
-                                    var processFunc = builder.createFixedInlineProcessFuncExpr(parameters, destType);
+                                    var processFunc = builder.createProcessFuncExpr(parameters, destType);
                                     var lengthExpr = ExprBuilder.getIntConstExpr(length);
-                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readFixedRestInline($processFunc, $lengthExpr, $guardFunction)); 
+                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readFixedRestInline($processFunc, arrayContext.index + $lengthExpr, $guardFunction)); 
                                     
                                 case Option.None:
                                     var processFunc = builder.createVariableInlineProcessFuncExpr(parameters, destType);
@@ -108,9 +108,9 @@ class TupleLitllToEntityBuild
                             switch (builder.getInlineFixedLength(data, parameters.parameters))
                             {
                                 case Option.Some(length):
-                                    var processFunc = builder.createFixedInlineProcessFuncExpr(parameters, destType);
+                                    var processFunc = builder.createProcessFuncExpr(parameters, destType);
                                     var lengthExpr = ExprBuilder.getIntConstExpr(length);
-                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readFixedOptionalInline($processFunc, $lengthExpr, $guardFunction)); 
+                                    ExprBuilder.createGetOrReturnExpr(macro arrayContext.readFixedOptionalInline($processFunc, arrayContext.index + $lengthExpr, $guardFunction)); 
                                     
                                 case Option.None:
                                     var processFunc = builder.createVariableInlineProcessFuncExpr(parameters, destType);
