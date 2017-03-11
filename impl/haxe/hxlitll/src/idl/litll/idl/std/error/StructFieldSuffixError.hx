@@ -1,7 +1,7 @@
 package litll.idl.std.error;
-import litll.core.error.LitllErrorSummary;
+import hxext.ds.Maybe;
+import litll.core.error.InlineErrorSummary;
 import litll.idl.std.data.idl.StructElementName;
-using hxext.ds.MaybeTools;
 
 class StructFieldSuffixError 
 {
@@ -14,8 +14,12 @@ class StructFieldSuffixError
         this.kind = kind;
     }
     
-    public function getSummary():LitllErrorSummary
+    public function getSummary():InlineErrorSummary<StructFieldSuffixErrorKind>
     {
-        return LitllErrorSummary.createWithTag(name.tag.upCast(), StructFieldSuffixErrorKindTools.toString(kind));
+        return new InlineErrorSummary(
+            name.tag.getRange(),
+            StructFieldSuffixErrorKindTools.toString(kind),
+            kind
+        );
     }
 }

@@ -7,11 +7,11 @@ import litll.core.tag.entry.DocumentTagEntry;
 class Tag
 {
 	public var document:Maybe<DocumentTagEntry>;
-	public var position:Maybe<SourceRange>;
+	public var range:Maybe<SourceRange>;
 	
 	public function new() 
 	{
-		position = Maybe.none();
+		range = Maybe.none();
 		document = Maybe.none();
 	}
 }

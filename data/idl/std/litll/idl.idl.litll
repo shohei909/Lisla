@@ -149,6 +149,8 @@
 [newtype StructElementName String]
 
 /// [completion_self]
+[newtype LibraryName String]
+/// [completion_self]
 [newtype LibraryPath String]
 /// [completion_self]
 [newtype PackagePath String]

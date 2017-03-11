@@ -20,7 +20,7 @@ class UnsettledArrayTag
 	public function settle(position:Int):ArrayTag
 	{
 		var tag = new ArrayTag();
-		tag.position = Maybe.some(new SourceRange(leadingTag.sourceMap, startPosition, position));
+		tag.range = Maybe.some(new SourceRange(leadingTag.sourceMap, startPosition, position));
 		return tag;
 	}
 	

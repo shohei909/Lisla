@@ -4,7 +4,7 @@ import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePath;
 import litll.idl.generator.output.EntityTypeInfomation;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.generator.data.DataOutputConfig;
+import litll.idl.generator.data.EntityOutputConfig;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
 
 class HaxeLitllToEntityTypePathPair

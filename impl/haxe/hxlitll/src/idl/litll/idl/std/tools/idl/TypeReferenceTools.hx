@@ -5,7 +5,7 @@ import haxe.macro.Expr.TypeParam;
 import litll.core.LitllString;
 import hxext.ds.Result;
 import litll.idl.exception.IdlException;
-import litll.idl.generator.data.DataOutputConfig;
+import litll.idl.generator.data.EntityOutputConfig;
 import litll.idl.generator.output.entity.EntityHaxeTypePath;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
@@ -34,11 +34,11 @@ using hxext.ds.ResultTools;
 
 class TypeReferenceTools
 {
-	public static function toMacroTypePath(reference:TypeReference, config:DataOutputConfig):haxe.macro.Expr.TypePath
+	public static function toMacroTypePath(reference:TypeReference, config:EntityOutputConfig):haxe.macro.Expr.TypePath
 	{
 		inline function toHaxeDataPath(typePath:TypePath):EntityHaxeTypePath
 		{
-			return config.toHaxeDataPath(typePath);
+			return config.toHaxePath(typePath);
 		}
 		
 		return switch (reference)

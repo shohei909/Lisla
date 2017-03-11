@@ -1,25 +1,49 @@
 package litll.idl.std.data.idl;
-import litll.core.LitllString;
 import hxext.ds.Maybe;
+import hxext.ds.Result;
+import litll.core.LitllString;
 import litll.core.tag.StringTag;
 import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.data.idl.PackagePath;
-import hxext.ds.Result;
+import litll.idl.std.data.idl.LibraryName;
 
-class ModulePath 
+class ModulePath extends LocalModulePath
 {
-	public var packagePath(default, null):PackagePath;
-	public var fileName(default, null):String;
-	public var tag(default, null):Maybe<StringTag>;
-	
-	public function new(path:Array<String>, ?tag:Maybe<StringTag>)
-	{
-		packagePath = new PackagePath(path.slice(0, path.length - 1), tag);
-		fileName = path[path.length - 1];
-		this.tag = tag;
-		PackagePath.validateElement(fileName);
-	}
-	
+    public var fileName(get, never):String;
+    private function get_fileName():String
+    {
+        return path[path.length - 1];
+    }
+    
+    public var libraryName(get, never):LibraryName;
+    private function get_libraryName():LibraryName 
+    {
+        return new LibraryName(new LitllString(path[0], tag));
+    }
+    
+	public var packagePath(get, never):PackagePath;
+    private function get_packagePath():PackagePath {
+        return new PackagePath(path.slice(0, path.length - 1), tag);
+    }
+    
+    
+    public function new(path:Array<String>, ?tag:Maybe<StringTag>)
+    {
+        super(path, tag);
+        
+        if (path.length == 0)
+        {
+            throw "Library name required " ;
+        }
+    }
+    
+    public function getChild():LocalModulePath
+    {
+        return new LocalModulePath(
+            this.path,
+            this.tag
+        );
+    }
+    
 	@:litllToEntity
 	public static function litllToEntity(string:LitllString):Result<ModulePath, LitllToEntityErrorKind>
 	{

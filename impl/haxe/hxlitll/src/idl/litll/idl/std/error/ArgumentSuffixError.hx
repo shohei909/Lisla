@@ -1,7 +1,7 @@
 package litll.idl.std.error;
-import litll.core.error.LitllErrorSummary;
+import hxext.ds.Maybe;
+import litll.core.error.InlineErrorSummary;
 import litll.idl.std.data.idl.ArgumentName;
-using hxext.ds.MaybeTools;
 
 class ArgumentSuffixError
 {
@@ -14,8 +14,12 @@ class ArgumentSuffixError
         this.kind = kind;
     }
     
-    public function getSummary():LitllErrorSummary
+    public function getSummary():InlineErrorSummary<ArgumentSuffixErrorKind>
     {
-        return LitllErrorSummary.createWithTag(name.tag.upCast(), ArgumentSuffixErrorKindTools.toString(kind));
+        return new InlineErrorSummary(
+            name.tag.getRange(), 
+            ArgumentSuffixErrorKindTools.toString(kind),
+            kind
+        );
     }
 }

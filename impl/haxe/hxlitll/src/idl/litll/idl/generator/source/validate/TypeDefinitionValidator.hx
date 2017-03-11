@@ -1,64 +1,87 @@
 package litll.idl.generator.source.validate;
 import haxe.ds.Option;
+import hxext.ds.Maybe;
 import hxext.ds.Result;
 import hxext.ds.Set;
-import litll.idl.generator.error.IdlReadErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKind;
+import litll.idl.generator.error.ReadIdlError;
+import litll.idl.generator.error.ReadIdlErrorKind;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseConditionGroup;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseConditionTools;
-import litll.idl.generator.source.PackageElement;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.validate.InlinabilityOnTuple;
 import litll.idl.generator.source.validate.TypeDefinitionValidator;
+import litll.idl.library.Library;
+import litll.idl.library.LibraryResolver;
+import litll.idl.library.LoadTypesContext;
+import litll.idl.library.PackageElement;
 import litll.idl.std.data.idl.EnumConstructor;
 import litll.idl.std.data.idl.EnumConstructorName;
+import litll.idl.std.data.idl.LibraryName;
+import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.data.idl.StructElement;
 import litll.idl.std.data.idl.StructElementName;
 import litll.idl.std.data.idl.TupleElement;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReference;
-import litll.idl.std.error.GetConditionErrorKind;
-import litll.idl.std.error.GetConditionErrorKindTools;
-import litll.idl.std.error.TypeFollowErrorKindTools;
 import litll.idl.std.tools.idl.EnumConstructorTools;
-import litll.idl.std.tools.idl.FollowedTypeDefinitionTools;
 import litll.idl.std.tools.idl.StructElementTools;
 import litll.idl.std.tools.idl.TupleTools;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
-import litll.idl.std.tools.idl.TypeReferenceTools;
 
-class TypeDefinitionValidator 
+class TypeDefinitionValidator implements IdlSourceProvider
 {
-    private var definition:TypeDefinition;
     private var packageElement:PackageElement;
     private var inlinabilityOnTuple:InlinabilityOnTuple;
     private var file:IdlFilePath;
     private var parameters:Array<TypeName>;
-    private var hasError:Bool;
+    private var errors:Array<ReadIdlError>;
+    private var library:LibraryResolver;
+    private var definition:TypeDefinition;
+    private var context:LoadTypesContext;
     
-    public static function run(file:IdlFilePath, name:String, element:PackageElement, definition:TypeDefinition):ValidType
+    private var hasError(get, never):Bool;
+    private function get_hasError():Bool 
     {
-        var validator = new TypeDefinitionValidator(file, element, definition);
-        
-        validator.validate();
-        
-        return new ValidType(
-            file,
-            element.getTypePath(name),
-            definition,
-            validator.inlinabilityOnTuple
-        );
+        return errors.length > 0;
     }
     
-    private function new(file:IdlFilePath, element:PackageElement, definition:TypeDefinition)
+    public static function run(context:LoadTypesContext, file:IdlFilePath, name:String, element:PackageElement, definition:TypeDefinition):TypeDefinitionValidationResult
     {
+        var library = element.library;
+        var validator = new TypeDefinitionValidator(context, file, library, definition);
+        validator.validate();
+        
+        return if (validator.errors.length > 0)
+        {
+            Result.Err(
+                validator.errors
+            );
+        }
+        else
+        {
+            Result.Ok(
+                new ValidType(
+                    file,
+                    element.getTypePath(name),
+                    definition,
+                    validator.inlinabilityOnTuple
+                )
+            );
+        }
+    }
+    
+    private function new(context:LoadTypesContext, file:IdlFilePath, library:LibraryResolver, definition:TypeDefinition)
+    {
+        this.context = context;
         this.file = file;
-        this.packageElement = element;
+        this.library = library;
         this.definition = definition;
         this.inlinabilityOnTuple = InlinabilityOnTuple.Never;
-        hasError = false;
+        errors = [];
     }
     
     private function validate():Void
@@ -87,10 +110,15 @@ class TypeDefinitionValidator
     private function validateTypeRefernce(reference:TypeReference):Void
     {
         var typePath = reference.getTypePath();
-        packageElement.root.getElement(typePath.getModuleArray()).iter(
-            function (referedElement:PackageElement):Void
+        typePath.modulePath.iter(
+            function (modulePath:ModulePath)
             {
-                referedElement.validateModule();
+                getElement(modulePath).iter(
+                    function (referedElement:PackageElement):Void
+                    {
+                        referedElement.validateModule(context);
+                    }
+                );
             }
         );
     }
@@ -98,13 +126,13 @@ class TypeDefinitionValidator
 	private function validateNewtype(underlyType:TypeReference):Void
 	{
         var typePath = underlyType.getTypePath();
-        switch (underlyType.getConditions(packageElement.root, parameters))
+        switch (underlyType.getConditions(this, parameters))
         {
             case Result.Ok(conditions):
                 inlinabilityOnTuple = LitllToEntityCaseConditionTools.getInlinability(conditions);
                 
             case Result.Err(error):
-                addError(IdlValidationErrorKind.GetCondition(error));
+                addErrorKind(IdlValidationErrorKind.GetCondition(error));
         }
 	}
     
@@ -119,7 +147,7 @@ class TypeDefinitionValidator
         {
             if (conditionMap.exists(name.name))
             {
-                addError(IdlValidationErrorKind.EnumConstuctorNameDuplicated(conditionMap[name.name].name, name));
+                addErrorKind(IdlValidationErrorKind.EnumConstuctorNameDuplicated(conditionMap[name.name].name, name));
             }
             else
             {
@@ -134,13 +162,13 @@ class TypeDefinitionValidator
         for (constructor in constructors)
 		{
             var name = EnumConstructorTools.getConstructorName(constructor);
-            switch (EnumConstructorTools.getConditions(constructor, packageElement.root, parameters))
+            switch (EnumConstructorTools.getConditions(constructor, this, parameters))
             {
                 case Result.Ok(conditions):
                     add(name, conditions);
                     
                 case Result.Err(error):
-                    addError(IdlValidationErrorKind.GetCondition(error));
+                    addErrorKind(IdlValidationErrorKind.GetCondition(error));
             }
             
             switch (EnumConstructorTools.getOwnedTupleElements(constructor))
@@ -159,7 +187,7 @@ class TypeDefinitionValidator
         switch (LitllToEntityCaseConditionGroup.intersects(conditionMap))
         {
             case Option.Some(groups):
-                addError(IdlValidationErrorKind.EnumConstuctorConditionDuplicated(groups.group0.name, groups.group1.name));
+                addErrorKind(IdlValidationErrorKind.EnumConstuctorConditionDuplicated(groups.group0.name, groups.group1.name));
                 
             case Option.None:
                 // success
@@ -174,7 +202,7 @@ class TypeDefinitionValidator
         {
             if (conditionMap.exists(name.name))
             {
-                addError(IdlValidationErrorKind.StructElementNameDuplicated(conditionMap[name.name].name, name));
+                addErrorKind(IdlValidationErrorKind.StructElementNameDuplicated(conditionMap[name.name].name, name));
             }
             else
             {
@@ -189,13 +217,13 @@ class TypeDefinitionValidator
         for (element in elements)
         {
             var name = StructElementTools.getName(element);
-            switch (StructElementTools.getConditions(element, packageElement.root, parameters))
+            switch (StructElementTools.getConditions(element, this, parameters))
             {
                 case Result.Ok(conditions):
                     add(name, conditions);
                     
                 case Result.Err(error):
-                    addError(IdlValidationErrorKind.GetCondition(error));
+                    addErrorKind(IdlValidationErrorKind.GetCondition(error));
             }
         }
         
@@ -206,7 +234,7 @@ class TypeDefinitionValidator
         switch (LitllToEntityCaseConditionGroup.intersects(conditionMap))
         {
             case Option.Some(groups):
-                addError(IdlValidationErrorKind.StructElementConditionDuplicated(groups.group0.name, groups.group1.name));
+                addErrorKind(IdlValidationErrorKind.StructElementConditionDuplicated(groups.group0.name, groups.group1.name));
                 
             case Option.None:
                 // success
@@ -219,13 +247,13 @@ class TypeDefinitionValidator
         
         if (hasError) return;
         
-        switch (TupleTools.getCondition(elements, packageElement.root, parameters))
+        switch (TupleTools.getCondition(elements, this, parameters))
         {
             case Result.Ok(_):
                 inlinabilityOnTuple = Always;
                 
             case Result.Err(error):
-                addError(IdlValidationErrorKind.GetCondition(error));
+                addErrorKind(IdlValidationErrorKind.GetCondition(error));
         }
 	}
     
@@ -243,7 +271,7 @@ class TypeDefinitionValidator
                     // TODO: validate for rest condition
                     if (usedNames.exists(argument.name.name))
                     {
-                        addError(IdlValidationErrorKind.ArgumentNameDuplicated(argument.name));
+                        addErrorKind(IdlValidationErrorKind.ArgumentNameDuplicated(argument.name));
                     }
                     else
                     {
@@ -253,9 +281,45 @@ class TypeDefinitionValidator
 		}
     }
     
-	private function addError(kind:IdlValidationErrorKind):Void 
+	private function addErrorKind(kind:IdlValidationErrorKind):Void 
 	{
-        hasError = true;
-		packageElement.root.addError(file, IdlReadErrorKind.Validation(kind));
+		errors.push(new ReadIdlError(file, ReadIdlErrorKind.Validation(kind)));
 	}
+    
+    
+    private function getElement(path:ModulePath):Maybe<PackageElement>
+    {
+        return getReferencedLibrary(path.libraryName).flatMap(
+            function (lib)
+            {
+                return lib.getModuleElement(path);
+            }
+        );
+    }
+    
+    public function resolveTypePath(path:TypePath):Maybe<TypeDefinition>
+    {
+        return path.modulePath.flatMap(
+            function (modulePath)
+            {
+                return getElement(modulePath).flatMap(
+                    function (element) return element.getTypeDefinition(context, path.typeName)
+                );
+            }
+        );
+    }
+    
+    private function getReferencedLibrary(name:LibraryName):Maybe<Library>
+    {
+        return switch library.getReferencedLibrary(file, name)
+        {
+            case Result.Ok(ok):
+                Maybe.some(ok);
+                
+            case Result.Err(errors):
+                trace(errors);
+                for (e in errors) errors.push(e);
+                Maybe.none();
+        }
+    }
 }

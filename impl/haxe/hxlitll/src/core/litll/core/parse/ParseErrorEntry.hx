@@ -1,7 +1,7 @@
 package litll.core.parse;
 import hxext.ds.Maybe;
 import litll.core.ds.SourceRange;
-import litll.core.error.LitllErrorSummary;
+import litll.core.error.InlineErrorSummary;
 
 class ParseErrorEntry
 {
@@ -59,8 +59,12 @@ class ParseErrorEntry
 		this.range = range;
 	}
 	
-    public function getSummary():LitllErrorSummary
+    public function getSummary():InlineErrorSummary<ParseErrorKind>
     {
-        return new LitllErrorSummary(Maybe.some(range), message);
+        return new InlineErrorSummary(
+            Maybe.some(range),
+            message,
+            kind
+        );
     }
 }

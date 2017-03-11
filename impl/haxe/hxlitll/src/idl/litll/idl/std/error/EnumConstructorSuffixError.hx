@@ -1,7 +1,7 @@
 package litll.idl.std.error;
-import litll.core.error.LitllErrorSummary;
+import litll.core.error.ErrorTools;
+import litll.core.error.InlineErrorSummary;
 import litll.idl.std.data.idl.EnumConstructorName;
-using hxext.ds.MaybeTools;
 
 class EnumConstructorSuffixError 
 {
@@ -14,8 +14,12 @@ class EnumConstructorSuffixError
         this.kind = kind;
     }
     
-    public function getSummary():LitllErrorSummary
+    public function getSummary():InlineErrorSummary<EnumConstructorSuffixErrorKind>
     {
-        return LitllErrorSummary.createWithTag(name.tag.upCast(), EnumConstructorSuffixErrorKindTools.toString(kind));
+        return new InlineErrorSummary(
+            name.tag.getRange(),
+            EnumConstructorSuffixErrorKindTools.toString(kind),
+            kind
+        );
     }
 }

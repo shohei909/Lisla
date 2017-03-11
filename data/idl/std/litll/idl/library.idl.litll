@@ -21,11 +21,8 @@
     library [library< LibraryReference]
 ]
 
-/// [completion_self]
-[newtype LibraryName String]
-
 [enum LibraryVersion
-    [version Version]
+    [version [version Version]]
 ]
 
 [tuple LibraryReference

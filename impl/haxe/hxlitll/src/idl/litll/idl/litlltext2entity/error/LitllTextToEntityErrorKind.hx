@@ -8,5 +8,5 @@ enum LitllTextToEntityErrorKind
     Parse(error:ParseErrorEntry);
     
     // ToEntity
-	LitllToEntity(error:LitllToEntityError);	
+	LitllToEntity(error:LitllToEntityError);
 }

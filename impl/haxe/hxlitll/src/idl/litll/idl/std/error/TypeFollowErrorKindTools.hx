@@ -1,20 +1,28 @@
 package litll.idl.std.error;
-import litll.core.error.LitllErrorSummary;
+import hxext.ds.Maybe;
+import litll.core.error.InlineErrorSummary;
 import litll.idl.exception.IdlException;
-import litll.idl.generator.error.IdlReadErrorKind;
-using hxext.ds.MaybeTools;
+import litll.idl.generator.error.ReadIdlErrorKind;
 
 class TypeFollowErrorKindTools
 {
-    public static function getSummary(error:TypeFollowErrorKind):LitllErrorSummary
+    public static function getSummary(error:TypeFollowErrorKind):InlineErrorSummary<TypeFollowErrorKind>
     {
         return switch(error)
         {
             case TypeFollowErrorKind.InvalidTypeParameterLength(typePath, expected, actual):
-                LitllErrorSummary.createWithTag(typePath.tag.upCast(), "invalid type parameters length. " + typePath.toString() + " expect " + expected + ", but actual " + actual);
+                new InlineErrorSummary(
+                    typePath.tag.getRange(),
+                    "Type parameters length is invalid. " + typePath.toString() + " expects " + expected + ", but actual " + actual,
+                    error
+                );
                 
             case TypeFollowErrorKind.LoopedNewtype(typePath):
-                LitllErrorSummary.createWithTag(typePath.tag.upCast(), "Type " + typePath.toString() + " is looping.");
+                new InlineErrorSummary(
+                    typePath.tag.getRange(), 
+                    "Type " + typePath.toString() + " is looping.",
+                    error
+                );
         }
     }
     

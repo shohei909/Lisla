@@ -1,142 +1,19 @@
 package litll.idl.generator.source;
 import haxe.ds.Option;
 import haxe.io.Path;
-import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.parse.Parser;
-import litll.idl.litll2entity.LitllToEntityRunner;
-import litll.idl.litll2entity.LitllToEntityConfig;
-import litll.idl.generator.error.IdlReadError;
-import litll.idl.generator.error.IdlReadErrorKind;
+import litll.idl.generator.error.ReadIdlError;
 import litll.idl.generator.source.file.IdlFilePath;
-import litll.idl.generator.source.file.LoadedIdl;
-import litll.idl.litlltext2entity.LitllTextToEntityRunner;
-import litll.idl.litlltext2entity.LitllTextToEntityRunner;
+import litll.idl.std.data.idl.LocalModulePath;
 import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.litll2entity.idl.IdlLitllToEntity;
+import litll.idl.std.data.idl.PackagePath;
 import sys.FileSystem;
 import sys.io.File;
 
-class IdlSourceReader 
-{
-	public static var suffix = ".idl.litll";
-	public var directories(default, null):Array<String>;
-	public var config(default, null):LitllToEntityConfig;
-	
-	public function new (directories:Array<String>, config:LitllToEntityConfig)
-	{
-		this.directories = directories;
-		this.config = config;
-	}
-	
-	public function moduleExists(path:Array<String>):Bool
-	{
-		var localPath = Path.join(path);
-		for (base in directories)
-		{
-			var filePath = base + "/" + localPath + ".idl.litll";
-			if (FileSystem.exists(filePath) && !FileSystem.isDirectory(filePath))
-			{
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public function directoryExists(path:Array<String>):Bool
-	{
-		var localPath = Path.join(path);
-		for (base in directories)
-		{
-			var dirPath = base + "/" + localPath;
-			if (FileSystem.exists(dirPath) && FileSystem.isDirectory(dirPath))
-			{
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public function readModule(path:Array<String>):Result<Maybe<LoadedIdl>, Array<IdlReadError>>
-	{
-		var loadedIdl:Maybe<LoadedIdl> = Maybe.none();
-		var localPath = Path.join(path);
-		var errors = [];
-        
-		for (base in directories)
-		{
-			var filePath = new IdlFilePath(base + "/" + localPath + ".idl.litll");
-            
-			inline function errorResult(kind:IdlReadErrorKind):Void
-			{
-				errors.push(new IdlReadError(filePath, kind));
-			}
-			
-			if (FileSystem.exists(filePath) && !FileSystem.isDirectory(filePath))
-			{
-				var content = File.getContent(filePath);
-                switch (LitllTextToEntityRunner.run(IdlLitllToEntity, content, null, config))
-                {
-                    case Result.Err(errors):
-                        for (error in errors)
-                        {
-                            errorResult(IdlReadErrorKind.LitllTextToEntity(error));
-                        }
-                        
-                    case Result.Ok(idl):
-                        switch (loadedIdl.toOption())
-                        {
-                            case Option.Some(prevIdl):
-                                errorResult(IdlReadErrorKind.ModuleDuplicated(new ModulePath(path), prevIdl.file));
-                                
-                            case Option.None:
-                                loadedIdl = Maybe.some(new LoadedIdl(idl, filePath));
-                        }
-                }
-			}
-		}
-		
-        return if (errors.length > 0)
-        {
-            Result.Err(errors);
-        }
-        else
-        {
-            Result.Ok(loadedIdl);
-        }
-	}
-	
-	public function getChildren(path:Array<String>):Array<String>
-	{
-		var names = [];
-		var localPath = Path.join(path);
-		for (base in directories)
-		{
-			var dirPath = base + "/" + localPath;
-			if (FileSystem.exists(dirPath) && FileSystem.isDirectory(dirPath))
-			{
-				for (childName in FileSystem.readDirectory(dirPath))
-				{
-					if (!FileSystem.isDirectory(dirPath + "/" + childName))
-					{
-						if (StringTools.endsWith(childName, suffix))
-						{
-							childName = childName.substr(0, childName.length - suffix.length);
-						}
-						else
-						{
-							continue;
-						}
-					}
-					
-					names.push(childName);
-				}
-			}
-		}
-		
-		return names;
-	}
+interface IdlSourceReader {
+    public function moduleExists(directory:String, path:ModulePath):Bool;
+    public function directoryExists(directory:String, path:PackagePath):Bool;
+    public function getChildren(directory:String, path:PackagePath):Array<String>;
+    public function getModule(directory:String, path:ModulePath):Option<String>;
+    public function getModuleFilePath(directory:String, path:ModulePath):String;
 }
-

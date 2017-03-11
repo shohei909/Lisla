@@ -1,5 +1,7 @@
 package litll.idl.litll2entity.error;
+import hxext.ds.Maybe;
 import litll.core.Litll;
+import litll.core.tag.Tag;
 
 enum LitllToEntityErrorKind
 {

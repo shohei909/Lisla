@@ -1,21 +1,40 @@
 package litll.idl.generator.source;
 import litll.idl.generator.source.validate.ValidType;
-import litll.idl.std.data.idl.TypeDefinition;
-import litll.idl.std.data.idl.TypePath;
-import sys.FileSystem;
+import litll.idl.library.Library;
+import litll.idl.library.LoadTypesContext;
+import litll.idl.library.PackageElement;
+import litll.idl.std.data.idl.PackagePath;
 
 class DirectoryElement
 {
-	private var root:RootPackageElement;
-	
+    // ========================
+    // Parent
+    // ========================
+    public var packageElement(default, null):PackageElement;
+    
+    // ========================
+    // Child
+    // ========================
 	public var children:Map<String, PackageElement>;
-	public var path(default, null):Array<String>;
 	public var loaded(default, null):Bool;
 	
-	public function new(root:RootPackageElement, path:Array<String>) 
+    // ========================
+    // Getter
+    // ========================
+    private var library(get, never):Library;
+    private inline function get_library():Library 
+    {
+        return packageElement.library;
+    }
+    public var path(get, never):PackagePath;
+    private function get_path():PackagePath
+    {
+        return packageElement.path;
+    }
+    
+	public function new(packageElement:PackageElement) 
 	{
-		this.root = root;
-		this.path = path;
+		this.packageElement = packageElement;
 		children = new Map<String, PackageElement>();
 		loaded = false;
 		init();
@@ -23,7 +42,7 @@ class DirectoryElement
 	
 	private function init():Void
 	{
-		if (!root.reader.directoryExists(path))
+		if (!library.directoryExistsAt(path))
 		{
 			loaded = true;	
 		}
@@ -32,27 +51,27 @@ class DirectoryElement
 	public function addChild(head:String):PackageElement
 	{
 		if (children.exists(head)) return children[head];
-		return children[head] = new PackageElement(root, path.concat([head]));
+		return children[head] = new PackageElement(library, path.concat([head]));
 	}
 	
-	public function loadChildren():Void
+	public function loadChildren(context:LoadTypesContext):Void
 	{
 		if (loaded) return;
 		
-		for (childName in root.reader.getChildren(path))
+		for (childName in library.getChildrenAt(path))
 		{
-			addChild(childName).loadChildren();
+			addChild(childName).loadChildren(context);
 		}
 		
 		loaded = true;
 	}
-	
-	public function fetchChildren(output:Array<ValidType>):Void 
+    
+	public function fetchChildren(context:LoadTypesContext, output:Array<ValidType>):Void 
 	{
-		loadChildren();
+		loadChildren(context);
 		for (child in children)
 		{
-			child.fetchChildren(output);
+			child.fetchChildren(context, output);
 		}
 	}
 }

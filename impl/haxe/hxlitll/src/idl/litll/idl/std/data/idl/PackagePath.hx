@@ -1,7 +1,7 @@
 package litll.idl.std.data.idl;
-import litll.core.LitllString;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
+import litll.core.LitllString;
 import litll.core.tag.StringTag;
 import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 
@@ -23,6 +23,11 @@ class PackagePath
         this.path = path;
 	}
 	
+    public function concat(additional:Array<String>):PackagePath
+    {
+        return new PackagePath(path.concat(additional), tag);
+    }
+    
 	public static function validateElement(string:String):Void
 	{
 		if (string.length == 0)
@@ -74,4 +79,12 @@ class PackagePath
 	{
 		return this.path;
 	}
+    
+    public function toModulePath():ModulePath
+    {
+        return new ModulePath(
+            path,
+            tag
+        );
+    }
 }

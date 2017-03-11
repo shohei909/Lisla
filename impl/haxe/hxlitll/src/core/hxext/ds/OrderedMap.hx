@@ -7,6 +7,16 @@ abstract OrderedMap<Key, Value>(OrderedMapImpl<Key, Value>)
 {
     public function new();
 
+    @:arrayAccess private inline function _get(key:Key):Value
+    {
+        return this.get(key);
+    }
+    
+    @:arrayAccess private inline function _set(key:Key, value:Value):Void
+    {
+        return this.set(key, value);
+    }
+    
 	@:to static inline function toStringOrderedMap<K:String,V>(t:OrderedMapImpl<K, V>):OrderedMapImpl<K, V> 
     {
 		return new OrderedMapImpl(new Map<K, V>());

@@ -64,6 +64,11 @@ abstract Maybe<T>(Null<T>) from Null<T>
 		return if (isSome()) Option.Some(this) else Option.None;
 	}
 	
+	public inline function toArray():Array<T>
+	{
+		return if (isSome()) [this] else [];
+	}
+    
 	public inline static function fromOption<T>(option:Option<T>):Maybe<T>
 	{
 		return switch (option)
@@ -74,5 +79,17 @@ abstract Maybe<T>(Null<T>) from Null<T>
 			case Option.None:
 				Maybe.none();
 		}
+	}
+    
+    @:impl
+	public static inline function upCast<U, T:U>(maybe:Maybe<T>):Maybe<U>
+	{
+		return cast maybe;
+	}
+    
+    @:impl
+	public static inline function mapAll<T, U>(maybe:Maybe<Array<T>>, func:T->U):Maybe<Array<U>>
+	{
+		return maybe.map(function (arr) return [for (e in arr) func(e)]);
 	}
 }

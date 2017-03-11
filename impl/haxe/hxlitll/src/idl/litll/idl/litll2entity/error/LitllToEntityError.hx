@@ -6,7 +6,7 @@ import litll.core.LitllArray;
 import litll.core.LitllString;
 import litll.core.LitllTools;
 import litll.core.ds.SourceRange;
-import litll.core.error.LitllErrorSummary;
+import litll.core.error.InlineErrorSummary;
 import litll.idl.litll2entity.error.LitllToEntityErrorKind;
 import litll.idl.litll2entity.error.LitllToEntityErrorTarget;
 
@@ -48,7 +48,7 @@ class LitllToEntityError
 		return switch (target)
 		{
 			case LitllToEntityErrorTarget.Str(str, maybeRange):
-				var maybeParentRange = str.tag.flatMap(function (t) return t.position);
+				var maybeParentRange = str.tag.flatMap(function (t) return t.range);
 				switch (maybeRange.toOption())
 				{
 					case Option.None:
@@ -61,15 +61,15 @@ class LitllToEntityError
 			case LitllToEntityErrorTarget.Arr(arr, index):
 				if (index < 0)
 				{
-					arr.tag.flatMap(function (tag) return tag.position);
+					arr.tag.flatMap(function (tag) return tag.range);
 				}
 				else if (index >= arr.data.length)
 				{
-					arr.tag.flatMap(function (tag) return tag.position);
+					arr.tag.flatMap(function (tag) return tag.range);
 				}
 				else
 				{
-					LitllTools.getTag(arr.data[index]).flatMap(function (tag) return tag.position);
+					LitllTools.getTag(arr.data[index]).flatMap(function (tag) return tag.range);
 				}
 		}
 	}
@@ -110,8 +110,12 @@ class LitllToEntityError
 		}
 	}
     
-    public function getSummary():LitllErrorSummary
+    public function getSummary():InlineErrorSummary<LitllToEntityErrorKind>
     {
-        return new LitllErrorSummary(getRange(), getKindString());
+        return new InlineErrorSummary(
+            getRange(),
+            getKindString(),
+            kind
+        );
     }
 }

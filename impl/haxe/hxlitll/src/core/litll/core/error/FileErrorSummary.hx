@@ -1,30 +1,50 @@
 package litll.core.error;
+import haxe.EnumTools.EnumValueTools;
+import haxe.io.Path;
+import hxext.ds.Maybe;
+import litll.core.ds.SourceRange;
 
-class FileErrorSummary implements ErrorSummary
+class FileErrorSummary<ErrorKind:EnumValue> implements IFileErrorSummary
 {
-    public var filePath:String;
-    public var summary:ErrorSummary;
+    public var file:String;
+    public var range:Maybe<SourceRange>;
+    public var message:String;
+    public var kind:ErrorKind;
     
-    public function new(filePath:String, summary:ErrorSummary) 
+    public function new(
+        file:String, 
+        range:Maybe<SourceRange>,
+        message:String,
+        kind:ErrorKind
+    )
     {
-        this.filePath = filePath;
-        this.summary = summary;
+        this.kind = kind;
+        this.file = file;
+        this.range = range;
+        this.message = message;
+        this.kind = kind;
+    }
+    
+    public inline function map<DestErrorKind:EnumValue>(func:ErrorKind->DestErrorKind):FileErrorSummary<DestErrorKind>
+    {
+        return replaceKind(func(kind));
+    }
+    
+    public inline function replaceKind<DestErrorKind:EnumValue>(destKind:DestErrorKind):FileErrorSummary<DestErrorKind>
+    {
+        return new FileErrorSummary(
+            file,
+            range, 
+            message,
+            destKind
+        );
     }
     
     public function toString():String
     {
-        return filePath + ": " + summary.toString();
-    }
-    
-    public function toLitll():Litll
-    {
-        return Litll.Arr(
-            new LitllArray(
-                [
-                    Litll.Str(new LitllString(filePath)),
-                    summary.toLitll(),
-                ]
-            )
-        );
+        var fileString = Path.normalize(file) + ": ";
+        var rangeString = range.map(function (r) return r.toString() + ": ").getOrElse("");
+        var kindString = " (kind: " + Type.getEnumName(Type.getEnum(kind)) + "." + EnumValueTools.getName(kind) + ")";
+        return fileString + rangeString + message + kindString; 
     }
 }

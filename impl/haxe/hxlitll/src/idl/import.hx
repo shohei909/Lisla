@@ -1,8 +1,7 @@
-using hxext.ds.MaybeTools;
 using hxext.ds.ResultTools;
 using hxext.ds.MapTools;
 using hxext.ds.OptionTools;
-using litll.core.error.ErrorSummaryTools;
+using litll.core.tag.TagTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 using litll.idl.std.tools.idl.EnumTools;
 using litll.idl.std.tools.idl.TupleTools;
@@ -12,3 +11,6 @@ using litll.idl.std.tools.idl.StructElementTools;
 using litll.idl.std.tools.idl.FollowedTypeDefinitionTools;
 using litll.idl.std.tools.idl.ArgumentTools;
 using litll.idl.std.tools.idl.EnumConstructorTools;
+using litll.idl.std.tools.idl.TypeDefinitionTools;
+using litll.idl.std.tools.idl.TypeParameterDeclarationTools;
+using litll.idl.std.tools.idl.TypeNameDeclarationTools;

@@ -1,27 +1,29 @@
 package litll.idl.generator.error;
-import litll.core.LitllTools;
 import hxext.ds.Maybe;
-import litll.core.error.LitllErrorSummary;
+import litll.core.error.InlineErrorSummary;
 import litll.core.tag.Tag;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.error.GetConditionErrorKind;
 import litll.idl.std.error.GetConditionErrorKindTools;
 import litll.idl.std.error.TypeFollowErrorKind;
-import litll.idl.std.error.TypeFollowErrorKindTools;
 
 class IdlValidationErrorKindTools
 {
-	public static function getSummary(errorKind:IdlValidationErrorKind ):LitllErrorSummary
+	public static function getSummary(errorKind:IdlValidationErrorKind):InlineErrorSummary<IdlValidationErrorKind>
 	{
-        inline function summary(tag:Maybe<Tag>, message:String):LitllErrorSummary
+        inline function summary(tag:Maybe<Tag>, message:String):InlineErrorSummary<IdlValidationErrorKind>
         {
-            return LitllErrorSummary.createWithTag(tag, message);
+            return new InlineErrorSummary(
+                tag.getRange(), 
+                message,
+                errorKind
+            );
         }
         
 		return switch (errorKind)
 		{
             case IdlValidationErrorKind.GetCondition(error):
-                GetConditionErrorKindTools.getSummary(error);
+                GetConditionErrorKindTools.getSummary(error).map(IdlValidationErrorKind.GetCondition);
                 
 			case IdlValidationErrorKind.ArgumentNameDuplicated(name):
 				summary(name.tag.upCast(), "Argument name " + name.name + " is duplicated");

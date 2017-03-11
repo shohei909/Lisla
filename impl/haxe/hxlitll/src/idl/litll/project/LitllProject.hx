@@ -1,27 +1,28 @@
 package litll.project;
 import haxe.ds.Option;
 import haxe.io.Path;
+import haxe.macro.Expr.TypeDefinition;
 import hxext.ds.Maybe;
-import hxext.ds.OrderedMap;
 import hxext.ds.Result;
-import litll.core.LitllString;
-import litll.core.error.ErrorSummary;
-import litll.idl.FileError;
-import litll.idl.ds.ProcessResult;
-import litll.idl.generator.error.IdlReadError;
+import hxext.error.ErrorBuffer;
+import litll.idl.generator.data.EntityOutputConfig;
+import litll.idl.generator.data.HaxePrintConfig;
+import litll.idl.generator.data.LitllToEntityOutputConfig;
+import litll.idl.generator.output.IdlToHaxeGenerateContext;
+import litll.idl.generator.output.IdlToHaxeGenerator;
+import litll.idl.generator.output.error.CompileIdlToHaxeErrorKind;
+import litll.idl.generator.output.error.GenerateHaxeErrorKind;
+import litll.idl.generator.output.haxe.HaxePrinter;
 import litll.idl.hxlitll.litll2entity.config.InputConfigLitllToEntity;
-import litll.idl.library.IdlLibrary;
-import litll.idl.library.IdlLibraryMap;
+import litll.idl.library.LibraryScope;
 import litll.idl.litlltext2entity.LitllFileToEntityRunner;
 import litll.idl.litlltext2entity.error.LitllFileToEntityError;
 import litll.idl.std.data.idl.TypeReference;
 import litll.idl.std.data.idl.project.ProjectConfig;
-import litll.idl.std.data.util.file.DirectoryPath;
 import litll.idl.std.data.util.file.FileExtension;
 import sys.FileSystem;
-import sys.io.File;
 
-class LitllProject 
+class LitllProject
 {
     public static var LITLL_HOME_VAR:String = "LITLL_HOME";
     
@@ -29,7 +30,7 @@ class LitllProject
     public var description:String;
     public var libraryDirectries(default, null):Array<String>;
     public var extensions(default, null):Map<FileExtension, TypeReference>;
-    private var libraries:Maybe<Result<IdlLibraryMap, Array<LitllFileToEntityError>>>;
+    private var libraries:Maybe<Result<LibraryScope, Array<LitllFileToEntityError>>>;
     
     public function new() 
     {
@@ -63,7 +64,7 @@ class LitllProject
         libraries = Maybe.none();
     }
     
-    public function getLibraries():Result<IdlLibraryMap, Array<LitllFileToEntityError>>
+    public function getLibraries():Result<LibraryScope, Array<LitllFileToEntityError>>
     {
         switch libraries.toOption()
         {
@@ -73,7 +74,7 @@ class LitllProject
             case Option.None:
         }
         
-        var map = new IdlLibraryMap();
+        var map = new LibraryScope();
         var errors = [];
         
         home.iter(function (_home) findLibraries(_home, map, errors));
@@ -88,7 +89,7 @@ class LitllProject
         return result;
     }
     
-    private function findLibraries(file:String, map:IdlLibraryMap, errors:Array<LitllFileToEntityError>):Void
+    private function findLibraries(file:String, map:LibraryScope, errors:Array<LitllFileToEntityError>):Void
     {
         if (FileSystem.exists(file))
         {
@@ -108,26 +109,62 @@ class LitllProject
         }
     }
     
-    public function generateHaxe(hxinputFilePath:String):Maybe<Array<ErrorSummary>>
+    public function compileIdlToHaxe(inputFilePath:String, outputDirectory:String):Maybe<Array<CompileIdlToHaxeErrorKind>>
     {
+        var types = switch (generateHaxe(inputFilePath))
+        {
+            case Result.Err(errors):
+                return Maybe.some(errors.map(CompileIdlToHaxeErrorKind.Generate));
+                
+            case Result.Ok(data):
+                data;
+        }
+        
+        var printConfig = new HaxePrintConfig(outputDirectory);
+        var printer = new HaxePrinter(printConfig);
+        
+        return printer.printTypes(types).mapAll(CompileIdlToHaxeErrorKind.Print);
+    }
+    
+    public function generateHaxe(inputFilePath:String):Result<Array<TypeDefinition>, Array<GenerateHaxeErrorKind>>
+    {
+        var errorBuffer = new ErrorBuffer();
         var libraries = switch(getLibraries())
         {
             case Result.Ok(_libraries):
                 _libraries;
                 
             case Result.Err(errors):
-                return Maybe.some(errors.summarize());
+                errorBuffer.mapAndPushAll(errors, GenerateHaxeErrorKind.GetLibrary);
+                null;
         }
-        
-        var inputConfig = switch (LitllFileToEntityRunner.run(InputConfigLitllToEntity, hxinputFilePath))
+        var inputConfig = switch (LitllFileToEntityRunner.run(InputConfigLitllToEntity, inputFilePath))
         {
             case Result.Ok(_inputConfig):
                 _inputConfig;
                 
             case Result.Err(errors):
-                return Maybe.some(errors.summarize());
+                errorBuffer.mapAndPushAll(errors, GenerateHaxeErrorKind.GetInputConfig);
+                null;
         }
         
-        return Maybe.none();
+        // error check
+        if (errorBuffer.hasError()) return Result.Err(errorBuffer.toArray());
+        
+        var context = new IdlToHaxeGenerateContext(
+            this,
+            inputFilePath,
+            inputConfig,
+            libraries
+        );
+        
+        return switch (IdlToHaxeGenerator.run(context))
+        {
+            case Result.Ok(ok):
+                Result.Ok(ok);
+                
+            case Result.Err(errors):
+                Result.Err([for (error in errors) GenerateHaxeErrorKind.LoadIdl(error)]);
+        }
     }
 }

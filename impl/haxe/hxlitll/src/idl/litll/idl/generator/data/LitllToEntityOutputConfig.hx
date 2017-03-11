@@ -1,24 +1,18 @@
 package litll.idl.generator.data;
 import haxe.ds.Option;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
 import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePath;
-import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.group.TypeGroupPath;
 import litll.idl.std.data.idl.group.TypePathFilter;
 
 using hxext.ds.ResultTools;
-using hxext.ds.MaybeTools;
 using litll.idl.std.tools.idl.path.TypePathFilterTools;
 
 class LitllToEntityOutputConfig
 {
-	public var targets:Array<TypeGroupPath>;
 	public var filters:Array<TypePathFilter>;
 	
-	public function new(targets:Array<TypeGroupPath>, filters:Array<TypePathFilter>) 
+	public function new(filters:Array<TypePathFilter>) 
 	{
-		this.targets = targets;
 		this.filters = [
 			TypePathFilterTools.createPrefix("ArrayLitllToEntity", "litll.idl.std.litll2entity.ArrayLitllToEntity"),
 			TypePathFilterTools.createPrefix("StringLitllToEntity", "litll.idl.std.litll2entity.StringLitllToEntity"),

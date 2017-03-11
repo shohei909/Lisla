@@ -10,7 +10,7 @@ import litll.idl.std.data.idl.TypeDependenceDeclaration;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypeParameterDeclaration;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.generator.data.DataOutputConfig;
+import litll.idl.generator.data.EntityOutputConfig;
 import litll.idl.std.data.idl.TypeReference;
 
 class TypeParameterDeclarationTools
@@ -38,7 +38,7 @@ class TypeParameterDeclarationTools
         }
     }
 	
-	public static function toHaxeLitllToEntityArgs(params:Array<TypeParameterDeclaration>, config:DataOutputConfig):Array<FunctionArg>
+	public static function toHaxeLitllToEntityArgs(params:Array<TypeParameterDeclaration>, config:EntityOutputConfig):Array<FunctionArg>
 	{
 		var result:Array<FunctionArg>  = [];
 		for (param in params)

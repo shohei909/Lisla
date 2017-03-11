@@ -1,11 +1,11 @@
 package litll.idl.std.tools.idl;
 import haxe.macro.Expr.FunctionArg;
 import litll.idl.std.data.idl.TypeDependenceDeclaration;
-import litll.idl.generator.data.DataOutputConfig;
+import litll.idl.generator.data.EntityOutputConfig;
 
 class TypeDependenceDeclarationTools 
 {
-	public static function toHaxeDependences(params:Array<TypeDependenceDeclaration>, config:DataOutputConfig):Array<FunctionArg>
+	public static function toHaxeDependences(params:Array<TypeDependenceDeclaration>, config:EntityOutputConfig):Array<FunctionArg>
 	{
 		return [
             for (param in params)

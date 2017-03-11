@@ -7,7 +7,7 @@ import hxext.ds.Maybe;
 import hxext.ds.Result;
 import hxext.ds.Set;
 import litll.idl.litll2entity.LitllToEntityContext;
-import litll.idl.generator.error.IdlReadErrorKind;
+import litll.idl.generator.error.ReadIdlErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKind;
 import litll.idl.generator.error.IdlValidationErrorKindTools;
 import litll.idl.generator.source.preprocess.IdlPreprocessor;
@@ -62,7 +62,7 @@ class TypeDefinitionPreprocessor
 				case TypeParameterDeclaration.TypeName(typeName):
                     if (typeParameters.exists(typeName.toString()))
 					{
-						addError(IdlReadErrorKind.TypeParameterNameDuplicated(typeName));
+						addError(ReadIdlErrorKind.TypeParameterNameDuplicated(typeName));
 					}
 					else
 					{
@@ -98,20 +98,29 @@ class TypeDefinitionPreprocessor
 		switch (path.modulePath.toOption())
 		{
 			case Option.Some(modulePath):
-				switch (parent.element.root.getElement(modulePath.toArray()).toOption())
+                var targetLibrary = switch (parent.library.getReferencedLibrary(parent.file, modulePath.libraryName))
+                {
+                    case Result.Ok(_library):
+                        _library;
+                        
+                    case Result.Err(errors):
+                        parent.addErrors(errors);
+                        return;
+                }
+				switch (targetLibrary.getModuleElement(modulePath).toOption())
 				{
 					case Option.Some(referredElement):
-						switch (referredElement.getTypeDefinition(path.typeName).toOption())
+						switch (referredElement.getTypeDefinition(parent.context, path.typeName).toOption())
 						{
 							case Option.Some(type):
 								processTypeReferenceParameters(path, type.getTypeParameters(), parameters);
 								
 							case Option.None:
-								addError(IdlReadErrorKind.TypeNotFound(path));
+								addError(ReadIdlErrorKind.TypeNotFound(path));
 						}
 						
 					case Option.None:
-						addError(IdlReadErrorKind.ModuleNotFound(modulePath));
+						addError(ReadIdlErrorKind.ModuleNotFound(modulePath));
 				}
 				
 			case Option.None:
@@ -131,7 +140,7 @@ class TypeDefinitionPreprocessor
 					{
                         
                         addError(
-                            IdlReadErrorKind.Validation(
+                            ReadIdlErrorKind.Validation(
                                 IdlValidationErrorKindTools.createInvalidTypeParameterLength(path, 0, parameters.length)
                             )
                         );
@@ -141,10 +150,10 @@ class TypeDefinitionPreprocessor
 				
                 for (importedElement in parent.importedElements)
 				{
-					switch (importedElement.getTypeDefinition(path.typeName).toOption())
+					switch (importedElement.getTypeDefinition(parent.context, path.typeName).toOption())
 					{
 						case Option.Some(type):
-							var module = importedElement.getModulePath();
+							var module = importedElement.path.toModulePath();
 							path.modulePath = Maybe.some(module);
 					        processTypeReferenceParameters(path, type.getTypeParameters(), parameters);
                             break;
@@ -155,7 +164,7 @@ class TypeDefinitionPreprocessor
 				
 				if (path.modulePath.isNone())
 				{
-					addError(IdlReadErrorKind.TypeNotFound(path));
+					addError(ReadIdlErrorKind.TypeNotFound(path));
 				}
 		}
 	}
@@ -165,7 +174,7 @@ class TypeDefinitionPreprocessor
 		if (referenceParameters.length != definitionParameters.length)
 		{
 			addError(
-				IdlReadErrorKind.Validation(
+				ReadIdlErrorKind.Validation(
                     IdlValidationErrorKindTools.createInvalidTypeParameterLength(path, definitionParameters.length, referenceParameters.length)
 				)
 			);
@@ -191,27 +200,27 @@ class TypeDefinitionPreprocessor
                                     TypeReferenceDependenceKind.Reference(name.data);
                                     
                                 case _:
-                                    addError(IdlReadErrorKind.InvalidTypeDependenceDescription(referenceParameter.value));
+                                    addError(ReadIdlErrorKind.InvalidTypeDependenceDescription(referenceParameter.value));
                                     continue;
                             }
                             
                         case _:
-                            addError(IdlReadErrorKind.InvalidTypeDependenceDescription(referenceParameter.value));
+                            addError(ReadIdlErrorKind.InvalidTypeDependenceDescription(referenceParameter.value));
                             continue;
                     }
                     
                     TypeReferenceParameterKind.Dependence(data, dependence.type);
 					
 				case TypeParameterDeclaration.TypeName(_):
-					var context = new LitllToEntityContext(referenceParameter.value, parent.element.root.reader.config);
-					switch (TypeReferenceLitllToEntity.process(context))
+					var litllToEntityContext = new LitllToEntityContext(referenceParameter.value, parent.context.config);
+					switch (TypeReferenceLitllToEntity.process(litllToEntityContext))
 					{
 						case Result.Ok(reference):
 							processTypeReference(reference);
 							TypeReferenceParameterKind.Type(reference);
 							
 						case Result.Err(err):
-							addError(IdlReadErrorKind.LitllTextToEntity(LitllTextToEntityErrorKind.LitllToEntity(err)));
+							addError(ReadIdlErrorKind.LitllTextToEntity(LitllTextToEntityErrorKind.LitllToEntity(err)));
 							continue;
 					}
 			}
@@ -220,8 +229,8 @@ class TypeDefinitionPreprocessor
 		}
 	}
 	
-	private function addError(kind:IdlReadErrorKind):Void 
+	private function addError(kind:ReadIdlErrorKind):Void 
 	{
-		parent.addError(kind);
+		parent.addErrorKind(kind);
 	}
 }

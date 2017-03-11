@@ -12,7 +12,7 @@ class TypePath
 	public var modulePath:Maybe<ModulePath>;
 	public var typeName:TypeName;
 	public var tag(default, null):Maybe<StringTag>;
-
+    
 	public function new(modulePath:Maybe<ModulePath>, typeName:TypeName, ?tag:Maybe<StringTag>)
 	{
 		this.modulePath = modulePath;

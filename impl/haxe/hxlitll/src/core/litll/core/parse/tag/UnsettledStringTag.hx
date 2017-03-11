@@ -19,7 +19,7 @@ class UnsettledStringTag
 	public function settle(position:Int):StringTag
 	{
 		var tag = new StringTag();
-		tag.position = Maybe.some(new SourceRange(leadingTag.sourceMap, startPosition, position));
+		tag.range = Maybe.some(new SourceRange(leadingTag.sourceMap, startPosition, position));
 		return tag;
 	}
 }
