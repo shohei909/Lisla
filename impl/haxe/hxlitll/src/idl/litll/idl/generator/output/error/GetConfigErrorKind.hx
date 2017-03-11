@@ -1,5 +1,5 @@
 package litll.idl.generator.output.error;
-import litll.idl.generator.error.ReadIdlError;
+import litll.idl.generator.error.LoadIdlError;
 import litll.idl.litlltext2entity.error.LitllFileToEntityError;
 
 enum GetConfigErrorKind

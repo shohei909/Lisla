@@ -54,13 +54,13 @@ class DirectoryElement
 		return children[head] = new PackageElement(library, path.concat([head]));
 	}
 	
-	public function loadChildren(context:LoadTypesContext):Void
+	public function resolveChildren(context:LoadTypesContext):Void
 	{
 		if (loaded) return;
 		
 		for (childName in library.getChildrenAt(path))
 		{
-			addChild(childName).loadChildren(context);
+			addChild(childName).resolveChildren(context);
 		}
 		
 		loaded = true;
@@ -68,7 +68,7 @@ class DirectoryElement
     
 	public function fetchChildren(context:LoadTypesContext, output:Array<ValidType>):Void 
 	{
-		loadChildren(context);
+		resolveChildren(context);
 		for (child in children)
 		{
 			child.fetchChildren(context, output);

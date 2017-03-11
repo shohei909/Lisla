@@ -2,7 +2,7 @@ package litll.idl.generator.output;
 import hxext.ds.Result;
 import litll.idl.generator.data.EntityOutputConfig;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
-import litll.idl.generator.error.ReadIdlError;
+import litll.idl.generator.error.LoadIdlError;
 import litll.idl.generator.output.entity.store.HaxeEntityInterface;
 import litll.idl.generator.output.entity.store.HaxeEntityInterfaceKindTools;
 import litll.idl.generator.source.IdlSourceReader;
@@ -42,7 +42,7 @@ class HaxeGenerateConfig
         this.sourceReader = sourceReader;
     }
     
-    public function resolveTargets():Result<LibraryTypesData, Array<ReadIdlError>>
+    public function resolveTargets():Result<LibraryTypesData, Array<LoadIdlError>>
     {
         var library = switch libraryScope.getReferencedLibrary(
             configFilePath,

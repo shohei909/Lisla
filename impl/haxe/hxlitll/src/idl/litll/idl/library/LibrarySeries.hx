@@ -1,8 +1,8 @@
 package litll.idl.library;
 import hxext.ds.OrderedMap;
 import hxext.ds.Result;
-import litll.idl.generator.error.ReadIdlError;
-import litll.idl.generator.error.ReadIdlErrorKind;
+import litll.idl.generator.error.LoadIdlError;
+import litll.idl.generator.error.LoadIdlErrorKind;
 import litll.idl.generator.source.IdlSourceReader;
 import litll.idl.library.Library;
 import litll.idl.std.entity.idl.library.LibraryConfig;
@@ -29,7 +29,7 @@ class LibrarySeries
         versions.set(config.version.data, pack);
     }
     
-    public function getReferencedLibrary(referencerFile:String, version:LibraryVersion) :Result<Library, Array<ReadIdlError>>
+    public function getReferencedLibrary(referencerFile:String, version:LibraryVersion) :Result<Library, Array<LoadIdlError>>
     {
         return switch (version)
         {
@@ -42,9 +42,9 @@ class LibrarySeries
                 {
                     Result.Err(
                         [
-                            new ReadIdlError(
+                            new LoadIdlError(
                                 referencerFile,
-                                ReadIdlErrorKind.LibraryVersionNotFound(name, _version)
+                                LoadIdlErrorKind.LibraryVersionNotFound(name, _version)
                             )
                         ]
                     );

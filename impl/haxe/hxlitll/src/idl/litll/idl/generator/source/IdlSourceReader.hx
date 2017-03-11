@@ -2,7 +2,7 @@ package litll.idl.generator.source;
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Result;
-import litll.idl.generator.error.ReadIdlError;
+import litll.idl.generator.error.LoadIdlError;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.std.entity.idl.LocalModulePath;
 import litll.idl.std.entity.idl.ModulePath;

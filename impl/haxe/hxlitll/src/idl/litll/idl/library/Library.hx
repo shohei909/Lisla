@@ -4,8 +4,8 @@ import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.idl.generator.error.ReadIdlError;
-import litll.idl.generator.error.ReadIdlErrorKind;
+import litll.idl.generator.error.LoadIdlError;
+import litll.idl.generator.error.LoadIdlErrorKind;
 import litll.idl.generator.source.IdlSourceReader;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.file.LoadedIdl;
@@ -67,7 +67,7 @@ class Library extends PackageElement implements LibraryResolver
         super(this, new PackagePath([name]));
     }
     
-    public function loadTypes():Result<Array<ValidType>, Array<ReadIdlError>>
+    public function loadTypes():Result<Array<ValidType>, Array<LoadIdlError>>
     {
         var context:LoadTypesContext = new LoadTypesContext();
         var types:Array<ValidType> = [];
@@ -84,7 +84,7 @@ class Library extends PackageElement implements LibraryResolver
         }
     }
     
-    public function loadType(modulePath:ModulePath, typeName:TypeName):Result<Maybe<ValidType>, Array<ReadIdlError>>
+    public function loadType(modulePath:ModulePath, typeName:TypeName):Result<Maybe<ValidType>, Array<LoadIdlError>>
     {
         var context:LoadTypesContext = new LoadTypesContext();
         var element = switch getModuleElement(modulePath).toOption()
@@ -130,7 +130,7 @@ class Library extends PackageElement implements LibraryResolver
         return sourceReader.getChildren(baseDirectory, path);
     }
     
-	public function readModuleAt(path:ModulePath):Result<Maybe<LoadedIdl>, Array<ReadIdlError>>
+	public function readModuleAt(path:ModulePath):Result<Maybe<LoadedIdl>, Array<LoadIdlError>>
 	{
         var filePath = sourceReader.getModuleFilePath(baseDirectory, path);
 		var content = switch sourceReader.getModule(baseDirectory, path)
@@ -139,16 +139,16 @@ class Library extends PackageElement implements LibraryResolver
                 data;
                 
             case Option.None:
-                return Result.Err([new ReadIdlError(filePath, ReadIdlErrorKind.ModuleNotFound(path))]);
+                return Result.Err([new LoadIdlError(filePath, LoadIdlErrorKind.ModuleNotFound(path))]);
         }
         
         var loadedIdl:Maybe<LoadedIdl> = Maybe.none();
 		var localPath = Path.join(path.path);
 		var errors = [];
         
-        inline function errorResult(kind:ReadIdlErrorKind):Void
+        inline function errorResult(kind:LoadIdlErrorKind):Void
         {
-            errors.push(new ReadIdlError(filePath, kind));
+            errors.push(new LoadIdlError(filePath, kind));
         }
         
 		switch (LitllTextToEntityRunner.run(IdlLitllToEntity, content, null, null))
@@ -156,14 +156,14 @@ class Library extends PackageElement implements LibraryResolver
             case Result.Err(errors):
                 for (error in errors)
                 {
-                    errorResult(ReadIdlErrorKind.LitllTextToEntity(error));
+                    errorResult(LoadIdlErrorKind.LitllTextToEntity(error));
                 }
                 
             case Result.Ok(idl):
                 switch (loadedIdl.toOption())
                 {
                     case Option.Some(prevIdl):
-                        errorResult(ReadIdlErrorKind.ModuleDuplicated(path, prevIdl.file));
+                        errorResult(LoadIdlErrorKind.ModuleDuplicated(path, prevIdl.file));
                         
                     case Option.None:
                         loadedIdl = Maybe.some(new LoadedIdl(idl, new IdlFilePath(filePath)));
@@ -180,7 +180,7 @@ class Library extends PackageElement implements LibraryResolver
         }
 	}
 	
-    public function getReferencedLibrary(referencerFile:String, referencedName:LibraryName):Result<Library, Array<ReadIdlError>>
+    public function getReferencedLibrary(referencerFile:String, referencedName:LibraryName):Result<Library, Array<LoadIdlError>>
     {   
         return if (referencedName.data == name)
         {
@@ -198,8 +198,8 @@ class Library extends PackageElement implements LibraryResolver
         {
             Result.Err(
                 [
-                    new ReadIdlError(filePath, ReadIdlErrorKind.LibraryNotFoundInLibraryConfig(config.tag.upCast(), name, referencedName.data)),
-                    new ReadIdlError(referencerFile, ReadIdlErrorKind.LibraryNotFound(referencedName)),
+                    new LoadIdlError(filePath, LoadIdlErrorKind.LibraryNotFoundInLibraryConfig(config.tag.upCast(), name, referencedName.data)),
+                    new LoadIdlError(referencerFile, LoadIdlErrorKind.LibraryNotFound(referencedName)),
                 ]
             );
         }

@@ -2,8 +2,8 @@ package litll.idl.library;
 import haxe.io.Path;
 import hxext.ds.Result;
 import litll.core.LitllString;
-import litll.idl.generator.error.ReadIdlError;
-import litll.idl.generator.error.ReadIdlErrorKind;
+import litll.idl.generator.error.LoadIdlError;
+import litll.idl.generator.error.LoadIdlErrorKind;
 import litll.idl.generator.source.IdlFileSourceReader;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.litlltext2entity.LitllFileToEntityRunner;
@@ -43,7 +43,7 @@ class LibraryScope
         }
     }
     
-    public function getReferencedLibrary(referencerFile:String, referencedName:LibraryName, version:LibraryVersion):Result<Library, Array<ReadIdlError>>
+    public function getReferencedLibrary(referencerFile:String, referencedName:LibraryName, version:LibraryVersion):Result<Library, Array<LoadIdlError>>
     {
         return if (map.exists(referencedName.data))
         {
@@ -53,9 +53,9 @@ class LibraryScope
         {
             Result.Err(
                 [
-                    new ReadIdlError(
+                    new LoadIdlError(
                         referencerFile,
-                        ReadIdlErrorKind.LibraryNotFound(referencedName)
+                        LoadIdlErrorKind.LibraryNotFound(referencedName)
                     )
                 ]
             );

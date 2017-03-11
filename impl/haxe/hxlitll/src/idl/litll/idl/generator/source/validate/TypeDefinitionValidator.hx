@@ -4,8 +4,8 @@ import hxext.ds.Maybe;
 import hxext.ds.Result;
 import hxext.ds.Set;
 import litll.idl.generator.error.IdlValidationErrorKind;
-import litll.idl.generator.error.ReadIdlError;
-import litll.idl.generator.error.ReadIdlErrorKind;
+import litll.idl.generator.error.LoadIdlError;
+import litll.idl.generator.error.LoadIdlErrorKind;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseConditionGroup;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseConditionTools;
@@ -38,7 +38,7 @@ class TypeDefinitionValidator implements IdlSourceProvider
     private var inlinabilityOnTuple:InlinabilityOnTuple;
     private var file:IdlFilePath;
     private var parameters:Array<TypeName>;
-    private var errors:Array<ReadIdlError>;
+    private var errors:Array<LoadIdlError>;
     private var library:LibraryResolver;
     private var definition:TypeDefinition;
     private var context:LoadTypesContext;
@@ -282,7 +282,7 @@ class TypeDefinitionValidator implements IdlSourceProvider
     
 	private function addErrorKind(kind:IdlValidationErrorKind):Void 
 	{
-		errors.push(new ReadIdlError(file, ReadIdlErrorKind.Validation(kind)));
+		errors.push(new LoadIdlError(file, LoadIdlErrorKind.Validation(kind)));
 	}
     
     

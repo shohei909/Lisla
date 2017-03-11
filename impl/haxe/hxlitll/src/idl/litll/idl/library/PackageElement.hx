@@ -4,12 +4,12 @@ import haxe.ds.Option;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
 import litll.idl.exception.SourceException;
-import litll.idl.generator.error.ReadIdlError;
-import litll.idl.generator.error.ReadIdlErrorKind;
+import litll.idl.generator.error.LoadIdlError;
+import litll.idl.generator.error.LoadIdlErrorKind;
 import litll.idl.generator.source.DirectoryElement;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.file.LoadedIdl;
-import litll.idl.generator.source.preprocess.IdlPreprocessor;
+import litll.idl.generator.source.resolve.IdlResolver;
 import litll.idl.generator.source.validate.IdlValidator;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.library.ModuleState;
@@ -43,7 +43,7 @@ class PackageElement
         this.library = library;
         
 		directory = new DirectoryElement(this);
-		module = ModuleState.Unloaded;
+		module = ModuleState.None;
 		initModule();
 	}
 	
@@ -88,15 +88,15 @@ class PackageElement
         );
 	}
 	
-	public function loadChildren(context:LoadTypesContext):Void
+	public function resolveChildren(context:LoadTypesContext):Void
 	{
-		loadModule(context);
-		directory.loadChildren(context);
+		resolveModule(context);
+		directory.resolveChildren(context);
 	}
 	
-	public function loadModule(context:LoadTypesContext):Void
+	public function resolveModule(context:LoadTypesContext):Void
 	{
-		if (module.isLoadStarted()) return;
+		if (module.isResolutionStarted()) return;
 		
 		var idl = switch (readIdl(context).toOption())
 		{
@@ -114,24 +114,24 @@ class PackageElement
                 data;
                 
             case Result.Err(error):
-                module = ModuleState.Loaded(Result.Err([new ReadIdlError(idl.file, error)]), idl.file);
+                module = ModuleState.Resolved(Result.Err([new LoadIdlError(idl.file, error)]), idl.file);
                 return;
         }
         
-		module = ModuleState.Loading(typeMap, idl.file);
-		var result = IdlPreprocessor.run(context, this, path.toModulePath(), idl, typeMap);
-		module = ModuleState.Loaded(result, idl.file);
+		module = ModuleState.Resolving(typeMap, idl.file);
+		var result = IdlResolver.run(context, this, path.toModulePath(), idl, typeMap);
+		module = ModuleState.Resolved(result, idl.file);
 	}
     
     public function validateModule(context:LoadTypesContext):Void
     {
 		if (module.isValidationStarted()) return;
         
-        loadModule(context);
+        resolveModule(context);
         
         switch (module)
 		{
-			case ModuleState.Loaded(loadResult, file):
+			case ModuleState.Resolved(loadResult, file):
                 switch (loadResult)
                 {
                     case Result.Ok(typeMap):
@@ -149,7 +149,7 @@ class PackageElement
 			case ModuleState.Validated(_) | ModuleState.Validating(_):
                 throw new SourceException("validation has already started");
                 
-			case ModuleState.Unloaded | ModuleState.Loading(_):
+			case ModuleState.None | ModuleState.Resolving(_):
 				throw new SourceException("must be loaded");
 		}
 	}
@@ -161,16 +161,16 @@ class PackageElement
             case ModuleState.Empty:
                 false;
                 
-			case ModuleState.Loaded(_) | ModuleState.Loading(_) | ModuleState.Validating(_) | ModuleState.Validated(_):
+			case ModuleState.Resolved(_) | ModuleState.Resolving(_) | ModuleState.Validating(_) | ModuleState.Validated(_):
 				true;
 				
-			case ModuleState.Unloaded:
-				loadModule(context);
+			case ModuleState.None:
+				resolveModule(context);
 				hasModule(context);
 		}
 	}
     
-	private function getTypeMap(types:Array<TypeDefinition>, filePath:IdlFilePath):Result<Map<String, TypeDefinition>, ReadIdlErrorKind>
+	private function getTypeMap(types:Array<TypeDefinition>, filePath:IdlFilePath):Result<Map<String, TypeDefinition>, LoadIdlErrorKind>
 	{
 		var typeMap:Map<String, TypeDefinition> = new Map<String, TypeDefinition>();
         
@@ -180,7 +180,7 @@ class PackageElement
 			if (typeMap.exists(name.toString()))
 			{
 				var path = new TypePath(Maybe.some(path.toModulePath()), name, name.tag);
-				return Result.Err(ReadIdlErrorKind.TypeNameDuplicated(path));
+				return Result.Err(LoadIdlErrorKind.TypeNameDuplicated(path));
 			}
 			else
 			{
@@ -216,14 +216,14 @@ class PackageElement
 			case ModuleState.Empty:
 				Maybe.none();
 			
-			case ModuleState.Unloaded | ModuleState.Loading(_) | ModuleState.Loaded(_) | ModuleState.Validating(_):
+			case ModuleState.None | ModuleState.Resolving(_) | ModuleState.Resolved(_) | ModuleState.Validating(_):
                 throw new SourceException("must be validated");
 		}
 	}
     
 	public function getTypeDefinition(context:LoadTypesContext, typeName:TypeName):Maybe<TypeDefinition>
 	{
-		loadModule(context);
+		resolveModule(context);
         
         return switch (module)
 		{
@@ -244,17 +244,17 @@ class PackageElement
                         Maybe.none();
                 }
                 
-			case ModuleState.Loaded(Result.Ok(data), _) | ModuleState.Validating(data, _) | ModuleState.Loading(data, _):
+			case ModuleState.Resolved(Result.Ok(data), _) | ModuleState.Validating(data, _) | ModuleState.Resolving(data, _):
 				data.getMaybe(typeName.toString());
 				
-			case ModuleState.Loaded(Result.Err(errors), _):
+			case ModuleState.Resolved(Result.Err(errors), _):
                 context.errors.pushAll(errors);
                 Maybe.none();
                 
 			case ModuleState.Empty:
 				Maybe.none();
                 
-			case ModuleState.Unloaded:
+			case ModuleState.None:
 				throw new SourceException("must be loaded");
 		}
 	}
@@ -301,7 +301,7 @@ class PackageElement
 	{	
 		return switch (module)
 		{
-			case ModuleState.Loaded(Result.Err(errors), file):
+			case ModuleState.Resolved(Result.Err(errors), file):
                 context.errors.pushAll(errors);
                 false;
                 
@@ -311,11 +311,11 @@ class PackageElement
 			case ModuleState.Validated(data, file):
 				data.exists(typeName.toString());
                 
-			case ModuleState.Loaded(Result.Ok(data), _) | ModuleState.Loading(data, _) | ModuleState.Validating(data, _):
+			case ModuleState.Resolved(Result.Ok(data), _) | ModuleState.Resolving(data, _) | ModuleState.Validating(data, _):
 				data.exists(typeName.toString());
 				
-			case ModuleState.Unloaded:
-				loadModule(context);
+			case ModuleState.None:
+				resolveModule(context);
 				hasType(context, typeName);
 		}
 	}
@@ -348,12 +348,12 @@ class PackageElement
                     }
 				}
             
-            case ModuleState.Loaded(Result.Err(errors), _):
+            case ModuleState.Resolved(Result.Err(errors), _):
                 context.errors.pushAll(errors);
                 
 			case ModuleState.Empty:
                 
-			case ModuleState.Unloaded | ModuleState.Loaded(Result.Ok(_), _) | ModuleState.Loading(_) | ModuleState.Validating(_):
+			case ModuleState.None | ModuleState.Resolved(Result.Ok(_), _) | ModuleState.Resolving(_) | ModuleState.Validating(_):
                 throw new SourceException("must be validated, but " + module);
 		}
 	}

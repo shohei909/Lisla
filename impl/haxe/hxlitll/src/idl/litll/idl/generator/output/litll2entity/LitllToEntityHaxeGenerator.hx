@@ -1,7 +1,7 @@
 package litll.idl.generator.output.litll2entity;
 import haxe.macro.Expr.TypeDefinition;
 import hxext.ds.Result;
-import litll.idl.generator.error.ReadIdlError;
+import litll.idl.generator.error.LoadIdlError;
 import litll.idl.generator.output.HaxeConvertContext;
 import litll.idl.generator.output.litll2entity.build.LitllToEntityHaxeTypeBuilder;
 import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePathPair;
@@ -9,7 +9,7 @@ using hxext.ds.ResultTools;
 
 class LitllToEntityHaxeGenerator
 {
-	public static function generateTypes(context:HaxeGenerateConfig):Result<Array<TypeDefinition>, Array<ReadIdlError>>
+	public static function generateTypes(context:HaxeGenerateConfig):Result<Array<TypeDefinition>, Array<LoadIdlError>>
 	{
         return switch (context.resolveTargets())
 		{

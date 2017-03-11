@@ -1,8 +1,8 @@
-package litll.idl.generator.source.preprocess;
+package litll.idl.generator.source.resolve;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.error.ReadIdlError;
-import litll.idl.generator.error.ReadIdlErrorKind;
+import litll.idl.generator.error.LoadIdlError;
+import litll.idl.generator.error.LoadIdlErrorKind;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.file.LoadedIdl;
 import litll.idl.library.LibraryResolver;
@@ -11,11 +11,11 @@ import litll.idl.library.PackageElement;
 import litll.idl.std.entity.idl.ModulePath;
 import litll.idl.std.entity.idl.TypeDefinition;
 
-class IdlPreprocessor
+class IdlResolver
 {
 	private var idl:LoadedIdl;
     private var modulePath:ModulePath;
-    private var errors:Array<ReadIdlError>;
+    private var errors:Array<LoadIdlError>;
 	
     public var context(default, null):LoadTypesContext;
     public var library(default, null):LibraryResolver;
@@ -28,16 +28,16 @@ class IdlPreprocessor
         return idl.file;
     }
     
-	public static function run(context:LoadTypesContext, element:PackageElement, modulePath:ModulePath, idl:LoadedIdl, typeMap:Map<String, TypeDefinition>):Result<Map<String, TypeDefinition>, Array<ReadIdlError>>
+	public static function run(context:LoadTypesContext, element:PackageElement, modulePath:ModulePath, idl:LoadedIdl, typeMap:Map<String, TypeDefinition>):Result<Map<String, TypeDefinition>, Array<LoadIdlError>>
 	{
-		var processor = new IdlPreprocessor(context, element, modulePath, idl);
+		var processor = new IdlResolver(context, element, modulePath, idl);
 		
 		processor.varidatePackagePath();
 		processor.processImportedModules();
         
         for (typeDefininition in idl.data.typeDefinitions)
 		{
-			TypeDefinitionPreprocessor.run(processor, typeDefininition);
+			TypeDefinitionResolver.run(processor, typeDefininition);
 		}
         
         return if (processor.errors.length > 0)
@@ -67,7 +67,7 @@ class IdlPreprocessor
         var _packagePath = idl.data.packageDeclaration._package;
         if (packagePath.toString() != _packagePath.toString())
         {
-            addErrorKind(ReadIdlErrorKind.InvalidPackage(packagePath, _packagePath));
+            addErrorKind(LoadIdlErrorKind.InvalidPackage(packagePath, _packagePath));
         }
     }
 	
@@ -93,22 +93,22 @@ class IdlPreprocessor
                     importedElements.push(element);
                     
                 case _:
-                    addErrorKind(ReadIdlErrorKind.ModuleNotFound(importTarget.module));
+                    addErrorKind(LoadIdlErrorKind.ModuleNotFound(importTarget.module));
             }
 		}
 	}
 	
-    public function addErrorKind(kind:ReadIdlErrorKind):Void
+    public function addErrorKind(kind:LoadIdlErrorKind):Void
     {
-        addError(new ReadIdlError(file, kind));
+        addError(new LoadIdlError(file, kind));
     }
     
-	public function addError(error:ReadIdlError):Void
+	public function addError(error:LoadIdlError):Void
 	{
 		errors.push(error);
 	}
     
-	public function addErrors(errors:Array<ReadIdlError>):Void
+	public function addErrors(errors:Array<LoadIdlError>):Void
 	{
 		for (error in errors) addError(error);
 	}

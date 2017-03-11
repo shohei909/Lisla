@@ -1,7 +1,7 @@
 package litll.idl.std.error;
 import litll.core.error.InlineErrorSummary;
 import litll.idl.exception.IdlException;
-import litll.idl.generator.error.ReadIdlErrorKind;
+import litll.idl.generator.error.LoadIdlErrorKind;
 
 class GetConditionErrorKindTools 
 {

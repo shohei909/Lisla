@@ -3,14 +3,14 @@ import litll.idl.library.ModuleState;
 
 class ModuleStateTools
 {
-	public static function isLoadStarted(state:ModuleState):Bool
+	public static function isResolutionStarted(state:ModuleState):Bool
 	{
 		return switch (state)
 		{
-			case ModuleState.Validated(_) | ModuleState.Validating(_) | ModuleState.Loaded(_) | ModuleState.Loading(_) | ModuleState.Empty: 
+			case ModuleState.Validated(_) | ModuleState.Validating(_) | ModuleState.Resolved(_) | ModuleState.Resolving(_) | ModuleState.Empty: 
 				true;
 				
-			case ModuleState.Unloaded:
+			case ModuleState.None:
 				false;
 		}
 	}
@@ -22,7 +22,7 @@ class ModuleStateTools
 			case ModuleState.Validated(_) | ModuleState.Validating(_) | ModuleState.Empty: 
 				true;
 				
-			case ModuleState.Unloaded | ModuleState.Loaded(_) | ModuleState.Loading(_):
+			case ModuleState.None | ModuleState.Resolved(_) | ModuleState.Resolving(_):
 				false;
 		}
 	}

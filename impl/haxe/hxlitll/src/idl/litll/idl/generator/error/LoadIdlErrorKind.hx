@@ -10,7 +10,7 @@ import litll.idl.std.entity.idl.TypePath;
 import litll.idl.std.entity.idl.LibraryName;
 import litll.idl.std.entity.util.version.Version;
 
-enum ReadIdlErrorKind
+enum LoadIdlErrorKind
 {
     // Library
     LibraryNotFoundInLibraryConfig(configTag:Maybe<Tag>, ownerName:String, referencedName:String);

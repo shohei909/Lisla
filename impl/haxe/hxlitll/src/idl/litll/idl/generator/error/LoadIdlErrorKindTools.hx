@@ -6,11 +6,11 @@ import litll.core.error.InlineErrorSummary;
 import litll.core.tag.Tag;
 import litll.idl.litlltext2entity.error.LitllTextToEntityErrorKindTools;
 
-class ReadIdlErrorKindTools 
+class LoadIdlErrorKindTools 
 {
-    public static function getSummary(errorKind:ReadIdlErrorKind):InlineErrorSummary<ReadIdlErrorKind>
+    public static function getSummary(errorKind:LoadIdlErrorKind):InlineErrorSummary<LoadIdlErrorKind>
 	{
-        inline function summary(tag:Maybe<Tag>, message:String):InlineErrorSummary<ReadIdlErrorKind>
+        inline function summary(tag:Maybe<Tag>, message:String):InlineErrorSummary<LoadIdlErrorKind>
         {
             return new InlineErrorSummary(
                 tag.getRange(), 
@@ -21,44 +21,44 @@ class ReadIdlErrorKindTools
         
 		return switch (errorKind)
 		{
-            case ReadIdlErrorKind.LibraryNotFoundInLibraryConfig(configTag, referencerName, referenceeName):
+            case LoadIdlErrorKind.LibraryNotFoundInLibraryConfig(configTag, referencerName, referenceeName):
                 summary(configTag.upCast(), "Library " + referenceeName + " is referenced in " + referencerName + ", but it is not found in library config file");
             
-            case ReadIdlErrorKind.LibraryNotFound(name):
+            case LoadIdlErrorKind.LibraryNotFound(name):
                 summary(name.tag.upCast(), "Library " + name.data + " is not found");
             
-            case ReadIdlErrorKind.LibraryVersionNotFound(name, version):
+            case LoadIdlErrorKind.LibraryVersionNotFound(name, version):
                 summary(version.tag.upCast(), "Library " + name + " version " + version.data + " is not found");
                 
-			case ReadIdlErrorKind.LitllTextToEntity(error):
+			case LoadIdlErrorKind.LitllTextToEntity(error):
 				LitllTextToEntityErrorKindTools.getSummary(error).replaceKind(errorKind);
 				
-			case ReadIdlErrorKind.ModuleDuplicated(module, existingPath):
+			case LoadIdlErrorKind.ModuleDuplicated(module, existingPath):
                 new InlineErrorSummary(
                     Maybe.none(), 
                     "Module " + module.toString() + " is duplicated with " + existingPath.toString(),
                     errorKind
                 );
 				
-			case ReadIdlErrorKind.TypeNameDuplicated(typePath):
+			case LoadIdlErrorKind.TypeNameDuplicated(typePath):
                 summary(typePath.tag.upCast(), "Type " + typePath.toString() + " is duplicated");
 				
-			case ReadIdlErrorKind.TypeParameterNameDuplicated(name):
+			case LoadIdlErrorKind.TypeParameterNameDuplicated(name):
 				summary(name.tag.upCast(), "Type parameter name " + name.toString() + " is duplicated");
 				
-			case ReadIdlErrorKind.InvalidPackage(expected, actual):
+			case LoadIdlErrorKind.InvalidPackage(expected, actual):
 				summary(actual.tag.upCast(), "Package name " + expected.toString() + " is expected but " + actual.toString());
 				
-			case ReadIdlErrorKind.TypeNotFound(path):
+			case LoadIdlErrorKind.TypeNotFound(path):
 				summary(path.tag.upCast(), "Type " + path.toString() + " is not found");
 				
-			case ReadIdlErrorKind.ModuleNotFound(path):
+			case LoadIdlErrorKind.ModuleNotFound(path):
 				summary(path.tag.upCast(), "Module " + path.toString() + " is not found");
                 
-            case ReadIdlErrorKind.InvalidTypeDependenceDescription(litll):
+            case LoadIdlErrorKind.InvalidTypeDependenceDescription(litll):
                 summary(LitllTools.getTag(litll).upCast(), "Invalid " + LitllTools.toString(litll) + " is loop");
                 
-            case ReadIdlErrorKind.Validation(error):
+            case LoadIdlErrorKind.Validation(error):
                 IdlValidationErrorKindTools.getSummary(error).replaceKind(errorKind);
 		}
 	}

@@ -1,26 +1,18 @@
-package litll.idl.generator.source.preprocess;
+package litll.idl.generator.source.resolve;
 
 import haxe.ds.Option;
-import litll.core.Litll;
-import litll.core.LitllString;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import hxext.ds.Set;
-import litll.idl.litll2entity.LitllToEntityContext;
-import litll.idl.generator.error.ReadIdlErrorKind;
-import litll.idl.generator.error.IdlValidationErrorKind;
+import litll.core.Litll;
+import litll.core.LitllString;
 import litll.idl.generator.error.IdlValidationErrorKindTools;
-import litll.idl.generator.source.preprocess.IdlPreprocessor;
+import litll.idl.generator.error.LoadIdlErrorKind;
+import litll.idl.generator.source.resolve.IdlResolver;
+import litll.idl.litll2entity.LitllToEntityContext;
 import litll.idl.litlltext2entity.error.LitllTextToEntityErrorKind;
-import litll.idl.std.entity.idl.EnumConstructor;
-import litll.idl.std.entity.idl.EnumConstructorName;
-import litll.idl.std.entity.idl.StructElement;
-import litll.idl.std.entity.idl.StructElementName;
-import litll.idl.std.entity.idl.TupleElement;
 import litll.idl.std.entity.idl.TypeDefinition;
 import litll.idl.std.entity.idl.TypeDependenceName;
 import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeNameDeclaration;
 import litll.idl.std.entity.idl.TypeParameterDeclaration;
 import litll.idl.std.entity.idl.TypePath;
 import litll.idl.std.entity.idl.TypeReference;
@@ -28,24 +20,22 @@ import litll.idl.std.entity.idl.TypeReferenceDependenceKind;
 import litll.idl.std.entity.idl.TypeReferenceParameter;
 import litll.idl.std.entity.idl.TypeReferenceParameterKind;
 import litll.idl.std.litll2entity.idl.TypeReferenceLitllToEntity;
-import litll.idl.std.error.GetConditionErrorKind;
-import litll.idl.std.error.TypeFollowErrorKind;
 using litll.idl.std.tools.idl.TypeDefinitionTools;
 
-class TypeDefinitionPreprocessor
+class TypeDefinitionResolver
 {
-	private var parent:IdlPreprocessor;
+	private var parent:IdlResolver;
 	private var definition:TypeDefinition;
 	private var typeParameters:Map<String, TypeName>;
     
-	public static function run(parent:IdlPreprocessor, definition:TypeDefinition):Void
+	public static function run(parent:IdlResolver, definition:TypeDefinition):Void
 	{
-		var runner = new TypeDefinitionPreprocessor(parent, definition);
+		var runner = new TypeDefinitionResolver(parent, definition);
 		runner.collectTypeParameters();
 		runner.process();
 	}
 	
-	private function new(parent:IdlPreprocessor, definition:TypeDefinition)
+	private function new(parent:IdlResolver, definition:TypeDefinition)
 	{
 		this.parent = parent;
 		this.definition = definition;
@@ -62,7 +52,7 @@ class TypeDefinitionPreprocessor
 				case TypeParameterDeclaration.TypeName(typeName):
                     if (typeParameters.exists(typeName.toString()))
 					{
-						addError(ReadIdlErrorKind.TypeParameterNameDuplicated(typeName));
+						addError(LoadIdlErrorKind.TypeParameterNameDuplicated(typeName));
 					}
 					else
 					{
@@ -116,11 +106,11 @@ class TypeDefinitionPreprocessor
 								processTypeReferenceParameters(path, type.getTypeParameters(), parameters);
 								
 							case Option.None:
-								addError(ReadIdlErrorKind.TypeNotFound(path));
+								addError(LoadIdlErrorKind.TypeNotFound(path));
 						}
 						
 					case Option.None:
-						addError(ReadIdlErrorKind.ModuleNotFound(modulePath));
+						addError(LoadIdlErrorKind.ModuleNotFound(modulePath));
 				}
 				
 			case Option.None:
@@ -140,7 +130,7 @@ class TypeDefinitionPreprocessor
 					{
                         
                         addError(
-                            ReadIdlErrorKind.Validation(
+                            LoadIdlErrorKind.Validation(
                                 IdlValidationErrorKindTools.createInvalidTypeParameterLength(path, 0, parameters.length)
                             )
                         );
@@ -164,7 +154,7 @@ class TypeDefinitionPreprocessor
 				
 				if (path.modulePath.isNone())
 				{
-					addError(ReadIdlErrorKind.TypeNotFound(path));
+					addError(LoadIdlErrorKind.TypeNotFound(path));
 				}
 		}
 	}
@@ -174,7 +164,7 @@ class TypeDefinitionPreprocessor
 		if (referenceParameters.length != definitionParameters.length)
 		{
 			addError(
-				ReadIdlErrorKind.Validation(
+				LoadIdlErrorKind.Validation(
                     IdlValidationErrorKindTools.createInvalidTypeParameterLength(path, definitionParameters.length, referenceParameters.length)
 				)
 			);
@@ -200,12 +190,12 @@ class TypeDefinitionPreprocessor
                                     TypeReferenceDependenceKind.Reference(name.data);
                                     
                                 case _:
-                                    addError(ReadIdlErrorKind.InvalidTypeDependenceDescription(referenceParameter.value));
+                                    addError(LoadIdlErrorKind.InvalidTypeDependenceDescription(referenceParameter.value));
                                     continue;
                             }
                             
                         case _:
-                            addError(ReadIdlErrorKind.InvalidTypeDependenceDescription(referenceParameter.value));
+                            addError(LoadIdlErrorKind.InvalidTypeDependenceDescription(referenceParameter.value));
                             continue;
                     }
                     
@@ -220,7 +210,7 @@ class TypeDefinitionPreprocessor
 							TypeReferenceParameterKind.Type(reference);
 							
 						case Result.Err(err):
-							addError(ReadIdlErrorKind.LitllTextToEntity(LitllTextToEntityErrorKind.LitllToEntity(err)));
+							addError(LoadIdlErrorKind.LitllTextToEntity(LitllTextToEntityErrorKind.LitllToEntity(err)));
 							continue;
 					}
 			}
@@ -229,7 +219,7 @@ class TypeDefinitionPreprocessor
 		}
 	}
 	
-	private function addError(kind:ReadIdlErrorKind):Void 
+	private function addError(kind:LoadIdlErrorKind):Void 
 	{
 		parent.addErrorKind(kind);
 	}
