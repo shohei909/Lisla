@@ -1,9 +1,9 @@
-// Lisla
+; Lisla
 ''''''''
 "Multi\r\nline" "\"" "\u{305D}\u{3089}"
 ''''''''
 
-// Json
+; Json
 ''''''''
 ["Multi\r\nline", "\"", "そら"]
 ''''''''

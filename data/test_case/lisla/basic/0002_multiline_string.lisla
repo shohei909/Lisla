@@ -1,4 +1,4 @@
-// Lisla
+; Lisla
 ''''''''
 "
 Multi
@@ -13,7 +13,7 @@ line
     '''''
 ''''''''
 
-// Json
+; Json
 ''''''''
 ["Multi\nline", "Lisla\n\n is\n\n  awesome."]
 ''''''''

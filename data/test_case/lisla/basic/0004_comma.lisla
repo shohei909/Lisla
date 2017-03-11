@@ -1,9 +1,9 @@
-// Lisla
+; Lisla
 ''''''''
 a,bc,def
 ''''''''
 
-// Json
+; Json
 ''''''''
 ["a,bc,def"]
 ''''''''

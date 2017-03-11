@@ -1,30 +1,30 @@
-/// 'IDL for Lisla IDL configure file(.config.lisla)'
-/// [license "Public Domain"]
-[package lisla.idl]
+;; 'IDL for Lisla IDL configure file(.config.lisla)'
+;; (license "Public Domain")
+(package lisla.idl)
 
-[import lisla.util.file]
-[import lisla.util.version]
-[import lisla.idl]
+(import lisla.util.file)
+(import lisla.util.version)
+(import lisla.idl)
 
-[struct LibraryConfig
-    [version Version]
-    [description String]
-    [extension..< FileExtensionDeclaration]
-    [library..< LibraryDependenceDeclaration]
-]
+(struct LibraryConfig
+    (version Version)
+    (description String)
+    (extension..< FileExtensionDeclaration)
+    (library..< LibraryDependenceDeclaration)
+)
 
-[tuple FileExtensionDeclaration
-    extension [target FileExtension] [type TypeReference]
-]
+(tuple FileExtensionDeclaration
+    extension (target FileExtension) (type TypeReference)
+)
 
-[tuple LibraryDependenceDeclaration
-    library [library< LibraryReference]
-]
+(tuple LibraryDependenceDeclaration
+    library (library< LibraryReference)
+)
 
-[enum LibraryVersion
-    [version [version Version]]
-]
+(enum LibraryVersion
+    (version (version Version))
+)
 
-[tuple LibraryReference
-    [name LibraryName] [version LibraryVersion]
-]
+(tuple LibraryReference
+    (name LibraryName) (version LibraryVersion)
+)

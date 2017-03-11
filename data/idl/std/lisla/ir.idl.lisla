@@ -1,23 +1,23 @@
-[package lisla]
-[import lisla.core]
+(package lisla)
+(import lisla.core)
 
-[enum Ir
-    [array [data.. Ir]]
-    [option [data [Option Ir]]]
-    [enum [name String] [data.. Ir]]
-    [tuple [data.. Ir]]
-    [struct [data< [Map String Ir]]]
-    [map [data< [Map PrimitiveIr Ir]]]
-    [primitive< [data PrimitiveIr]]
-]
+(enum Ir
+    (array (data.. Ir))
+    (option (data (Option Ir)))
+    (enum (name String) (data.. Ir))
+    (tuple (data.. Ir))
+    (struct (data< (Map String Ir)))
+    (map (data< (Map PrimitiveIr Ir)))
+    (primitive< (data PrimitiveIr))
+)
 
-[enum PrimitiveIr
-    [fixed_int [size UInt64] [data BigInt]]
-    [fixed_uint [size UInt64] [data BigUInt]]
-    [variable_int [data BigInt]]
-    [variable_uint [data BigUInt]]
-    [float64 [data Float64]]
-    [boolean [data Boolean]]
-    [string [data String]]
-    [binary [data Binary]]
-]
+(enum PrimitiveIr
+    (fixed_int (size UInt64) (data BigInt))
+    (fixed_uint (size UInt64) (data BigUInt))
+    (variable_int (data BigInt))
+    (variable_uint (data BigUInt))
+    (float64 (data Float64))
+    (boolean (data Boolean))
+    (string (data String))
+    (binary (data Binary))
+)

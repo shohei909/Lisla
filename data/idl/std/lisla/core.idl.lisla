@@ -1,90 +1,90 @@
-/// 'Basic types'
-/// [license "Public Domain"]
+;; 'Basic types'
+;; (license "Public Domain")
 
-[package lisla]
+(package lisla)
 
-/// '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'
-[newtype Int64 [VariableInt [const 64]]]
-/// '32 bit integer.'
-[newtype Int32 [VariableInt [const 32]]]
-/// '16 bit integer.'
-[newtype Int16 [FixedInt [const 16]]]
-/// '8 bit integer.'
-[newtype Int8 [FixedInt [const 8]]]
+;; '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'
+(newtype Int64 (VariableInt (const 64)))
+;; '32 bit integer.'
+(newtype Int32 (VariableInt (const 32)))
+;; '16 bit integer.'
+(newtype Int16 (FixedInt (const 16)))
+;; '8 bit integer.'
+(newtype Int8 (FixedInt (const 8)))
 
-[newtype BigInt [VariableInt [const 0xFFFFFFFF]]]
+(newtype BigInt (VariableInt (const 0xFFFFFFFF)))
 
 
-/// 'unsigned 64 bit integer'
-[newtype UInt64 [VariableUInt [const 64]]]
-/// 'unsigned 32 bit integer'
-[newtype UInt32 [VariableUInt [const 32]]]
-/// 'unsigned 16 bit integer'
-[newtype UInt16 [FixedUInt [const 16]]]
-/// 'unsigned 8 bit integer'
-[newtype UInt8 [FixedUInt [const 8]]]
+;; 'unsigned 64 bit integer'
+(newtype UInt64 (VariableUInt (const 64)))
+;; 'unsigned 32 bit integer'
+(newtype UInt32 (VariableUInt (const 32)))
+;; 'unsigned 16 bit integer'
+(newtype UInt16 (FixedUInt (const 16)))
+;; 'unsigned 8 bit integer'
+(newtype UInt8 (FixedUInt (const 8)))
 
-[newtype BigUInt [VariableUInt [const 0xFFFFFFFF]]]
+(newtype BigUInt (VariableUInt (const 0xFFFFFFFF)))
 
-/// 'Signed integer serialized in variable length in binary(bisla) mode.'
-[newtype [VariableInt [bit_length UInt32]] String]
-/// 'Usigned integer serialized in variable length in binary(bisla) mode.'
-[newtype [VariableUInt [bit_length UInt32]] String]
+;; 'Signed integer serialized in variable length in binary(bisla) mode.'
+(newtype (VariableInt (bit_length UInt32)) String)
+;; 'Usigned integer serialized in variable length in binary(bisla) mode.'
+(newtype (VariableUInt (bit_length UInt32)) String)
 
-/// 'Signed integer serialized in fixed length in binary(bisla) mode.'
-[newtype [FixedInt [bit_length UInt32]] String]
-/// 'Unsigned integer serialized in fixed length in binary(bisla) mode.'
-[newtype [FixedUInt [bit_length UInt32]] String]
+;; 'Signed integer serialized in fixed length in binary(bisla) mode.'
+(newtype (FixedInt (bit_length UInt32)) String)
+;; 'Unsigned integer serialized in fixed length in binary(bisla) mode.'
+(newtype (FixedUInt (bit_length UInt32)) String)
 
-/// '''
-/// 64 bit floating point number
-/// example: '1.1', '.1', '1.', '1.e+2', 100E0100
-/// '''
-[newtype Float64 String]
+;; '''
+;; 64 bit floating point number
+;; example: '1.1', '.1', '1.', '1.e+2', 100E0100
+;; '''
+(newtype Float64 String)
 
-/// 'true or false.'
-[enum Boolean true false]
+;; 'true or false.'
+(enum Boolean true false)
 
-/// '''
-/// YYYY-MM-DD_HH:MM:SS(.fraction) 
-/// The range is '1000-01-01 00:00:00.000000' to '9999-12-31 23:59:59.999999'
-/// '''
-[newtype DateTime String]
+;; '''
+;; YYYY-MM-DD_HH:MM:SS(.fraction) 
+;; The range is '1000-01-01 00:00:00.000000' to '9999-12-31 23:59:59.999999'
+;; '''
+(newtype DateTime String)
 
-/// '''
-/// YYYY-MM-DD
-/// The range is '1000-01-01' to '9999-12-31'
-/// '''
-[newtype Date String]
+;; '''
+;; YYYY-MM-DD
+;; The range is '1000-01-01' to '9999-12-31'
+;; '''
+(newtype Date String)
 
-/// '''
-/// HH:MM:SS[.fraction]
-/// The range is '00:00:00.000000' to '23:59:59.999999'
-/// '''
-[newtype Time String]
+;; '''
+;; HH:MM:SS(.fraction)
+;; The range is '00:00:00.000000' to '23:59:59.999999'
+;; '''
+(newtype Time String)
 
-[tuple [Pair K V]
-    [element1 K]
-    [element2 V]
-]
+(tuple (Pair K V)
+    (element1 K)
+    (element2 V)
+)
 
-[newtype [Map K V]
-    [Array [Pair K V]]
-]
+(newtype (Map K V)
+    (Array (Pair K V))
+)
 
-[enum Any
-    [str< [data String]]
-    [arr< [data [Array Any]]]
-]
+(enum Any
+    (str< (data String))
+    (arr< (data (Array Any)))
+)
 
-[enum [Option T]
-    [none:]
-    [some: [data T]]
-]
+(enum (Option T)
+    (none:)
+    (some: (data T))
+)
 
-[newtype [FixedArray T [length Int64]]
-    [Array T]
-]
+(newtype (FixedArray T (length Int64))
+    (Array T)
+)
 
-/// 'Base64 encoded binary'
-[newtype Binary String]
+;; 'Base64 encoded binary'
+(newtype Binary String)

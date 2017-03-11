@@ -1,19 +1,19 @@
-// Lisla
+; Lisla
 ''''''''
-/// '''
-/// # Sample for document comment.
-/// 
-/// This is comment for various tools (e.g. editor, document generation).
-/// '''
-/// [author shohei909]
-/// [license "Public Domain"]
-/// [document_markup markdown]
+;; '''
+;; # Sample for document comment.
+;; 
+;; This is comment for various tools (e.g. editor, document generation).
+;; '''
+;; (author shohei909)
+;; (license "Public Domain")
+;; (document_markup markdown)
 
-/// 'This is documment for first element'
+;; 'This is documment for first element'
 aaa
 ''''''''
 
-// Json
+; Json
 ''''''''
 ["aaa"]
 ''''''''

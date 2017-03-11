@@ -1,10 +1,10 @@
-/// ''
-/// [license "Public Domain"]
-[package lisla.idl]
+;; ''
+;; (license "Public Domain")
+(package lisla.idl)
 
-[import lisla.idl]
+(import lisla.idl)
 
-[newtype PortableIdl [Array PortableIdlElement]]
-[tuple PortableIdlElement
-    [module ModulePath] [type TypeDefinition]
-]
+(newtype PortableIdl (Array PortableIdlElement))
+(tuple PortableIdlElement
+    (module ModulePath) (type TypeDefinition)
+)

@@ -1,9 +1,9 @@
 
 """
-[newtype [Test T U]
-	[Wrap [Test T U]]
-]
-[newtype [Wrap T]
+(newtype (Test T U)
+	(Wrap (Test T U))
+)
+(newtype (Wrap T)
 	T
-]
+)
 """

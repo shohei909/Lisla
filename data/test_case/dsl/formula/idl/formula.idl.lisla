@@ -1,27 +1,27 @@
-[package '']
-[import lisla.core]
+(package '')
+(import lisla.core)
 
-[enum BracketExpr
-    [value< [value Float64]]
-    [expr< [expr SumExpr]]
-]
+(enum BracketExpr
+    (value< (value Float64))
+    (expr< (expr SumExpr))
+)
 
-[tuple ProductExpr
-    [expr BracketExpr]
-    [op..< ProductOp]
-]
+(tuple ProductExpr
+    (expr BracketExpr)
+    (op..< ProductOp)
+)
 
-[enum ProductOp
-    [mutiply: * [expr BracketExpr]]
-    [divide: / [expr BracketExpr]]
-]
+(enum ProductOp
+    (mutiply: * (expr BracketExpr))
+    (divide: / (expr BracketExpr))
+)
 
-[tuple SumExpr
-    [expr< ProductExpr]
-    [op..< SumOp]
-]
+(tuple SumExpr
+    (expr< ProductExpr)
+    (op..< SumOp)
+)
 
-[enum SumOp
-    [plus: + [expr< ProductExpr]]
-    [minus: - [expr< ProductExpr]]
-]
+(enum SumOp
+    (plus: + (expr< ProductExpr))
+    (minus: - (expr< ProductExpr))
+)

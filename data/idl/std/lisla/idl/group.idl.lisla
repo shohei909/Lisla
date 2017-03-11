@@ -1,9 +1,9 @@
-/// 'Type for matching Lisla IDL Data'
-/// [license "Public Domain"]
-[package lisla.idl]
-[import lisla.idl]
+;; 'Type for matching Lisla IDL Data'
+;; (license "Public Domain")
+(package lisla.idl)
+(import lisla.idl)
 
-[tuple TypeGroupFilter
-    [from TypeGroupPath] [to TypeGroupPath]
-]
-[newtype TypeGroupPath String]
+(tuple TypeGroupFilter
+    (from TypeGroupPath) (to TypeGroupPath)
+)
+(newtype TypeGroupPath String)

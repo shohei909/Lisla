@@ -1,23 +1,23 @@
-/// 'Types for .tmTheme'
-[package lisla.util]
+;; 'Types for .tmTheme'
+(package lisla.util)
 
-/// [completion_const comment]
-/// [completion_const comment.line]
-/// [completion_const comment.line.double-slash]
-/// [completion_const comment.line.double-dash]
-/// [completion_const comment.line.number-sign]
-/// [completion_const comment.line.parcentage]
-/// [completion_const comment.block]
-/// [completion_const comment.block.documentation]
-/// [completion_const constant]
-/// [completion_const constant.numeric]
-/// [completion_const constant.character]
-/// [completion_const constant.character.escape]
-/// [completion_const constant.language]
-/// [completion_const constant.other]
-/// [completion_const entity.name]
-/// [completion_const entity.name.function]
-/// [completion_const entity.name.type]
-/// [completion_const entity.name.function]
-/// [completion_const entity.name.function]
-[newtype HighlightScope String]
+;; (completion_const comment)
+;; (completion_const comment.line)
+;; (completion_const comment.line.double-slash)
+;; (completion_const comment.line.double-dash)
+;; (completion_const comment.line.number-sign)
+;; (completion_const comment.line.parcentage)
+;; (completion_const comment.block)
+;; (completion_const comment.block.documentation)
+;; (completion_const constant)
+;; (completion_const constant.numeric)
+;; (completion_const constant.character)
+;; (completion_const constant.character.escape)
+;; (completion_const constant.language)
+;; (completion_const constant.other)
+;; (completion_const entity.name)
+;; (completion_const entity.name.function)
+;; (completion_const entity.name.type)
+;; (completion_const entity.name.function)
+;; (completion_const entity.name.function)
+(newtype HighlightScope String)

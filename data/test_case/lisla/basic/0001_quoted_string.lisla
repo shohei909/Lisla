@@ -1,9 +1,9 @@
-// Lisla
+; Lisla
 ''''''''
-"[abc 'def']" ''' "abc" '''
+"(abc 'def')" ''' "abc" '''
 ''''''''
 
-// Json
+; Json
 ''''''''
-["[abc 'def']", " \"abc\" "]
+["(abc 'def')", " \"abc\" "]
 ''''''''

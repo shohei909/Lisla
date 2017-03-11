@@ -1,10 +1,10 @@
-// Lisla
+; Lisla
 ''''''''
-//! Comments start with ! are keeped when Lisla is minified.
-///! 'Keeping document comments are also available.'
+;! Comments start with ! are keeped when Lisla is minified.
+;;! 'Keeping document comments are also available.'
 ''''''''
 
-// Json
+; Json
 ''''''''
 []
 ''''''''

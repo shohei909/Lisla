@@ -1,22 +1,22 @@
-/// 'Document tags for Lisla IDL'
-/// [license "Public Domain"]
-[package lisla.idl]
+;; 'Document tags for Lisla IDL'
+;; (license "Public Domain")
+(package lisla.idl)
 
-[import lisla.idl]
-[import lisla.core]
-[import lisla.util.highlight]
+(import lisla.idl)
+(import lisla.core)
+(import lisla.util.highlight)
 
-[struct TypeDefinitionDocument
-    [document_tag.. TypeReference]
+(struct TypeDefinitionDocument
+    (document_tag.. TypeReference)
 
-    [completion?]
-    [completion_const.. Any]
-    [completion_type.. TypeReference]
-    [highlight.. HighlightScope]
-]
+    (completion?)
+    (completion_const.. Any)
+    (completion_type.. TypeReference)
+    (highlight.. HighlightScope)
+)
 
-[struct TypeReferenceDocument
-    [completion?]
-    [completion_const.. Any]
-    [completion_type.. TypeReference]
-]
+(struct TypeReferenceDocument
+    (completion?)
+    (completion_const.. Any)
+    (completion_type.. TypeReference)
+)

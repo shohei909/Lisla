@@ -1,9 +1,9 @@
-[version 0.0.0]
-[description "Standard Library of Lisla IDL"]
+(version 0.0.0)
+(description "Standard Library of Lisla IDL")
 
-[extension idl.lisla      lisla.idl.Idl]
-[extension library.lisla  lisla.idl.lib.LibraryConfig]
-[extension project.lisla  lisla.idl.project.ProjectConfig]
-[extension clidl.lisla    lisla.cli.clidl.Clidl]
-[extension libref.lisla   lisla.idl.library.LibraryRootDirectory]
-[extension ir.lisla       lisla.ir.Ir]
+(extension idl.lisla      lisla.idl.Idl)
+(extension library.lisla  lisla.idl.lib.LibraryConfig)
+(extension project.lisla  lisla.idl.project.ProjectConfig)
+(extension clidl.lisla    lisla.cli.clidl.Clidl)
+(extension libref.lisla   lisla.idl.library.LibraryRootDirectory)
+(extension ir.lisla       lisla.ir.Ir)

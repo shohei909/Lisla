@@ -1,5 +1,5 @@
-/// [license "Public Domain"]
-[package lisla.util]
+;; (license "Public Domain")
+(package lisla.util)
 
-/// 'UUID Version 4. `RRRRRRRR-RRRR-4RRR-rRRR-RRRRRRRRRRRR` format.'
-[newtype Uuid4 String]
+;; 'UUID Version 4. `RRRRRRRR-RRRR-4RRR-rRRR-RRRRRRRRRRRR` format.'
+(newtype Uuid4 String)

@@ -1,10 +1,10 @@
-// Lisla
+; Lisla
 ''''''''
-// this is comment
-string // this is also comment
+; this is comment
+string ; this is also comment
 ''''''''
 
-// Json
+; Json
 ''''''''
 ["string"]
 ''''''''

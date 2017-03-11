@@ -1,11 +1,11 @@
-/// [license "Public Domain"]
-[package lisla.util]
+;; (license "Public Domain")
+(package lisla.util)
 
-/// 'ISO 639 Code'
-[newtype LanguageCode String]
+;; 'ISO 639 Code'
+(newtype LanguageCode String)
 
-/// 'ISO 3166-1 Code'
-[newtype CountryCode String]
+;; 'ISO 3166-1 Code'
+(newtype CountryCode String)
 
-/// 'IETF language tag (see RFC 5646)'
-[newtype LanguageTag String]
+;; 'IETF language tag (see RFC 5646)'
+(newtype LanguageTag String)

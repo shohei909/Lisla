@@ -1,79 +1,79 @@
-[package hxlisla]
+(package hxlisla)
 
-[import lisla.util.version]
-[import lisla.util.file]
-[import lisla.idl]
-[import lisla.idl.group]
+(import lisla.util.version)
+(import lisla.util.file)
+(import lisla.idl)
+(import lisla.idl.group)
 
-[struct InputConfig
-    [target< TargetDeclaration]
-    [import..< ImportDeclaration]
-    [entity< EntityDeclaration 
-        [entity]
-    ]
-    [lisla_to_entity< LislaToEntityDeclaration 
-        [lisla_to_entity]
-    ]
-    [entity_to_lisla< EntityToLislaDeclaration 
-        [entity_to_lisla]
-    ]
-]
+(struct InputConfig
+    (target< TargetDeclaration)
+    (import..< ImportDeclaration)
+    (entity< EntityDeclaration 
+        (entity)
+    )
+    (lisla_to_entity< LislaToEntityDeclaration 
+        (lisla_to_entity)
+    )
+    (entity_to_lisla< EntityToLislaDeclaration 
+        (entity_to_lisla)
+    )
+)
 
-[tuple TargetDeclaration
+(tuple TargetDeclaration
     target 
-    [name LibraryName] 
-    [data< TargetConfig]
-]
-[struct TargetConfig
-    [version Version]
-    [haxe_package PackagePath]
-]
+    (name LibraryName) 
+    (data< TargetConfig)
+)
+(struct TargetConfig
+    (version Version)
+    (haxe_package PackagePath)
+)
 
-[tuple ImportDeclaration
-    import [name String] [data< ImportConfig]
-]
-[struct ImportConfig
-    [haxe_source DirectoryPath]
-]
+(tuple ImportDeclaration
+    import (name String) (data< ImportConfig)
+)
+(struct ImportConfig
+    (haxe_source DirectoryPath)
+)
 
-[tuple FilterDeclaration
-    filter [data< TypeGroupFilter]
-]
+(tuple FilterDeclaration
+    filter (data< TypeGroupFilter)
+)
 
-[tuple EntityDeclaration
-    entity [data< EntityConfig]
-]
-[struct EntityConfig
-    [filter..< FilterDeclaration]
-]
+(tuple EntityDeclaration
+    entity (data< EntityConfig)
+)
+(struct EntityConfig
+    (filter..< FilterDeclaration)
+)
 
-[enum LislaToEntityDeclaration 
-    [lisla_to_entity [data< LislaToEntityConfig]]
-    [no_lisla_to_entity]
-]
-[struct LislaToEntityConfig
-    [filter..< FilterDeclaration]
-]
+(enum LislaToEntityDeclaration 
+    (lisla_to_entity (data< LislaToEntityConfig))
+    (no_lisla_to_entity)
+)
+(struct LislaToEntityConfig
+    (filter..< FilterDeclaration)
+)
 
-[enum EntityToLislaDeclaration 
-    [entity_to_bisla [data< EntityToLislaConfig]]
-    [no_entity_to_bisla]
-]
-[struct EntityToLislaConfig
-    [filter..< FilterDeclaration]
-]
+(enum EntityToLislaDeclaration 
+    (entity_to_bisla (data< EntityToLislaConfig))
+    (no_entity_to_bisla)
+)
+(struct EntityToLislaConfig
+    (filter..< FilterDeclaration)
+)
 
-[enum BislaToEntityDeclaration 
-    [bisla_to_entity [data< BislaToEntityConfig]]
-    [no_bisla_to_entity]
-]
-[struct BislaToEntityConfig
-    [filter..< FilterDeclaration]
-]
-[enum EntityToBislaDeclaration 
-    [entity_to_bisla [data< EntityToBislaConfig]]
-    [no_entity_to_bisla]
-]
-[struct EntityToBislaConfig
-    [filter..< FilterDeclaration]
-]
+(enum BislaToEntityDeclaration 
+    (bisla_to_entity (data< BislaToEntityConfig))
+    (no_bisla_to_entity)
+)
+(struct BislaToEntityConfig
+    (filter..< FilterDeclaration)
+)
+(enum EntityToBislaDeclaration 
+    (entity_to_bisla (data< EntityToBislaConfig))
+    (no_entity_to_bisla)
+)
+(struct EntityToBislaConfig
+    (filter..< FilterDeclaration)
+)

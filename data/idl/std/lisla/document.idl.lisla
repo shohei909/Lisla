@@ -1,37 +1,37 @@
-/// 'IDL for Lisla Document Comment'
-/// [license "Public Domain"]
+;; 'IDL for Lisla Document Comment'
+;; (license "Public Domain")
 
 
-[package lisla]
-[import lisla.idl]
-[import lisla.idl.portable]
+(package lisla)
+(import lisla.idl)
+(import lisla.idl.portable)
 
-[struct Document
-    [comment..< String]
-]
+(struct Document
+    (comment..< String)
+)
 
-[struct HeaderDocument
-    [encoding? DocumentEncoding]
-    [license.. License]
-    [author.. Author]
-    [type? TypeReference]
-    [type_note? PortableIdl]
-    [document_markup? DocumentMarkupLanguage]
-]
+(struct HeaderDocument
+    (encoding? DocumentEncoding)
+    (license.. License)
+    (author.. Author)
+    (type? TypeReference)
+    (type_note? PortableIdl)
+    (document_markup? DocumentMarkupLanguage)
+)
 
-[enum DocumentEncoding utf8]
+(enum DocumentEncoding utf8)
 
-/// [completion_const "markdown"]
-/// [completion]
-[newtype DocumentMarkupLanguage String]
+;; (completion_const "markdown")
+;; (completion)
+(newtype DocumentMarkupLanguage String)
 
-/// [completion_const "MIT License"]
-/// [completion_const "Apache License 2.0"]
-/// [completion_const "Public Domain"]
-/// [completion_const "GNU Lesser General Public License Version 3 (LGPLv3)"]
-/// [completion_const "GNU Lesser General Public License Version 2.1 (LGPLv2.1)"]
-/// [completion]
-[newtype License String]
+;; (completion_const "MIT License")
+;; (completion_const "Apache License 2.0")
+;; (completion_const "Public Domain")
+;; (completion_const "GNU Lesser General Public License Version 3 (LGPLv3)")
+;; (completion_const "GNU Lesser General Public License Version 2.1 (LGPLv2.1)")
+;; (completion)
+(newtype License String)
 
-/// [completion]
-[newtype Author String]
+;; (completion)
+(newtype Author String)

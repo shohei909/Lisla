@@ -1,48 +1,48 @@
-[package lisla.cli]
+(package lisla.cli)
 
-[import lisla.util.version]
+(import lisla.util.version)
 
-[struct Clidl
-    [version Version]
-    [about String]
-    [common<< CommonConfig]
-]
-[newtype VersionString String]
+(struct Clidl
+    (version Version)
+    (about String)
+    (common<< CommonConfig)
+)
+(newtype VersionString String)
 
-[tuple Subcommand
+(tuple Subcommand
     subcommand
-    [name CommandName]
-    [config< SubcommandConfig]
-]
-[struct SubcommandConfig
-    [name_config<< NameConfig]
-    [common<< CommonConfig]
-]
-[newtype CommandName String]
+    (name CommandName)
+    (config< SubcommandConfig)
+)
+(struct SubcommandConfig
+    (name_config<< NameConfig)
+    (common<< CommonConfig)
+)
+(newtype CommandName String)
 
-[tuple CommandArgument
+(tuple CommandArgument
     arg 
-    [name CommandName]
-    [config< CommandArgumentConfig]
-]
-[struct CommandArgumentConfig
-    [required?]
-    [name<< NameConfig]
-    [common<< CommonConfig]
-]
+    (name CommandName)
+    (config< CommandArgumentConfig)
+)
+(struct CommandArgumentConfig
+    (required?)
+    (name<< NameConfig)
+    (common<< CommonConfig)
+)
 
-[tuple CommandInput
+(tuple CommandInput
     input 
     TypeReference
-]
+)
 
-[struct NameConfig
-    [short.. CommandName]
-    [long.. CommandName]
-]
-[struct CommonConfig
-    [description? String]
-    [subcommand..< Subcommand]
-    [arg..< CommandArgument]
-    [input..< CommandInput]
-]
+(struct NameConfig
+    (short.. CommandName)
+    (long.. CommandName)
+)
+(struct CommonConfig
+    (description? String)
+    (subcommand..< Subcommand)
+    (arg..< CommandArgument)
+    (input..< CommandInput)
+)

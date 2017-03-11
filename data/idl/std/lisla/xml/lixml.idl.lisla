@@ -1,25 +1,25 @@
-/// ''
+;; ''
 
-[package lisla.xml]
+(package lisla.xml)
 
-[enum LixmlContent
-    [string< [string String]]
-    [element< [element LixmlElement]]
-]
-[tuple LixmlElement
-    [name LixmlElementName]
-    [attribute.. LixmlAttribute]
-    [children?< LixmlChildrenTuple]
-]
-[tuple LixmlAttribute
-    [name LixmlAttributeName]
-    [value? LixmlAttributeValue]
-]
-[newtype LixmlAttributeName String]
-[newtype LixmlAttributeValue String]
+(enum LixmlContent
+    (string< (string String))
+    (element< (element LixmlElement))
+)
+(tuple LixmlElement
+    (name LixmlElementName)
+    (attribute.. LixmlAttribute)
+    (children?< LixmlChildrenTuple)
+)
+(tuple LixmlAttribute
+    (name LixmlAttributeName)
+    (value? LixmlAttributeValue)
+)
+(newtype LixmlAttributeName String)
+(newtype LixmlAttributeValue String)
 
-[tuple LixmlChildrenTuple
+(tuple LixmlChildrenTuple
     >
-    [children.. LixmlContent]
-]
-[newtype LixmlElementName String]
+    (children.. LixmlContent)
+)
+(newtype LixmlElementName String)
