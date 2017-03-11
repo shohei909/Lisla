@@ -32,14 +32,14 @@ Lislaはシンプルです。そして、十分な機能を持っています。
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 abcd
-            </code></pre>
+</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="lisla">
 ["abcd"]
-            </code></pre>
+</pre>
         </td>
     </tr>
 </table>
@@ -54,16 +54,16 @@ Lislaは最上位の階層が配列なので、単純な`abcd`という記述は
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 a
 b c
 def
-            </code></pre>
+</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="json">
 ["a", "b", "c", "def"]
-            </code></pre>
+</pre>
         </td>
     </tr>
 </table>
@@ -74,19 +74,19 @@ def
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 
 a
 
 b  c   
 def
  
-            </code></pre>
+</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="json">
 ["a", "b", "c", "def"]
-            </code></pre>
+</pre>
         </td>
     </tr>
 </table>
@@ -99,14 +99,14 @@ def
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 "(abc 'def')" ' "abc" '
-            </code></pre>
+</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="json">
 ["(abc, 'def')", " \"abc\" "]
-            </code></pre>
+</pre>
         </td>
     </tr>
 </table>
@@ -117,14 +117,14 @@ def
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 """a"b"c""" '''' 'abc' ''''
-            </code></pre>
+</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="json">
 ["a\"b\"c", " 'abc' "]
-            </code></pre>
+</pre>
         </td>
     </tr>
 </table>
@@ -135,14 +135,14 @@ def
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 '' ""
-            </code></pre>
+</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="json">
 ["", ""]
-            </code></pre>
+</pre>
         </td>
     </tr>
 </table>
@@ -156,14 +156,14 @@ def
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 a ((bc def) (g))
-            </code></pre>
+</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="json">
 ["a", [["bc", "def"], ["g"]]]
-            </code></pre>
+</pre>
         </td>
     </tr>
 </table>
@@ -174,14 +174,14 @@ a ((bc def) (g))
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 ("a"(bc def)(g))(("h\ni")jk)
-            </code></pre>
+</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="json">
 [["a", [["bc", "def"], ["g"]]], [["h\ni"], "jk"]]
-            </code></pre>
+</pre>
         </td>
     </tr>
 </table>
@@ -204,7 +204,7 @@ Lislaでは、複数行のクオートあり文字列が使用できます。
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 "
 Multi
 line
@@ -215,13 +215,11 @@ line
      is
 
       awesome.
-    '''''
-            </code></pre>
+    '''''</pre>
         </td>
         <td>
-            <pre><code>
-["Multi\nline", "Lisla\n\n is\n\n  awesome."]
-            </code></pre>
+<pre lang="json">
+["Multi\nline", "Lisla\n\n is\n\n  awesome."]</pre>
         </td>
     </tr>
 </table>
@@ -270,14 +268,12 @@ Lislaでは、ダブルクオートのクオート有りの文字列でエスケ
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
-"Multi\r\nline" "\"" "\u{305D}\u{3089}"
-            </code></pre>
+<pre lang="lisla">
+"Multi\r\nline" "\"" "\u{305D}\u{3089}"</pre>
         </td>
         <td>
-            <pre><code>
-["Multi\r\nline", "\"", "そら"]
-            </code></pre>
+<pre lang="json">
+["Multi\r\nline", "\"", "そら"]</pre>
         </td>
     </tr>
 </table>
@@ -288,14 +284,12 @@ Lislaでは、ダブルクオートのクオート有りの文字列でエスケ
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
-'Single\r\nline' '\' '''\u{305D}\u{3089}'''
-            </code></pre>
+<pre lang="lisla">
+'Single\r\nline' '\' '''\u{305D}\u{3089}'''</pre>
         </td>
         <td>
-            <pre><code>
-["Single\\r\\nline", "\\", "\\u{305D}\\u{3089}"]
-            </code></pre>
+<pre lang="json">
+["Single\\r\\nline", "\\", "\\u{305D}\\u{3089}"]</pre>
         </td>
     </tr>
 </table>
@@ -336,22 +330,20 @@ Lislaでは、ダブルクオートのクオート有りの文字列でエスケ
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
     "
     配列補間はインデントを壊さないので
      例えばLislaを、\(bold "マークアップ言語のように")
       使う場合に役立ちます
-    "
-            </code></pre>
+    "</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="json">
 [
     "配列補間はインデントを壊さないので\n 例えばLislaを、", 
     ["bold", "マークアップ言語のように"], 
     "\n  使う場合に役立ちます"
-]
-            </code></pre>
+]</pre>
         </td>
     </tr>
 </table>
@@ -362,14 +354,14 @@ Lislaでは、ダブルクオートのクオート有りの文字列でエスケ
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-            <pre><code>
+<pre lang="lisla">
 "a\(b \ c (d))d"
-            </code></pre>
+</pre>
         </td>
         <td>
-            <pre><code>
+<pre lang="json">
 ["a", ["b"], ["c", ["d"]], "e"]
-            </code></pre>
+</pre>
         </td>
     </tr>
 </table>
