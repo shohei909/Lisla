@@ -17,15 +17,15 @@ import litll.idl.litll2entity.LitllToEntityArrayContext;
 import litll.idl.litll2entity.LitllToEntityContext;
 import litll.idl.litll2entity.error.LitllToEntityError;
 import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.data.idl.EnumConstructor;
-import litll.idl.std.data.idl.GenericTypeReference;
-import litll.idl.std.data.idl.StructElement;
-import litll.idl.std.data.idl.TupleElement;
+import litll.idl.std.entity.idl.EnumConstructor;
+import litll.idl.std.entity.idl.GenericTypeReference;
+import litll.idl.std.entity.idl.StructElement;
+import litll.idl.std.entity.idl.TupleElement;
 import litll.idl.std.tools.idl.TypeNameTools;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
 import haxe.macro.Expr.TypeDefinition in HaxeTypeDefinition;
-import litll.idl.std.data.idl.TypeDefinition in IdlTypeDefinition;
+import litll.idl.std.entity.idl.TypeDefinition in IdlTypeDefinition;
 
 class LitllToEntityHaxeTypeBuilder
 {

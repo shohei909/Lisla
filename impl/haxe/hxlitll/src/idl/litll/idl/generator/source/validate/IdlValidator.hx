@@ -4,10 +4,10 @@ import litll.core.LitllString;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.library.LibraryResolver;
 import litll.idl.library.LoadTypesContext;
-import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.data.idl.TypeDefinition;
-import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.entity.idl.ModulePath;
+import litll.idl.std.entity.idl.TypeDefinition;
+import litll.idl.std.entity.idl.TypeName;
+import litll.idl.std.entity.idl.TypePath;
 
 class IdlValidator 
 {

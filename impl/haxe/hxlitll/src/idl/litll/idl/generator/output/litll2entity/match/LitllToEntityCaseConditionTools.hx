@@ -8,15 +8,15 @@ import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardCondition
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.generator.source.IdlSourceReader;
 import litll.idl.generator.source.validate.InlinabilityOnTuple;
-import litll.idl.std.data.idl.Argument;
-import litll.idl.std.data.idl.ArgumentName;
-import litll.idl.std.data.idl.EnumConstructor;
-import litll.idl.std.data.idl.EnumConstructorKind;
-import litll.idl.std.data.idl.StructElement;
-import litll.idl.std.data.idl.StructElementKind;
-import litll.idl.std.data.idl.TupleElement;
-import litll.idl.std.data.idl.FollowedTypeDefinition;
-import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.entity.idl.Argument;
+import litll.idl.std.entity.idl.ArgumentName;
+import litll.idl.std.entity.idl.EnumConstructor;
+import litll.idl.std.entity.idl.EnumConstructorKind;
+import litll.idl.std.entity.idl.StructElement;
+import litll.idl.std.entity.idl.StructElementKind;
+import litll.idl.std.entity.idl.TupleElement;
+import litll.idl.std.entity.idl.FollowedTypeDefinition;
+import litll.idl.std.entity.idl.TypeName;
 using litll.idl.std.tools.idl.TypeReferenceTools;
 
 class LitllToEntityCaseConditionTools 

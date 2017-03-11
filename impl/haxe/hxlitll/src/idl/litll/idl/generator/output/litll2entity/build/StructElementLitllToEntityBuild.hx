@@ -8,9 +8,9 @@ import litll.idl.generator.tools.ExprBuilder;
 import litll.idl.litll2entity.LitllToEntityContext;
 import litll.idl.litll2entity.error.LitllToEntityError;
 import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.data.idl.StructElement;
-import litll.idl.std.data.idl.StructField;
-import litll.idl.std.data.idl.StructElementKind;
+import litll.idl.std.entity.idl.StructElement;
+import litll.idl.std.entity.idl.StructField;
+import litll.idl.std.entity.idl.StructElementKind;
 
 class StructElementLitllToEntityBuild
 {       

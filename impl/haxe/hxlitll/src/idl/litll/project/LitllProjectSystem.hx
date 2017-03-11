@@ -8,7 +8,7 @@ import litll.idl.litll2entity.LitllToEntityRunner;
 import litll.idl.litlltext2entity.LitllFileToEntityRunner;
 import litll.idl.litlltext2entity.error.LitllFileToEntityError;
 import litll.idl.litlltext2entity.error.LitllFileToEntityErrorKind;
-import litll.idl.std.data.idl.project.ProjectConfig;
+import litll.idl.std.entity.idl.project.ProjectConfig;
 import litll.idl.std.litll2entity.idl.project.ProjectConfigLitllToEntity;
 import sys.FileSystem;
 import sys.io.File;

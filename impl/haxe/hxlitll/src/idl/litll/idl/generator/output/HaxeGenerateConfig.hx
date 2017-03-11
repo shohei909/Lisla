@@ -6,12 +6,12 @@ import litll.idl.generator.error.ReadIdlError;
 import litll.idl.generator.output.entity.store.HaxeEntityInterface;
 import litll.idl.generator.output.entity.store.HaxeEntityInterfaceKindTools;
 import litll.idl.generator.source.IdlSourceReader;
-import litll.idl.hxlitll.data.config.TargetConfig;
+import litll.idl.hxlitll.entity.config.TargetConfig;
 import litll.idl.library.LibraryScope;
 import litll.idl.library.LibraryTypesData;
-import litll.idl.std.data.idl.LibraryName;
-import litll.idl.std.data.idl.library.LibraryVersion;
-import litll.idl.std.data.util.version.Version;
+import litll.idl.std.entity.idl.LibraryName;
+import litll.idl.std.entity.idl.library.LibraryVersion;
+import litll.idl.std.entity.util.version.Version;
 
 class HaxeGenerateConfig
 {

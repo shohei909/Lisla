@@ -2,11 +2,11 @@ package litll.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Maybe;
 import litll.idl.exception.IdlException;
-import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.TypeReference;
-import litll.idl.std.data.idl.TypeReferenceDependenceKind;
-import litll.idl.std.data.idl.TypeReferenceParameter;
-import litll.idl.std.data.idl.TypeReferenceParameterKind;
+import litll.idl.std.entity.idl.TypePath;
+import litll.idl.std.entity.idl.TypeReference;
+import litll.idl.std.entity.idl.TypeReferenceDependenceKind;
+import litll.idl.std.entity.idl.TypeReferenceParameter;
+import litll.idl.std.entity.idl.TypeReferenceParameterKind;
 
 class TypeReferenceParameterTools 
 {

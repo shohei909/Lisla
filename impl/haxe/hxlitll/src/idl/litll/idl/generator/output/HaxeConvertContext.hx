@@ -8,9 +8,9 @@ import litll.idl.generator.data.LitllToEntityOutputConfig;
 import litll.idl.generator.source.IdlSourceProvider;
 import litll.idl.library.LibraryResolver;
 import litll.idl.library.LoadTypesContext;
-import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.data.idl.TypeDefinition;
-import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.entity.idl.ModulePath;
+import litll.idl.std.entity.idl.TypeDefinition;
+import litll.idl.std.entity.idl.TypePath;
 
 class HaxeConvertContext implements IdlSourceProvider
 {

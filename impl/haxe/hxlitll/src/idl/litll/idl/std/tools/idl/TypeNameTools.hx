@@ -2,7 +2,7 @@ package litll.idl.std.tools.idl;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
 import haxe.macro.Expr.TypeParamDecl;
-import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.entity.idl.TypeName;
 
 class TypeNameTools 
 {

@@ -3,12 +3,12 @@ import hxext.ds.Maybe;
 import litll.core.Litll;
 import litll.core.tag.Tag;
 import litll.idl.litlltext2entity.error.LitllTextToEntityErrorKind;
-import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.data.idl.PackagePath;
-import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.LibraryName;
-import litll.idl.std.data.util.version.Version;
+import litll.idl.std.entity.idl.ModulePath;
+import litll.idl.std.entity.idl.PackagePath;
+import litll.idl.std.entity.idl.TypeName;
+import litll.idl.std.entity.idl.TypePath;
+import litll.idl.std.entity.idl.LibraryName;
+import litll.idl.std.entity.util.version.Version;
 
 enum ReadIdlErrorKind
 {

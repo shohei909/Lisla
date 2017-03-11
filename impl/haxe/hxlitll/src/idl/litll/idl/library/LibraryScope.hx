@@ -8,9 +8,9 @@ import litll.idl.generator.source.IdlFileSourceReader;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.litlltext2entity.LitllFileToEntityRunner;
 import litll.idl.litlltext2entity.error.LitllFileToEntityError;
-import litll.idl.std.data.idl.LibraryName;
-import litll.idl.std.data.idl.library.LibraryVersion;
-import litll.idl.std.data.util.version.Version;
+import litll.idl.std.entity.idl.LibraryName;
+import litll.idl.std.entity.idl.library.LibraryVersion;
+import litll.idl.std.entity.util.version.Version;
 import litll.idl.std.litll2entity.idl.library.LibraryConfigLitllToEntity;
 
 class LibraryScope

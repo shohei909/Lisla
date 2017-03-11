@@ -1,5 +1,5 @@
 package litll.idl.generator.output;
-import litll.idl.hxlitll.data.config.InputConfig;
+import litll.idl.hxlitll.entity.config.InputConfig;
 import litll.idl.library.LibraryScope;
 
 class HaxeGenerateConfigFactoryContext 

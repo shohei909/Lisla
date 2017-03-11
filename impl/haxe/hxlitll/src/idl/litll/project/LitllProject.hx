@@ -19,9 +19,9 @@ import litll.idl.hxlitll.litll2entity.config.InputConfigLitllToEntity;
 import litll.idl.library.LibraryScope;
 import litll.idl.litlltext2entity.LitllFileToEntityRunner;
 import litll.idl.litlltext2entity.error.LitllFileToEntityError;
-import litll.idl.std.data.idl.TypeReference;
-import litll.idl.std.data.idl.project.ProjectConfig;
-import litll.idl.std.data.util.file.FileExtension;
+import litll.idl.std.entity.idl.TypeReference;
+import litll.idl.std.entity.idl.project.ProjectConfig;
+import litll.idl.std.entity.util.file.FileExtension;
 import sys.FileSystem;
 
 class LitllProject

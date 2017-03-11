@@ -3,7 +3,7 @@ import litll.idl.generator.output.entity.EntityHaxeTypePath;
 import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePath;
 import litll.idl.generator.output.EntityTypeInfomation;
 import litll.idl.generator.source.validate.ValidType;
-import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.entity.idl.TypePath;
 import litll.idl.generator.data.EntityOutputConfig;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
 

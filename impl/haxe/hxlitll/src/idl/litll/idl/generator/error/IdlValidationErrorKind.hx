@@ -1,8 +1,8 @@
 package litll.idl.generator.error;
-import litll.idl.std.data.idl.ArgumentName;
-import litll.idl.std.data.idl.EnumConstructorName;
-import litll.idl.std.data.idl.StructElementName;
-import litll.idl.std.data.idl.TypeDependenceName;
+import litll.idl.std.entity.idl.ArgumentName;
+import litll.idl.std.entity.idl.EnumConstructorName;
+import litll.idl.std.entity.idl.StructElementName;
+import litll.idl.std.entity.idl.TypeDependenceName;
 import litll.idl.std.error.GetConditionErrorKind;
 import litll.idl.std.error.TypeFollowErrorKind;
 

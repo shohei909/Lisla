@@ -5,10 +5,10 @@ import litll.idl.generator.error.ReadIdlError;
 import litll.idl.generator.error.ReadIdlErrorKind;
 import litll.idl.generator.source.IdlSourceReader;
 import litll.idl.library.Library;
-import litll.idl.std.data.idl.library.LibraryConfig;
-import litll.idl.std.data.idl.LibraryName;
-import litll.idl.std.data.idl.library.LibraryVersion;
-import litll.idl.std.data.util.version.Version;
+import litll.idl.std.entity.idl.library.LibraryConfig;
+import litll.idl.std.entity.idl.LibraryName;
+import litll.idl.std.entity.idl.library.LibraryVersion;
+import litll.idl.std.entity.util.version.Version;
 
 class LibrarySeries
 {

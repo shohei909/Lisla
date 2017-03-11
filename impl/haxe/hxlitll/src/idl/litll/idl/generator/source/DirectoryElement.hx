@@ -3,7 +3,7 @@ import litll.idl.generator.source.validate.ValidType;
 import litll.idl.library.Library;
 import litll.idl.library.LoadTypesContext;
 import litll.idl.library.PackageElement;
-import litll.idl.std.data.idl.PackagePath;
+import litll.idl.std.entity.idl.PackagePath;
 
 class DirectoryElement
 {

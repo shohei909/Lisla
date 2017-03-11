@@ -5,13 +5,13 @@ import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeParamDecl;
 import hxext.ds.Maybe;
 import litll.idl.generator.output.entity.EntityHaxeTypePath;
-import litll.idl.std.data.idl.TypeDefinition;
-import litll.idl.std.data.idl.TypeDependenceDeclaration;
-import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypeParameterDeclaration;
-import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.entity.idl.TypeDefinition;
+import litll.idl.std.entity.idl.TypeDependenceDeclaration;
+import litll.idl.std.entity.idl.TypeName;
+import litll.idl.std.entity.idl.TypeParameterDeclaration;
+import litll.idl.std.entity.idl.TypePath;
 import litll.idl.generator.data.EntityOutputConfig;
-import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.entity.idl.TypeReference;
 
 class TypeParameterDeclarationTools
 {

@@ -13,10 +13,10 @@ import litll.idl.generator.source.preprocess.IdlPreprocessor;
 import litll.idl.generator.source.validate.IdlValidator;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.library.ModuleState;
-import litll.idl.std.data.idl.PackagePath;
-import litll.idl.std.data.idl.TypeDefinition;
-import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.entity.idl.PackagePath;
+import litll.idl.std.entity.idl.TypeDefinition;
+import litll.idl.std.entity.idl.TypeName;
+import litll.idl.std.entity.idl.TypePath;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
 
 using litll.idl.library.ModuleStateTools;
@@ -84,7 +84,7 @@ class PackageElement
 	{
 		return new TypePath(
             Maybe.some(path.toModulePath()), 
-            litll.idl.std.data.idl.TypeName.create(typeName).getOrThrow()
+            litll.idl.std.entity.idl.TypeName.create(typeName).getOrThrow()
         );
 	}
 	

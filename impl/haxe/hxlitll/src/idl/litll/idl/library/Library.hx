@@ -12,12 +12,12 @@ import litll.idl.generator.source.file.LoadedIdl;
 import litll.idl.generator.source.validate.ValidType;
 import litll.idl.library.PackageElement;
 import litll.idl.litlltext2entity.LitllTextToEntityRunner;
-import litll.idl.std.data.idl.LibraryName;
-import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.data.idl.PackagePath;
-import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.library.LibraryConfig;
+import litll.idl.std.entity.idl.LibraryName;
+import litll.idl.std.entity.idl.ModulePath;
+import litll.idl.std.entity.idl.PackagePath;
+import litll.idl.std.entity.idl.TypeName;
+import litll.idl.std.entity.idl.TypePath;
+import litll.idl.std.entity.idl.library.LibraryConfig;
 import litll.idl.std.litll2entity.idl.IdlLitllToEntity;
 
 class Library extends PackageElement implements LibraryResolver

@@ -1,7 +1,7 @@
 package litll.idl.std.error;
 import hxext.ds.Maybe;
 import litll.core.error.InlineErrorSummary;
-import litll.idl.std.data.idl.ArgumentName;
+import litll.idl.std.entity.idl.ArgumentName;
 
 class ArgumentSuffixError
 {

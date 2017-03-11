@@ -1,6 +1,6 @@
 package litll.idl.generator.output.entity;
 import litll.idl.generator.output.haxe.HaxeTypePath;
-import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.entity.idl.TypePath;
 
 class EntityHaxeTypePath extends HaxeTypePath
 {

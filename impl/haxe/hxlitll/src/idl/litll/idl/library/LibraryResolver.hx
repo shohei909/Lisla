@@ -2,7 +2,7 @@ package litll.idl.library;
 import hxext.ds.Result;
 import litll.idl.generator.error.ReadIdlError;
 import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.data.idl.LibraryName;
+import litll.idl.std.entity.idl.LibraryName;
 
 interface LibraryResolver
 {

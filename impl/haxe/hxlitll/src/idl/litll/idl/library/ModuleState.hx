@@ -3,7 +3,7 @@ import hxext.ds.Result;
 import litll.idl.generator.error.ReadIdlError;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.validate.TypeDefinitionValidationResult;
-import litll.idl.std.data.idl.TypeDefinition;
+import litll.idl.std.entity.idl.TypeDefinition;
 
 enum ModuleState 
 {

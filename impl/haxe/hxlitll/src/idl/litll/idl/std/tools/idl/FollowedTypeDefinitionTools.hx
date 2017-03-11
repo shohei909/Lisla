@@ -5,10 +5,10 @@ import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardCondition;
 import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.data.idl.ArgumentName;
-import litll.idl.std.data.idl.FollowedTypeDefinition;
-import litll.idl.std.data.idl.TupleElement;
-import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.entity.idl.ArgumentName;
+import litll.idl.std.entity.idl.FollowedTypeDefinition;
+import litll.idl.std.entity.idl.TupleElement;
+import litll.idl.std.entity.idl.TypeName;
 import litll.idl.std.error.ArgumentSuffixErrorKind;
 import litll.idl.std.error.GetConditionErrorKind;
 

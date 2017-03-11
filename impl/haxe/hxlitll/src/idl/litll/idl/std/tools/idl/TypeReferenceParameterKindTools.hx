@@ -1,7 +1,7 @@
 package litll.idl.std.tools.idl;
-import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.TypeReference;
-import litll.idl.std.data.idl.TypeReferenceParameterKind;
+import litll.idl.std.entity.idl.TypePath;
+import litll.idl.std.entity.idl.TypeReference;
+import litll.idl.std.entity.idl.TypeReferenceParameterKind;
 
 class TypeReferenceParameterKindTools 
 {

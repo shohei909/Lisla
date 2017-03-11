@@ -8,8 +8,8 @@ import litll.idl.generator.source.file.LoadedIdl;
 import litll.idl.library.LibraryResolver;
 import litll.idl.library.LoadTypesContext;
 import litll.idl.library.PackageElement;
-import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.data.idl.TypeDefinition;
+import litll.idl.std.entity.idl.ModulePath;
+import litll.idl.std.entity.idl.TypeDefinition;
 
 class IdlPreprocessor
 {

@@ -10,21 +10,21 @@ import hxext.ds.Maybe;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.data.EntityOutputConfig;
 import litll.idl.generator.output.EntityTypeInfomation;
-import litll.idl.std.data.idl.Argument;
-import litll.idl.std.data.idl.ArgumentKind;
-import litll.idl.std.data.idl.EnumConstructor;
-import litll.idl.std.data.idl.StructElement;
-import litll.idl.std.data.idl.StructElementKind;
-import litll.idl.std.data.idl.StructElementName;
-import litll.idl.std.data.idl.StructField;
-import litll.idl.std.data.idl.TupleElement;
+import litll.idl.std.entity.idl.Argument;
+import litll.idl.std.entity.idl.ArgumentKind;
+import litll.idl.std.entity.idl.EnumConstructor;
+import litll.idl.std.entity.idl.StructElement;
+import litll.idl.std.entity.idl.StructElementKind;
+import litll.idl.std.entity.idl.StructElementName;
+import litll.idl.std.entity.idl.StructField;
+import litll.idl.std.entity.idl.TupleElement;
 import litll.idl.std.tools.idl.TypeDefinitionTools;
 import litll.idl.std.tools.idl.TypeDependenceDeclarationTools;
 import litll.idl.std.tools.idl.TypeNameTools;
 import litll.idl.std.tools.idl.TypeParameterDeclarationTools;
 
 import haxe.macro.Expr.TypeDefinition in HaxeTypeDefinition;
-import litll.idl.std.data.idl.TypeDefinition in IdlTypeDefinition;
+import litll.idl.std.entity.idl.TypeDefinition in IdlTypeDefinition;
 
 class EntityHaxeTypeBuilder
 {

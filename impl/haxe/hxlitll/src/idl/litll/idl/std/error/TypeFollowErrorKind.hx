@@ -1,8 +1,8 @@
 package litll.idl.std.error;
 import haxe.macro.Expr.TypeDefinition;
-import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.entity.idl.TypeName;
+import litll.idl.std.entity.idl.TypePath;
+import litll.idl.std.entity.idl.TypeReference;
 
 enum TypeFollowErrorKind 
 {

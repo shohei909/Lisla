@@ -4,9 +4,9 @@ import haxe.io.Path;
 import hxext.ds.Result;
 import litll.idl.generator.error.ReadIdlError;
 import litll.idl.generator.source.file.IdlFilePath;
-import litll.idl.std.data.idl.LocalModulePath;
-import litll.idl.std.data.idl.ModulePath;
-import litll.idl.std.data.idl.PackagePath;
+import litll.idl.std.entity.idl.LocalModulePath;
+import litll.idl.std.entity.idl.ModulePath;
+import litll.idl.std.entity.idl.PackagePath;
 import sys.FileSystem;
 import sys.io.File;
 

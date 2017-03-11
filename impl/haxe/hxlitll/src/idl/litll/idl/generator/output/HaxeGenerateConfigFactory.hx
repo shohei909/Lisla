@@ -6,9 +6,9 @@ import litll.idl.generator.output.HaxeGenerateConfigFactoryContext;
 import litll.idl.generator.source.IdlFileSourceReader;
 import litll.idl.generator.source.IdlSourceReader;
 import litll.idl.library.LibraryScope;
-import litll.idl.std.data.idl.LibraryName;
-import litll.idl.std.data.idl.group.TypeGroupFilter;
-import litll.idl.std.data.util.version.Version;
+import litll.idl.std.entity.idl.LibraryName;
+import litll.idl.std.entity.idl.group.TypeGroupFilter;
+import litll.idl.std.entity.util.version.Version;
 import litll.idl.std.tools.idl.group.TypeGroupFilterTools;
 
 class HaxeGenerateConfigFactory 
@@ -59,7 +59,7 @@ class HaxeGenerateConfigFactory
             filters.push(
                 TypeGroupFilterTools.create(
                     inputConfig.target.name.data, 
-                    inputConfig.target.data.haxePackage.toString() + ".data" // TODO: entity
+                    inputConfig.target.data.haxePackage.toString() + ".entity"
                 )
             );
             

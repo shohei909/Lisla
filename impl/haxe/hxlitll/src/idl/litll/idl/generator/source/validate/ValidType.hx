@@ -1,8 +1,8 @@
 package litll.idl.generator.source.validate;
 import litll.idl.generator.source.file.IdlFilePath;
 import litll.idl.generator.source.validate.InlinabilityOnTuple;
-import litll.idl.std.data.idl.TypeDefinition;
-import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.entity.idl.TypeDefinition;
+import litll.idl.std.entity.idl.TypePath;
 
 class ValidType 
 {

@@ -4,21 +4,21 @@ import hxext.ds.Result;
 import litll.core.print.Printer;
 import litll.idl.exception.IdlException;
 import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.data.idl.FollowedTypeDefinition;
-import litll.idl.std.data.idl.SpecializedTypeDefinition;
-import litll.idl.std.data.idl.TypeDefinition;
-import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypeNameDeclaration;
-import litll.idl.std.data.idl.TypeParameterDeclaration;
-import litll.idl.std.data.idl.TypeReference;
-import litll.idl.std.data.idl.TypeReferenceDependenceKind;
-import litll.idl.std.data.idl.TypeReferenceParameter;
-import litll.idl.std.data.idl.TypeReferenceParameterKind;
+import litll.idl.std.entity.idl.FollowedTypeDefinition;
+import litll.idl.std.entity.idl.SpecializedTypeDefinition;
+import litll.idl.std.entity.idl.TypeDefinition;
+import litll.idl.std.entity.idl.TypeName;
+import litll.idl.std.entity.idl.TypeNameDeclaration;
+import litll.idl.std.entity.idl.TypeParameterDeclaration;
+import litll.idl.std.entity.idl.TypeReference;
+import litll.idl.std.entity.idl.TypeReferenceDependenceKind;
+import litll.idl.std.entity.idl.TypeReferenceParameter;
+import litll.idl.std.entity.idl.TypeReferenceParameterKind;
 import litll.idl.std.error.TypeFollowErrorKind;
 import litll.idl.std.error.TypeSpecializeErrorKind;
 import litll.idl.std.error.TypeSpecializeErrorKindTools;
 using litll.idl.std.tools.idl.TypeReferenceTools;
-using litll.idl.std.data.idl.TypeParameterDeclaration;
+using litll.idl.std.entity.idl.TypeParameterDeclaration;
 
 class TypeDefinitionTools
 {

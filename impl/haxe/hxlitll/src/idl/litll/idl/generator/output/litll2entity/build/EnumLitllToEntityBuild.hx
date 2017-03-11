@@ -9,11 +9,11 @@ import litll.idl.generator.tools.ExprBuilder;
 import litll.idl.litll2entity.LitllToEntityArrayContext;
 import litll.idl.litll2entity.error.LitllToEntityError;
 import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.data.idl.EnumConstructor;
-import litll.idl.std.data.idl.EnumConstructorKind;
-import litll.idl.std.data.idl.EnumConstructorName;
-import litll.idl.std.data.idl.TupleElement;
-import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.entity.idl.EnumConstructor;
+import litll.idl.std.entity.idl.EnumConstructorKind;
+import litll.idl.std.entity.idl.EnumConstructorName;
+import litll.idl.std.entity.idl.TupleElement;
+import litll.idl.std.entity.idl.TypeReference;
 import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
 class EnumLitllToEntityBuild 

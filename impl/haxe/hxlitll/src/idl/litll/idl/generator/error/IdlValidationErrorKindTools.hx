@@ -2,7 +2,7 @@ package litll.idl.generator.error;
 import hxext.ds.Maybe;
 import litll.core.error.InlineErrorSummary;
 import litll.core.tag.Tag;
-import litll.idl.std.data.idl.TypePath;
+import litll.idl.std.entity.idl.TypePath;
 import litll.idl.std.error.GetConditionErrorKind;
 import litll.idl.std.error.GetConditionErrorKindTools;
 import litll.idl.std.error.TypeFollowErrorKind;

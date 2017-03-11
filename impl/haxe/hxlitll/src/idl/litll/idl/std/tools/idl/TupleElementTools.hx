@@ -4,10 +4,10 @@ import hxext.ds.Result;
 import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
 import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
 import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.data.idl.ArgumentKind;
-import litll.idl.std.data.idl.TupleElement;
-import litll.idl.std.data.idl.TypeName;
-import litll.idl.std.data.idl.TypeReference;
+import litll.idl.std.entity.idl.ArgumentKind;
+import litll.idl.std.entity.idl.TupleElement;
+import litll.idl.std.entity.idl.TypeName;
+import litll.idl.std.entity.idl.TypeReference;
 import litll.idl.std.error.ArgumentSuffixErrorKind;
 import litll.idl.std.error.GetConditionErrorKind;
 

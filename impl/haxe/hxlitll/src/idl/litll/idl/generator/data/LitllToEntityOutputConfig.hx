@@ -1,8 +1,8 @@
 package litll.idl.generator.data;
 import haxe.ds.Option;
 import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePath;
-import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.group.TypeGroupFilter;
+import litll.idl.std.entity.idl.TypePath;
+import litll.idl.std.entity.idl.group.TypeGroupFilter;
 import litll.idl.std.tools.idl.group.TypeGroupFilterTools;
 
 using hxext.ds.ResultTools;
