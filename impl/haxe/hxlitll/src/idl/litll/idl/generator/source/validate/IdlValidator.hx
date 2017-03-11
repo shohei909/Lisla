@@ -1,12 +1,17 @@
 package litll.idl.generator.source.validate;
+import hxext.ds.Maybe;
+import litll.core.LitllString;
 import litll.idl.generator.source.file.IdlFilePath;
+import litll.idl.library.LibraryResolver;
 import litll.idl.library.LoadTypesContext;
-import litll.idl.library.PackageElement;
+import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.data.idl.TypeDefinition;
+import litll.idl.std.data.idl.TypeName;
+import litll.idl.std.data.idl.TypePath;
 
 class IdlValidator 
 {
-    public static function run(context:LoadTypesContext, file:IdlFilePath, element:PackageElement, types:Map<String, TypeDefinition>):Map<String, TypeDefinitionValidationResult>
+    public static function run(context:LoadTypesContext, file:IdlFilePath, modulePath:ModulePath, library:LibraryResolver, types:Map<String, TypeDefinition>):Map<String, TypeDefinitionValidationResult>
     {
         var result = new Map();
 		for (name in types.keys())
@@ -14,8 +19,12 @@ class IdlValidator
 			result[name] = TypeDefinitionValidator.run(
                 context,
                 file,
-                name,
-                element, 
+                new TypePath(
+                    Maybe.some(modulePath), 
+                    new TypeName(new LitllString(name, modulePath.tag)),
+                    modulePath.tag
+                ),
+                library, 
                 types[name]
             );
 		}

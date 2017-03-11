@@ -136,7 +136,7 @@ class PackageElement
                 {
                     case Result.Ok(typeMap):
                         module = ModuleState.Validating(typeMap, file);
-                        var validTypeMap = IdlValidator.run(context, file, library, typeMap);
+                        var validTypeMap = IdlValidator.run(context, file, path.toModulePath(), library, typeMap);
                         module = ModuleState.Validated(validTypeMap, file);
                         
                     case Result.Err(errors):

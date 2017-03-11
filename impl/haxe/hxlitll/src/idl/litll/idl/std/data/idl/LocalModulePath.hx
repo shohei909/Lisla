@@ -7,7 +7,6 @@ class LocalModulePath
     public var path(default, null):Array<String>;
 	public var tag(default, null):Maybe<StringTag>;
     
-    
 	public function new(path:Array<String>, ?tag:Maybe<StringTag>)
 	{
 		this.path = path;

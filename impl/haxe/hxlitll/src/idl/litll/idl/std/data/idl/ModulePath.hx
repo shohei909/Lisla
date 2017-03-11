@@ -25,7 +25,6 @@ class ModulePath extends LocalModulePath
         return new PackagePath(path.slice(0, path.length - 1), tag);
     }
     
-    
     public function new(path:Array<String>, ?tag:Maybe<StringTag>)
     {
         super(path, tag);

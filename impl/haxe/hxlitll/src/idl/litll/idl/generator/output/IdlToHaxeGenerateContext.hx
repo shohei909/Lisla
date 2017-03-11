@@ -66,6 +66,7 @@ class IdlToHaxeGenerateContext
                     for (type in types)
                     {
                         var haxePath = entityOutputConfig.toHaxePath(type.typePath);
+                        
                         var entityInterface = if (entityOutputConfig.predefinedTypes.exists(haxePath.toString()))
                         {
                             entityOutputConfig.predefinedTypes[haxePath.toString()];

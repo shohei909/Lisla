@@ -87,14 +87,16 @@ class EntityOutputConfig
 	
 	public function toHaxePath(typePath:TypePath):EntityHaxeTypePath
 	{
-		var l = filters.length;
+        var l = filters.length;
+        
+        
 		for (i in 0...l)
 		{
 			var filter = filters[l - i - 1];
 			switch (filter.apply(typePath).toOption())
 			{
 				case Option.Some(convertedPath):
-					typePath = convertedPath;
+                    typePath = convertedPath;
 					break;
 					
 				case Option.None:

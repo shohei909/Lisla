@@ -49,9 +49,8 @@ class TypeDefinitionValidator implements IdlSourceProvider
         return errors.length > 0;
     }
     
-    public static function run(context:LoadTypesContext, file:IdlFilePath, name:String, element:PackageElement, definition:TypeDefinition):TypeDefinitionValidationResult
+    public static function run(context:LoadTypesContext, file:IdlFilePath, typePath:TypePath, library:LibraryResolver, definition:TypeDefinition):TypeDefinitionValidationResult
     {
-        var library = element.library;
         var validator = new TypeDefinitionValidator(context, file, library, definition);
         validator.validate();
         
@@ -66,7 +65,7 @@ class TypeDefinitionValidator implements IdlSourceProvider
             Result.Ok(
                 new ValidType(
                     file,
-                    element.getTypePath(name),
+                    typePath,
                     definition,
                     validator.inlinabilityOnTuple
                 )

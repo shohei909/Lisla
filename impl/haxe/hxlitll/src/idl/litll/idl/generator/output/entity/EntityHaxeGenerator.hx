@@ -22,6 +22,7 @@ class EntityHaxeGenerator
                             {
                                 continue;
                             }
+                            
                             EntityHaxeTypeBuilder.convertType(info, config);
                         }
                     ]
