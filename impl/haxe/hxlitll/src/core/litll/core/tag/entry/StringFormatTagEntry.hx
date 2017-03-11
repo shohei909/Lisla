@@ -1,4 +1,4 @@
-package litll.core.tag.entry;
+package lisla.core.tag.entry;
 
 /**
  * ...

@@ -1,4 +1,4 @@
-package litll.core.parse.array;
+package lisla.core.parse.array;
 
 enum CommentKind
 {

@@ -1,5 +1,5 @@
 # Specification
-## Litll
+## Lisla
 - [p] test case
     - [x] basic
         - [x] sample
@@ -22,7 +22,7 @@
 - [p] japanese
     - [x] overview
 
-## IDL on Litll 
+## IDL on Lisla 
 - [x] standard library
     - [x] basic
     - [x] for IDL
@@ -33,11 +33,11 @@
 - [ ] japanese
     - [ ] overview
 
-## Binary format(Bitll)
+## Binary format(Bisla)
 Later
 
 # Rust library
-## Litll
+## Lisla
 - [p] parse
     - [p] basic
     - [ ] document comment
@@ -47,14 +47,14 @@ Later
 - [ ] minify
 - [ ] object map
 - [ ] hash
-- [ ] IDL on Litll
+- [ ] IDL on Lisla
     - [ ] code generation 
         - [ ] data structure
         - [ ] instance
-        - [ ] litllToEntity
-        - [ ] litllfy
-        - [ ] debitllfy
-        - [ ] bitllfy
+        - [ ] lislaToEntity
+        - [ ] lislafy
+        - [ ] debislafy
+        - [ ] bislafy
     - [ ] lint
     - [ ] documment generate
     - [ ] auto complete
@@ -76,21 +76,21 @@ Later
 - [ ] format
 - [ ] syntax highlight
 - [ ] minify
-- [p] IDL on Litll
+- [p] IDL on Lisla
     - [p] code generation 
         - [x] Entity data structure
-        - [p] Litll to Haxe Entity
+        - [p] Lisla to Haxe Entity
         - [ ] IR to Haxe Entity
         - [ ] Haxe Entity to IR
-        - [ ] bitll to Haxe Entity
-        - [ ] Haxe Entity to bitll
+        - [ ] bisla to Haxe Entity
+        - [ ] Haxe Entity to bisla
     - [p] convertion
-        - [p] litll to IR
-        - [ ] IR to litll
+        - [p] lisla to IR
+        - [ ] IR to lisla
         - [ ] JSON to IR
         - [ ] IR to JSON
-        - [ ] bitll to IR
-        - [ ] IR to bitll
+        - [ ] bisla to IR
+        - [ ] IR to bisla
 
 # Haxe CLI tool ()
 - [ ] help

@@ -1,17 +1,17 @@
-package litll.idl.library;
+package lisla.idl.library;
 import haxe.io.Path;
 import hxext.ds.Result;
-import litll.core.LitllString;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.error.LoadIdlErrorKind;
-import litll.idl.generator.source.IdlFileSourceReader;
-import litll.idl.generator.source.validate.ValidType;
-import litll.idl.litlltext2entity.LitllFileToEntityRunner;
-import litll.idl.litlltext2entity.error.LitllFileToEntityError;
-import litll.idl.std.entity.idl.LibraryName;
-import litll.idl.std.entity.idl.library.LibraryVersion;
-import litll.idl.std.entity.util.version.Version;
-import litll.idl.std.litll2entity.idl.library.LibraryConfigLitllToEntity;
+import lisla.core.LislaString;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.error.LoadIdlErrorKind;
+import lisla.idl.generator.source.IdlFileSourceReader;
+import lisla.idl.generator.source.validate.ValidType;
+import lisla.idl.lislatext2entity.LislaFileToEntityRunner;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
+import lisla.idl.std.entity.idl.LibraryName;
+import lisla.idl.std.entity.idl.library.LibraryVersion;
+import lisla.idl.std.entity.util.version.Version;
+import lisla.idl.std.lisla2entity.idl.library.LibraryConfigLislaToEntity;
 
 class LibraryScope
 {
@@ -21,9 +21,9 @@ class LibraryScope
         map = new Map();
     }
     
-    public function read(name:String, file:String, errorOutput:Array<LitllFileToEntityError>):Void
+    public function read(name:String, file:String, errorOutput:Array<LislaFileToEntityError>):Void
     {
-        return switch(LitllFileToEntityRunner.run(LibraryConfigLitllToEntity, file))
+        return switch(LislaFileToEntityRunner.run(LibraryConfigLislaToEntity, file))
         {
             case Result.Ok(config):
                 var lib = if (map.exists(name))

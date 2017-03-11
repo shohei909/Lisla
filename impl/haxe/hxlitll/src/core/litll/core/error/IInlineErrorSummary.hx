@@ -1,6 +1,6 @@
-package litll.core.error;
+package lisla.core.error;
 import hxext.ds.Maybe;
-import litll.core.ds.SourceRange;
+import lisla.core.ds.SourceRange;
 
 interface IInlineErrorSummary 
 {

@@ -1,5 +1,5 @@
-package litll.idl.generator.output.entity.store;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
+package lisla.idl.generator.output.entity.store;
+import lisla.idl.generator.output.entity.EntityHaxeTypePath;
 
 class HaxeEntityInterface
 {

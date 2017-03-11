@@ -1,44 +1,44 @@
-package litll.idl.litll2entity.error;
+package lisla.idl.lisla2entity.error;
 import haxe.ds.Option;
 import hxext.ds.Maybe;
-import litll.core.Litll;
-import litll.core.LitllArray;
-import litll.core.LitllString;
-import litll.core.LitllTools;
-import litll.core.ds.SourceRange;
-import litll.core.error.InlineErrorSummary;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.litll2entity.error.LitllToEntityErrorTarget;
+import lisla.core.Lisla;
+import lisla.core.LislaArray;
+import lisla.core.LislaString;
+import lisla.core.LislaTools;
+import lisla.core.ds.SourceRange;
+import lisla.core.error.InlineErrorSummary;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorTarget;
 
-class LitllToEntityError 
+class LislaToEntityError 
 {
-	public var target(default, null):LitllToEntityErrorTarget;
-	public var kind(default, null):LitllToEntityErrorKind;
+	public var target(default, null):LislaToEntityErrorTarget;
+	public var kind(default, null):LislaToEntityErrorKind;
 	
-	public function new (target:LitllToEntityErrorTarget, kind:LitllToEntityErrorKind)
+	public function new (target:LislaToEntityErrorTarget, kind:LislaToEntityErrorKind)
 	{
 		this.target = target;
 		this.kind = kind;
 	}
 	
-	public static function ofString(string:LitllString, range:Maybe<SourceRange>, kind:LitllToEntityErrorKind):LitllToEntityError
+	public static function ofString(string:LislaString, range:Maybe<SourceRange>, kind:LislaToEntityErrorKind):LislaToEntityError
 	{
-		return new LitllToEntityError(LitllToEntityErrorTarget.Str(string, range), kind);
+		return new LislaToEntityError(LislaToEntityErrorTarget.Str(string, range), kind);
 	}
 	
-	public static function ofArray(array:LitllArray<Litll>, index:Int, kind:LitllToEntityErrorKind):LitllToEntityError
+	public static function ofArray(array:LislaArray<Lisla>, index:Int, kind:LislaToEntityErrorKind):LislaToEntityError
 	{
-		return new LitllToEntityError(LitllToEntityErrorTarget.Arr(array, index), kind);
+		return new LislaToEntityError(LislaToEntityErrorTarget.Arr(array, index), kind);
 	}
 	
-	public static function ofLitll(litll:Litll, kind:LitllToEntityErrorKind):LitllToEntityError
+	public static function ofLisla(lisla:Lisla, kind:LislaToEntityErrorKind):LislaToEntityError
 	{
-		return switch (litll)
+		return switch (lisla)
 		{
-			case Litll.Str(string):
+			case Lisla.Str(string):
 				ofString(string, Maybe.none(), kind);
 				
-			case Litll.Arr(array):
+			case Lisla.Arr(array):
 				ofArray(array, -1, kind);
 		}
 	}
@@ -47,7 +47,7 @@ class LitllToEntityError
 	{
 		return switch (target)
 		{
-			case LitllToEntityErrorTarget.Str(str, maybeRange):
+			case LislaToEntityErrorTarget.Str(str, maybeRange):
 				var maybeParentRange = str.tag.flatMap(function (t) return t.range);
 				switch (maybeRange.toOption())
 				{
@@ -58,7 +58,7 @@ class LitllToEntityError
 						maybeParentRange.flatMap(function (parentRange) return parentRange.concat(range));
 				}
 				
-			case LitllToEntityErrorTarget.Arr(arr, index):
+			case LislaToEntityErrorTarget.Arr(arr, index):
 				if (index < 0)
 				{
 					arr.tag.flatMap(function (tag) return tag.range);
@@ -69,7 +69,7 @@ class LitllToEntityError
 				}
 				else
 				{
-					LitllTools.getTag(arr.data[index]).flatMap(function (tag) return tag.range);
+					LislaTools.getTag(arr.data[index]).flatMap(function (tag) return tag.range);
 				}
 		}
 	}
@@ -78,39 +78,39 @@ class LitllToEntityError
 	{
 		return switch (kind)
 		{
-			case LitllToEntityErrorKind.UnmatchedEnumConstructor(expected):
+			case LislaToEntityErrorKind.UnmatchedEnumConstructor(expected):
 				"unmatched enum constructor. '" + expected.join(" | ") + "' expected";
 				
-			case LitllToEntityErrorKind.UnmatchedStructElement(expected):
+			case LislaToEntityErrorKind.UnmatchedStructElement(expected):
 				"unmatched struct element. '" + expected.join(" | ") + "' expected";
                 
-			case LitllToEntityErrorKind.UnmatchedLabel(expected):
+			case LislaToEntityErrorKind.UnmatchedLabel(expected):
 				"unmatched enum label. '" + expected + "' expected";
 				
-			case LitllToEntityErrorKind.StructElementDuplicated(name):
+			case LislaToEntityErrorKind.StructElementDuplicated(name):
 				"struct element '" + name + "' is duplicated";
                 
-			case LitllToEntityErrorKind.StructElementNotFound(name):
+			case LislaToEntityErrorKind.StructElementNotFound(name):
 				"struct element '" + name + "' is not found";
 				
-			case LitllToEntityErrorKind.CantBeArray:
+			case LislaToEntityErrorKind.CantBeArray:
 				"can't be array";
 				
-			case LitllToEntityErrorKind.CantBeString:
+			case LislaToEntityErrorKind.CantBeString:
 				"can't be string";
 				
-			case LitllToEntityErrorKind.TooLongArray:
+			case LislaToEntityErrorKind.TooLongArray:
 				"too long array";
 				
-			case LitllToEntityErrorKind.EndOfArray:
+			case LislaToEntityErrorKind.EndOfArray:
 				"end of array";
 				
-			case LitllToEntityErrorKind.Fatal(message):
+			case LislaToEntityErrorKind.Fatal(message):
 				message;
 		}
 	}
     
-    public function getSummary():InlineErrorSummary<LitllToEntityErrorKind>
+    public function getSummary():InlineErrorSummary<LislaToEntityErrorKind>
     {
         return new InlineErrorSummary(
             getRange(),

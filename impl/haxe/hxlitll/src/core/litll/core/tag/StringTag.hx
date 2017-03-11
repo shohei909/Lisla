@@ -1,11 +1,11 @@
-package litll.core.tag;
+package lisla.core.tag;
 import hxext.ds.Maybe;
-import litll.core.ds.SourceMap;
-import litll.core.ds.SourceRange;
-import litll.core.tag.entry.StringFormatTagEntry;
-import litll.core.tag.entry.StringKind;
+import lisla.core.ds.SourceMap;
+import lisla.core.ds.SourceRange;
+import lisla.core.tag.entry.StringFormatTagEntry;
+import lisla.core.tag.entry.StringKind;
 import unifill.CodePoint;
-import litll.core.parse.ParserConfig;
+import lisla.core.parse.ParserConfig;
 import haxe.ds.Option;
 
 class StringTag extends Tag

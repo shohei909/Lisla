@@ -1,8 +1,8 @@
-package litll.idl.library;
+package lisla.idl.library;
 import hxext.ds.Result;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.LibraryName;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.LibraryName;
 
 interface LibraryResolver
 {

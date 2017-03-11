@@ -1,4 +1,4 @@
-package litll.core.parse.string;
+package lisla.core.parse.string;
 
 enum QuotedStringState
 {

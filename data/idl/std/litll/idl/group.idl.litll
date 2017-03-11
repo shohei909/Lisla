@@ -1,7 +1,7 @@
-/// 'Type for matching Litll IDL Data'
+/// 'Type for matching Lisla IDL Data'
 /// [license "Public Domain"]
-[package litll.idl]
-[import litll.idl]
+[package lisla.idl]
+[import lisla.idl]
 
 [tuple TypeGroupFilter
     [from TypeGroupPath] [to TypeGroupPath]

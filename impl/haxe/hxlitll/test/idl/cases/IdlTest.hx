@@ -1,19 +1,19 @@
 package cases;
-import LitllTestCase;
+import LislaTestCase;
 import file.FileTools;
 import hxext.ds.Result;
-import litll.core.parse.Parser;
-import litll.idl.litll2entity.LitllToEntityRunner;
-import litll.idl.std.litll2entity.idl.IdlLitllToEntity;
+import lisla.core.parse.Parser;
+import lisla.idl.lisla2entity.LislaToEntityRunner;
+import lisla.idl.std.lisla2entity.idl.IdlLislaToEntity;
 import sys.io.File;
 
-class IdlTest extends LitllTestCase
+class IdlTest extends LislaTestCase
 {
-	public function testLitllToEntity():Void
+	public function testLislaToEntity():Void
 	{
     	for (file in FileTools.readRecursively(TestIdl.IDL_DIRECTORY))
 		{
-			if (StringTools.endsWith(file, ".idl.litll"))
+			if (StringTools.endsWith(file, ".idl.lisla"))
 			{
 				var content = File.getContent(TestIdl.IDL_DIRECTORY + "/" + file);
 				var caseData = switch (Parser.run(content))
@@ -26,13 +26,13 @@ class IdlTest extends LitllTestCase
 						continue;
 				}
 				
-				var idl = switch (LitllToEntityRunner.run(IdlLitllToEntity, caseData))
+				var idl = switch (LislaToEntityRunner.run(IdlLislaToEntity, caseData))
 				{
 					case Result.Ok(data):
 						data;
 						
 					case Result.Err(error):
-						fail("failed to litllToEntity file:  \n" + error).label(file);
+						fail("failed to lislaToEntity file:  \n" + error).label(file);
 						continue;
 				}
 			}

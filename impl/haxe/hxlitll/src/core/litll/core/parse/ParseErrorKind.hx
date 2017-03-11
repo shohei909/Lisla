@@ -1,4 +1,4 @@
-package litll.core.parse;
+package lisla.core.parse;
 import unifill.CodePoint;
 
 enum ParseErrorKind

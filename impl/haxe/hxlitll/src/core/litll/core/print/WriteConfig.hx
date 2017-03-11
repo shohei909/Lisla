@@ -1,4 +1,4 @@
-package litll.core.print;
+package lisla.core.print;
 
 class WriteConfig
 {

@@ -82,7 +82,7 @@ pub struct Parser<'a> {
     context: Option<Context>,
 }
 
-type OutputArray = (Vec<Litll>, TagWriter<ArrayTag>);
+type OutputArray = (Vec<Lisla>, TagWriter<ArrayTag>);
 
 
 
@@ -90,7 +90,7 @@ type OutputArray = (Vec<Litll>, TagWriter<ArrayTag>);
 // Parser impl
 // ===============================================================================
 
-pub fn parse(chars: Chars, config: &Config) -> Result<LitllArray, Error> {
+pub fn parse(chars: Chars, config: &Config) -> Result<LislaArray, Error> {
     let mut parser = Parser::new(&config);
 
     for character in chars {
@@ -582,7 +582,7 @@ impl<'a> Parser<'a> {
     // End
     // ---------------------------------------------------
     #[inline]
-    pub fn end(mut self) -> Result<LitllArray, Error> {
+    pub fn end(mut self) -> Result<LislaArray, Error> {
         self.position += 1;
 
         if self.end_context().is_err() {
@@ -593,7 +593,7 @@ impl<'a> Parser<'a> {
         }
 
         let (output_vec, tag) = self.output;
-        let data = LitllArray {
+        let data = LislaArray {
             data: output_vec,
             tag: tag.end(self.position),
         };
@@ -650,7 +650,7 @@ impl<'a> Parser<'a> {
         let (ref mut output_vec, _) = self.output;
         let (arr, tag) = old_output;
 
-        let data = Litll::Array(LitllArray {
+        let data = Lisla::Array(LislaArray {
             data: arr,
             tag: tag.end(self.position),
         });
@@ -663,7 +663,7 @@ impl<'a> Parser<'a> {
 
         if length == 2 {
             {
-                let data = Litll::String(LitllString {
+                let data = Lisla::String(LislaString {
                     data: String::new(),
                     tag: tag.pop_for_string(self.config,
                                             self.position - 2,
@@ -797,7 +797,7 @@ impl<'a> Parser<'a> {
             }
         }
 
-        let data = Litll::String(LitllString {
+        let data = Lisla::String(LislaString {
             data: string,
             tag: detail.tag.end(self.position),
         });
@@ -878,7 +878,7 @@ impl<'a> Parser<'a> {
     fn end_unquoted_string_body(&mut self, detail: UnquotedStringContext) {
         let string = detail.string;
         let (ref mut output_vec, _) = self.output;
-        let data = Litll::String(LitllString {
+        let data = Lisla::String(LislaString {
             data: string,
             tag: detail.tag.end(self.position),
         });

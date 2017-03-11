@@ -1,24 +1,24 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.core.print.Printer;
-import litll.idl.exception.IdlException;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.FollowedTypeDefinition;
-import litll.idl.std.entity.idl.SpecializedTypeDefinition;
-import litll.idl.std.entity.idl.TypeDefinition;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeNameDeclaration;
-import litll.idl.std.entity.idl.TypeParameterDeclaration;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.entity.idl.TypeReferenceDependenceKind;
-import litll.idl.std.entity.idl.TypeReferenceParameter;
-import litll.idl.std.entity.idl.TypeReferenceParameterKind;
-import litll.idl.std.error.TypeFollowErrorKind;
-import litll.idl.std.error.TypeSpecializeErrorKind;
-import litll.idl.std.error.TypeSpecializeErrorKindTools;
-using litll.idl.std.tools.idl.TypeReferenceTools;
-using litll.idl.std.entity.idl.TypeParameterDeclaration;
+import lisla.core.print.Printer;
+import lisla.idl.exception.IdlException;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.FollowedTypeDefinition;
+import lisla.idl.std.entity.idl.SpecializedTypeDefinition;
+import lisla.idl.std.entity.idl.TypeDefinition;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeNameDeclaration;
+import lisla.idl.std.entity.idl.TypeParameterDeclaration;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.entity.idl.TypeReferenceDependenceKind;
+import lisla.idl.std.entity.idl.TypeReferenceParameter;
+import lisla.idl.std.entity.idl.TypeReferenceParameterKind;
+import lisla.idl.std.error.TypeFollowErrorKind;
+import lisla.idl.std.error.TypeSpecializeErrorKind;
+import lisla.idl.std.error.TypeSpecializeErrorKindTools;
+using lisla.idl.std.tools.idl.TypeReferenceTools;
+using lisla.idl.std.entity.idl.TypeParameterDeclaration;
 
 class TypeDefinitionTools
 {
@@ -96,7 +96,7 @@ class TypeDefinitionTools
             switch [definitionParameter, referenceParameter.processedValue.toOption()]
             {
                 case [_, Option.None]:
-                    var value = Printer.printLitll(referenceParameter.value);
+                    var value = Printer.printLisla(referenceParameter.value);
                     throw new IdlException("type parameter '" + value + "' must be processed");
                 
                 case [TypeParameterDeclaration.TypeName(typeName), Option.Some(TypeReferenceParameterKind.Type(type))]:

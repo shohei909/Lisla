@@ -1,25 +1,25 @@
-package litll.idl.library;
+package lisla.idl.library;
 
 import haxe.ds.Option;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.idl.exception.SourceException;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.error.LoadIdlErrorKind;
-import litll.idl.generator.source.DirectoryElement;
-import litll.idl.generator.source.file.IdlFilePath;
-import litll.idl.generator.source.file.LoadedIdl;
-import litll.idl.generator.source.resolve.IdlResolver;
-import litll.idl.generator.source.validate.IdlValidator;
-import litll.idl.generator.source.validate.ValidType;
-import litll.idl.library.ModuleState;
-import litll.idl.std.entity.idl.PackagePath;
-import litll.idl.std.entity.idl.TypeDefinition;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.tools.idl.TypeDefinitionTools;
+import lisla.idl.exception.SourceException;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.error.LoadIdlErrorKind;
+import lisla.idl.generator.source.DirectoryElement;
+import lisla.idl.generator.source.file.IdlFilePath;
+import lisla.idl.generator.source.file.LoadedIdl;
+import lisla.idl.generator.source.resolve.IdlResolver;
+import lisla.idl.generator.source.validate.IdlValidator;
+import lisla.idl.generator.source.validate.ValidType;
+import lisla.idl.library.ModuleState;
+import lisla.idl.std.entity.idl.PackagePath;
+import lisla.idl.std.entity.idl.TypeDefinition;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.tools.idl.TypeDefinitionTools;
 
-using litll.idl.library.ModuleStateTools;
+using lisla.idl.library.ModuleStateTools;
 using hxext.ds.MapTools;
 using hxext.ds.ResultTools;
 
@@ -84,7 +84,7 @@ class PackageElement
 	{
 		return new TypePath(
             Maybe.some(path.toModulePath()), 
-            litll.idl.std.entity.idl.TypeName.create(typeName).getOrThrow()
+            lisla.idl.std.entity.idl.TypeName.create(typeName).getOrThrow()
         );
 	}
 	

@@ -1,4 +1,4 @@
-package litll.core.char;
+package lisla.core.char;
 import unifill.CodePoint;
 
 class CodePointTools

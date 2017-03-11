@@ -1,12 +1,12 @@
-package litll.idl.litlltext2entity.error;
-import litll.core.parse.ParseErrorEntry;
-import litll.idl.litll2entity.error.LitllToEntityError;
+package lisla.idl.lislatext2entity.error;
+import lisla.core.parse.ParseErrorEntry;
+import lisla.idl.lisla2entity.error.LislaToEntityError;
 
-enum LitllTextToEntityErrorKind 
+enum LislaTextToEntityErrorKind 
 {
 	// Parse
     Parse(error:ParseErrorEntry);
     
     // ToEntity
-	LitllToEntity(error:LitllToEntityError);
+	LislaToEntity(error:LislaToEntityError);
 }

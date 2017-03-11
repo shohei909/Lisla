@@ -1,6 +1,6 @@
-package litll.idl.std.tools.idl.group;
-import litll.idl.std.entity.idl.group.TypeGroupFilter;
-import litll.idl.std.entity.idl.group.TypeGroupPath;
+package lisla.idl.std.tools.idl.group;
+import lisla.idl.std.entity.idl.group.TypeGroupFilter;
+import lisla.idl.std.entity.idl.group.TypeGroupPath;
 
 class TypeGroupFilterTools 
 {

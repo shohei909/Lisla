@@ -1,10 +1,10 @@
-/// 'Document tags for Litll IDL'
+/// 'Document tags for Lisla IDL'
 /// [license "Public Domain"]
-[package litll.idl]
+[package lisla.idl]
 
-[import litll.idl]
-[import litll.core]
-[import litll.util.highlight]
+[import lisla.idl]
+[import lisla.core]
+[import lisla.util.highlight]
 
 [struct TypeDefinitionDocument
     [document_tag.. TypeReference]

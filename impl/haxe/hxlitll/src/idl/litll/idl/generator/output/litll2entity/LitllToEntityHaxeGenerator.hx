@@ -1,20 +1,20 @@
-package litll.idl.generator.output.litll2entity;
+package lisla.idl.generator.output.lisla2entity;
 import haxe.macro.Expr.TypeDefinition;
 import hxext.ds.Result;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.output.HaxeConvertContext;
-import litll.idl.generator.output.litll2entity.build.LitllToEntityHaxeTypeBuilder;
-import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePathPair;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.output.HaxeConvertContext;
+import lisla.idl.generator.output.lisla2entity.build.LislaToEntityHaxeTypeBuilder;
+import lisla.idl.generator.output.lisla2entity.path.HaxeLislaToEntityTypePathPair;
 using hxext.ds.ResultTools;
 
-class LitllToEntityHaxeGenerator
+class LislaToEntityHaxeGenerator
 {
 	public static function generateTypes(context:HaxeGenerateConfig):Result<Array<TypeDefinition>, Array<LoadIdlError>>
 	{
         return switch (context.resolveTargets())
 		{
 			case Result.Ok(data):
-                var config = context.litllToEntityOutputConfig;
+                var config = context.lislaToEntityOutputConfig;
                 
                 var convertContext = new HaxeConvertContext(
                     data.library, 
@@ -26,12 +26,12 @@ class LitllToEntityHaxeGenerator
                     [
                         for (info in data.infomations)
                         {
-                            var pathPair = new HaxeLitllToEntityTypePathPair(
+                            var pathPair = new HaxeLislaToEntityTypePathPair(
                                 info,
-                                config.toHaxeLitllToEntityPath(info.typePath)
+                                config.toHaxeLislaToEntityPath(info.typePath)
                             );
                             
-                            LitllToEntityHaxeTypeBuilder.convertType(pathPair, convertContext);
+                            LislaToEntityHaxeTypeBuilder.convertType(pathPair, convertContext);
                         }
                     ]
                 );

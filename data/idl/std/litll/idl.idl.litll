@@ -1,11 +1,11 @@
-/// 'IDL for Litll Interface Description Language (Litll IDL)'
+/// 'IDL for Lisla Interface Description Language (Lisla IDL)'
 /// [license "Public Domain"]
 
-[package litll]
+[package lisla]
 
-[import litll.core]
+[import lisla.core]
 
-/// [document_tag litll.idl.document.IdlDocumentTag]
+/// [document_tag lisla.idl.document.IdlDocumentTag]
 [tuple Idl
     [package_declaration PackageDeclaration]
     [import_declarations.. ImportDeclaration]
@@ -20,7 +20,7 @@
     import [module ModulePath]
 ]
 
-/// [document_tag litll.idl.document.TypeDefinitionDocumentTag]
+/// [document_tag lisla.idl.document.TypeDefinitionDocumentTag]
 [enum TypeDefinition
     [newtype [name TypeNameDeclaration] [type TypeReference]]
     [tuple [name TypeNameDeclaration] [arguments.. TupleElement]]

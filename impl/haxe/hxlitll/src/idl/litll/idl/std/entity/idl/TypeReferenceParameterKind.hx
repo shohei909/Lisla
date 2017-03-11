@@ -1,6 +1,6 @@
-package litll.idl.std.entity.idl;
-import litll.core.Litll;
-import litll.core.LitllString;
+package lisla.idl.std.entity.idl;
+import lisla.core.Lisla;
+import lisla.core.LislaString;
 
 enum TypeReferenceParameterKind 
 {

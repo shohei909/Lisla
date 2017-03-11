@@ -1,12 +1,12 @@
-package litll.idl.generator.source;
+package lisla.idl.generator.source;
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Result;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.error.LoadIdlErrorKind;
-import litll.idl.std.entity.idl.LocalModulePath;
-import litll.idl.std.entity.idl.ModulePath;
-import litll.idl.std.entity.idl.PackagePath;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.error.LoadIdlErrorKind;
+import lisla.idl.std.entity.idl.LocalModulePath;
+import lisla.idl.std.entity.idl.ModulePath;
+import lisla.idl.std.entity.idl.PackagePath;
 
 #if sys
 import sys.FileSystem;
@@ -33,7 +33,7 @@ class IdlFileSourceReader implements IdlSourceReader
     {
         var localPath = Path.join(path.path);
         var dirPath = directory + "/" + localPath;
-        var suffix = ".idl.litll";
+        var suffix = ".idl.lisla";
         var names = [];
         
         if (FileSystem.exists(dirPath) && FileSystem.isDirectory(dirPath))
@@ -74,7 +74,7 @@ class IdlFileSourceReader implements IdlSourceReader
     public function getModuleFilePath(directory:String, path:ModulePath):String 
     {
 		var localPath = Path.join(path.path);
-	    return directory + "/" + localPath + ".idl.litll";
+	    return directory + "/" + localPath + ".idl.lisla";
     }
 }
 #end

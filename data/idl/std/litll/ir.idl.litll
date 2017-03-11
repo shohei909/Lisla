@@ -1,5 +1,5 @@
-[package litll]
-[import litll.core]
+[package lisla]
+[import lisla.core]
 
 [enum Ir
     [array [data.. Ir]]

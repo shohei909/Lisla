@@ -1,4 +1,4 @@
-# Litll IDL  
+# Lisla IDL  
 
-Litll IDL(Interface Description Language)は、Litllの構造を表現するためのインターフェース記述言語であり、それ自体がLitllです。
+Lisla IDL(Interface Description Language)は、Lislaの構造を表現するためのインターフェース記述言語であり、それ自体がLislaです。
 

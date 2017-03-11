@@ -1,15 +1,15 @@
-package litll.idl.generator.output;
+package lisla.idl.generator.output;
 
-import litll.idl.generator.data.EntityOutputConfig;
-import litll.idl.generator.data.LitllToEntityOutputConfig;
-import litll.idl.generator.output.HaxeGenerateConfigFactoryContext;
-import litll.idl.generator.source.IdlFileSourceReader;
-import litll.idl.generator.source.IdlSourceReader;
-import litll.idl.library.LibraryScope;
-import litll.idl.std.entity.idl.LibraryName;
-import litll.idl.std.entity.idl.group.TypeGroupFilter;
-import litll.idl.std.entity.util.version.Version;
-import litll.idl.std.tools.idl.group.TypeGroupFilterTools;
+import lisla.idl.generator.data.EntityOutputConfig;
+import lisla.idl.generator.data.LislaToEntityOutputConfig;
+import lisla.idl.generator.output.HaxeGenerateConfigFactoryContext;
+import lisla.idl.generator.source.IdlFileSourceReader;
+import lisla.idl.generator.source.IdlSourceReader;
+import lisla.idl.library.LibraryScope;
+import lisla.idl.std.entity.idl.LibraryName;
+import lisla.idl.std.entity.idl.group.TypeGroupFilter;
+import lisla.idl.std.entity.util.version.Version;
+import lisla.idl.std.tools.idl.group.TypeGroupFilterTools;
 
 class HaxeGenerateConfigFactory 
 {
@@ -23,7 +23,7 @@ class HaxeGenerateConfigFactory
             getTargetName(context),
             getTargetVersion(context),
             getEntityOutputConfig(context),
-            getLitllToEntityOutputConfig(context),
+            getLislaToEntityOutputConfig(context),
             getSourceReader(context)
         );
     }
@@ -72,7 +72,7 @@ class HaxeGenerateConfigFactory
         return new EntityOutputConfig(filters);
     }
     
-    private function getLitllToEntityOutputConfig(context:HaxeGenerateConfigFactoryContext):LitllToEntityOutputConfig
+    private function getLislaToEntityOutputConfig(context:HaxeGenerateConfigFactoryContext):LislaToEntityOutputConfig
     {
         var filters = [];
         var configs = context.requiredLibraryConfigs.concat([context.inputConfig]);
@@ -82,14 +82,14 @@ class HaxeGenerateConfigFactory
             filters.push(
                 TypeGroupFilterTools.create(
                     inputConfig.target.name.data, 
-                    inputConfig.target.data.haxePackage.toString() + ".litll2entity"
+                    inputConfig.target.data.haxePackage.toString() + ".lisla2entity"
                 )
             );
             
             // TODO:
         }
         
-        return new LitllToEntityOutputConfig(filters);
+        return new LislaToEntityOutputConfig(filters);
     }
     
     private function getSourceReader(context:HaxeGenerateConfigFactoryContext):IdlSourceReader

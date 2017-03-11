@@ -1,9 +1,9 @@
-package litll.core.error;
+package lisla.core.error;
 
 import haxe.EnumTools.EnumValueTools;
 import hxext.ds.Maybe;
-import litll.core.error.IInlineErrorSummary;
-import litll.core.ds.SourceRange;
+import lisla.core.error.IInlineErrorSummary;
+import lisla.core.ds.SourceRange;
 
 class InlineErrorSummary<ErrorKind:EnumValue> implements IInlineErrorSummary
 {

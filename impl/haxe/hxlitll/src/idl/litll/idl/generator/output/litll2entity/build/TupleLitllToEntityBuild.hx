@@ -1,28 +1,28 @@
-package litll.idl.generator.output.litll2entity.build;
+package lisla.idl.generator.output.lisla2entity.build;
 import haxe.ds.Option;
 import haxe.macro.Expr;
 import hxext.ds.Result;
-import litll.idl.exception.IdlException;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
-import litll.idl.generator.tools.ExprBuilder;
-import litll.idl.std.entity.idl.Argument;
-import litll.idl.std.entity.idl.ArgumentKind;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.error.GetConditionErrorKindTools;
-import litll.idl.std.tools.idl.TupleTools;
-import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
+import lisla.idl.exception.IdlException;
+import lisla.idl.generator.output.entity.EntityHaxeTypePath;
+import lisla.idl.generator.tools.ExprBuilder;
+import lisla.idl.std.entity.idl.Argument;
+import lisla.idl.std.entity.idl.ArgumentKind;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.error.GetConditionErrorKindTools;
+import lisla.idl.std.tools.idl.TupleTools;
+import lisla.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
-class TupleLitllToEntityBuild 
+class TupleLislaToEntityBuild 
 {
     private var elements:Array<TupleElement>;
     public var parameters(default, null):TypeParameterDeclarationCollection;
     public var declarations(default, null):Array<Expr>;
     public var references(default, null):Array<Expr>;
-    public var builder(default, null):LitllToEntityExprBuilder;
+    public var builder(default, null):LislaToEntityExprBuilder;
     
     public function new(
-        builder:LitllToEntityExprBuilder, 
+        builder:LislaToEntityExprBuilder, 
         parameters:TypeParameterDeclarationCollection,
         elements:Array<TupleElement>
     ) 

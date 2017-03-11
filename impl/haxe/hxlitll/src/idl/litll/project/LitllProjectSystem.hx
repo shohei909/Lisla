@@ -1,24 +1,24 @@
-package litll.project;
+package lisla.project;
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.parse.Parser;
-import litll.idl.litll2entity.LitllToEntityRunner;
-import litll.idl.litlltext2entity.LitllFileToEntityRunner;
-import litll.idl.litlltext2entity.error.LitllFileToEntityError;
-import litll.idl.litlltext2entity.error.LitllFileToEntityErrorKind;
-import litll.idl.std.entity.idl.project.ProjectConfig;
-import litll.idl.std.litll2entity.idl.project.ProjectConfigLitllToEntity;
+import lisla.core.parse.Parser;
+import lisla.idl.lisla2entity.LislaToEntityRunner;
+import lisla.idl.lislatext2entity.LislaFileToEntityRunner;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityErrorKind;
+import lisla.idl.std.entity.idl.project.ProjectConfig;
+import lisla.idl.std.lisla2entity.idl.project.ProjectConfigLislaToEntity;
 import sys.FileSystem;
 import sys.io.File;
 
 #if sys
-class LitllProjectSystem
+class LislaProjectSystem
 {
     private static var MAX_DEPTH = 4096;
     
-    public static function getCurrentProject():Result<LitllProject, Array<LitllFileToEntityError>>
+    public static function getCurrentProject():Result<LislaProject, Array<LislaFileToEntityError>>
     {
         return switch (findProjectHome().toOption())
         {
@@ -26,7 +26,7 @@ class LitllProjectSystem
                 openProject(path);
                 
             case Option.None:
-                Result.Ok(new LitllProject());
+                Result.Ok(new LislaProject());
         }
     }
     
@@ -38,7 +38,7 @@ class LitllProjectSystem
         {
             if (path == "") break;
             
-            var projectPath = path + "/main.project.litll";
+            var projectPath = path + "/main.project.lisla";
             if (FileSystem.exists(projectPath)) return Maybe.some(path);
             
             path = Path.normalize(path + "/..");
@@ -47,13 +47,13 @@ class LitllProjectSystem
         return Maybe.none();
     }
     
-    public static function openProject(projectHome:String):Result<LitllProject, Array<LitllFileToEntityError>>
+    public static function openProject(projectHome:String):Result<LislaProject, Array<LislaFileToEntityError>>
     {
-        var project = new LitllProject();
+        var project = new LislaProject();
         
-        if (FileSystem.exists(projectHome + "/main.project.litll"))
+        if (FileSystem.exists(projectHome + "/main.project.lisla"))
         {
-            switch (readProjectConfig(projectHome + "/main.project.litll"))
+            switch (readProjectConfig(projectHome + "/main.project.lisla"))
             {
                 case Result.Ok(config):
                     project.apply(projectHome, config);
@@ -62,9 +62,9 @@ class LitllProjectSystem
                     return Result.Err(errors);
             }
         }
-        if (FileSystem.exists(projectHome + "/user.project.litll"))
+        if (FileSystem.exists(projectHome + "/user.project.lisla"))
         {
-            switch (readProjectConfig(projectHome + "/user.project.litll"))
+            switch (readProjectConfig(projectHome + "/user.project.lisla"))
             {
                 case Result.Ok(config):
                     project.apply(projectHome, config);
@@ -77,9 +77,9 @@ class LitllProjectSystem
         return Result.Ok(project);
     }
     
-    public static function readProjectConfig(filePath:String):Result<ProjectConfig, Array<LitllFileToEntityError>>
+    public static function readProjectConfig(filePath:String):Result<ProjectConfig, Array<LislaFileToEntityError>>
     {
-        return LitllFileToEntityRunner.run(ProjectConfigLitllToEntity, filePath);
+        return LislaFileToEntityRunner.run(ProjectConfigLislaToEntity, filePath);
     }
 }
 

@@ -1,4 +1,4 @@
-package litll.idl.generator.io;
+package lisla.idl.generator.io;
 
 #if sys
 /**

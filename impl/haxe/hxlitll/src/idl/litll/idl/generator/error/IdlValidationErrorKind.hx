@@ -1,10 +1,10 @@
-package litll.idl.generator.error;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.EnumConstructorName;
-import litll.idl.std.entity.idl.StructElementName;
-import litll.idl.std.entity.idl.TypeDependenceName;
-import litll.idl.std.error.GetConditionErrorKind;
-import litll.idl.std.error.TypeFollowErrorKind;
+package lisla.idl.generator.error;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.EnumConstructorName;
+import lisla.idl.std.entity.idl.StructElementName;
+import lisla.idl.std.entity.idl.TypeDependenceName;
+import lisla.idl.std.error.GetConditionErrorKind;
+import lisla.idl.std.error.TypeFollowErrorKind;
 
 enum IdlValidationErrorKind 
 {

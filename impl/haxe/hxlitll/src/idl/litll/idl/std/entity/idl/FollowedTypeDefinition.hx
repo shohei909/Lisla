@@ -1,8 +1,8 @@
-package litll.idl.std.entity.idl;
-import litll.idl.std.entity.idl.Argument;
-import litll.idl.std.entity.idl.EnumConstructor;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeReference;
+package lisla.idl.std.entity.idl;
+import lisla.idl.std.entity.idl.Argument;
+import lisla.idl.std.entity.idl.EnumConstructor;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeReference;
 
 enum FollowedTypeDefinition
 {

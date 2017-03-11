@@ -1,7 +1,7 @@
-package litll.idl.litlltext2entity.error;
+package lisla.idl.lislatext2entity.error;
 
-enum LitllFileToEntityErrorKind 
+enum LislaFileToEntityErrorKind 
 {
     FileNotFound;
-    LitllTextToEntity(error:LitllTextToEntityErrorKind);
+    LislaTextToEntity(error:LislaTextToEntityErrorKind);
 }

@@ -1,4 +1,4 @@
-package litll.core.parse;
+package lisla.core.parse;
 
 class ParserConfig
 {

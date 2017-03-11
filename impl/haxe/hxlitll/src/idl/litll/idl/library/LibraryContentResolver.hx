@@ -1,6 +1,6 @@
-package litll.idl.library;
+package lisla.idl.library;
 import hxext.ds.Result;
-import litll.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.error.LoadIdlError;
 
 class LibraryContentResolver 
 {

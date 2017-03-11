@@ -1,6 +1,6 @@
-package litll.idl.litll2entity;
+package lisla.idl.lisla2entity;
 
-class LitllToEntityConfig
+class LislaToEntityConfig
 {
 	public var persevering:Bool;
 	

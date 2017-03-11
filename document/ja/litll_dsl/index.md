@@ -1,29 +1,29 @@
-# Litll DSL ツールキット
+# Lisla DSL ツールキット
 
-Litll DSL ツールキットは、LitllベースのDSLを簡単に作成するためのツール群です。
+Lisla DSL ツールキットは、LislaベースのDSLを簡単に作成するためのツール群です。
 
-IDL on Litll を使ってデータ構造を記述するだけでDSLの作成が終わり、パーサ、バリデータ、シンタックスハイライタ、入力補完を手に入れることができます。
+IDL on Lisla を使ってデータ構造を記述するだけでDSLの作成が終わり、パーサ、バリデータ、シンタックスハイライタ、入力補完を手に入れることができます。
 
 
 # 構成
 
-Litll DSL ツールキットは以下のツールで構成されます。
+Lisla DSL ツールキットは以下のツールで構成されます。
 
 
 ## Rust
 
-### liblitll
-RustでLitllをあつかうためのライブラリです
+### liblisla
+RustでLislaをあつかうためのライブラリです
 
 #### 機能
-- [ｘ] Litll読み込み
-- [ ] Litll書き込み
+- [ｘ] Lisla読み込み
+- [ ] Lisla書き込み
 - [ ] フォーマット
 - [ ] データ正規化
 - [ ] Hash生成
 - [ ] ファイル圧縮(minify)
 
-- Litll IDL
+- Lisla IDL
     - Rust出力
         - [ ] データ構造生成
         - オブジェクトマッピング
@@ -34,11 +34,11 @@ RustでLitllをあつかうためのライブラリです
         - [ ] コードジャンプ
         - [ ] 入力補完
 
-### litllc
-Litllのためのコマンドラインツール
+### lislac
+Lislaのためのコマンドラインツール
 
 #### 機能
-- [ ] Litll → Json変換
+- [ ] Lisla → Json変換
 - [ ] ファイル圧縮(minify)
 - [ ] フォーマット
 - [ ] バリデーション
@@ -49,35 +49,35 @@ Litllのためのコマンドラインツール
     - [ ] 入力補完
     - [ ] プラグインシステム
     - プラグイン
-        - [ ] Litll IDL サポート強化
+        - [ ] Lisla IDL サポート強化
 
-- IDL on Litll
+- IDL on Lisla
     - 標準ライブラリ
 
 ## Haxe
 
-### hxlitll
-HaxeでLitllをあつかうためのライブラリです。
+### hxlisla
+HaxeでLislaをあつかうためのライブラリです。
 
 #### 機能
-- [x] Litll読み込み
-- [ ] Litll書き込み
+- [x] Lisla読み込み
+- [ ] Lisla書き込み
 - [ ] データ正規化
 - [ ] Hash生成
 
-- Litll IDL
-    - Litll → Haxe 出力
+- Lisla IDL
+    - Lisla → Haxe 出力
         - [x] データ構造
-        - [ ] 逆Litll化
-        - [ ] Litll化
-        - [ ] 逆Bitll化
-        - [ ] Bitll化
-    - [ ] Haxe → Litll 出力
+        - [ ] 逆Lisla化
+        - [ ] Lisla化
+        - [ ] 逆Bisla化
+        - [ ] Bisla化
+    - [ ] Haxe → Lisla 出力
 
 ## エディタ
 
-### Litll VSCode Plugin
-Visual Studio Code上で、Litllを記述するためのプラグイン
+### Lisla VSCode Plugin
+Visual Studio Code上で、Lislaを記述するためのプラグイン
 
 #### 機能
 - [ ] フォーマット
@@ -86,11 +86,11 @@ Visual Studio Code上で、Litllを記述するためのプラグイン
 - [ ] コードジャンプ
 - [ ] 入力補完
 
-### さまざまなLitll DSL
+### さまざまなLisla DSL
 
-Litll 
+Lisla 
 
-#### Litll IDL
+#### Lisla IDL
 
 #### Clidl (Command Line Interface language)
 

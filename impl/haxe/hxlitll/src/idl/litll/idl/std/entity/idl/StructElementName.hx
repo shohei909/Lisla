@@ -1,12 +1,12 @@
-package litll.idl.std.entity.idl;
+package lisla.idl.std.entity.idl;
 
-import litll.core.LitllString;
+import lisla.core.LislaString;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.tag.StringTag;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
+import lisla.core.tag.StringTag;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
 using hxext.ds.ResultTools;
-using litll.core.string.IdentifierTools;
+using lisla.core.string.IdentifierTools;
 using StringTools;
 
 class StructElementName
@@ -60,8 +60,8 @@ class StructElementName
         this.tag = tag;
     }
     
-	@:litllToEntity
-	public static function litllToEntity(string:LitllString):Result<StructElementName, LitllToEntityErrorKind>
+	@:lislaToEntity
+	public static function lislaToEntity(string:LislaString):Result<StructElementName, LislaToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -69,7 +69,7 @@ class StructElementName
 				Result.Ok(data);
 			
 			case Result.Err(data):
-				Result.Err(LitllToEntityErrorKind.Fatal(data));
+				Result.Err(LislaToEntityErrorKind.Fatal(data));
 		}
 	}
 	public static function create(string:String, ?tag:Maybe<StringTag>):Result<StructElementName, String>

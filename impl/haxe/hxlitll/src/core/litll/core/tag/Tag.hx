@@ -1,8 +1,8 @@
-package litll.core.tag;
+package lisla.core.tag;
 import haxe.ds.Option;
 import hxext.ds.Maybe;
-import litll.core.ds.SourceRange;
-import litll.core.tag.entry.DocumentTagEntry;
+import lisla.core.ds.SourceRange;
+import lisla.core.tag.entry.DocumentTagEntry;
 
 class Tag
 {

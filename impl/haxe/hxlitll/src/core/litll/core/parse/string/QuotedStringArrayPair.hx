@@ -1,10 +1,10 @@
-package litll.core.parse.string;
-import litll.core.tag.StringTag;
+package lisla.core.parse.string;
+import lisla.core.tag.StringTag;
 
 class QuotedStringArrayPair
 {
     public var string:Array<QuotedStringLine>;
-    public var array:Array<LitllArray<Litll>>;
+    public var array:Array<LislaArray<Lisla>>;
     public var tag:StringTag;
 
     public function new(string:Array<QuotedStringLine>, tag:StringTag)

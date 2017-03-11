@@ -1,8 +1,8 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
 import haxe.macro.Expr.TypeParamDecl;
-import litll.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeName;
 
 class TypeNameTools 
 {

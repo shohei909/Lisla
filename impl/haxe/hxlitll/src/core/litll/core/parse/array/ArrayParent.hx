@@ -1,6 +1,6 @@
-package litll.core.parse.array;
-import litll.core.parse.string.QuotedStringContext;
-import litll.core.parse.string.QuotedStringArrayPair;
+package lisla.core.parse.array;
+import lisla.core.parse.string.QuotedStringContext;
+import lisla.core.parse.string.QuotedStringArrayPair;
 
 enum ArrayParent
 {

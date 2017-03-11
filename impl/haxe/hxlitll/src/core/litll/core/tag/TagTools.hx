@@ -1,6 +1,6 @@
-package litll.core.tag;
+package lisla.core.tag;
 import hxext.ds.Maybe;
-import litll.core.ds.SourceRange;
+import lisla.core.ds.SourceRange;
 
 class TagTools 
 {

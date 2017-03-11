@@ -1,8 +1,8 @@
-# データ記述言語「Litll」
+# データ記述言語「Lisla」
 
-Litll（リトル）は、文字列型と配列型のみをサポートするデータ記述言語です。
+Lisla（リトル）は、文字列型と配列型のみをサポートするデータ記述言語です。
 
-Litllは
+Lislaは
 * 学ぶのが簡単で
 * 読むのが簡単で
 * 書くのが簡単で
@@ -12,7 +12,7 @@ YAMLは書くのは簡単ですが、パースをするのは難しいです。J
 
 多くのデータ記述言語は多くの目的に対して複雑すぎます。
 
-Litllはシンプルです。そして、十分な機能を持っています。
+Lislaはシンプルです。そして、十分な機能を持っています。
 
 # 構文
 
@@ -27,7 +27,7 @@ Litllはシンプルです。そして、十分な機能を持っています。
 * コメント構文(`//`)
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -42,14 +42,14 @@ abcd
     </tr>
 </table>
 
-Litllは最上位の階層が配列なので、単純な`abcd`という記述は、JSONの`["abcd"]`に相当します。
+Lislaは最上位の階層が配列なので、単純な`abcd`という記述は、JSONの`["abcd"]`に相当します。
 
 ## 区切り文字(空白文字と改行文字)
 
 空白文字(`` ``(#x20), `\t`(#x9))と改行文字(LF, CR)は区切り文字として使うことができます。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -69,7 +69,7 @@ def
 連続した区切り文字、文頭/文末の区切り文字は無視されます。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -94,7 +94,7 @@ def
 特殊文字、空白文字、ブラックリスト空白文字を文字列データに含めたい場合、ダブルクオート(`"`)とシングルクオート(`'`)で囲みます。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -112,7 +112,7 @@ def
 クオートの数は、3つまたはそれ以上でも構いません。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -130,7 +130,7 @@ def
 クオート2つは空白文字列の意味になります。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -151,7 +151,7 @@ def
 配列を入れ子にしたい場合、大かっこ`[]`で囲みます。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -169,7 +169,7 @@ a [[bc def] [g]]
 大カッコの前後の区切り文字は省略可能です。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -187,7 +187,7 @@ a [[bc def] [g]]
 
 ## 複数行文字列
 
-Litllでは、複数行のクオートあり文字列が使用できます。
+Lislaでは、複数行のクオートあり文字列が使用できます。
 
 複数行の文字列構文では、いくつかの空白文字や改行は無視されます。
 
@@ -199,7 +199,7 @@ Litllでは、複数行のクオートあり文字列が使用できます。
 改行は`\r\n`、`\n`、`\r`のいずれかで、1つの改行というあつかいです。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -208,7 +208,7 @@ Multi
 line
 "
     '''''
-    Litll
+    Lisla
 
      is
 
@@ -218,7 +218,7 @@ line
         </td>
         <td>
             <pre><code>
-["Multi\nline", "Litll\n\n is\n\n  awesome."]
+["Multi\nline", "Lisla\n\n is\n\n  awesome."]
             </code></pre>
         </td>
     </tr>
@@ -227,7 +227,7 @@ line
 
 ## エスケープシークエンス
 
-Litllでは、ダブルクオートのクオート有りの文字列でエスケープが利用可能です。
+Lislaでは、ダブルクオートのクオート有りの文字列でエスケープが利用可能です。
 
 <table>
     <tr>
@@ -265,7 +265,7 @@ Litllでは、ダブルクオートのクオート有りの文字列でエスケ
 </table>
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -283,7 +283,7 @@ Litllでは、ダブルクオートのクオート有りの文字列でエスケ
 シングルクオートのクオート有りの文字列では、これらのエスケープはされません。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -331,20 +331,20 @@ Litllでは、ダブルクオートのクオート有りの文字列でエスケ
 文字列内で`\[`から始めて`]`で閉じることで、その配列の内容を文字列の間に挿入することができます。つまり以下のようなことです。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
     "
     配列補間はインデントを壊さないので
-     例えばLitllを、\[bold "マークアップ言語のように"]
+     例えばLislaを、\[bold "マークアップ言語のように"]
       使う場合に役立ちます
     "
             </code></pre>
         </td>
         <td>
             <pre><code>
-["配列補間はインデントを壊さないので\n 例えばLitllを、", ["bold", "マークアップ言語のように"], "\n  使う場合に役立ちます"]
+["配列補間はインデントを壊さないので\n 例えばLislaを、", ["bold", "マークアップ言語のように"], "\n  使う場合に役立ちます"]
             </code></pre>
         </td>
     </tr>
@@ -353,7 +353,7 @@ Litllでは、ダブルクオートのクオート有りの文字列でエスケ
 配列補間の`\[]`の内側では、'\'でエスケープされた区切り文字によって、複数の配列を文字列の間に挿入できます。
 
 <table>
-    <tr><th>Litll</th><th>JSON</th></tr>
+    <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
             <pre><code>
@@ -370,7 +370,7 @@ Litllでは、ダブルクオートのクオート有りの文字列でエスケ
 
 ## コメント
 
-Litllでは行コメントが使えます。
+Lislaでは行コメントが使えます。
 
 ```
 // this is comment
@@ -397,42 +397,42 @@ string // this is also comment
 aaa
 ```
 
-ドキュメントコメントの内容もLitllで記述します。
+ドキュメントコメントの内容もLislaで記述します。
 
 ### 保護されたコメント
 
 `//!`と`///!`は、ツールによる空白除去やコメント除去を行った場合に除去されないコメントを意味します。
 
 ```
-//! 「!」で始まるコメントはLitllがminifyされる際に除去されません
+//! 「!」で始まるコメントはLislaがminifyされる際に除去されません
 ///! '保護されたドキュメントコメントも利用可能です'
 ```
 
 ## エンコード
 
-LitllはUTF-8のみをサポートしています。 (BOMありなし両方)
+LislaはUTF-8のみをサポートしています。 (BOMありなし両方)
 
 ## 拡張子
 
-`.litll`
+`.lisla`
 
 ## 実装
 
 ### Haxe
 
-- hxlitll : 公式実装
+- hxlisla : 公式実装
 
 ### Rust
 
-- liblitll : 公式実装
+- liblisla : 公式実装
 
-## 新しいLitllパーサを実装する上で
+## 新しいLislaパーサを実装する上で
 
 多くのテストケースが用意されているのでそちらに目を通してください。
 
 ## バージョン
 
-ここで説明されている`Litll`のバージョンは`1.0.0`です。
+ここで説明されている`Lisla`のバージョンは`1.0.0`です。
 
 ## ライセンス
 このドキュメントとテストケースのライセンスは[Creative Commons 0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)です。

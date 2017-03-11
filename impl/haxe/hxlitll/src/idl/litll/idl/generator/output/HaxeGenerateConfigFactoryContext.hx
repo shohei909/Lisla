@@ -1,6 +1,6 @@
-package litll.idl.generator.output;
-import litll.idl.hxlitll.entity.config.InputConfig;
-import litll.idl.library.LibraryScope;
+package lisla.idl.generator.output;
+import lisla.idl.hxlisla.entity.config.InputConfig;
+import lisla.idl.library.LibraryScope;
 
 class HaxeGenerateConfigFactoryContext 
 {

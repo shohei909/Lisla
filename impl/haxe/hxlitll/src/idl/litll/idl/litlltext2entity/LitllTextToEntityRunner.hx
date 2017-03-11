@@ -1,33 +1,33 @@
-package litll.idl.litlltext2entity;
+package lisla.idl.lislatext2entity;
 import hxext.ds.Result;
-import litll.core.parse.Parser;
-import litll.core.parse.ParserConfig;
-import litll.idl.litll2entity.LitllToEntityConfig;
-import litll.idl.litll2entity.LitllToEntityRunner;
-import litll.idl.litll2entity.LitllToEntityType;
-import litll.idl.litlltext2entity.error.LitllTextToEntityErrorKind;
+import lisla.core.parse.Parser;
+import lisla.core.parse.ParserConfig;
+import lisla.idl.lisla2entity.LislaToEntityConfig;
+import lisla.idl.lisla2entity.LislaToEntityRunner;
+import lisla.idl.lisla2entity.LislaToEntityType;
+import lisla.idl.lislatext2entity.error.LislaTextToEntityErrorKind;
 
-class LitllTextToEntityRunner 
+class LislaTextToEntityRunner 
 {
-	public static function run<T>(processorType:LitllToEntityType<T>, text:String, ?parseConfig:ParserConfig, ?litllToEntityConfig:LitllToEntityConfig):Result<T, Array<LitllTextToEntityErrorKind>>
+	public static function run<T>(processorType:LislaToEntityType<T>, text:String, ?parseConfig:ParserConfig, ?lislaToEntityConfig:LislaToEntityConfig):Result<T, Array<LislaTextToEntityErrorKind>>
 	{
-		var litllArray = switch (Parser.run(text, parseConfig))
+		var lislaArray = switch (Parser.run(text, parseConfig))
         {
             case Result.Ok(data):
                 data;
                 
             case Result.Err(err):
-                var errors = [for (entry in err.entries) LitllTextToEntityErrorKind.Parse(entry)];
+                var errors = [for (entry in err.entries) LislaTextToEntityErrorKind.Parse(entry)];
                 return Result.Err(errors);
         }
         
-        return switch (LitllToEntityRunner.run(processorType, litllArray, litllToEntityConfig))
+        return switch (LislaToEntityRunner.run(processorType, lislaArray, lislaToEntityConfig))
         {
             case Result.Ok(data):
                 Result.Ok(data);
                 
             case Result.Err(err):
-                Result.Err([LitllTextToEntityErrorKind.LitllToEntity(err)]);
+                Result.Err([LislaTextToEntityErrorKind.LislaToEntity(err)]);
         }
 	}
 }

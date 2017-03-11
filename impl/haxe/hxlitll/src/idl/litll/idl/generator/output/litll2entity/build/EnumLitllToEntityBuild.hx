@@ -1,32 +1,32 @@
-package litll.idl.generator.output.litll2entity.build;
+package lisla.idl.generator.output.lisla2entity.build;
 import haxe.macro.Expr;
 import hxext.ds.Result;
-import litll.core.LitllString;
-import litll.idl.exception.IdlException;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
-import litll.idl.generator.output.entity.store.HaxeEntityInterface;
-import litll.idl.generator.tools.ExprBuilder;
-import litll.idl.litll2entity.LitllToEntityArrayContext;
-import litll.idl.litll2entity.error.LitllToEntityError;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.entity.idl.EnumConstructor;
-import litll.idl.std.entity.idl.EnumConstructorKind;
-import litll.idl.std.entity.idl.EnumConstructorName;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
+import lisla.core.LislaString;
+import lisla.idl.exception.IdlException;
+import lisla.idl.generator.output.entity.EntityHaxeTypePath;
+import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
+import lisla.idl.generator.tools.ExprBuilder;
+import lisla.idl.lisla2entity.LislaToEntityArrayContext;
+import lisla.idl.lisla2entity.error.LislaToEntityError;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import lisla.idl.std.entity.idl.EnumConstructor;
+import lisla.idl.std.entity.idl.EnumConstructorKind;
+import lisla.idl.std.entity.idl.EnumConstructorName;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
-class EnumLitllToEntityBuild 
+class EnumLislaToEntityBuild 
 {
     private var targetList:Array<Expr> = [];
     public var cases(default, null):Array<Case> = [];
     
     private var constructors:Array<EnumConstructor>;
     private var parameters:TypeParameterDeclarationCollection;
-    private var builder:LitllToEntityExprBuilder;
+    private var builder:LislaToEntityExprBuilder;
     private var dataInterface:HaxeEntityInterface;
         
-    public function new(builder:LitllToEntityExprBuilder, dataInterface:HaxeEntityInterface, parameters:TypeParameterDeclarationCollection, constructors:Array<EnumConstructor>) 
+    public function new(builder:LislaToEntityExprBuilder, dataInterface:HaxeEntityInterface, parameters:TypeParameterDeclarationCollection, constructors:Array<EnumConstructor>) 
     {
         this.builder = builder;
         this.dataInterface = dataInterface;
@@ -61,7 +61,7 @@ class EnumLitllToEntityBuild
                     switch (parameterized.name.kind)
                     {
                         case EnumConstructorKind.Normal:
-                            var label = TupleElement.Label(new LitllString(name.name, name.tag));
+                            var label = TupleElement.Label(new LislaString(name.name, name.tag));
                             addTupleCase(name, [label].concat(elements));
                     
                         case EnumConstructorKind.Tuple:
@@ -78,8 +78,8 @@ class EnumLitllToEntityBuild
                                 case TupleElement.Argument(argument):
                                     addUnfoldCase(name, argument.type);
                                     
-                                case TupleElement.Label(litllString):
-                                    addPrimitiveCase(name, litllString.data);
+                                case TupleElement.Label(lislaString):
+                                    addPrimitiveCase(name, lislaString.data);
                             }
                     }
             }
@@ -90,9 +90,9 @@ class EnumLitllToEntityBuild
                 // case data:
                 values : [macro data],
                 expr: macro hxext.ds.Result.Err(
-                    litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
-                        context.litll, 
-                        litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedEnumConstructor([$a{targetList}])
+                    lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(
+                        context.lisla, 
+                        lisla.idl.lisla2entity.error.LislaToEntityErrorKind.UnmatchedEnumConstructor([$a{targetList}])
                     )
                 )
             }
@@ -112,7 +112,7 @@ class EnumLitllToEntityBuild
     {
         var guard = builder.createTupleGuardConditions(elements, parameters.parameters);
         var caseExpr = macro  {
-            var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
+            var arrayContext = new lisla.idl.lisla2entity.LislaToEntityArrayContext(array, 0, context.config);
             var data = $instantiationExpr;
             switch (arrayContext.closeOrError())
             {
@@ -124,14 +124,14 @@ class EnumLitllToEntityBuild
             }
         }
         
-        cases.push(LitllToEntityExprBuilder.createTupleCase(guard, caseExpr));
+        cases.push(LislaToEntityExprBuilder.createTupleCase(guard, caseExpr));
     }
     inline function addTupleCase(name:EnumConstructorName, elements:Array<TupleElement>):Void
     {
         var string = name.name;
         addTarget(string);
         
-        var build = new TupleLitllToEntityBuild(builder, parameters, elements);
+        var build = new TupleLislaToEntityBuild(builder, parameters, elements);
         var instantiationExpr = builder.createEnumInstantiationExpr(build.declarations, build.references, dataInterface.path, name, parameters);
         _addTupleCase(instantiationExpr, elements);
     }
@@ -143,7 +143,7 @@ class EnumLitllToEntityBuild
         };
         cases.push(
             {
-                values: [macro litll.core.Litll.Str(data)],
+                values: [macro lisla.core.Lisla.Str(data)],
                 guard: (macro data.data == $stringExpr),
                 expr: instantiationExpr,
             }

@@ -1,6 +1,6 @@
-package litll.idl.std.entity.idl;
+package lisla.idl.std.entity.idl;
 import hxext.ds.Maybe;
-import litll.core.tag.StringTag;
+import lisla.core.tag.StringTag;
 
 class LocalModulePath 
 {

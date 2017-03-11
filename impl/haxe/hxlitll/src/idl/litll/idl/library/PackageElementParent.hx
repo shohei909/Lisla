@@ -1,4 +1,4 @@
-package litll.idl.library;
+package lisla.idl.library;
 
 interface PackageElementParent 
 {

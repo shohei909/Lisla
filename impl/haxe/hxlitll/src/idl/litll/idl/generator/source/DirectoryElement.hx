@@ -1,9 +1,9 @@
-package litll.idl.generator.source;
-import litll.idl.generator.source.validate.ValidType;
-import litll.idl.library.Library;
-import litll.idl.library.LoadTypesContext;
-import litll.idl.library.PackageElement;
-import litll.idl.std.entity.idl.PackagePath;
+package lisla.idl.generator.source;
+import lisla.idl.generator.source.validate.ValidType;
+import lisla.idl.library.Library;
+import lisla.idl.library.LoadTypesContext;
+import lisla.idl.library.PackageElement;
+import lisla.idl.std.entity.idl.PackagePath;
 
 class DirectoryElement
 {

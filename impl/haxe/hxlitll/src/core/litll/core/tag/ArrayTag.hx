@@ -1,7 +1,7 @@
-package litll.core.tag;
+package lisla.core.tag;
 import haxe.ds.Option;
 import hxext.ds.Maybe;
-import litll.core.tag.entry.StringFormatTagEntry;
+import lisla.core.tag.entry.StringFormatTagEntry;
 
 class ArrayTag extends Tag
 {

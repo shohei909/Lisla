@@ -1,13 +1,13 @@
-package litll.idl.std.entity.idl.group;
+package lisla.idl.std.entity.idl.group;
 import haxe.ds.Option;
-import litll.core.LitllString;
+import lisla.core.LislaString;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.tag.StringTag;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.entity.idl.PackagePath;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
+import lisla.core.tag.StringTag;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import lisla.idl.std.entity.idl.PackagePath;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
 
 class TypeGroupPath
 {
@@ -49,8 +49,8 @@ class TypeGroupPath
 		}
 	}
 	
-	@:litllToEntity
-	public static function litllToEntity(string:LitllString):Result<TypeGroupPath, LitllToEntityErrorKind>
+	@:lislaToEntity
+	public static function lislaToEntity(string:LislaString):Result<TypeGroupPath, LislaToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -58,7 +58,7 @@ class TypeGroupPath
 				Result.Ok(data);
 				
 			case Result.Err(err):
-				Result.Err(LitllToEntityErrorKind.Fatal(err));
+				Result.Err(LislaToEntityErrorKind.Fatal(err));
 		}
 	}
 	

@@ -1,5 +1,5 @@
 [package '']
-[import litll.core]
+[import lisla.core]
 
 [enum BracketExpr
     [value< [value Float64]]

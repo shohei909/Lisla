@@ -1,9 +1,9 @@
-package litll.idl.litll2entity.error;
+package lisla.idl.lisla2entity.error;
 import hxext.ds.Maybe;
-import litll.core.Litll;
-import litll.core.tag.Tag;
+import lisla.core.Lisla;
+import lisla.core.tag.Tag;
 
-enum LitllToEntityErrorKind
+enum LislaToEntityErrorKind
 {
 	CantBeArray;
 	CantBeString;

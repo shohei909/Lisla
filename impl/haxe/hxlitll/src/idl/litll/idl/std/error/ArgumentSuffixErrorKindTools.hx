@@ -1,5 +1,5 @@
-package litll.idl.std.error;
-import litll.idl.exception.IdlException;
+package lisla.idl.std.error;
+import lisla.idl.exception.IdlException;
 
 class ArgumentSuffixErrorKindTools 
 {

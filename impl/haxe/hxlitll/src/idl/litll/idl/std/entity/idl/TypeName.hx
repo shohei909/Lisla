@@ -1,15 +1,15 @@
-package litll.idl.std.entity.idl;
-import litll.core.LitllString;
+package lisla.idl.std.entity.idl;
+import lisla.core.LislaString;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.string.IdentifierTools;
-import litll.core.tag.StringTag;
-import litll.idl.litll2entity.error.LitllToEntityError;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
+import lisla.core.string.IdentifierTools;
+import lisla.core.tag.StringTag;
+import lisla.idl.lisla2entity.error.LislaToEntityError;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
 using hxext.ds.ResultTools;
 
 @:forward(tag)
-abstract TypeName(LitllString)
+abstract TypeName(LislaString)
 {
 	private static var headEReg:EReg = ~/[A-Z]/;
 	private static var bodyEReg:EReg = ~/[0-9a-zA-Z]*/;
@@ -20,14 +20,14 @@ abstract TypeName(LitllString)
 		return this.tag;
 	}
 	
-	public function new (string:LitllString) 
+	public function new (string:LislaString) 
 	{
 		validate(string.data);
 		this = string;
 	}
 	
-	@:litllToEntity
-	public static function litllToEntity(string:LitllString):Result<TypeName, LitllToEntityErrorKind>
+	@:lislaToEntity
+	public static function lislaToEntity(string:LislaString):Result<TypeName, LislaToEntityErrorKind>
 	{
 		return try
 		{
@@ -35,7 +35,7 @@ abstract TypeName(LitllString)
 		}
 		catch (err:String)
 		{
-			Result.Err(LitllToEntityErrorKind.Fatal(err));
+			Result.Err(LislaToEntityErrorKind.Fatal(err));
 		}
 	}
 	
@@ -43,7 +43,7 @@ abstract TypeName(LitllString)
 	{
 		return try
 		{
-			Result.Ok(new TypeName(new LitllString(string, tag)));
+			Result.Ok(new TypeName(new LislaString(string, tag)));
 		}
 		catch (err:String)
 		{
@@ -76,13 +76,13 @@ abstract TypeName(LitllString)
 		return IdentifierTools.toCamelCase(this.data).getOrThrow();
 	}
     
-    public function toLitllToEntityVariableName():String
+    public function toLislaToEntityVariableName():String
     {
-        return toVariableName() + "LitllToEntity";
+        return toVariableName() + "LislaToEntity";
     }
 	
 	public function map(func:String->String):TypeName
 	{
-		return new TypeName(new LitllString(func(this.data), this.tag));
+		return new TypeName(new LislaString(func(this.data), this.tag));
 	}
 }

@@ -1,6 +1,6 @@
-package litll.idl.std.tools.idl;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeDependenceDeclaration;
+package lisla.idl.std.tools.idl;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeDependenceDeclaration;
 
 typedef TypeParameterDeclarationCollection =
 {

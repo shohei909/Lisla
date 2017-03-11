@@ -1,14 +1,14 @@
-package litll.idl.library;
+package lisla.idl.library;
 import hxext.ds.OrderedMap;
 import hxext.ds.Result;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.error.LoadIdlErrorKind;
-import litll.idl.generator.source.IdlSourceReader;
-import litll.idl.library.Library;
-import litll.idl.std.entity.idl.library.LibraryConfig;
-import litll.idl.std.entity.idl.LibraryName;
-import litll.idl.std.entity.idl.library.LibraryVersion;
-import litll.idl.std.entity.util.version.Version;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.error.LoadIdlErrorKind;
+import lisla.idl.generator.source.IdlSourceReader;
+import lisla.idl.library.Library;
+import lisla.idl.std.entity.idl.library.LibraryConfig;
+import lisla.idl.std.entity.idl.LibraryName;
+import lisla.idl.std.entity.idl.library.LibraryVersion;
+import lisla.idl.std.entity.util.version.Version;
 
 class LibrarySeries
 {

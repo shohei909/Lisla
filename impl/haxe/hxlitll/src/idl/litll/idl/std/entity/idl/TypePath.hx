@@ -1,11 +1,11 @@
-package litll.idl.std.entity.idl;
+package lisla.idl.std.entity.idl;
 import haxe.ds.Option;
-import litll.core.LitllString;
+import lisla.core.LislaString;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.tag.StringTag;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.entity.idl.group.TypeGroupPath;
+import lisla.core.tag.StringTag;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import lisla.idl.std.entity.idl.group.TypeGroupPath;
 
 class TypePath
 {
@@ -20,8 +20,8 @@ class TypePath
 		this.tag = tag;
 	}
 	
-	@:litllToEntity
-	public static function litllToEntity(string:LitllString):Result<TypePath, LitllToEntityErrorKind>
+	@:lislaToEntity
+	public static function lislaToEntity(string:LislaString):Result<TypePath, LislaToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -29,7 +29,7 @@ class TypePath
 				Result.Ok(data);
 			
 			case Result.Err(data):
-				Result.Err(LitllToEntityErrorKind.Fatal(data));
+				Result.Err(LislaToEntityErrorKind.Fatal(data));
 		}
 	}
 	
@@ -57,7 +57,7 @@ class TypePath
 			var typeNameString = array[array.length - 1];	
 			
 			Result.Ok(
-				new TypePath(modulePath, new TypeName(new LitllString(typeNameString, tag)), tag)
+				new TypePath(modulePath, new TypeName(new LislaString(typeNameString, tag)), tag)
 			);
 		}
 		catch (err:String)

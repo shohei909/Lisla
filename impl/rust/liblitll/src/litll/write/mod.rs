@@ -172,7 +172,7 @@ enum SeparationContext {
 // Writer Implements
 // ===============================================================================
 
-pub fn write(config: &Config, arr: &LitllArray) -> String {
+pub fn write(config: &Config, arr: &LislaArray) -> String {
     let mut output = String::new();
     let mut writer = Writer::new(config, &arr.tag.format);
     writer.write_elements(&mut output, arr);
@@ -193,15 +193,15 @@ impl<'a> Writer<'a> {
 
 
     #[inline]
-    fn write_elements(&mut self, output: &mut String, arr: &LitllArray) -> ArrayContext {
+    fn write_elements(&mut self, output: &mut String, arr: &LislaArray) -> ArrayContext {
         let mut iter = arr.data.iter();
         let mut separation = SeparationContext::Head;
         let mut has_new_line = false;
         let mut next = iter.next();
 
-        while let Option::Some(litll) = next {
-            match *litll {
-                Litll::Array(ref child_arr) => {
+        while let Option::Some(lisla) = next {
+            match *lisla {
+                Lisla::Array(ref child_arr) => {
                     let separater_has_new_line = self.write_separater(output,
                                                                       &child_arr.tag.format,
                                                                       separation);
@@ -220,7 +220,7 @@ impl<'a> Writer<'a> {
                     output.push(']');
                 }
 
-                Litll::String(ref string) => {
+                Lisla::String(ref string) => {
                     let separater_has_new_line = self.write_separater(output,
                                                                       &string.tag.format,
                                                                       separation);
@@ -234,8 +234,8 @@ impl<'a> Writer<'a> {
             }
 
             next = iter.next();
-            let separater_required = match (litll, next) {
-                (&Litll::Array(_), _) | (_, Option::Some(&Litll::Array(_))) => false, 
+            let separater_required = match (lisla, next) {
+                (&Lisla::Array(_), _) | (_, Option::Some(&Lisla::Array(_))) => false, 
                 _ => true,
             };
             separation = SeparationContext::Body(separater_required);
@@ -459,14 +459,14 @@ impl<'a> Writer<'a> {
 
 
     #[inline]
-    fn write_string(&mut self, output: &mut String, litll_string: &LitllString) -> bool {
-        let mut quote = litll_string.tag.detail.quote;
+    fn write_string(&mut self, output: &mut String, lisla_string: &LislaString) -> bool {
+        let mut quote = lisla_string.tag.detail.quote;
         let mut starts_with_new_line = false;
         let mut force_escape = false;
         let mut longest_quotes = 0;
         let mut starts_with_lf = false;
         let mut end_with_cr = false;
-        let escaped_tag = &litll_string.tag.detail.escaped;
+        let escaped_tag = &lisla_string.tag.detail.escaped;
 
         match self.config.string_mode {
             StringMode::Minified => {
@@ -482,9 +482,9 @@ impl<'a> Writer<'a> {
             StringMode::Pretty => {
                 let mut i = 0;
                 let mut quotes_counter = 0;
-                let len = litll_string.data.len();
+                let len = lisla_string.data.len();
                 if let QuoteKind::Quoted(quote_char, _) = quote {
-                    for character in litll_string.data.chars() {
+                    for character in lisla_string.data.chars() {
                         match (quote_char, character) {
                             (_, '\n') | (_, '\r') => {
                                 if !is_escaped_in_quoted(quote_char, character, escaped_tag, i) {
@@ -528,7 +528,7 @@ impl<'a> Writer<'a> {
             }
         }
 
-        if litll_string.data.len() == 0 {
+        if lisla_string.data.len() == 0 {
             let quote_char = match quote {
                 QuoteKind::Quoted(c, _) => c,
                 QuoteKind::Unquoted => QuoteChar::Double,
@@ -553,7 +553,7 @@ impl<'a> Writer<'a> {
 
         let mut prev_character = Option::None;
         let mut i = 0;
-        for character in litll_string.data.chars() {
+        for character in lisla_string.data.chars() {
             let escaped = is_escaped(quote,
                                      force_escape,
                                      prev_character,

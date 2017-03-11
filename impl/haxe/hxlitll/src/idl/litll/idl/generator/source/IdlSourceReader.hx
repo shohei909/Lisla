@@ -1,12 +1,12 @@
-package litll.idl.generator.source;
+package lisla.idl.generator.source;
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Result;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.source.file.IdlFilePath;
-import litll.idl.std.entity.idl.LocalModulePath;
-import litll.idl.std.entity.idl.ModulePath;
-import litll.idl.std.entity.idl.PackagePath;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.source.file.IdlFilePath;
+import lisla.idl.std.entity.idl.LocalModulePath;
+import lisla.idl.std.entity.idl.ModulePath;
+import lisla.idl.std.entity.idl.PackagePath;
 import sys.FileSystem;
 import sys.io.File;
 

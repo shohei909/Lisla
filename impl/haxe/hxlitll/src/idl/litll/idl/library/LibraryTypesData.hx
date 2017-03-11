@@ -1,5 +1,5 @@
-package litll.idl.library;
-import litll.idl.generator.output.EntityTypeInfomation;
+package lisla.idl.library;
+import lisla.idl.generator.output.EntityTypeInfomation;
 
 class LibraryTypesData 
 {

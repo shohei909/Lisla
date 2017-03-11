@@ -1,10 +1,10 @@
-package litll.idl.generator.error;
+package lisla.idl.generator.error;
 import hxext.ds.Maybe;
-import litll.core.LitllTools;
-import litll.core.error.IInlineErrorSummary;
-import litll.core.error.InlineErrorSummary;
-import litll.core.tag.Tag;
-import litll.idl.litlltext2entity.error.LitllTextToEntityErrorKindTools;
+import lisla.core.LislaTools;
+import lisla.core.error.IInlineErrorSummary;
+import lisla.core.error.InlineErrorSummary;
+import lisla.core.tag.Tag;
+import lisla.idl.lislatext2entity.error.LislaTextToEntityErrorKindTools;
 
 class LoadIdlErrorKindTools 
 {
@@ -30,8 +30,8 @@ class LoadIdlErrorKindTools
             case LoadIdlErrorKind.LibraryVersionNotFound(name, version):
                 summary(version.tag.upCast(), "Library " + name + " version " + version.data + " is not found");
                 
-			case LoadIdlErrorKind.LitllTextToEntity(error):
-				LitllTextToEntityErrorKindTools.getSummary(error).replaceKind(errorKind);
+			case LoadIdlErrorKind.LislaTextToEntity(error):
+				LislaTextToEntityErrorKindTools.getSummary(error).replaceKind(errorKind);
 				
 			case LoadIdlErrorKind.ModuleDuplicated(module, existingPath):
                 new InlineErrorSummary(
@@ -55,8 +55,8 @@ class LoadIdlErrorKindTools
 			case LoadIdlErrorKind.ModuleNotFound(path):
 				summary(path.tag.upCast(), "Module " + path.toString() + " is not found");
                 
-            case LoadIdlErrorKind.InvalidTypeDependenceDescription(litll):
-                summary(LitllTools.getTag(litll).upCast(), "Invalid " + LitllTools.toString(litll) + " is loop");
+            case LoadIdlErrorKind.InvalidTypeDependenceDescription(lisla):
+                summary(LislaTools.getTag(lisla).upCast(), "Invalid " + LislaTools.toString(lisla) + " is loop");
                 
             case LoadIdlErrorKind.Validation(error):
                 IdlValidationErrorKindTools.getSummary(error).replaceKind(errorKind);

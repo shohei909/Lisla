@@ -1,9 +1,9 @@
-[package hxlitll]
+[package hxlisla]
 
-[import litll.util.version]
-[import litll.util.file]
-[import litll.idl]
-[import litll.idl.group]
+[import lisla.util.version]
+[import lisla.util.file]
+[import lisla.idl]
+[import lisla.idl.group]
 
 [struct InputConfig
     [target< TargetDeclaration]
@@ -11,11 +11,11 @@
     [entity< EntityDeclaration 
         [entity]
     ]
-    [litll_to_entity< LitllToEntityDeclaration 
-        [litll_to_entity]
+    [lisla_to_entity< LislaToEntityDeclaration 
+        [lisla_to_entity]
     ]
-    [entity_to_litll< EntityToLitllDeclaration 
-        [entity_to_litll]
+    [entity_to_lisla< EntityToLislaDeclaration 
+        [entity_to_lisla]
     ]
 ]
 
@@ -47,33 +47,33 @@
     [filter..< FilterDeclaration]
 ]
 
-[enum LitllToEntityDeclaration 
-    [litll_to_entity [data< LitllToEntityConfig]]
-    [no_litll_to_entity]
+[enum LislaToEntityDeclaration 
+    [lisla_to_entity [data< LislaToEntityConfig]]
+    [no_lisla_to_entity]
 ]
-[struct LitllToEntityConfig
+[struct LislaToEntityConfig
     [filter..< FilterDeclaration]
 ]
 
-[enum EntityToLitllDeclaration 
-    [entity_to_bitll [data< EntityToLitllConfig]]
-    [no_entity_to_bitll]
+[enum EntityToLislaDeclaration 
+    [entity_to_bisla [data< EntityToLislaConfig]]
+    [no_entity_to_bisla]
 ]
-[struct EntityToLitllConfig
+[struct EntityToLislaConfig
     [filter..< FilterDeclaration]
 ]
 
-[enum BitllToEntityDeclaration 
-    [bitll_to_entity [data< BitllToEntityConfig]]
-    [no_bitll_to_entity]
+[enum BislaToEntityDeclaration 
+    [bisla_to_entity [data< BislaToEntityConfig]]
+    [no_bisla_to_entity]
 ]
-[struct BitllToEntityConfig
+[struct BislaToEntityConfig
     [filter..< FilterDeclaration]
 ]
-[enum EntityToBitllDeclaration 
-    [entity_to_bitll [data< EntityToBitllConfig]]
-    [no_entity_to_bitll]
+[enum EntityToBislaDeclaration 
+    [entity_to_bisla [data< EntityToBislaConfig]]
+    [no_entity_to_bisla]
 ]
-[struct EntityToBitllConfig
+[struct EntityToBislaConfig
     [filter..< FilterDeclaration]
 ]

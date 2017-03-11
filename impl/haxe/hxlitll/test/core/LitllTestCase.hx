@@ -1,13 +1,13 @@
 package;
-import litll.core.Litll;
-import litll.core.LitllArray;
-import litll.core.LitllString;
+import lisla.core.Lisla;
+import lisla.core.LislaArray;
+import lisla.core.LislaString;
 import haxe.PosInfos;
 import nanotest.NanoTestCase;
 
-class LitllTestCase extends NanoTestCase
+class LislaTestCase extends NanoTestCase
 {
-	private function assertLitllArray(litll:LitllArray<Litll>, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
+	private function assertLislaArray(lisla:LislaArray<Lisla>, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
 	{
 		if (!Std.is(json, Array))
 		{
@@ -16,27 +16,27 @@ class LitllTestCase extends NanoTestCase
 		}
 		
 		var jsonArray:Array<Dynamic> = json;
-		assertEquals(jsonArray.length, litll.data.length, pos).label(path + ".length");
+		assertEquals(jsonArray.length, lisla.data.length, pos).label(path + ".length");
 		
 		for (i in 0...jsonArray.length)
 		{
-			assertLitll(litll.data[i], jsonArray[i], path + "[" + i + "]", pos);
+			assertLisla(lisla.data[i], jsonArray[i], path + "[" + i + "]", pos);
 		}
 	}
 	
-	private function assertLitll(litll:Litll, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
+	private function assertLisla(lisla:Lisla, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
 	{
-		switch (litll)
+		switch (lisla)
 		{
 			case Str(str):
-				assertLitllString(str, json, path, pos);
+				assertLislaString(str, json, path, pos);
 			
 			case Arr(arr):
-				assertLitllArray(arr, json, path, pos);
+				assertLislaArray(arr, json, path, pos);
 		}
 	}
 	
-	private function assertLitllString(litll:LitllString, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
+	private function assertLislaString(lisla:LislaString, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
 	{
 		if (!Std.is(json, String))
 		{
@@ -44,6 +44,6 @@ class LitllTestCase extends NanoTestCase
 			return;
 		}
 		
-		assertEquals(json, litll.data, pos).label(path);
+		assertEquals(json, lisla.data, pos).label(path);
 	}
 }

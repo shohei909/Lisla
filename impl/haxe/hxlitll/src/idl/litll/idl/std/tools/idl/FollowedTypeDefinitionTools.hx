@@ -1,22 +1,22 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardCondition;
-import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.FollowedTypeDefinition;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.error.ArgumentSuffixErrorKind;
-import litll.idl.std.error.GetConditionErrorKind;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardCondition;
+import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.FollowedTypeDefinition;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.error.ArgumentSuffixErrorKind;
+import lisla.idl.std.error.GetConditionErrorKind;
 
 class FollowedTypeDefinitionTools 
 {
-    public static function getConditions(type:FollowedTypeDefinition, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToEntityCaseCondition>, GetConditionErrorKind>
+    public static function getConditions(type:FollowedTypeDefinition, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LislaToEntityCaseCondition>, GetConditionErrorKind>
     {
-        var result:Array<LitllToEntityCaseCondition> = [];
+        var result:Array<LislaToEntityCaseCondition> = [];
         return switch (_getConditions(type, source, definitionParameters, result, []))
         {
             case Option.None:
@@ -31,17 +31,17 @@ class FollowedTypeDefinitionTools
         type:FollowedTypeDefinition, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        result:Array<LitllToEntityCaseCondition>,
+        result:Array<LislaToEntityCaseCondition>,
         enumInlineTypeHistory:Array<String>
     ):Option<GetConditionErrorKind>
     {   
         switch (type)
         {
             case FollowedTypeDefinition.Arr(_):
-                result.push(LitllToEntityCaseCondition.Arr(LitllToEntityGuardCondition.any()));
+                result.push(LislaToEntityCaseCondition.Arr(LislaToEntityGuardCondition.any()));
                 
             case FollowedTypeDefinition.Str:
-                result.push(LitllToEntityCaseCondition.Str);
+                result.push(LislaToEntityCaseCondition.Str);
                 
             case FollowedTypeDefinition.Tuple(elements):
                 switch (TupleTools.getCondition(elements, source, definitionParameters))
@@ -115,7 +115,7 @@ class FollowedTypeDefinitionTools
         definitionParameters:Array<TypeName>,
         tupleInlineTypeHistory:Array<String>,
         enumInlineTypeHistory:Array<String>
-    ):Result<Array<LitllToEntityCaseCondition>, GetConditionErrorKind>
+    ):Result<Array<LislaToEntityCaseCondition>, GetConditionErrorKind>
     {
         return switch (getFirstElementCondition(type, argumentName, source, definitionParameters, tupleInlineTypeHistory, enumInlineTypeHistory))
         {

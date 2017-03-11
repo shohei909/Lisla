@@ -1,4 +1,4 @@
-package litll.idl.std.tools.util.version;
+package lisla.idl.std.tools.util.version;
 
 class VersionTools 
 {

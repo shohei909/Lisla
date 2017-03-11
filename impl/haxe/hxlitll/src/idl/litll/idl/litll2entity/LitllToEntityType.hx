@@ -1,8 +1,8 @@
-package litll.idl.litll2entity;
+package lisla.idl.lisla2entity;
 import hxext.ds.Result;
-import litll.idl.litll2entity.error.LitllToEntityError;
+import lisla.idl.lisla2entity.error.LislaToEntityError;
 
-typedef LitllToEntityType<T> =
+typedef LislaToEntityType<T> =
 {
-    public function process(context:LitllToEntityContext):Result<T, LitllToEntityError>;
+    public function process(context:LislaToEntityContext):Result<T, LislaToEntityError>;
 }

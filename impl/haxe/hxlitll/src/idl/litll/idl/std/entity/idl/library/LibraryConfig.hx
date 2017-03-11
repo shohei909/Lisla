@@ -1,22 +1,22 @@
-package litll.idl.std.entity.idl.library;
+package lisla.idl.std.entity.idl.library;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.LitllString;
-import litll.core.tag.ArrayTag;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.entity.util.version.Version;
+import lisla.core.LislaString;
+import lisla.core.tag.ArrayTag;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import lisla.idl.std.entity.util.version.Version;
 
 class LibraryConfig 
 {
     public var version : Version;
-    public var description : LitllString;
+    public var description : LislaString;
     public var extensions : Map<String, FileExtensionDeclaration>;
     public var libraries : Map<String, LibraryReference>;
     public var tag:Maybe<ArrayTag>;
     
     public function new(
         version:Version, 
-        description:LitllString, 
+        description:LislaString, 
         extensions:Array<FileExtensionDeclaration>, 
         libraries:Array<LibraryDependenceDeclaration>,
         
@@ -28,14 +28,14 @@ class LibraryConfig
         this.version = version;
         this.description = description;
         
-        // TODO: use litllToEntity
+        // TODO: use lislaToEntity
 		var extensionMap = new Map();
         var libraryMap = new Map();
         for (extension in extensions)
         {
             if (extensionMap.exists(extension.target.data))
             {
-                throw Result.Err(LitllToEntityErrorKind.Fatal("Extension " + extension.target.data + " is dupplicated"));
+                throw Result.Err(LislaToEntityErrorKind.Fatal("Extension " + extension.target.data + " is dupplicated"));
             }
             
             extensionMap[extension.target.data] = extension;
@@ -45,7 +45,7 @@ class LibraryConfig
         {
             if (libraryMap.exists(library.library.name.data))
             {
-                throw Result.Err(LitllToEntityErrorKind.Fatal("Library " + library.library.name.data + " is dupplicated"));
+                throw Result.Err(LislaToEntityErrorKind.Fatal("Library " + library.library.name.data + " is dupplicated"));
             }
             
             libraryMap[library.library.name.data] = library.library;
@@ -56,13 +56,13 @@ class LibraryConfig
         this.tag = tag;
     }
     
-    @:litllToEntity
-    public static function litllToEntity(
+    @:lislaToEntity
+    public static function lislaToEntity(
         version:Version, 
-        description:LitllString, 
+        description:LislaString, 
         extensions:Array<FileExtensionDeclaration>, 
         libraries:Array<LibraryDependenceDeclaration>
-    ):Result<LibraryConfig, LitllToEntityErrorKind> // TODO: Array error
+    ):Result<LibraryConfig, LislaToEntityErrorKind> // TODO: Array error
 	{
         return Result.Ok(
             new LibraryConfig(

@@ -1,4 +1,4 @@
-package litll.idl.generator.tools;
+package lisla.idl.generator.tools;
 import haxe.macro.Expr;
 import hxext.ds.Result;
 

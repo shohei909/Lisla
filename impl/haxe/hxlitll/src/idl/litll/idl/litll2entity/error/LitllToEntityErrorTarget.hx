@@ -1,13 +1,13 @@
-package litll.idl.litll2entity.error;
+package lisla.idl.lisla2entity.error;
 import haxe.ds.Option;
-import litll.core.LitllArray;
-import litll.core.LitllString;
+import lisla.core.LislaArray;
+import lisla.core.LislaString;
 import hxext.ds.Maybe;
-import litll.core.ds.SourceRange;
-import litll.core.Litll;
+import lisla.core.ds.SourceRange;
+import lisla.core.Lisla;
 
-enum LitllToEntityErrorTarget 
+enum LislaToEntityErrorTarget 
 {
-	Str(string:LitllString, range:Maybe<SourceRange>);
-	Arr(array:LitllArray<Litll>, index:Int);
+	Str(string:LislaString, range:Maybe<SourceRange>);
+	Arr(array:LislaArray<Lisla>, index:Int);
 }   

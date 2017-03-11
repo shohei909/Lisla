@@ -1,4 +1,4 @@
-package litll.idl.generator.output.entity;
+package lisla.idl.generator.output.entity;
 
 import haxe.macro.Expr;
 import haxe.macro.Expr.ComplexType;
@@ -7,24 +7,24 @@ import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeDefKind;
 import hxext.ds.Maybe;
-import litll.idl.exception.IdlException;
-import litll.idl.generator.data.EntityOutputConfig;
-import litll.idl.generator.output.EntityTypeInfomation;
-import litll.idl.std.entity.idl.Argument;
-import litll.idl.std.entity.idl.ArgumentKind;
-import litll.idl.std.entity.idl.EnumConstructor;
-import litll.idl.std.entity.idl.StructElement;
-import litll.idl.std.entity.idl.StructElementKind;
-import litll.idl.std.entity.idl.StructElementName;
-import litll.idl.std.entity.idl.StructField;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.tools.idl.TypeDefinitionTools;
-import litll.idl.std.tools.idl.TypeDependenceDeclarationTools;
-import litll.idl.std.tools.idl.TypeNameTools;
-import litll.idl.std.tools.idl.TypeParameterDeclarationTools;
+import lisla.idl.exception.IdlException;
+import lisla.idl.generator.data.EntityOutputConfig;
+import lisla.idl.generator.output.EntityTypeInfomation;
+import lisla.idl.std.entity.idl.Argument;
+import lisla.idl.std.entity.idl.ArgumentKind;
+import lisla.idl.std.entity.idl.EnumConstructor;
+import lisla.idl.std.entity.idl.StructElement;
+import lisla.idl.std.entity.idl.StructElementKind;
+import lisla.idl.std.entity.idl.StructElementName;
+import lisla.idl.std.entity.idl.StructField;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.tools.idl.TypeDefinitionTools;
+import lisla.idl.std.tools.idl.TypeDependenceDeclarationTools;
+import lisla.idl.std.tools.idl.TypeNameTools;
+import lisla.idl.std.tools.idl.TypeParameterDeclarationTools;
 
 import haxe.macro.Expr.TypeDefinition in HaxeTypeDefinition;
-import litll.idl.std.entity.idl.TypeDefinition in IdlTypeDefinition;
+import lisla.idl.std.entity.idl.TypeDefinition in IdlTypeDefinition;
 
 class EntityHaxeTypeBuilder
 {
@@ -121,7 +121,7 @@ class EntityHaxeTypeBuilder
                                         {
                                             name: "tag",
                                             opt: true,
-                                            type: macro:hxext.ds.Maybe<litll.core.tag.StringTag>,
+                                            type: macro:hxext.ds.Maybe<lisla.core.tag.StringTag>,
                                         },
                                     ],
                                     ret: null,
@@ -268,10 +268,10 @@ class EntityHaxeTypeBuilder
                     args.push(convertField(field, config));
                     
                 case StructElement.Label(name):
-                    addLabel(name, macro:hxext.ds.Maybe<litll.core.tag.StringTag>);
+                    addLabel(name, macro:hxext.ds.Maybe<lisla.core.tag.StringTag>);
                     
                 case StructElement.NestedLabel(name):
-                    addLabel(name, macro:hxext.ds.Maybe<litll.core.tag.ArrayTag>);
+                    addLabel(name, macro:hxext.ds.Maybe<lisla.core.tag.ArrayTag>);
             }
         }
         

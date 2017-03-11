@@ -1,6 +1,6 @@
 [version 0.0.0]
 
-[description "Configure file of hxlitll haxe generator"]
+[description "Configure file of hxlisla haxe generator"]
 
-[library litll [version 0.0.0]]
-[extension hxgen.litll  litll.idl.config.InputFile]
+[library lisla [version 0.0.0]]
+[extension hxgen.lisla  lisla.idl.config.InputFile]

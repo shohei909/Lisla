@@ -1,35 +1,35 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
-import litll.core.LitllString;
+import lisla.core.LislaString;
 import hxext.ds.Result;
-import litll.idl.exception.IdlException;
-import litll.idl.generator.data.EntityOutputConfig;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.FollowedTypeDefinition;
-import litll.idl.std.entity.idl.GenericTypeReference;
-import litll.idl.std.entity.idl.ModulePath;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.entity.idl.TypeReferenceDependenceKind;
-import litll.idl.std.entity.idl.TypeReferenceParameterKind;
-import litll.idl.std.error.GetConditionErrorKind;
-import litll.idl.std.error.TypeFollowErrorKind;
-import litll.idl.std.error.TypeFollowErrorKindTools;
+import lisla.idl.exception.IdlException;
+import lisla.idl.generator.data.EntityOutputConfig;
+import lisla.idl.generator.output.entity.EntityHaxeTypePath;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.FollowedTypeDefinition;
+import lisla.idl.std.entity.idl.GenericTypeReference;
+import lisla.idl.std.entity.idl.ModulePath;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.entity.idl.TypeReferenceDependenceKind;
+import lisla.idl.std.entity.idl.TypeReferenceParameterKind;
+import lisla.idl.std.error.GetConditionErrorKind;
+import lisla.idl.std.error.TypeFollowErrorKind;
+import lisla.idl.std.error.TypeFollowErrorKindTools;
 
-using litll.idl.std.tools.idl.TypeDefinitionTools;
-using litll.idl.std.tools.idl.TypeParameterDeclarationTools;
-using litll.idl.std.tools.idl.TupleElementTools;
-using litll.idl.std.tools.idl.ArgumentTools;
-using litll.idl.std.tools.idl.EnumConstructorTools;
-using litll.idl.std.tools.idl.TypeReferenceParameterTools;
-using litll.idl.std.tools.idl.TypeReferenceTools;
-using litll.idl.std.tools.idl.StructElementTools;
+using lisla.idl.std.tools.idl.TypeDefinitionTools;
+using lisla.idl.std.tools.idl.TypeParameterDeclarationTools;
+using lisla.idl.std.tools.idl.TupleElementTools;
+using lisla.idl.std.tools.idl.ArgumentTools;
+using lisla.idl.std.tools.idl.EnumConstructorTools;
+using lisla.idl.std.tools.idl.TypeReferenceParameterTools;
+using lisla.idl.std.tools.idl.TypeReferenceTools;
+using lisla.idl.std.tools.idl.StructElementTools;
 using hxext.ds.ResultTools;
 
 class TypeReferenceTools
@@ -151,7 +151,7 @@ class TypeReferenceTools
         if (parameterNames.indexOf(name) != -1)
         {
             // Any
-            targetPath = new TypePath(new ModulePath(["litll", "core"]), new TypeName(new LitllString("Any")));
+            targetPath = new TypePath(new ModulePath(["lisla", "core"]), new TypeName(new LislaString("Any")));
         }
         
         return switch (source.resolveTypePath(targetPath).toOption())
@@ -209,7 +209,7 @@ class TypeReferenceTools
         }
     }
     
-    public static function getGuardConditionKind(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToEntityGuardConditionKind, GetConditionErrorKind>
+    public static function getGuardConditionKind(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LislaToEntityGuardConditionKind, GetConditionErrorKind>
     {
         return switch (type.follow(source, definitionParameters))
         {
@@ -217,12 +217,12 @@ class TypeReferenceTools
                 switch (data)
                 {
                     case FollowedTypeDefinition.Str:
-                        Result.Ok(LitllToEntityGuardConditionKind.Str);
+                        Result.Ok(LislaToEntityGuardConditionKind.Str);
                         
                     case FollowedTypeDefinition.Struct(_)
                         | FollowedTypeDefinition.Arr(_)
                         | FollowedTypeDefinition.Tuple(_):
-                        Result.Ok(LitllToEntityGuardConditionKind.Arr);
+                        Result.Ok(LislaToEntityGuardConditionKind.Arr);
                         
                     case FollowedTypeDefinition.Enum(constructors):
                         constructors.getGuardConditionKind(source, definitionParameters);
@@ -233,7 +233,7 @@ class TypeReferenceTools
         }
     }
     
-    public static function getConditions(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToEntityCaseCondition>, GetConditionErrorKind>
+    public static function getConditions(type:TypeReference, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LislaToEntityCaseCondition>, GetConditionErrorKind>
     {
         return switch (type.follow(source, definitionParameters))
         {

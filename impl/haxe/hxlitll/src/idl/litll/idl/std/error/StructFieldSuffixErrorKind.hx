@@ -1,7 +1,7 @@
-package litll.idl.std.error;
-import litll.idl.std.entity.idl.FollowedTypeDefinition;
-import litll.idl.std.entity.idl.StructElementKind;
-import litll.idl.std.entity.idl.TypeReference;
+package lisla.idl.std.error;
+import lisla.idl.std.entity.idl.FollowedTypeDefinition;
+import lisla.idl.std.entity.idl.StructElementKind;
+import lisla.idl.std.entity.idl.TypeReference;
 
 enum StructFieldSuffixErrorKind 
 {

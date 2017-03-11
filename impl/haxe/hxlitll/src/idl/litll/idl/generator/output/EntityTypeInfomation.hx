@@ -1,11 +1,11 @@
-package litll.idl.generator.output;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
-import litll.idl.generator.output.entity.store.HaxeEntityInterface;
-import litll.idl.generator.output.entity.store.HaxeEntityInterfaceKind;
-import litll.idl.generator.source.validate.InlinabilityOnTuple;
-import litll.idl.generator.source.validate.ValidType;
-import litll.idl.std.entity.idl.TypeDefinition;
-import litll.idl.std.entity.idl.TypePath;
+package lisla.idl.generator.output;
+import lisla.idl.generator.output.entity.EntityHaxeTypePath;
+import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
+import lisla.idl.generator.output.entity.store.HaxeEntityInterfaceKind;
+import lisla.idl.generator.source.validate.InlinabilityOnTuple;
+import lisla.idl.generator.source.validate.ValidType;
+import lisla.idl.std.entity.idl.TypeDefinition;
+import lisla.idl.std.entity.idl.TypePath;
 
 class EntityTypeInfomation 
 {

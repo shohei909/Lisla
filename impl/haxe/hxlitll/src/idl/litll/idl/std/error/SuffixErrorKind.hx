@@ -1,5 +1,5 @@
-package litll.idl.std.error;
-import litll.idl.std.entity.idl.EnumConstructorName;
+package lisla.idl.std.error;
+import lisla.idl.std.entity.idl.EnumConstructorName;
 
 enum SuffixErrorKind 
 {

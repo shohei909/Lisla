@@ -1,10 +1,10 @@
-/// 'IDL for Litll Document Comment'
+/// 'IDL for Lisla Document Comment'
 /// [license "Public Domain"]
 
 
-[package litll]
-[import litll.idl]
-[import litll.idl.portable]
+[package lisla]
+[import lisla.idl]
+[import lisla.idl.portable]
 
 [struct Document
     [comment..< String]

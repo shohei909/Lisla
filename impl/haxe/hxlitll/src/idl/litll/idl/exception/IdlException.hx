@@ -1,4 +1,4 @@
-package litll.idl.exception;
+package lisla.idl.exception;
 
 class IdlException
 {

@@ -1,23 +1,23 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionBuilder;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
-import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.ArgumentKind;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.FollowedTypeDefinition;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.error.ArgumentSuffixError;
-import litll.idl.std.error.ArgumentSuffixErrorKind;
-import litll.idl.std.error.GetConditionErrorKind;
-using litll.idl.std.tools.idl.TypeReferenceParameterTools;
-using litll.idl.std.tools.idl.TypeReferenceTools;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionBuilder;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
+import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.ArgumentKind;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.FollowedTypeDefinition;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.error.ArgumentSuffixError;
+import lisla.idl.std.error.ArgumentSuffixErrorKind;
+import lisla.idl.std.error.GetConditionErrorKind;
+using lisla.idl.std.tools.idl.TypeReferenceParameterTools;
+using lisla.idl.std.tools.idl.TypeReferenceTools;
 
 class TupleTools 
 {
@@ -30,9 +30,9 @@ class TupleTools
         );
     }
     
-    public static function getGuard(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToEntityGuardCondition, GetConditionErrorKind>
+    public static function getGuard(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LislaToEntityGuardCondition, GetConditionErrorKind>
     {
-        var builder = new LitllToEntityGuardConditionBuilder();
+        var builder = new LislaToEntityGuardConditionBuilder();
         return switch (_getGuard(elements, source, definitionParameters, builder, []))
         {
             case Option.None:
@@ -47,7 +47,7 @@ class TupleTools
         elements:Array<TupleElement>, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        builder:LitllToEntityGuardConditionBuilder,
+        builder:LislaToEntityGuardConditionBuilder,
         parentTypes:Array<String>
     ):Option<GetConditionErrorKind>
     {
@@ -56,7 +56,7 @@ class TupleTools
             switch (element)
             {
                 case TupleElement.Label(value):
-                    builder.add(LitllToEntityGuardConditionKind.Const([value.data => true]));
+                    builder.add(LislaToEntityGuardConditionKind.Const([value.data => true]));
                     
                 case TupleElement.Argument(argument):
                     switch [argument.name.kind, argument.defaultValue]
@@ -164,12 +164,12 @@ class TupleTools
         return Option.None;
     }
     
-    public static function getCondition(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToEntityCaseCondition, GetConditionErrorKind>
+    public static function getCondition(elements:Array<TupleElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LislaToEntityCaseCondition, GetConditionErrorKind>
     {
         return switch (getGuard(elements, source, definitionParameters))
         {
             case Result.Ok(data):
-                Result.Ok(LitllToEntityCaseCondition.Arr(data));
+                Result.Ok(LislaToEntityCaseCondition.Arr(data));
                 
             case Result.Err(error):
                 Result.Err(error);

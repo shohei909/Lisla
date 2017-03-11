@@ -1,4 +1,4 @@
-package litll.idl.std.error;
+package lisla.idl.std.error;
 
 class EnumConstructorSuffixErrorKindTools 
 {

@@ -1,25 +1,25 @@
-package litll.idl.litll2entity;
+package lisla.idl.lisla2entity;
 import haxe.ds.Option;
-import litll.core.Litll;
-import litll.core.LitllArray;
+import lisla.core.Lisla;
+import lisla.core.LislaArray;
 import hxext.ds.Result;
-import litll.idl.litll2entity.error.LitllToEntityError;
+import lisla.idl.lisla2entity.error.LislaToEntityError;
 
-class LitllToEntityRunner
+class LislaToEntityRunner
 {
-	public static function run<T>(processorType:LitllToEntityType<T>, litll:LitllArray<Litll>, ?config:LitllToEntityConfig):Result<T, LitllToEntityError>
+	public static function run<T>(processorType:LislaToEntityType<T>, lisla:LislaArray<Lisla>, ?config:LislaToEntityConfig):Result<T, LislaToEntityError>
 	{
 		if (config == null)
 		{
-			config = new LitllToEntityConfig();
+			config = new LislaToEntityConfig();
 		}
 		
-		var context = new LitllToEntityContext(Litll.Arr(litll), config);
+		var context = new LislaToEntityContext(Lisla.Arr(lisla), config);
 		return processorType.process(context);
 	}
 	
-	public static function processLitll(context:LitllToEntityContext):Result<Litll, LitllToEntityError>
+	public static function processLisla(context:LislaToEntityContext):Result<Lisla, LislaToEntityError>
 	{
-		return Result.Ok(context.litll);
+		return Result.Ok(context.lisla);
 	}
 }

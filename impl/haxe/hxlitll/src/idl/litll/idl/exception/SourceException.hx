@@ -1,5 +1,5 @@
-package litll.idl.exception;
-import litll.idl.exception.IdlException;
+package lisla.idl.exception;
+import lisla.idl.exception.IdlException;
 
 class SourceException extends IdlException
 {

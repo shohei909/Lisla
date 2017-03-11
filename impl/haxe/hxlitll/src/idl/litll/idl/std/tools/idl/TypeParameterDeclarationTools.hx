@@ -1,17 +1,17 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeParamDecl;
 import hxext.ds.Maybe;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
-import litll.idl.std.entity.idl.TypeDefinition;
-import litll.idl.std.entity.idl.TypeDependenceDeclaration;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeParameterDeclaration;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.generator.data.EntityOutputConfig;
-import litll.idl.std.entity.idl.TypeReference;
+import lisla.idl.generator.output.entity.EntityHaxeTypePath;
+import lisla.idl.std.entity.idl.TypeDefinition;
+import lisla.idl.std.entity.idl.TypeDependenceDeclaration;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeParameterDeclaration;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.generator.data.EntityOutputConfig;
+import lisla.idl.std.entity.idl.TypeReference;
 
 class TypeParameterDeclarationTools
 {
@@ -38,7 +38,7 @@ class TypeParameterDeclarationTools
         }
     }
 	
-	public static function toHaxeLitllToEntityArgs(params:Array<TypeParameterDeclaration>, config:EntityOutputConfig):Array<FunctionArg>
+	public static function toHaxeLislaToEntityArgs(params:Array<TypeParameterDeclaration>, config:EntityOutputConfig):Array<FunctionArg>
 	{
 		var result:Array<FunctionArg>  = [];
 		for (param in params)
@@ -57,7 +57,7 @@ class TypeParameterDeclarationTools
 					var haxeTypePath = ComplexType.TPath(new EntityHaxeTypePath(new TypePath(Maybe.none(), typeName, typeName.tag)).toMacroPath());
 					result.push(
 						{
-							name: typeName.toLitllToEntityVariableName(),
+							name: typeName.toLislaToEntityVariableName(),
                             type: null
 						}
 					);

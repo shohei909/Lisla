@@ -1,4 +1,4 @@
-package litll.idl.generator.output.entity.store litll.idl.generator.output.interface;
+package lisla.idl.generator.output.entity.store lisla.idl.generator.output.interface;
 
 class HaxeFunctionInterface
 {

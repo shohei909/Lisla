@@ -1,4 +1,4 @@
-package litll.core.string;
+package lisla.core.string;
 
 typedef ContentPosition =
 {

@@ -1,14 +1,14 @@
-# Litll IR
+# Lisla IR
 
-## Litll IRとは
+## Lisla IRとは
 
-Litll IR(Litll Intermediate Representation, Litll中間表現)とは、Litll IDLで型付けされたLitllによって表現可能なデータ構造です。
+Lisla IR(Lisla Intermediate Representation, Lisla中間表現)とは、Lisla IDLで型付けされたLislaによって表現可能なデータ構造です。
 
-Litllのデータと、JSONやBitllなどの他のデータ形式との変換をする際の内部的な表現として使われます。
+Lislaのデータと、JSONやBislaなどの他のデータ形式との変換をする際の内部的な表現として使われます。
 
-## Litll IRのデータ型
+## Lisla IRのデータ型
 
-Litll IRでは、以下のデータ型があります。
+Lisla IRでは、以下のデータ型があります。
 
 * プリミティブ型
    * 可変bit長符号あり整数型
@@ -23,8 +23,8 @@ Litll IRでは、以下のデータ型があります。
 * 代数的データ型(enum)
 * タプル型(tuple)
 
-## LitllからのLitll IR構築
+## LislaからのLisla IR構築
 
-## Litll IRのJSON変換
+## Lisla IRのJSON変換
 
-## Litll IRのBitll変換
+## Lisla IRのBisla変換

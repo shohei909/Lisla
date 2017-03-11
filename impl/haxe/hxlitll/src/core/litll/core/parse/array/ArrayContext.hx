@@ -1,24 +1,24 @@
-package litll.core.parse.array;
+package lisla.core.parse.array;
 import haxe.ds.Option;
-import litll.core.LitllArray;
-import litll.core.LitllString;
+import lisla.core.LislaArray;
+import lisla.core.LislaString;
 import hxext.ds.Result;
-import litll.core.ds.SourceRange;
-import litll.core.parse.string.QuotedStringContext;
-import litll.core.parse.string.QuotedStringArrayPair;
-import litll.core.parse.string.UnquotedStringContext;
+import lisla.core.ds.SourceRange;
+import lisla.core.parse.string.QuotedStringContext;
+import lisla.core.parse.string.QuotedStringArrayPair;
+import lisla.core.parse.string.UnquotedStringContext;
 import unifill.CodePoint;
-import litll.core.parse.ParseContext;
-import litll.core.parse.array.ArrayParent;
-import litll.core.parse.array.ArrayParent;
-import litll.core.parse.tag.UnsettledArrayTag;
-import litll.core.parse.tag.UnsettledLeadingTag;
-using litll.core.char.CodePointTools;
+import lisla.core.parse.ParseContext;
+import lisla.core.parse.array.ArrayParent;
+import lisla.core.parse.array.ArrayParent;
+import lisla.core.parse.tag.UnsettledArrayTag;
+import lisla.core.parse.tag.UnsettledLeadingTag;
+using lisla.core.char.CodePointTools;
 
 class ArrayContext
 {
     private var parent:ArrayParent;
-    private var data:Array<Litll>;
+    private var data:Array<Lisla>;
 	private var tag:UnsettledArrayTag;
 	private var elementTag:UnsettledLeadingTag;
     private var top:ParseContext;
@@ -78,7 +78,7 @@ class ArrayContext
                 switch (parent)
                 {
                     case ArrayParent.QuotedString(stringContext, store):
-                        var arr = new LitllArray<Litll>(data, tag.settle(top.position));
+                        var arr = new LislaArray<Lisla>(data, tag.settle(top.position));
                         store.array.push(arr);
                         
                         var nextContext = new ArrayContext(top, this.parent, false, new UnsettledLeadingTag(top.sourceMap).toArrayTag(top.position));
@@ -209,7 +209,7 @@ class ArrayContext
 	{
 		if (length == 2)
 		{
-			data.push(Litll.Str(new LitllString("", popStringTag(top.position - 2).settle(top.position))));
+			data.push(Lisla.Str(new LislaString("", popStringTag(top.position - 2).settle(top.position))));
 			state = ArrayState.Normal;
 		}
 		else
@@ -220,29 +220,29 @@ class ArrayContext
     
     private function endArray(destination:ArrayContext):Void
 	{
-		var arr = new LitllArray<Litll>(data, tag.settle(top.position));
+		var arr = new LislaArray<Lisla>(data, tag.settle(top.position));
 		
-		destination.data.push(Litll.Arr(arr));
+		destination.data.push(Lisla.Arr(arr));
 		top.current = destination;
 	}
     
     private function endInterporation(stringContext:QuotedStringContext, store:QuotedStringArrayPair):Void
     {
-    	var arr = new LitllArray<Litll>(data, tag.settle(top.position));
+    	var arr = new LislaArray<Lisla>(data, tag.settle(top.position));
         store.array.push(arr);
 		stringContext.store(store);
         
 		top.current = stringContext.parent;
     }
     
-    public function pushString(litllString:LitllString):Void
+    public function pushString(lislaString:LislaString):Void
     {
-        data.push(Litll.Str(litllString));
+        data.push(Lisla.Str(lislaString));
 		state = ArrayState.Normal;
     }
-    public function pushArray(litll:LitllArray<Litll>):Void
+    public function pushArray(lisla:LislaArray<Lisla>):Void
     {
-        data.push(Litll.Arr(litll));
+        data.push(Lisla.Arr(lisla));
 		state = ArrayState.Normal;
     }
     
@@ -252,12 +252,12 @@ class ArrayContext
         tag.writeDocument(top.config, codePoint, top.position - 1);
     }
     
-	public inline function endTop():LitllArray<Litll>
+	public inline function endTop():LislaArray<Lisla>
 	{
-		return new LitllArray<Litll>(data, tag.settle(top.position));
+		return new LislaArray<Lisla>(data, tag.settle(top.position));
 	}
     
-    public inline function getData():Option<LitllArray<Litll>> 
+    public inline function getData():Option<LislaArray<Lisla>> 
 	{
 		return switch (state)
         {

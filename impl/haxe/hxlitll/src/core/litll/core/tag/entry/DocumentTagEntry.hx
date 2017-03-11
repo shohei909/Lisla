@@ -1,5 +1,5 @@
-package litll.core.tag.entry;
-import litll.core.ds.SourceRange;
+package lisla.core.tag.entry;
+import lisla.core.ds.SourceRange;
 
 /**
  * ...

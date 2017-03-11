@@ -1,5 +1,5 @@
-package litll.idl.library;
-import litll.idl.library.ModuleState;
+package lisla.idl.library;
+import lisla.idl.library.ModuleState;
 
 class ModuleStateTools
 {

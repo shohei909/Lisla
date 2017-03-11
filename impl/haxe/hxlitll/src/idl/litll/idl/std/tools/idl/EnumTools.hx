@@ -1,20 +1,20 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKindTools;
-import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.EnumConstructor;
-import litll.idl.std.entity.idl.EnumConstructorKind;
-import litll.idl.std.entity.idl.EnumConstructorName;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.error.EnumConstructorSuffixError;
-import litll.idl.std.error.EnumConstructorSuffixErrorKind;
-import litll.idl.std.error.GetConditionErrorKind;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKindTools;
+import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.EnumConstructor;
+import lisla.idl.std.entity.idl.EnumConstructorKind;
+import lisla.idl.std.entity.idl.EnumConstructorName;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.error.EnumConstructorSuffixError;
+import lisla.idl.std.error.EnumConstructorSuffixErrorKind;
+import lisla.idl.std.error.GetConditionErrorKind;
 
 class EnumTools 
 {
@@ -25,10 +25,10 @@ class EnumTools
         );
     }
     
-    public static function getGuardConditionKind(constructors:Array<EnumConstructor>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToEntityGuardConditionKind, GetConditionErrorKind>
+    public static function getGuardConditionKind(constructors:Array<EnumConstructor>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LislaToEntityGuardConditionKind, GetConditionErrorKind>
     {
-        var kind1 = LitllToEntityGuardConditionKind.Never;
-        inline function error(name:EnumConstructorName, kind:EnumConstructorSuffixErrorKind):Result<LitllToEntityGuardConditionKind, GetConditionErrorKind>
+        var kind1 = LislaToEntityGuardConditionKind.Never;
+        inline function error(name:EnumConstructorName, kind:EnumConstructorSuffixErrorKind):Result<LislaToEntityGuardConditionKind, GetConditionErrorKind>
         {
             return Result.Err(errorKind(name, kind));
         }
@@ -41,7 +41,7 @@ class EnumTools
                     switch (name.kind)
                     {
                         case EnumConstructorKind.Normal:
-                            LitllToEntityGuardConditionKind.Const([name.name => true]);
+                            LislaToEntityGuardConditionKind.Const([name.name => true]);
                     
                         case EnumConstructorKind.Tuple:
                             return error(name, EnumConstructorSuffixErrorKind.TupleSuffixForPrimitiveEnumConstructor);
@@ -54,7 +54,7 @@ class EnumTools
                     switch (parameterized.name.kind)
                     {
                         case EnumConstructorKind.Normal | EnumConstructorKind.Tuple:
-                            LitllToEntityGuardConditionKind.Arr;
+                            LislaToEntityGuardConditionKind.Arr;
                     
                         case EnumConstructorKind.Inline:
                             var elements = parameterized.elements;
@@ -75,13 +75,13 @@ class EnumTools
                                             return Result.Err(error);
                                     }
                                     
-                                case TupleElement.Label(litllString):
-                                    LitllToEntityGuardConditionKind.Const([litllString.data => true]);
+                                case TupleElement.Label(lislaString):
+                                    LislaToEntityGuardConditionKind.Const([lislaString.data => true]);
                             }
                     }
             }
             
-            kind1 = LitllToEntityGuardConditionKindTools.merge(kind1, kind2);
+            kind1 = LislaToEntityGuardConditionKindTools.merge(kind1, kind2);
         }
         
         return Result.Ok(kind1);

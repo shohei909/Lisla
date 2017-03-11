@@ -1,10 +1,10 @@
-package litll.core;
-import litll.core.Litll;
+package lisla.core;
+import lisla.core.Lisla;
 import hxext.ds.Maybe;
-import litll.core.tag.ArrayTag;
-import litll.core.tag.StringTag;
+import lisla.core.tag.ArrayTag;
+import lisla.core.tag.StringTag;
 
-class LitllArray<T>
+class LislaArray<T>
 {
 	public var data:Array<T>;
 	public var tag:Maybe<ArrayTag>;
@@ -21,9 +21,9 @@ class LitllArray<T>
 		this.tag = tag;
 	}
     
-    public inline function slice(pos:Int, ?end:Int):LitllArray<T>
+    public inline function slice(pos:Int, ?end:Int):LislaArray<T>
     {
-        return new LitllArray(
+        return new LislaArray(
             data.slice(pos, end),
             tag
         );

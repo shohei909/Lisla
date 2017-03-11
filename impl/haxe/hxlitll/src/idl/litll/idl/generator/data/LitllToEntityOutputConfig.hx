@@ -1,13 +1,13 @@
-package litll.idl.generator.data;
+package lisla.idl.generator.data;
 import haxe.ds.Option;
-import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePath;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.entity.idl.group.TypeGroupFilter;
-import litll.idl.std.tools.idl.group.TypeGroupFilterTools;
+import lisla.idl.generator.output.lisla2entity.path.HaxeLislaToEntityTypePath;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.entity.idl.group.TypeGroupFilter;
+import lisla.idl.std.tools.idl.group.TypeGroupFilterTools;
 
 using hxext.ds.ResultTools;
 
-class LitllToEntityOutputConfig
+class LislaToEntityOutputConfig
 {
 	public var filters:Array<TypeGroupFilter>;
 	
@@ -15,17 +15,17 @@ class LitllToEntityOutputConfig
 	{
 		this.filters = filters.concat(
             [
-                TypeGroupFilterTools.create("ArrayLitllToEntity", "litll.idl.std.litll2entity.ArrayLitllToEntity"),
-                TypeGroupFilterTools.create("StringLitllToEntity", "litll.idl.std.litll2entity.StringLitllToEntity"),
+                TypeGroupFilterTools.create("ArrayLislaToEntity", "lisla.idl.std.lisla2entity.ArrayLislaToEntity"),
+                TypeGroupFilterTools.create("StringLislaToEntity", "lisla.idl.std.lisla2entity.StringLislaToEntity"),
             ]
         );
 	}
 	
-	public function toHaxeLitllToEntityPath(sourcePath:TypePath):HaxeLitllToEntityTypePath
+	public function toHaxeLislaToEntityPath(sourcePath:TypePath):HaxeLislaToEntityTypePath
 	{
 		var typePath = new TypePath(
 			sourcePath.modulePath, 
-			sourcePath.typeName.map(function (name) return name + "LitllToEntity"),
+			sourcePath.typeName.map(function (name) return name + "LislaToEntity"),
 			sourcePath.tag
 		);
 		
@@ -43,6 +43,6 @@ class LitllToEntityOutputConfig
 			}
 		}
 		
-		return new HaxeLitllToEntityTypePath(typePath);
+		return new HaxeLislaToEntityTypePath(typePath);
 	}
 }

@@ -1,6 +1,6 @@
 /// 'for File System'
 /// [license "Public Domain"]
-[package litll.util]
+[package lisla.util]
 
 [newtype FileOrDirectoryPath String]
 [newtype FilePath String]

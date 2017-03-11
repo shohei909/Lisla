@@ -4,7 +4,7 @@ use std::ops::Range;
 
 #[derive(Debug)]
 pub struct Error {
-    pub data: Option<LitllArray>,
+    pub data: Option<LislaArray>,
     pub entries: Vec<ErrorEntry>,
 }
 

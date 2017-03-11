@@ -1,11 +1,11 @@
-package litll.idl.generator.error;
+package lisla.idl.generator.error;
 import hxext.ds.Maybe;
-import litll.core.error.InlineErrorSummary;
-import litll.core.tag.Tag;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.error.GetConditionErrorKind;
-import litll.idl.std.error.GetConditionErrorKindTools;
-import litll.idl.std.error.TypeFollowErrorKind;
+import lisla.core.error.InlineErrorSummary;
+import lisla.core.tag.Tag;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.error.GetConditionErrorKind;
+import lisla.idl.std.error.GetConditionErrorKindTools;
+import lisla.idl.std.error.TypeFollowErrorKind;
 
 class IdlValidationErrorKindTools
 {

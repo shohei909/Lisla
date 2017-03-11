@@ -1,24 +1,24 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
-import litll.core.LitllString;
+import lisla.core.LislaString;
 import hxext.ds.Result;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.EnumConstructor;
-import litll.idl.std.entity.idl.EnumConstructorKind;
-import litll.idl.std.entity.idl.EnumConstructorName;
-import litll.idl.std.entity.idl.ParameterizedEnumConstructor;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.error.ArgumentSuffixErrorKind;
-import litll.idl.std.error.EnumConstructorSuffixError;
-import litll.idl.std.error.EnumConstructorSuffixErrorKind;
-import litll.idl.std.error.GetConditionErrorKind;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.EnumConstructor;
+import lisla.idl.std.entity.idl.EnumConstructorKind;
+import lisla.idl.std.entity.idl.EnumConstructorName;
+import lisla.idl.std.entity.idl.ParameterizedEnumConstructor;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.error.ArgumentSuffixErrorKind;
+import lisla.idl.std.error.EnumConstructorSuffixError;
+import lisla.idl.std.error.EnumConstructorSuffixErrorKind;
+import lisla.idl.std.error.GetConditionErrorKind;
 
-using litll.idl.std.tools.idl.TypeReferenceTools;
+using lisla.idl.std.tools.idl.TypeReferenceTools;
 
 class EnumConstructorTools 
 {    
@@ -66,7 +66,7 @@ class EnumConstructorTools
         }
     }
     
-    public static function getConditions(constructor:EnumConstructor, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToEntityCaseCondition>, GetConditionErrorKind>
+    public static function getConditions(constructor:EnumConstructor, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LislaToEntityCaseCondition>, GetConditionErrorKind>
     {
         var result = [];
         return switch (_getConditions(constructor, source, definitionParameters, result, []))
@@ -83,25 +83,25 @@ class EnumConstructorTools
         constructor:EnumConstructor, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        result:Array<LitllToEntityCaseCondition>,
+        result:Array<LislaToEntityCaseCondition>,
         history:Array<String>
     ):Option<GetConditionErrorKind>
     {
         return switch (constructor)
         {
             case EnumConstructor.Primitive(name):
-                result.push(LitllToEntityCaseCondition.Const(name.name));
+                result.push(LislaToEntityCaseCondition.Const(name.name));
                 Option.None;
                 
             case EnumConstructor.Parameterized(parameterized):
                 switch (parameterized.name.kind)
                 {
                     case EnumConstructorKind.Normal:
-                        var label = TupleElement.Label(new LitllString(parameterized.name.name, parameterized.name.tag));
+                        var label = TupleElement.Label(new LislaString(parameterized.name.name, parameterized.name.tag));
                         switch (TupleTools.getGuard([label].concat(parameterized.elements), source, definitionParameters))
                         {
                             case Result.Ok(data):
-                                result.push(LitllToEntityCaseCondition.Arr(data));
+                                result.push(LislaToEntityCaseCondition.Arr(data));
                                 Option.None;
                                 
                             case Result.Err(error):
@@ -112,7 +112,7 @@ class EnumConstructorTools
                         switch (TupleTools.getGuard(parameterized.elements, source, definitionParameters))
                         {
                             case Result.Ok(data):
-                                result.push(LitllToEntityCaseCondition.Arr(data));
+                                result.push(LislaToEntityCaseCondition.Arr(data));
                                 Option.None;
                                 
                             case Result.Err(error):
@@ -154,7 +154,7 @@ class EnumConstructorTools
                                         }
                                     }
                                     
-                                case TupleElement.Label(litllString):
+                                case TupleElement.Label(lislaString):
                                     Option.Some(errorKind(parameterized.name, EnumConstructorSuffixErrorKind.InvalidInlineEnumConstructorLabel));
                             }
                         }
@@ -180,7 +180,7 @@ class EnumConstructorTools
                 switch (parameterized.name.kind)
                 {
                     case EnumConstructorKind.Normal:
-                        var label = TupleElement.Label(new LitllString(parameterized.name.name, parameterized.name.tag));
+                        var label = TupleElement.Label(new LislaString(parameterized.name.name, parameterized.name.tag));
                         Option.Some([label].concat(parameterized.elements));
                         
                     case EnumConstructorKind.Tuple:
@@ -211,7 +211,7 @@ class EnumConstructorTools
                 switch (parameterized.name.kind)
                 {
                     case EnumConstructorKind.Normal:
-                        condition.conditions.push(LitllToEntityCaseCondition.Const(parameterized.name.name));
+                        condition.conditions.push(LislaToEntityCaseCondition.Const(parameterized.name.name));
                         Option.None;
                         
                     case EnumConstructorKind.Tuple:

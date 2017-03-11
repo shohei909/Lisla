@@ -1,8 +1,8 @@
-package litll.idl.generator.output.litll2entity.match;
+package lisla.idl.generator.output.lisla2entity.match;
 
-class LitllToEntityGuardConditionKindTools 
+class LislaToEntityGuardConditionKindTools 
 {
-    public static function intersects(kind1:LitllToEntityGuardConditionKind, kind2:LitllToEntityGuardConditionKind):Bool
+    public static function intersects(kind1:LislaToEntityGuardConditionKind, kind2:LislaToEntityGuardConditionKind):Bool
     {
         return switch [kind1, kind2]
         {
@@ -47,7 +47,7 @@ class LitllToEntityGuardConditionKindTools
         }
     }
     
-    public static function merge(kind1:LitllToEntityGuardConditionKind, kind2:LitllToEntityGuardConditionKind):LitllToEntityGuardConditionKind
+    public static function merge(kind1:LislaToEntityGuardConditionKind, kind2:LislaToEntityGuardConditionKind):LislaToEntityGuardConditionKind
     {
         return switch [kind1, kind2]
         {

@@ -1,17 +1,17 @@
-package litll.idl.litll2entity;
+package lisla.idl.lisla2entity;
 import haxe.ds.Option;
-import litll.core.Litll;
-import litll.idl.litll2entity.LitllToEntityArrayContext;
-import litll.idl.litll2entity.LitllToEntityConfig;
+import lisla.core.Lisla;
+import lisla.idl.lisla2entity.LislaToEntityArrayContext;
+import lisla.idl.lisla2entity.LislaToEntityConfig;
 
-class LitllToEntityContext
+class LislaToEntityContext
 {
-	public var litll(default, null):Litll;
-	public var config(default, null):LitllToEntityConfig;
+	public var lisla(default, null):Lisla;
+	public var config(default, null):LislaToEntityConfig;
 	
-	public inline function new(litll:Litll, config:LitllToEntityConfig)
+	public inline function new(lisla:Lisla, config:LislaToEntityConfig)
 	{
-		this.litll = litll;
+		this.lisla = lisla;
 		this.config = config;
 	}
 }

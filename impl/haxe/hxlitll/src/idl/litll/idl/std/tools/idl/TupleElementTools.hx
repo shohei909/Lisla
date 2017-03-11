@@ -1,15 +1,15 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.ArgumentKind;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.error.ArgumentSuffixErrorKind;
-import litll.idl.std.error.GetConditionErrorKind;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.ArgumentKind;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.error.ArgumentSuffixErrorKind;
+import lisla.idl.std.error.GetConditionErrorKind;
 
 class TupleElementTools
 {
@@ -52,7 +52,7 @@ class TupleElementTools
         {
             case TupleElement.Label(value):
                 condition.canBeEmpty = false;
-                condition.conditions.push(LitllToEntityCaseCondition.Const(value.data));
+                condition.conditions.push(LislaToEntityCaseCondition.Const(value.data));
                 Option.None;
                 
             case TupleElement.Argument(argument):

@@ -1,15 +1,15 @@
-package litll.idl.generator.source.resolve;
+package lisla.idl.generator.source.resolve;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.error.LoadIdlErrorKind;
-import litll.idl.generator.source.file.IdlFilePath;
-import litll.idl.generator.source.file.LoadedIdl;
-import litll.idl.library.LibraryResolver;
-import litll.idl.library.LoadTypesContext;
-import litll.idl.library.PackageElement;
-import litll.idl.std.entity.idl.ModulePath;
-import litll.idl.std.entity.idl.TypeDefinition;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.error.LoadIdlErrorKind;
+import lisla.idl.generator.source.file.IdlFilePath;
+import lisla.idl.generator.source.file.LoadedIdl;
+import lisla.idl.library.LibraryResolver;
+import lisla.idl.library.LoadTypesContext;
+import lisla.idl.library.PackageElement;
+import lisla.idl.std.entity.idl.ModulePath;
+import lisla.idl.std.entity.idl.TypeDefinition;
 
 class IdlResolver
 {

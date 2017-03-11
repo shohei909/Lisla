@@ -1,19 +1,19 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionBuilder;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
-import litll.idl.std.entity.idl.FollowedTypeDefinition;
-import litll.idl.std.entity.idl.StructElementName;
-import litll.idl.std.entity.idl.StructField;
-import litll.idl.std.entity.idl.StructElementKind;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.StructElement;
-import litll.idl.std.error.GetConditionErrorKind;
-import litll.idl.std.error.StructFieldSuffixError;
-import litll.idl.std.error.StructFieldSuffixErrorKind;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionBuilder;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
+import lisla.idl.std.entity.idl.FollowedTypeDefinition;
+import lisla.idl.std.entity.idl.StructElementName;
+import lisla.idl.std.entity.idl.StructField;
+import lisla.idl.std.entity.idl.StructElementKind;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.StructElement;
+import lisla.idl.std.error.GetConditionErrorKind;
+import lisla.idl.std.error.StructFieldSuffixError;
+import lisla.idl.std.error.StructFieldSuffixErrorKind;
 
 class StructFieldTools 
 {
@@ -28,7 +28,7 @@ class StructFieldTools
         field:StructField, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        conditions:Array<LitllToEntityCaseCondition>,
+        conditions:Array<LislaToEntityCaseCondition>,
         history:Array<String>
     ):Option<GetConditionErrorKind>
     {
@@ -41,13 +41,13 @@ class StructFieldTools
                 | [StructElementKind.OptionalInline, Option.None]
                 | [StructElementKind.Array, Option.None]
                 | [StructElementKind.ArrayInline, Option.None]:
-                var builder = new LitllToEntityGuardConditionBuilder();
-                builder.add(LitllToEntityGuardConditionKind.Const([field.name.name => true]));
+                var builder = new LislaToEntityGuardConditionBuilder();
+                builder.add(LislaToEntityGuardConditionKind.Const([field.name.name => true]));
                 switch (field.type.getGuardConditionKind(source, definitionParameters))
                 {
                     case Result.Ok(data):
                         builder.add(data);
-                        conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
+                        conditions.push(LislaToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
                     case Result.Err(error):
@@ -122,12 +122,12 @@ class StructFieldTools
         }
     }
     
-    public static function _getGuardForStruct(field:StructField, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LitllToEntityGuardConditionBuilder):Option<GetConditionErrorKind>
+    public static function _getGuardForStruct(field:StructField, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LislaToEntityGuardConditionBuilder):Option<GetConditionErrorKind>
     {
         return switch [field.name.kind, field.defaultValue]
         {
             case [StructElementKind.Normal, Option.None]:
-                builder.add(LitllToEntityGuardConditionKind.Arr);
+                builder.add(LislaToEntityGuardConditionKind.Arr);
                 Option.None;
                 
             case [StructElementKind.Normal, Option.Some(_)]
@@ -149,13 +149,13 @@ class StructFieldTools
                         switch (data)
                         {
                             case FollowedTypeDefinition.Str:
-                                builder.add(LitllToEntityGuardConditionKind.Str);
+                                builder.add(LislaToEntityGuardConditionKind.Str);
                                 Option.None;
                                 
                             case FollowedTypeDefinition.Struct(_)
                                 | FollowedTypeDefinition.Arr(_)
                                 | FollowedTypeDefinition.Tuple(_):
-                                builder.add(LitllToEntityGuardConditionKind.Arr);
+                                builder.add(LislaToEntityGuardConditionKind.Arr);
                                 Option.None;
                                 
                             case FollowedTypeDefinition.Enum(constructors):

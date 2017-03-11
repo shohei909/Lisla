@@ -1,6 +1,6 @@
-package litll.idl.generator.output.litll2entity.match;
+package lisla.idl.generator.output.lisla2entity.match;
 
-enum LitllToEntityGuardConditionKind
+enum LislaToEntityGuardConditionKind
 {
     Never;
     Const(strings:Map<String, Bool>);

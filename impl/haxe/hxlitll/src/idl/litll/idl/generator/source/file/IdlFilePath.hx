@@ -1,4 +1,4 @@
-package litll.idl.generator.source.file;
+package lisla.idl.generator.source.file;
 
 abstract IdlFilePath(String) to String 
 {

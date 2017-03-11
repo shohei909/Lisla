@@ -1,15 +1,15 @@
-package litll.core.print;
-import litll.core.LitllArray;
+package lisla.core.print;
+import lisla.core.LislaArray;
 
 class Printer
 {
-	public static function print(array:LitllArray<Litll>):String
+	public static function print(array:LislaArray<Lisla>):String
 	{
         return "" + array;
 	}
     
-    public static function printLitll(litll:Litll):String
+    public static function printLisla(lisla:Lisla):String
 	{
-        return "" + litll;
+        return "" + lisla;
 	}
 }

@@ -1,4 +1,4 @@
-package litll.core.ds;
+package lisla.core.ds;
 
 class SourcePosition
 {

@@ -1,8 +1,8 @@
 /// ''
 /// [license "Public Domain"]
-[package litll.idl]
+[package lisla.idl]
 
-[import litll.idl]
+[import lisla.idl]
 
 [newtype PortableIdl [Array PortableIdlElement]]
 [tuple PortableIdlElement

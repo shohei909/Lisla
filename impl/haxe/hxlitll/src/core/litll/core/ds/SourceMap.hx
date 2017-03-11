@@ -1,6 +1,6 @@
-package litll.core.ds;
+package lisla.core.ds;
 import haxe.ds.Option;
-import litll.core.math.Search.SearchTools;
+import lisla.core.math.Search.SearchTools;
 
 class SourceMap
 {

@@ -1,16 +1,16 @@
-package litll.idl.litlltext2entity.error;
-import litll.core.error.InlineErrorSummary;
+package lisla.idl.lislatext2entity.error;
+import lisla.core.error.InlineErrorSummary;
 
-class LitllTextToEntityErrorKindTools 
+class LislaTextToEntityErrorKindTools 
 {
-    public static function getSummary(kind:LitllTextToEntityErrorKind):InlineErrorSummary<LitllTextToEntityErrorKind>
+    public static function getSummary(kind:LislaTextToEntityErrorKind):InlineErrorSummary<LislaTextToEntityErrorKind>
     {
         return switch(kind)
         {
-			case LitllTextToEntityErrorKind.Parse(error):
+			case LislaTextToEntityErrorKind.Parse(error):
                 error.getSummary().replaceKind(kind);
 				
-			case LitllTextToEntityErrorKind.LitllToEntity(error):
+			case LislaTextToEntityErrorKind.LislaToEntity(error):
 				error.getSummary().replaceKind(kind);
 		}
     }

@@ -1,8 +1,8 @@
-package litll.idl.std.entity.idl;
-import litll.core.Litll;
+package lisla.idl.std.entity.idl;
+import lisla.core.Lisla;
 
 enum TypeReferenceDependenceKind 
 {
-    Const(litll:Litll);
+    Const(lisla:Lisla);
     Reference(name:String);
 }

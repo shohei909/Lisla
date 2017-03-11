@@ -1,19 +1,19 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.Argument;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.FollowedTypeDefinition;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.error.ArgumentSuffixError;
-import litll.idl.std.error.ArgumentSuffixErrorKind;
-import litll.idl.std.error.GetConditionErrorKind;
-import litll.idl.std.tools.idl.TypeReferenceTools;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.Argument;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.FollowedTypeDefinition;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.error.ArgumentSuffixError;
+import lisla.idl.std.error.ArgumentSuffixErrorKind;
+import lisla.idl.std.error.GetConditionErrorKind;
+import lisla.idl.std.tools.idl.TypeReferenceTools;
 
 class ArgumentTools 
 {
@@ -36,7 +36,7 @@ class ArgumentTools
                 {
                     switch (condition)
                     {
-                        case LitllToEntityCaseCondition.Arr(guard):
+                        case LislaToEntityCaseCondition.Arr(guard):
                             switch [length, guard.getFixedLength()]
                             {
                                 case [_, Option.None]:
@@ -54,7 +54,7 @@ class ArgumentTools
                                     }
                             }
                             
-                        case LitllToEntityCaseCondition.Str | LitllToEntityCaseCondition.Const(_):
+                        case LislaToEntityCaseCondition.Str | LislaToEntityCaseCondition.Const(_):
                             return Result.Err(errorKind(argument.name, ArgumentSuffixErrorKind.InlineString));
                     }
                 }

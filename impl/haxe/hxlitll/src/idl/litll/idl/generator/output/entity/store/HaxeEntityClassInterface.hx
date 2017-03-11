@@ -1,11 +1,11 @@
-package litll.idl.generator.output.entity.store;
+package lisla.idl.generator.output.entity.store;
 
 class HaxeEntityClassInterface
 {
-	public var litllToEntity(default, null):HaxeEntityConstructorKind;
+	public var lislaToEntity(default, null):HaxeEntityConstructorKind;
 
-	public function new(litllToEntity:HaxeEntityConstructorKind) 
+	public function new(lislaToEntity:HaxeEntityConstructorKind) 
 	{
-		this.litllToEntity = litllToEntity;
+		this.lislaToEntity = lislaToEntity;
 	}
 }

@@ -1,8 +1,8 @@
-package litll.idl.std.error;
+package lisla.idl.std.error;
 import haxe.macro.Expr.TypeDefinition;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.entity.idl.TypeReference;
 
 enum TypeFollowErrorKind 
 {

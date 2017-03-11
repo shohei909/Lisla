@@ -1,43 +1,43 @@
-package litll.idl.generator.output.litll2entity.build;
+package lisla.idl.generator.output.lisla2entity.build;
 import haxe.ds.Option;
 import haxe.macro.Expr;
 import haxe.macro.Expr.Case;
 import hxext.ds.Result;
-import litll.core.LitllString;
-import litll.idl.exception.IdlException;
-import litll.idl.generator.data.LitllToEntityOutputConfig;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
-import litll.idl.generator.output.entity.store.HaxeEntityConstructorKind;
-import litll.idl.generator.output.entity.store.HaxeEntityConstructorReturnKind;
-import litll.idl.generator.output.entity.store.HaxeEntityInterface;
-import litll.idl.generator.output.entity.store.HaxeEntityInterfaceKind;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseConditionTools;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardCondition;
-import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePathPair;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.generator.source.validate.ValidType;
-import litll.idl.generator.tools.ExprBuilder;
-import litll.idl.litll2entity.error.LitllToEntityError;
-import litll.idl.std.entity.idl.Argument;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.EnumConstructorName;
-import litll.idl.std.entity.idl.GenericTypeReference;
-import litll.idl.std.entity.idl.StructElementName;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.entity.idl.TypeReferenceParameter;
-import litll.idl.std.entity.idl.TypeReferenceParameterKind;
-import litll.idl.std.error.ArgumentSuffixErrorKindTools;
-import litll.idl.std.error.GetConditionErrorKindTools;
-import litll.idl.std.tools.idl.FollowedTypeDefinitionTools;
-import litll.idl.std.tools.idl.TupleTools;
-import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
+import lisla.core.LislaString;
+import lisla.idl.exception.IdlException;
+import lisla.idl.generator.data.LislaToEntityOutputConfig;
+import lisla.idl.generator.output.entity.EntityHaxeTypePath;
+import lisla.idl.generator.output.entity.store.HaxeEntityConstructorKind;
+import lisla.idl.generator.output.entity.store.HaxeEntityConstructorReturnKind;
+import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
+import lisla.idl.generator.output.entity.store.HaxeEntityInterfaceKind;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseConditionTools;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardCondition;
+import lisla.idl.generator.output.lisla2entity.path.HaxeLislaToEntityTypePathPair;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.generator.source.validate.ValidType;
+import lisla.idl.generator.tools.ExprBuilder;
+import lisla.idl.lisla2entity.error.LislaToEntityError;
+import lisla.idl.std.entity.idl.Argument;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.EnumConstructorName;
+import lisla.idl.std.entity.idl.GenericTypeReference;
+import lisla.idl.std.entity.idl.StructElementName;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.entity.idl.TypeReferenceParameter;
+import lisla.idl.std.entity.idl.TypeReferenceParameterKind;
+import lisla.idl.std.error.ArgumentSuffixErrorKindTools;
+import lisla.idl.std.error.GetConditionErrorKindTools;
+import lisla.idl.std.tools.idl.FollowedTypeDefinitionTools;
+import lisla.idl.std.tools.idl.TupleTools;
+import lisla.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
 
-class LitllToEntityExprBuilder
+class LislaToEntityExprBuilder
 {
 	public var context(default, null):HaxeConvertContext;
     
@@ -66,7 +66,7 @@ class LitllToEntityExprBuilder
             argumentReferences.push(macro $i{dependence.name.toVariableName()});
         }
         
-        return switch (classInterface.litllToEntity)
+        return switch (classInterface.lislaToEntity)
         {
             case HaxeEntityConstructorKind.New:
                 var sourceTypePath = sourcePath.toMacroPath();
@@ -97,8 +97,8 @@ class LitllToEntityExprBuilder
                                 
                             case hxext.ds.Result.Err(data):
                                 hxext.ds.Result.Err(
-                                    litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
-                                        $contextExpr.litll, 
+                                    lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(
+                                        $contextExpr.lisla, 
                                         data
                                     )
                                 );
@@ -177,11 +177,11 @@ class LitllToEntityExprBuilder
         return switch (searchTypeParameter(parameters, destType))
         {
             case Option.Some(typeParameter):
-                var typeName = typeParameter.toLitllToEntityVariableName();
+                var typeName = typeParameter.toLislaToEntityVariableName();
                 macro $i{typeName};
                 
             case Option.None:
-                var haxePath = context.litllToEntityConfig.toHaxeLitllToEntityPath(destType.typePath);
+                var haxePath = context.lislaToEntityConfig.toHaxeLislaToEntityPath(destType.typePath);
                 macro $i{haxePath.toString()};
         }
     }
@@ -220,15 +220,15 @@ class LitllToEntityExprBuilder
     // ==============================================================
     // guard
     // ==============================================================
-    public function createTupleGuardConditions(elements:Array<TupleElement>, definitionParameters:Array<TypeName>):LitllToEntityGuardCondition
+    public function createTupleGuardConditions(elements:Array<TupleElement>, definitionParameters:Array<TypeName>):LislaToEntityGuardCondition
     {
         return elements.getGuard(context, definitionParameters).getOrThrow(GetConditionErrorKindTools.toIdlException);
     }
-    public function createFieldGuardConditions(name:StructElementName, type:TypeReference, definitionParameters:Array<TypeName>):LitllToEntityGuardCondition
+    public function createFieldGuardConditions(name:StructElementName, type:TypeReference, definitionParameters:Array<TypeName>):LislaToEntityGuardCondition
     {
         return createTupleGuardConditions(
             [
-                TupleElement.Label(new LitllString(name.name, name.tag)),
+                TupleElement.Label(new LislaString(name.name, name.tag)),
                 TupleElement.Argument(
                     new Argument(
                         new ArgumentName(name.name, name.tag),
@@ -256,7 +256,7 @@ class LitllToEntityExprBuilder
     {
         var guard = createTupleGuardConditions(
             [
-                TupleElement.Label(new LitllString(name.name, name.tag)),
+                TupleElement.Label(new LislaString(name.name, name.tag)),
                 TupleElement.Argument(
                     new Argument(
                         new ArgumentName(name.name, name.tag),
@@ -277,11 +277,11 @@ class LitllToEntityExprBuilder
         createConditionsCase(conditions, caseExpr, outputCases);
     }
     
-    public static function createTupleCase(guard:LitllToEntityGuardCondition, caseExpr:Expr):Case
+    public static function createTupleCase(guard:LislaToEntityGuardCondition, caseExpr:Expr):Case
     {
         var guardConditions = guard.getConditionExprs(macro array);
         return {
-            values: [macro litll.core.Litll.Arr(array)],
+            values: [macro lisla.core.Lisla.Arr(array)],
             guard: if (guardConditions.length == 0) null else ExprBuilder.createAndExpr(guardConditions),
             expr: caseExpr,
         }
@@ -302,25 +302,25 @@ class LitllToEntityExprBuilder
         createConditionsCase(conditions, caseExpr, outputCases);
     }
     
-    private function createConditionsCase(conditions:Array<LitllToEntityCaseCondition>, caseExpr:Expr, outputCases:Array<Case>):Void
+    private function createConditionsCase(conditions:Array<LislaToEntityCaseCondition>, caseExpr:Expr, outputCases:Array<Case>):Void
     {
         for (condition in conditions)
         {
             var caseData = switch (condition)
             {
-                case LitllToEntityCaseCondition.Arr(guard):
+                case LislaToEntityCaseCondition.Arr(guard):
                     createTupleCase(guard, caseExpr);
                     
-                case LitllToEntityCaseCondition.Str:
+                case LislaToEntityCaseCondition.Str:
                     {
-                        values: [macro litll.core.Litll.Str(_)],
+                        values: [macro lisla.core.Lisla.Str(_)],
                         expr: caseExpr,
                     }
                     
-                case LitllToEntityCaseCondition.Const(label):
+                case LislaToEntityCaseCondition.Const(label):
                     var stringExpr:Expr = ExprBuilder.getStringConstExpr(label);
                     {
-                        values: [macro litll.core.Litll.Str(string)],
+                        values: [macro lisla.core.Lisla.Str(string)],
                         guard: (macro string.data == $stringExpr),
                         expr: caseExpr,
                     }

@@ -1,7 +1,7 @@
-package litll.idl.std.error;
+package lisla.idl.std.error;
 import hxext.ds.Maybe;
-import litll.core.error.InlineErrorSummary;
-import litll.idl.std.entity.idl.StructElementName;
+import lisla.core.error.InlineErrorSummary;
+import lisla.idl.std.entity.idl.StructElementName;
 
 class StructFieldSuffixError 
 {

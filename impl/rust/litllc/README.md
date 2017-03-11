@@ -1,5 +1,5 @@
-# Litllc
-Litllc is CLI tools for litll.
+# Lislac
+Lislac is CLI tools for lisla.
 
 ## Lisence
-Litllc is lisenced under [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)
+Lislac is lisenced under [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)

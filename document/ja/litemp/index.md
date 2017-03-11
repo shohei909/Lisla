@@ -1,12 +1,12 @@
-# Litllテンプレート言語「Litemp」
+# Lislaテンプレート言語「Litemp」
 
-Litempは、Litllをテンプレート言語に拡張したものです。Litllの文字列や配列を引数として受け取って、Litllを返します。
+Litempは、Lislaをテンプレート言語に拡張したものです。Lislaの文字列や配列を引数として受け取って、Lislaを返します。
 
 ※ この言語は未実装であり、この内容はドラフトです。
 
 ## 文法
 
-LitempはLitllのスーパーセットです。正しくLitllとして読み込めるテキストは、Litempとして読み込むことができます。
+LitempはLislaのスーパーセットです。正しくLislaとして読み込めるテキストは、Litempとして読み込むことができます。
 
 ### 変数
 
@@ -24,7 +24,7 @@ TODO: 説明
 
 ### 型推論
 
-Litempのドキュメント全体に対するLitll IDLの型情報を与えることで、各変数の型を推論できます。
+Litempのドキュメント全体に対するLisla IDLの型情報を与えることで、各変数の型を推論できます。
 
 ただし、この型推論にはいくつかの制限があります。
 
@@ -43,7 +43,7 @@ TODO: 例
 
 `\(string)String`は厳密にString型と一致することを表しますが、
 
-同じように`\[array]`と`\(array)[Array litll.core.Any]`も同じ意味ではありません。
+同じように`\[array]`と`\(array)[Array lisla.core.Any]`も同じ意味ではありません。
 
 ## バージョン
 

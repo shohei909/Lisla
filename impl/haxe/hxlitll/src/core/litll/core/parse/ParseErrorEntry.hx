@@ -1,7 +1,7 @@
-package litll.core.parse;
+package lisla.core.parse;
 import hxext.ds.Maybe;
-import litll.core.ds.SourceRange;
-import litll.core.error.InlineErrorSummary;
+import lisla.core.ds.SourceRange;
+import lisla.core.error.InlineErrorSummary;
 
 class ParseErrorEntry
 {

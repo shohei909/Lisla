@@ -1,7 +1,7 @@
-package litll.idl.generator.output.error;
-import litll.core.error.FileErrorSummary;
-import litll.idl.litlltext2entity.error.LitllFileToEntityErrorKind;
-import litll.idl.litlltext2entity.error.LitllFileToEntityErrorKindTools;
+package lisla.idl.generator.output.error;
+import lisla.core.error.FileErrorSummary;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityErrorKind;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityErrorKindTools;
 
 class GetConfigErrorKindTools
 {

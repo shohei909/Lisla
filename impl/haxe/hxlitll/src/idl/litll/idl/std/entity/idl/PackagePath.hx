@@ -1,9 +1,9 @@
-package litll.idl.std.entity.idl;
+package lisla.idl.std.entity.idl;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.LitllString;
-import litll.core.tag.StringTag;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
+import lisla.core.LislaString;
+import lisla.core.tag.StringTag;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
 
 class PackagePath
 {
@@ -44,8 +44,8 @@ class PackagePath
 		}
 	}
 	
-	@:litllToEntity
-	public static function litllToEntity(string:LitllString):Result<PackagePath, LitllToEntityErrorKind>
+	@:lislaToEntity
+	public static function lislaToEntity(string:LislaString):Result<PackagePath, LislaToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -53,7 +53,7 @@ class PackagePath
 				Result.Ok(data);
 				
 			case Result.Err(err):
-				Result.Err(LitllToEntityErrorKind.Fatal(err));
+				Result.Err(LislaToEntityErrorKind.Fatal(err));
 		}
 	}
 	

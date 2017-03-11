@@ -1,43 +1,43 @@
-package litll.project;
+package lisla.project;
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
 import hxext.error.ErrorBuffer;
-import litll.idl.generator.data.EntityOutputConfig;
-import litll.idl.generator.data.HaxePrintConfig;
-import litll.idl.generator.data.LitllToEntityOutputConfig;
-import litll.idl.generator.output.HaxeGenerateConfigFactory;
-import litll.idl.generator.output.HaxeGenerateConfig;
-import litll.idl.generator.output.HaxeGenerateConfigFactoryContext;
-import litll.idl.generator.output.HaxeGenerator;
-import litll.idl.generator.output.error.CompileIdlToHaxeErrorKind;
-import litll.idl.generator.output.error.GetConfigErrorKind;
-import litll.idl.generator.output.haxe.HaxePrinter;
-import litll.idl.generator.source.IdlFileSourceReader;
-import litll.idl.hxlitll.litll2entity.config.InputConfigLitllToEntity;
-import litll.idl.library.LibraryScope;
-import litll.idl.litlltext2entity.LitllFileToEntityRunner;
-import litll.idl.litlltext2entity.error.LitllFileToEntityError;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.entity.idl.project.ProjectConfig;
-import litll.idl.std.entity.util.file.FileExtension;
+import lisla.idl.generator.data.EntityOutputConfig;
+import lisla.idl.generator.data.HaxePrintConfig;
+import lisla.idl.generator.data.LislaToEntityOutputConfig;
+import lisla.idl.generator.output.HaxeGenerateConfigFactory;
+import lisla.idl.generator.output.HaxeGenerateConfig;
+import lisla.idl.generator.output.HaxeGenerateConfigFactoryContext;
+import lisla.idl.generator.output.HaxeGenerator;
+import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
+import lisla.idl.generator.output.error.GetConfigErrorKind;
+import lisla.idl.generator.output.haxe.HaxePrinter;
+import lisla.idl.generator.source.IdlFileSourceReader;
+import lisla.idl.hxlisla.lisla2entity.config.InputConfigLislaToEntity;
+import lisla.idl.library.LibraryScope;
+import lisla.idl.lislatext2entity.LislaFileToEntityRunner;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.entity.idl.project.ProjectConfig;
+import lisla.idl.std.entity.util.file.FileExtension;
 import sys.FileSystem;
 
-class LitllProject
+class LislaProject
 {
-    public static var LITLL_HOME_VAR:String = "LITLL_HOME";
+    public static var LISLA_HOME_VAR:String = "LISLA_HOME";
     
     public var home:Maybe<String>;
     public var description:String;
     public var libraryDirectries(default, null):Array<String>;
     public var extensions(default, null):Map<FileExtension, TypeReference>;
-    private var libraries:Maybe<Result<LibraryScope, Array<LitllFileToEntityError>>>;
+    private var libraries:Maybe<Result<LibraryScope, Array<LislaFileToEntityError>>>;
     
     public function new() 
     {
         var env = Sys.environment();
-        home = env.getMaybe(LITLL_HOME_VAR);
+        home = env.getMaybe(LISLA_HOME_VAR);
         description = "";
         libraryDirectries = [];
         libraries = Maybe.none();
@@ -51,7 +51,7 @@ class LitllProject
             return Path.normalize(projectHome + "/" + path);
         }
         
-        config.litllHome.iter(function (v) home = Maybe.some(resolvePath(v.data)));
+        config.lislaHome.iter(function (v) home = Maybe.some(resolvePath(v.data)));
         config.description.iter(function (v) description = v.data);
         
         for (idl in config.idl)
@@ -66,7 +66,7 @@ class LitllProject
         libraries = Maybe.none();
     }
     
-    public function getLibraryScope():Result<LibraryScope, Array<LitllFileToEntityError>>
+    public function getLibraryScope():Result<LibraryScope, Array<LislaFileToEntityError>>
     {
         switch libraries.toOption()
         {
@@ -91,7 +91,7 @@ class LitllProject
         return result;
     }
     
-    private function findLibraries(file:String, scope:LibraryScope, errors:Array<LitllFileToEntityError>):Void
+    private function findLibraries(file:String, scope:LibraryScope, errors:Array<LislaFileToEntityError>):Void
     {
         if (FileSystem.exists(file))
         {
@@ -102,10 +102,10 @@ class LitllProject
                     findLibraries(file + "/" + child, scope, errors);
                 }
             }
-            else if (StringTools.endsWith(file, ".library.litll"))
+            else if (StringTools.endsWith(file, ".library.lisla"))
             {
                 var fileName = Path.withoutDirectory(file);
-                var name = fileName.substr(0, fileName.length - ".library.litll".length);
+                var name = fileName.substr(0, fileName.length - ".library.lisla".length);
                 scope.read(name, file, errors);
             }
         }
@@ -153,7 +153,7 @@ class LitllProject
                 errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetLibrary);
                 null;
         }
-        var inputConfig = switch (LitllFileToEntityRunner.run(InputConfigLitllToEntity, configFilePath))
+        var inputConfig = switch (LislaFileToEntityRunner.run(InputConfigLislaToEntity, configFilePath))
         {
             case Result.Ok(_inputConfig):
                 _inputConfig;
@@ -171,7 +171,7 @@ class LitllProject
         for (imported in inputConfig._import)
         {
             var filePath = Path.join([baseDirectory, imported.data.haxeSource.data]);
-            switch (LitllFileToEntityRunner.run(InputConfigLitllToEntity, filePath))
+            switch (LislaFileToEntityRunner.run(InputConfigLislaToEntity, filePath))
             {
                 case Result.Ok(_inputConfig):
                     requiredInputConfigs.push(_inputConfig);

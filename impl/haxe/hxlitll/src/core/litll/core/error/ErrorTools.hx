@@ -1,6 +1,6 @@
-package litll.core.error;
+package lisla.core.error;
 import hxext.ds.Maybe;
-import litll.core.tag.Tag;
+import lisla.core.tag.Tag;
 
 class ErrorTools 
 {

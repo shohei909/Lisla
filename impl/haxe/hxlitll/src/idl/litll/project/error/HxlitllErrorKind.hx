@@ -1,9 +1,9 @@
-package litll.project.error;
-import litll.idl.generator.output.error.CompileIdlToHaxeErrorKind;
-import litll.idl.litlltext2entity.error.LitllFileToEntityError;
+package lisla.project.error;
+import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
 
-enum HxlitllErrorKind 
+enum HxlislaErrorKind 
 {
-    LoadProject(error:LitllFileToEntityError);
+    LoadProject(error:LislaFileToEntityError);
     CompileIdlToHaxe(error:CompileIdlToHaxeErrorKind);
 }

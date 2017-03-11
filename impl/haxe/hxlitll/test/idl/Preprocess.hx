@@ -1,11 +1,11 @@
 import haxe.io.Path;
 import hxext.ds.Result;
-import litll.idl.generator.io.StandardIoProvider;
-import litll.idl.generator.output.HaxeGenerateConfigFactory;
-import litll.idl.generator.output.error.CompileIdlToHaxeErrorKind;
-import litll.project.LitllProjectSystem;
-import litll.project.error.HxlitllErrorKind;
-import litll.project.error.HxlitllErrorKindTools;
+import lisla.idl.generator.io.StandardIoProvider;
+import lisla.idl.generator.output.HaxeGenerateConfigFactory;
+import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
+import lisla.project.LislaProjectSystem;
+import lisla.project.error.HxlislaErrorKind;
+import lisla.project.error.HxlislaErrorKindTools;
 import sys.FileSystem;
 using hxext.ds.ResultTools;
 
@@ -13,43 +13,43 @@ class Preprocess
 {
     public static function main():Void
     {
-        remove("migration/litll");
+        remove("migration/lisla");
         
         // new
-        var litllProject = switch (LitllProjectSystem.getCurrentProject())
+        var lislaProject = switch (LislaProjectSystem.getCurrentProject())
         {
-            case Result.Ok(litllProject):
-                litllProject;
+            case Result.Ok(lislaProject):
+                lislaProject;
                 
             case Result.Err(errors):
-                outputErrorAndClose(errors, HxlitllErrorKind.LoadProject);
+                outputErrorAndClose(errors, HxlislaErrorKind.LoadProject);
                 return;
         }
         
-        litllProject.compileIdlToHaxe(
-            "litll/hxlitll/litll.hxgen.litll", 
+        lislaProject.compileIdlToHaxe(
+            "lisla/hxlisla/lisla.hxgen.lisla", 
             "migration",
-            new LitllHaxeGenerateConfigFactory().create
+            new LislaHaxeGenerateConfigFactory().create
         ).iter(outputCompileIdlToHaxeErrorAndClose);
         
-        litllProject.compileIdlToHaxe(
-            "litll/hxlitll/hxlitll.hxgen.litll", 
+        lislaProject.compileIdlToHaxe(
+            "lisla/hxlisla/hxlisla.hxgen.lisla", 
             "migration",
-            new HxlitllHaxeGenerateConfigFactory().create
+            new HxlislaHaxeGenerateConfigFactory().create
         ).iter(outputCompileIdlToHaxeErrorAndClose);
     }
     
     private static function outputCompileIdlToHaxeErrorAndClose(errors:Array<CompileIdlToHaxeErrorKind>):Void
     {
-        outputErrorAndClose(errors, HxlitllErrorKind.CompileIdlToHaxe);
+        outputErrorAndClose(errors, HxlislaErrorKind.CompileIdlToHaxe);
     }
     
-    private inline static function outputErrorAndClose<Kind>(errors:Array<Kind>, func:Kind->HxlitllErrorKind):Void
+    private inline static function outputErrorAndClose<Kind>(errors:Array<Kind>, func:Kind->HxlislaErrorKind):Void
     {
         var io = new StandardIoProvider();
         for (error in errors)
         {
-            var summary = HxlitllErrorKindTools.getSummary(func(error));
+            var summary = HxlislaErrorKindTools.getSummary(func(error));
             io.printErrorLine(summary.toString());
         }
         
@@ -77,10 +77,10 @@ class Preprocess
 	} 
 }
 
-private class LitllHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
+private class LislaHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
 {
 }
 
-private class HxlitllHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
+private class HxlislaHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
 {
 }

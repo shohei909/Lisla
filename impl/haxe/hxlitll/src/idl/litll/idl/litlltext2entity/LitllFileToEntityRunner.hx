@@ -1,30 +1,30 @@
-package litll.idl.litlltext2entity;
+package lisla.idl.lislatext2entity;
 import hxext.ds.Result;
-import litll.core.parse.ParserConfig;
-import litll.idl.litll2entity.LitllToEntityConfig;
-import litll.idl.litll2entity.LitllToEntityType;
-import litll.idl.litlltext2entity.error.LitllFileToEntityError;
-import litll.idl.litlltext2entity.error.LitllFileToEntityErrorKind;
+import lisla.core.parse.ParserConfig;
+import lisla.idl.lisla2entity.LislaToEntityConfig;
+import lisla.idl.lisla2entity.LislaToEntityType;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityErrorKind;
 import sys.FileSystem;
 import sys.io.File;
 
-class LitllFileToEntityRunner 
+class LislaFileToEntityRunner 
 {
-    public static function run<T>(processorType:LitllToEntityType<T>, filePath:String, ?parseConfig:ParserConfig, ?litllToEntityConfig:LitllToEntityConfig):Result<T, Array<LitllFileToEntityError>>
+    public static function run<T>(processorType:LislaToEntityType<T>, filePath:String, ?parseConfig:ParserConfig, ?lislaToEntityConfig:LislaToEntityConfig):Result<T, Array<LislaFileToEntityError>>
     {
         if (!FileSystem.exists(filePath))
         {
-            return Result.Err([new LitllFileToEntityError(filePath, LitllFileToEntityErrorKind.FileNotFound)]);
+            return Result.Err([new LislaFileToEntityError(filePath, LislaFileToEntityErrorKind.FileNotFound)]);
         }
         
         var text = File.getContent(filePath);
-        return switch (LitllTextToEntityRunner.run(processorType, text, parseConfig, litllToEntityConfig))
+        return switch (LislaTextToEntityRunner.run(processorType, text, parseConfig, lislaToEntityConfig))
         {
             case Result.Ok(data):
                 Result.Ok(data);
                 
             case Result.Err(errors):
-                Result.Err([for (err in errors) new LitllFileToEntityError(filePath, LitllFileToEntityErrorKind.LitllTextToEntity(err))]);
+                Result.Err([for (err in errors) new LislaFileToEntityError(filePath, LislaFileToEntityErrorKind.LislaTextToEntity(err))]);
         }
     }
 }

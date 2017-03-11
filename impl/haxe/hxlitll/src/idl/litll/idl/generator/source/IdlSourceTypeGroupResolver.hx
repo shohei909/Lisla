@@ -1,2 +1,2 @@
-package litll.idl.generator.source;
+package lisla.idl.generator.source;
 

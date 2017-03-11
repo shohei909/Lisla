@@ -1,10 +1,10 @@
-package litll.core.parse.string;
-import litll.core.char.CodePointTools;
-import litll.core.ds.SourceRange;
-import litll.core.parse.ParseContext;
-import litll.core.parse.array.ArrayState;
-import litll.core.parse.array.ArrayContext;
-import litll.core.parse.tag.UnsettledStringTag;
+package lisla.core.parse.string;
+import lisla.core.char.CodePointTools;
+import lisla.core.ds.SourceRange;
+import lisla.core.parse.ParseContext;
+import lisla.core.parse.array.ArrayState;
+import lisla.core.parse.array.ArrayContext;
+import lisla.core.parse.tag.UnsettledStringTag;
 import unifill.CodePoint;
 
 class UnquotedStringContext 
@@ -84,6 +84,6 @@ class UnquotedStringContext
             isSlash = false;
 		}
 		
-		parent.pushString(new LitllString(string, tag.settle(top.position)));
+		parent.pushString(new LislaString(string, tag.settle(top.position)));
 	}
 }

@@ -1,24 +1,24 @@
-package litll.idl.library;
+package lisla.idl.library;
 
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.error.LoadIdlErrorKind;
-import litll.idl.generator.source.IdlSourceReader;
-import litll.idl.generator.source.file.IdlFilePath;
-import litll.idl.generator.source.file.LoadedIdl;
-import litll.idl.generator.source.validate.ValidType;
-import litll.idl.library.PackageElement;
-import litll.idl.litlltext2entity.LitllTextToEntityRunner;
-import litll.idl.std.entity.idl.LibraryName;
-import litll.idl.std.entity.idl.ModulePath;
-import litll.idl.std.entity.idl.PackagePath;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.entity.idl.library.LibraryConfig;
-import litll.idl.std.litll2entity.idl.IdlLitllToEntity;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.error.LoadIdlErrorKind;
+import lisla.idl.generator.source.IdlSourceReader;
+import lisla.idl.generator.source.file.IdlFilePath;
+import lisla.idl.generator.source.file.LoadedIdl;
+import lisla.idl.generator.source.validate.ValidType;
+import lisla.idl.library.PackageElement;
+import lisla.idl.lislatext2entity.LislaTextToEntityRunner;
+import lisla.idl.std.entity.idl.LibraryName;
+import lisla.idl.std.entity.idl.ModulePath;
+import lisla.idl.std.entity.idl.PackagePath;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.entity.idl.library.LibraryConfig;
+import lisla.idl.std.lisla2entity.idl.IdlLislaToEntity;
 
 class Library extends PackageElement implements LibraryResolver
 {
@@ -151,12 +151,12 @@ class Library extends PackageElement implements LibraryResolver
             errors.push(new LoadIdlError(filePath, kind));
         }
         
-		switch (LitllTextToEntityRunner.run(IdlLitllToEntity, content, null, null))
+		switch (LislaTextToEntityRunner.run(IdlLislaToEntity, content, null, null))
         {
             case Result.Err(errors):
                 for (error in errors)
                 {
-                    errorResult(LoadIdlErrorKind.LitllTextToEntity(error));
+                    errorResult(LoadIdlErrorKind.LislaTextToEntity(error));
                 }
                 
             case Result.Ok(idl):

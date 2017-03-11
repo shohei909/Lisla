@@ -1,10 +1,10 @@
-/// 'IDL for Litll IDL configure file(.config.litll)'
+/// 'IDL for Lisla IDL configure file(.config.lisla)'
 /// [license "Public Domain"]
-[package litll.idl]
+[package lisla.idl]
 
-[import litll.util.file]
-[import litll.util.version]
-[import litll.idl]
+[import lisla.util.file]
+[import lisla.util.version]
+[import lisla.idl]
 
 [struct LibraryConfig
     [version Version]

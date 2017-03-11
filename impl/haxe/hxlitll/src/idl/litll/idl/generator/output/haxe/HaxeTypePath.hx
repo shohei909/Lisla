@@ -1,7 +1,7 @@
-package litll.idl.generator.output.haxe;
-import litll.idl.std.entity.idl.ModulePath;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
+package lisla.idl.generator.output.haxe;
+import lisla.idl.std.entity.idl.ModulePath;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
 
 class HaxeTypePath
 {

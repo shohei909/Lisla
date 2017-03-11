@@ -1,8 +1,8 @@
-package litll.core.error;
+package lisla.core.error;
 import haxe.EnumTools.EnumValueTools;
 import haxe.io.Path;
 import hxext.ds.Maybe;
-import litll.core.ds.SourceRange;
+import lisla.core.ds.SourceRange;
 
 class FileErrorSummary<ErrorKind:EnumValue> implements IFileErrorSummary
 {

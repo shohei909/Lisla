@@ -1,8 +1,8 @@
-package litll.core.parse.array;
-import litll.core.parse.string.QuotedStringContext;
-import litll.core.parse.string.UnquotedStringContext;
-import litll.core.parse.tag.UnsettledArrayTag;
-import litll.core.parse.tag.UnsettledLeadingTag;
+package lisla.core.parse.array;
+import lisla.core.parse.string.QuotedStringContext;
+import lisla.core.parse.string.UnquotedStringContext;
+import lisla.core.parse.tag.UnsettledArrayTag;
+import lisla.core.parse.tag.UnsettledLeadingTag;
 
 enum ArrayState
 {

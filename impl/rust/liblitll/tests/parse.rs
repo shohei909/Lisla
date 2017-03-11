@@ -1,14 +1,14 @@
-extern crate liblitll;
+extern crate liblisla;
 extern crate rustc_serialize;
 
-use liblitll::litll::*;
+use liblisla::lisla::*;
 
 use std::fs;
 use std::io::Read;
 use rustc_serialize::json::Json;
 
 
-const TEST_CASES_PATH: &'static str = "./../../../spec/litll/test_case/";
+const TEST_CASES_PATH: &'static str = "./../../../spec/lisla/test_case/";
 
 #[test]
 fn test_basic() {
@@ -31,21 +31,21 @@ fn test_basic() {
         let case_data = parse::parse(string.chars(), &config).unwrap();
         let mut into_iter = case_data.data.into_iter();
 
-        let litll_string = into_iter.next().unwrap().str().unwrap();
+        let lisla_string = into_iter.next().unwrap().str().unwrap();
         let json_string = into_iter.next().unwrap().str().unwrap();
-        let litll_data = parse::parse(litll_string.chars(), &config).unwrap();
+        let lisla_data = parse::parse(lisla_string.chars(), &config).unwrap();
         let json_data = Json::from_str(json_string.as_str()).unwrap();
 
-        equals(&Litll::Array(litll_data),
+        equals(&Lisla::Array(lisla_data),
                &json_data,
                entry.path().to_str().unwrap(),
                &mut vec![]);
     }
 }
 
-fn equals(litll: &Litll, json: &Json, path: &str, stack: &mut Vec<usize>) {
-    match (litll, json) {
-        (&Litll::Array(ref s), &Json::Array(ref j)) => {
+fn equals(lisla: &Lisla, json: &Json, path: &str, stack: &mut Vec<usize>) {
+    match (lisla, json) {
+        (&Lisla::Array(ref s), &Json::Array(ref j)) => {
             assert!(s.data.len() == j.len(),
                     "unmatched array length({}:{:?}): {:?} {:?}",
                     path,
@@ -60,7 +60,7 @@ fn equals(litll: &Litll, json: &Json, path: &str, stack: &mut Vec<usize>) {
             }
         }
 
-        (&Litll::String(ref s), &Json::String(ref j)) => {
+        (&Lisla::String(ref s), &Json::String(ref j)) => {
             assert!(s.data.as_str() == j.as_str(),
                     "unmatched string({}:{:?}): {:?} {:?}",
                     path,
@@ -70,7 +70,7 @@ fn equals(litll: &Litll, json: &Json, path: &str, stack: &mut Vec<usize>) {
         }
 
         (_, _) => {
-            panic!("unmatched({}:{:?}): {:?} {:?}", path, stack, litll, json);
+            panic!("unmatched({}:{:?}): {:?} {:?}", path, stack, lisla, json);
         }
     }
 }

@@ -1,6 +1,6 @@
 /// ''
 
-[package litll.xml]
+[package lisla.xml]
 
 [enum LixmlContent
     [string< [string String]]

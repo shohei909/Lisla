@@ -1,8 +1,8 @@
-package litll.core;
-import litll.core.LitllArray;
+package lisla.core;
+import lisla.core.LislaArray;
 
-enum Litll 
+enum Lisla 
 {
-	Arr(data:LitllArray<Litll>);
-    Str(data:LitllString);
+	Arr(data:LislaArray<Lisla>);
+    Str(data:LislaString);
 }

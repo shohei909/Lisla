@@ -1,10 +1,10 @@
-package litll.core.parse.tag;
+package lisla.core.parse.tag;
 import hxext.ds.Maybe;
 import unifill.CodePoint;
 import haxe.ds.Option;
-import litll.core.ds.SourceRange;
-import litll.core.parse.ParserConfig;
-import litll.core.tag.ArrayTag;
+import lisla.core.ds.SourceRange;
+import lisla.core.parse.ParserConfig;
+import lisla.core.tag.ArrayTag;
 
 class UnsettledArrayTag
 {

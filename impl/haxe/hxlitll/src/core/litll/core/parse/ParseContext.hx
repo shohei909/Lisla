@@ -1,14 +1,14 @@
-package litll.core.parse;
+package lisla.core.parse;
 import haxe.ds.Option;
-import litll.core.char.CodePointTools;
+import lisla.core.char.CodePointTools;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.ds.SourceMap;
-import litll.core.ds.SourceRange;
-import litll.core.parse.array.ArrayParent;
-import litll.core.parse.array.ArrayState;
-import litll.core.parse.array.ArrayContext;
-import litll.core.parse.tag.UnsettledLeadingTag;
+import lisla.core.ds.SourceMap;
+import lisla.core.ds.SourceRange;
+import lisla.core.parse.array.ArrayParent;
+import lisla.core.parse.array.ArrayState;
+import lisla.core.parse.array.ArrayContext;
+import lisla.core.parse.tag.UnsettledLeadingTag;
 import unifill.CodePoint;
 
 class ParseContext
@@ -64,7 +64,7 @@ class ParseContext
         current.process(codePoint);
     }
     
-    public inline function end():Result<LitllArray<Litll>, ParseError> 
+    public inline function end():Result<LislaArray<Lisla>, ParseError> 
 	{
 		position += 1;
 		

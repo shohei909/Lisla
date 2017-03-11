@@ -1,7 +1,7 @@
-package litll.idl.std.tools.idl;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeNameDeclaration;
-import litll.idl.std.entity.idl.TypeParameterDeclaration;
+package lisla.idl.std.tools.idl;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeNameDeclaration;
+import lisla.idl.std.entity.idl.TypeParameterDeclaration;
 
 class TypeNameDeclarationTools
 {

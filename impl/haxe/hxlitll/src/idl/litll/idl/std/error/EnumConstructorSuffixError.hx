@@ -1,7 +1,7 @@
-package litll.idl.std.error;
-import litll.core.error.ErrorTools;
-import litll.core.error.InlineErrorSummary;
-import litll.idl.std.entity.idl.EnumConstructorName;
+package lisla.idl.std.error;
+import lisla.core.error.ErrorTools;
+import lisla.core.error.InlineErrorSummary;
+import lisla.idl.std.entity.idl.EnumConstructorName;
 
 class EnumConstructorSuffixError 
 {

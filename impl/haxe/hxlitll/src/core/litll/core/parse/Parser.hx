@@ -1,33 +1,33 @@
-package litll.core.parse;
+package lisla.core.parse;
 
 import haxe.ds.Option;
-import litll.core.LitllArray;
+import lisla.core.LislaArray;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.ds.SourceMap;
-import litll.core.ds.SourceRange;
-import litll.core.parse.array.ArrayContext;
-import litll.core.parse.array.ArrayParent;
-import litll.core.parse.array.ArrayState;
-import litll.core.parse.array.ArrayState;
-import litll.core.parse.array.CommentContext;
-import litll.core.parse.string.EscapeSequenceState;
-import litll.core.parse.string.UnquotedStringContext;
-import litll.core.parse.tag.UnsettledArrayTag;
-import litll.core.parse.tag.UnsettledLeadingTag;
-import litll.core.parse.tag.UnsettledStringTag;
-import litll.core.parse.tag.UnsettledStringTag;
-import litll.core.tag.ArrayTag;
+import lisla.core.ds.SourceMap;
+import lisla.core.ds.SourceRange;
+import lisla.core.parse.array.ArrayContext;
+import lisla.core.parse.array.ArrayParent;
+import lisla.core.parse.array.ArrayState;
+import lisla.core.parse.array.ArrayState;
+import lisla.core.parse.array.CommentContext;
+import lisla.core.parse.string.EscapeSequenceState;
+import lisla.core.parse.string.UnquotedStringContext;
+import lisla.core.parse.tag.UnsettledArrayTag;
+import lisla.core.parse.tag.UnsettledLeadingTag;
+import lisla.core.parse.tag.UnsettledStringTag;
+import lisla.core.parse.tag.UnsettledStringTag;
+import lisla.core.tag.ArrayTag;
 import unifill.CodePoint;
 import unifill.Exception;
 
 using unifill.Unifill;
-using litll.core.char.NewLineCharTools;
-using litll.core.char.CodePointTools;
+using lisla.core.char.NewLineCharTools;
+using lisla.core.char.CodePointTools;
 
 class Parser
 {
-	public static function run(string:String, ?config:ParserConfig):Result<LitllArray<Litll>, ParseError> 
+	public static function run(string:String, ?config:ParserConfig):Result<LislaArray<Lisla>, ParseError> 
 	{
 		if (config == null) 
 		{

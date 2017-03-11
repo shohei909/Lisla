@@ -1,13 +1,13 @@
-package litll.idl.generator.source.validate;
+package lisla.idl.generator.source.validate;
 import hxext.ds.Maybe;
-import litll.core.LitllString;
-import litll.idl.generator.source.file.IdlFilePath;
-import litll.idl.library.LibraryResolver;
-import litll.idl.library.LoadTypesContext;
-import litll.idl.std.entity.idl.ModulePath;
-import litll.idl.std.entity.idl.TypeDefinition;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
+import lisla.core.LislaString;
+import lisla.idl.generator.source.file.IdlFilePath;
+import lisla.idl.library.LibraryResolver;
+import lisla.idl.library.LoadTypesContext;
+import lisla.idl.std.entity.idl.ModulePath;
+import lisla.idl.std.entity.idl.TypeDefinition;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
 
 class IdlValidator 
 {
@@ -21,7 +21,7 @@ class IdlValidator
                 file,
                 new TypePath(
                     Maybe.some(modulePath), 
-                    new TypeName(new LitllString(name, modulePath.tag)),
+                    new TypeName(new LislaString(name, modulePath.tag)),
                     modulePath.tag
                 ),
                 library, 

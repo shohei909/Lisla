@@ -1,26 +1,26 @@
-package litll.idl.generator.source.resolve;
+package lisla.idl.generator.source.resolve;
 
 import haxe.ds.Option;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.Litll;
-import litll.core.LitllString;
-import litll.idl.generator.error.IdlValidationErrorKindTools;
-import litll.idl.generator.error.LoadIdlErrorKind;
-import litll.idl.generator.source.resolve.IdlResolver;
-import litll.idl.litll2entity.LitllToEntityContext;
-import litll.idl.litlltext2entity.error.LitllTextToEntityErrorKind;
-import litll.idl.std.entity.idl.TypeDefinition;
-import litll.idl.std.entity.idl.TypeDependenceName;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeParameterDeclaration;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.entity.idl.TypeReferenceDependenceKind;
-import litll.idl.std.entity.idl.TypeReferenceParameter;
-import litll.idl.std.entity.idl.TypeReferenceParameterKind;
-import litll.idl.std.litll2entity.idl.TypeReferenceLitllToEntity;
-using litll.idl.std.tools.idl.TypeDefinitionTools;
+import lisla.core.Lisla;
+import lisla.core.LislaString;
+import lisla.idl.generator.error.IdlValidationErrorKindTools;
+import lisla.idl.generator.error.LoadIdlErrorKind;
+import lisla.idl.generator.source.resolve.IdlResolver;
+import lisla.idl.lisla2entity.LislaToEntityContext;
+import lisla.idl.lislatext2entity.error.LislaTextToEntityErrorKind;
+import lisla.idl.std.entity.idl.TypeDefinition;
+import lisla.idl.std.entity.idl.TypeDependenceName;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeParameterDeclaration;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.entity.idl.TypeReferenceDependenceKind;
+import lisla.idl.std.entity.idl.TypeReferenceParameter;
+import lisla.idl.std.entity.idl.TypeReferenceParameterKind;
+import lisla.idl.std.lisla2entity.idl.TypeReferenceLislaToEntity;
+using lisla.idl.std.tools.idl.TypeDefinitionTools;
 
 class TypeDefinitionResolver
 {
@@ -118,7 +118,7 @@ class TypeDefinitionResolver
 				{
 					processTypeReferenceParameters(
 						path, 
-						[TypeParameterDeclaration.TypeName(new TypeName(new LitllString("T")))], 
+						[TypeParameterDeclaration.TypeName(new TypeName(new LislaString("T")))], 
 						parameters
 					);
 					return;
@@ -180,13 +180,13 @@ class TypeDefinitionResolver
 				case TypeParameterDeclaration.Dependence(dependence):
                     var data = switch (referenceParameter.value)
                     {
-                        case Litll.Arr(data) if (data.length == 2 && data.data[0].match(Litll.Str(_.data => "const"))):
+                        case Lisla.Arr(data) if (data.length == 2 && data.data[0].match(Lisla.Str(_.data => "const"))):
                             TypeReferenceDependenceKind.Const(data.data[1]);
                             
-                        case Litll.Arr(data) if (data.length == 2 && data.data[0].match(Litll.Str(_.data => "ref"))):
+                        case Lisla.Arr(data) if (data.length == 2 && data.data[0].match(Lisla.Str(_.data => "ref"))):
                             switch (data.data[1])
                             {
-                                case Litll.Str(name):
+                                case Lisla.Str(name):
                                     TypeReferenceDependenceKind.Reference(name.data);
                                     
                                 case _:
@@ -202,15 +202,15 @@ class TypeDefinitionResolver
                     TypeReferenceParameterKind.Dependence(data, dependence.type);
 					
 				case TypeParameterDeclaration.TypeName(_):
-					var litllToEntityContext = new LitllToEntityContext(referenceParameter.value, parent.context.config);
-					switch (TypeReferenceLitllToEntity.process(litllToEntityContext))
+					var lislaToEntityContext = new LislaToEntityContext(referenceParameter.value, parent.context.config);
+					switch (TypeReferenceLislaToEntity.process(lislaToEntityContext))
 					{
 						case Result.Ok(reference):
 							processTypeReference(reference);
 							TypeReferenceParameterKind.Type(reference);
 							
 						case Result.Err(err):
-							addError(LoadIdlErrorKind.LitllTextToEntity(LitllTextToEntityErrorKind.LitllToEntity(err)));
+							addError(LoadIdlErrorKind.LislaTextToEntity(LislaTextToEntityErrorKind.LislaToEntity(err)));
 							continue;
 					}
 			}

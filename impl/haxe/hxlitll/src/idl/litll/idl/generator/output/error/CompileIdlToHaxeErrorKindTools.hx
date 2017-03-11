@@ -1,8 +1,8 @@
-package litll.idl.generator.output.error;
-import litll.core.error.FileErrorSummary;
-import litll.idl.generator.output.error.GetConfigErrorKind;
-import litll.idl.generator.output.haxe.PrintHaxeErrorKind;
-import litll.idl.generator.output.haxe.PrintHaxeErrorKindTools;
+package lisla.idl.generator.output.error;
+import lisla.core.error.FileErrorSummary;
+import lisla.idl.generator.output.error.GetConfigErrorKind;
+import lisla.idl.generator.output.haxe.PrintHaxeErrorKind;
+import lisla.idl.generator.output.haxe.PrintHaxeErrorKindTools;
 
 class CompileIdlToHaxeErrorKindTools
 {

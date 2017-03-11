@@ -1,19 +1,19 @@
-package litll.idl.litlltext2entity.error;
-import litll.core.error.FileErrorSummary;
+package lisla.idl.lislatext2entity.error;
+import lisla.core.error.FileErrorSummary;
 
-class LitllFileToEntityError
+class LislaFileToEntityError
 {
     public var file(default, null):String;
-    public var kind(default, null):LitllFileToEntityErrorKind;
+    public var kind(default, null):LislaFileToEntityErrorKind;
     
-    public function new (file:String, kind:LitllFileToEntityErrorKind)
+    public function new (file:String, kind:LislaFileToEntityErrorKind)
     {
         this.file = file;
         this.kind = kind;
     }
     
-    public function getSummary():FileErrorSummary<LitllFileToEntityErrorKind>
+    public function getSummary():FileErrorSummary<LislaFileToEntityErrorKind>
     {
-        return LitllFileToEntityErrorKindTools.getSummary(kind).withFile(file);
+        return LislaFileToEntityErrorKindTools.getSummary(kind).withFile(file);
     }
 }

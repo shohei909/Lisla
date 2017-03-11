@@ -1,13 +1,13 @@
-package litll.core.parse.string;
-using litll.core.char.CodePointTools;
-import litll.core.ds.SourceRange;
-import litll.core.parse.ParseContext;
-import litll.core.parse.array.ArrayContext;
-import litll.core.parse.array.ArrayParent;
-import litll.core.parse.array.ArrayState;
-import litll.core.parse.tag.UnsettledLeadingTag;
-import litll.core.parse.tag.UnsettledStringTag;
-import litll.core.tag.StringTag;
+package lisla.core.parse.string;
+using lisla.core.char.CodePointTools;
+import lisla.core.ds.SourceRange;
+import lisla.core.parse.ParseContext;
+import lisla.core.parse.array.ArrayContext;
+import lisla.core.parse.array.ArrayParent;
+import lisla.core.parse.array.ArrayState;
+import lisla.core.parse.tag.UnsettledLeadingTag;
+import lisla.core.parse.tag.UnsettledStringTag;
+import lisla.core.tag.StringTag;
 import unifill.CodePoint;
 
 class QuotedStringContext 
@@ -263,7 +263,7 @@ class QuotedStringContext
                 isGroupTop = false;
             }
             
-            parent.pushString(new LitllString(string, tag));
+            parent.pushString(new LislaString(string, tag));
             isFirstGroup = false;
         }
         

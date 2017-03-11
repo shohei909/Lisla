@@ -1,17 +1,17 @@
-package litll.idl.generator.output.litll2entity.match;
+package lisla.idl.generator.output.lisla2entity.match;
 
 class FirstElementCondition 
 {
     public var canBeEmpty:Bool;
-    public var conditions(default, null):Array<LitllToEntityCaseCondition>;
+    public var conditions(default, null):Array<LislaToEntityCaseCondition>;
     
-    public function new(canBeEmpty:Bool, conditions:Array<LitllToEntityCaseCondition>) 
+    public function new(canBeEmpty:Bool, conditions:Array<LislaToEntityCaseCondition>) 
     {
         this.canBeEmpty = canBeEmpty;
         this.conditions = conditions;
     }
     
-    public function addConditions(newConditions:Array<LitllToEntityCaseCondition>):Void
+    public function addConditions(newConditions:Array<LislaToEntityCaseCondition>):Void
     {
         for (condition in newConditions)
         {

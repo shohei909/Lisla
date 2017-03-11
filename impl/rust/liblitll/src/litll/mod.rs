@@ -6,14 +6,14 @@ pub mod util;
 use self::tag::*;
 
 #[derive(Debug, Clone)]
-pub struct LitllString {
+pub struct LislaString {
     pub data: String,
     pub tag: Tag<StringTag>,
 }
 
-impl LitllString {
+impl LislaString {
     pub fn new(string: String) -> Self {
-        LitllString {
+        LislaString {
             data: string,
             tag: Tag::new().for_string(QuoteKind::Quoted(QuoteChar::Double, 1)),
         }
@@ -21,14 +21,14 @@ impl LitllString {
 }
 
 #[derive(Debug, Clone)]
-pub struct LitllArray {
-    pub data: Vec<Litll>,
+pub struct LislaArray {
+    pub data: Vec<Lisla>,
     pub tag: Tag<ArrayTag>,
 }
 
-impl LitllArray {
-    pub fn new(arr: Vec<Litll>) -> Self {
-        LitllArray {
+impl LislaArray {
+    pub fn new(arr: Vec<Lisla>) -> Self {
+        LislaArray {
             data: arr,
             tag: Tag::new().for_array(),
         }
@@ -36,37 +36,37 @@ impl LitllArray {
 }
 
 #[derive(Debug, Clone)]
-pub enum Litll {
-    String(LitllString),
-    Array(LitllArray),
+pub enum Lisla {
+    String(LislaString),
+    Array(LislaArray),
 }
 
-impl Litll {
+impl Lisla {
     pub fn str(self) -> Option<String> {
         match self {
-            Litll::String(data) => Option::Some(data.data),
-            Litll::Array(_) => Option::None,
+            Lisla::String(data) => Option::Some(data.data),
+            Lisla::Array(_) => Option::None,
         }
     }
 
-    pub fn arr(self) -> Option<Vec<Litll>> {
+    pub fn arr(self) -> Option<Vec<Lisla>> {
         match self {
-            Litll::String(_) => Option::None,
-            Litll::Array(data) => Option::Some(data.data),
+            Lisla::String(_) => Option::None,
+            Lisla::Array(data) => Option::Some(data.data),
         }
     }
 
     pub fn is_str(&self) -> bool {
         match *self {
-            Litll::String(_) => true,
-            Litll::Array(_) => false,
+            Lisla::String(_) => true,
+            Lisla::Array(_) => false,
         }
     }
 
     pub fn is_arr(&self) -> bool {
         match *self {
-            Litll::String(_) => false,
-            Litll::Array(_) => true,
+            Lisla::String(_) => false,
+            Lisla::Array(_) => true,
         }
     }
 }

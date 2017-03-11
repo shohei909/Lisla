@@ -1,45 +1,45 @@
-package litll.idl.generator.output.litll2entity.match;
+package lisla.idl.generator.output.lisla2entity.match;
 import haxe.ds.Option;
 import haxe.macro.Expr.Case;
-import litll.core.LitllString;
-import litll.idl.exception.IdlException;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardCondition;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.generator.source.IdlSourceReader;
-import litll.idl.generator.source.validate.InlinabilityOnTuple;
-import litll.idl.std.entity.idl.Argument;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.EnumConstructor;
-import litll.idl.std.entity.idl.EnumConstructorKind;
-import litll.idl.std.entity.idl.StructElement;
-import litll.idl.std.entity.idl.StructElementKind;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.FollowedTypeDefinition;
-import litll.idl.std.entity.idl.TypeName;
-using litll.idl.std.tools.idl.TypeReferenceTools;
+import lisla.core.LislaString;
+import lisla.idl.exception.IdlException;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardCondition;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.generator.source.IdlSourceReader;
+import lisla.idl.generator.source.validate.InlinabilityOnTuple;
+import lisla.idl.std.entity.idl.Argument;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.EnumConstructor;
+import lisla.idl.std.entity.idl.EnumConstructorKind;
+import lisla.idl.std.entity.idl.StructElement;
+import lisla.idl.std.entity.idl.StructElementKind;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.FollowedTypeDefinition;
+import lisla.idl.std.entity.idl.TypeName;
+using lisla.idl.std.tools.idl.TypeReferenceTools;
 
-class LitllToEntityCaseConditionTools 
+class LislaToEntityCaseConditionTools 
 {
-    public static function intersects(condition0:LitllToEntityCaseCondition, condition1:LitllToEntityCaseCondition):Bool
+    public static function intersects(condition0:LislaToEntityCaseCondition, condition1:LislaToEntityCaseCondition):Bool
     {
         return switch [condition0, condition1]
         {
-            case [LitllToEntityCaseCondition.Const(_), LitllToEntityCaseCondition.Str]
-                | [LitllToEntityCaseCondition.Str, LitllToEntityCaseCondition.Const(_)]
-                | [LitllToEntityCaseCondition.Str, LitllToEntityCaseCondition.Str]:
+            case [LislaToEntityCaseCondition.Const(_), LislaToEntityCaseCondition.Str]
+                | [LislaToEntityCaseCondition.Str, LislaToEntityCaseCondition.Const(_)]
+                | [LislaToEntityCaseCondition.Str, LislaToEntityCaseCondition.Str]:
                 true;
                 
-            case [LitllToEntityCaseCondition.Const(const0), LitllToEntityCaseCondition.Const(const1)]:
+            case [LislaToEntityCaseCondition.Const(const0), LislaToEntityCaseCondition.Const(const1)]:
                 const0 == const1;
                 
-            case [LitllToEntityCaseCondition.Arr(_), LitllToEntityCaseCondition.Const(_)]
-                | [LitllToEntityCaseCondition.Arr(_), LitllToEntityCaseCondition.Str]
-                | [LitllToEntityCaseCondition.Const(_), LitllToEntityCaseCondition.Arr(_)]
-                | [LitllToEntityCaseCondition.Str, LitllToEntityCaseCondition.Arr(_)]:
+            case [LislaToEntityCaseCondition.Arr(_), LislaToEntityCaseCondition.Const(_)]
+                | [LislaToEntityCaseCondition.Arr(_), LislaToEntityCaseCondition.Str]
+                | [LislaToEntityCaseCondition.Const(_), LislaToEntityCaseCondition.Arr(_)]
+                | [LislaToEntityCaseCondition.Str, LislaToEntityCaseCondition.Arr(_)]:
                 false;
                 
-            case [LitllToEntityCaseCondition.Arr(arr0), LitllToEntityCaseCondition.Arr(arr1)]:
+            case [LislaToEntityCaseCondition.Arr(arr0), LislaToEntityCaseCondition.Arr(arr1)]:
                 var shared = switch [arr0.max, arr1.max]
                 {
                     case [Option.None, Option.None]:
@@ -65,7 +65,7 @@ class LitllToEntityCaseConditionTools
                     }
                     for (i in 0...length)
                     {
-                        if (!LitllToEntityGuardConditionKindTools.intersects(arr0.conditions[i], arr1.conditions[i]))
+                        if (!LislaToEntityGuardConditionKindTools.intersects(arr0.conditions[i], arr1.conditions[i]))
                         {
                             intersects = false;
                             break;
@@ -81,12 +81,12 @@ class LitllToEntityCaseConditionTools
         }
     }
     
-    public static function getInlinability(conditions:Array<LitllToEntityCaseCondition>):InlinabilityOnTuple
+    public static function getInlinability(conditions:Array<LislaToEntityCaseCondition>):InlinabilityOnTuple
     {
-        return getInlinabilityWithNext(conditions, LitllToEntityGuardConditionKind.Never);
+        return getInlinabilityWithNext(conditions, LislaToEntityGuardConditionKind.Never);
     }
     
-    public static function getInlinabilityWithNext(conditions:Array<LitllToEntityCaseCondition>, nextGuard:LitllToEntityGuardConditionKind):InlinabilityOnTuple
+    public static function getInlinabilityWithNext(conditions:Array<LislaToEntityCaseCondition>, nextGuard:LislaToEntityGuardConditionKind):InlinabilityOnTuple
     {
         var canFixed = true;
         var canVariable = true;
@@ -129,30 +129,30 @@ class LitllToEntityCaseConditionTools
         }
     }
     
-    public static function canInlineFixed(condition:LitllToEntityCaseCondition):Bool
+    public static function canInlineFixed(condition:LislaToEntityCaseCondition):Bool
     {
         return switch (condition)
         {
-            case LitllToEntityCaseCondition.Const(_) | LitllToEntityCaseCondition.Str:
+            case LislaToEntityCaseCondition.Const(_) | LislaToEntityCaseCondition.Str:
                 false;
                 
-            case LitllToEntityCaseCondition.Arr(_):
+            case LislaToEntityCaseCondition.Arr(_):
                 true;
         }
     }
     
-    public static function intersectsShallow(condition0:LitllToEntityCaseCondition, condition1:LitllToEntityCaseCondition, nextGuard:LitllToEntityGuardConditionKind):Option<Bool>
+    public static function intersectsShallow(condition0:LislaToEntityCaseCondition, condition1:LislaToEntityCaseCondition, nextGuard:LislaToEntityGuardConditionKind):Option<Bool>
     {
         return switch [condition0, condition1]
         {
-            case [LitllToEntityCaseCondition.Const(_), _]
-                | [LitllToEntityCaseCondition.Str, _]
-                | [_, LitllToEntityCaseCondition.Str]
-                | [_, LitllToEntityCaseCondition.Const(_)]:
+            case [LislaToEntityCaseCondition.Const(_), _]
+                | [LislaToEntityCaseCondition.Str, _]
+                | [_, LislaToEntityCaseCondition.Str]
+                | [_, LislaToEntityCaseCondition.Const(_)]:
                 Option.None;
                 
-            case [LitllToEntityCaseCondition.Arr(arr0), LitllToEntityCaseCondition.Arr(arr1)]:
-                inline function get(guard:LitllToEntityGuardCondition):LitllToEntityGuardConditionKind
+            case [LislaToEntityCaseCondition.Arr(arr0), LislaToEntityCaseCondition.Arr(arr1)]:
+                inline function get(guard:LislaToEntityGuardCondition):LislaToEntityGuardConditionKind
                 {
                     return switch (guard.max)
                     {
@@ -163,18 +163,18 @@ class LitllToEntityCaseConditionTools
                             if (guard.conditions.length > 0) 
                             {
                                 var result = guard.conditions[0];
-                                if (guard.min == 0) LitllToEntityGuardConditionKindTools.merge(result, nextGuard) else result;
+                                if (guard.min == 0) LislaToEntityGuardConditionKindTools.merge(result, nextGuard) else result;
                             }
                             else
                             {
-                                LitllToEntityGuardConditionKind.Always;
+                                LislaToEntityGuardConditionKind.Always;
                             }
                     }
                 }
                 
                 var guard0 = get(arr0);
                 var guard1 = get(arr1);
-                Option.Some(LitllToEntityGuardConditionKindTools.intersects(guard0, guard1));
+                Option.Some(LislaToEntityGuardConditionKindTools.intersects(guard0, guard1));
         }
     }
 }

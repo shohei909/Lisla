@@ -1,26 +1,26 @@
-package litll.idl.generator.output.litll2entity.match;
+package lisla.idl.generator.output.lisla2entity.match;
 import haxe.ds.Option;
 import haxe.macro.Expr;
-import litll.core.Litll;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
-using litll.idl.std.tools.idl.TypeReferenceTools;
+import lisla.core.Lisla;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
+using lisla.idl.std.tools.idl.TypeReferenceTools;
 
-class LitllToEntityGuardCondition
+class LislaToEntityGuardCondition
 {
     public var min(default, null):Int = 0;
     public var max(default, null):Option<Int>;
-    public var conditions(default, null):Array<LitllToEntityGuardConditionKind>;
+    public var conditions(default, null):Array<LislaToEntityGuardConditionKind>;
     
-    public function new (min:Int, max:Option<Int>, conditions:Array<LitllToEntityGuardConditionKind>)
+    public function new (min:Int, max:Option<Int>, conditions:Array<LislaToEntityGuardConditionKind>)
     {
         this.min = min;
         this.max = max;
         this.conditions = conditions;
     }
     
-    public static function any():LitllToEntityGuardCondition
+    public static function any():LislaToEntityGuardCondition
     {
-        return new LitllToEntityGuardCondition(0, Option.None, []);
+        return new LislaToEntityGuardCondition(0, Option.None, []);
     }
     
     public function getConditionExprs(dataExpr:Expr):Array<Expr>
@@ -67,29 +67,29 @@ class LitllToEntityGuardCondition
                         expr: ExprDef.EConst(Constant.CString(key)),
                         pos: null,
                     }
-                    result.push(macro $dataExpr.data[$index].match(litll.core.Litll.Str(_.data => $string)));
+                    result.push(macro $dataExpr.data[$index].match(lisla.core.Lisla.Str(_.data => $string)));
                 }
             }
             
             switch (condition)
             {
-                case LitllToEntityGuardConditionKind.Const(strings):
+                case LislaToEntityGuardConditionKind.Const(strings):
                     addConst(strings);
                     
-                case LitllToEntityGuardConditionKind.Str:
-                    result.push(macro $dataExpr.data[$index].match(litll.core.Litll.Str(_)));
+                case LislaToEntityGuardConditionKind.Str:
+                    result.push(macro $dataExpr.data[$index].match(lisla.core.Lisla.Str(_)));
                     
-                case LitllToEntityGuardConditionKind.Arr:
-                    result.push(macro $dataExpr.data[$index].match(litll.core.Litll.Arr(_)));
+                case LislaToEntityGuardConditionKind.Arr:
+                    result.push(macro $dataExpr.data[$index].match(lisla.core.Lisla.Arr(_)));
                     
-                case LitllToEntityGuardConditionKind.ArrOrConst(strings):
+                case LislaToEntityGuardConditionKind.ArrOrConst(strings):
                     addConst(strings);
-                    result.push(macro $dataExpr.data[$index].match(litll.core.Litll.Arr(_)));
+                    result.push(macro $dataExpr.data[$index].match(lisla.core.Lisla.Arr(_)));
                     
-                case LitllToEntityGuardConditionKind.Never:
+                case LislaToEntityGuardConditionKind.Never:
                     result.push(macro false);
                     
-                case LitllToEntityGuardConditionKind.Always:
+                case LislaToEntityGuardConditionKind.Always:
             }
         }
         

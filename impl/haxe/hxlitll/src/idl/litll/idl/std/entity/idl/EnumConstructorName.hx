@@ -1,10 +1,10 @@
-package litll.idl.std.entity.idl;
-import litll.core.LitllString;
+package lisla.idl.std.entity.idl;
+import lisla.core.LislaString;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.tag.StringTag;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-using litll.core.string.IdentifierTools;
+import lisla.core.tag.StringTag;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+using lisla.core.string.IdentifierTools;
 using StringTools;
 
 class EnumConstructorName
@@ -38,8 +38,8 @@ class EnumConstructorName
         this.name = name;
 	}
 	
-	@:litllToEntity
-	public static function litllToEntity(string:LitllString):Result<EnumConstructorName, LitllToEntityErrorKind>
+	@:lislaToEntity
+	public static function lislaToEntity(string:LislaString):Result<EnumConstructorName, LislaToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -47,7 +47,7 @@ class EnumConstructorName
 				Result.Ok(data);
 			
 			case Result.Err(data):
-				Result.Err(LitllToEntityErrorKind.Fatal(data));
+				Result.Err(LislaToEntityErrorKind.Fatal(data));
 		}
 	}
 	public static function create(string:String, ?tag:Maybe<StringTag>):Result<EnumConstructorName, String>

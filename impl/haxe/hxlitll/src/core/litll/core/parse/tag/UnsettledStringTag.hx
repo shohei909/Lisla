@@ -1,9 +1,9 @@
-package litll.core.parse.tag;
+package lisla.core.parse.tag;
 import haxe.ds.Option;
 import hxext.ds.Maybe;
-import litll.core.ds.SourceRange;
-import litll.core.tag.ArrayTag;
-import litll.core.tag.StringTag;
+import lisla.core.ds.SourceRange;
+import lisla.core.tag.ArrayTag;
+import lisla.core.tag.StringTag;
 
 class UnsettledStringTag
 {

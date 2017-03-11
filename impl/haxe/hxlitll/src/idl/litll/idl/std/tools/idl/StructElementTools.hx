@@ -1,21 +1,21 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionBuilder;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionKind;
-import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.FollowedTypeDefinition;
-import litll.idl.std.entity.idl.StructElement;
-import litll.idl.std.entity.idl.StructField;
-import litll.idl.std.entity.idl.StructElementKind;
-import litll.idl.std.entity.idl.StructElementName;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypeReference;
-import litll.idl.std.error.GetConditionErrorKind;
-import litll.idl.std.error.StructFieldSuffixError;
-import litll.idl.std.error.StructFieldSuffixErrorKind;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionBuilder;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
+import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.FollowedTypeDefinition;
+import lisla.idl.std.entity.idl.StructElement;
+import lisla.idl.std.entity.idl.StructField;
+import lisla.idl.std.entity.idl.StructElementKind;
+import lisla.idl.std.entity.idl.StructElementName;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypeReference;
+import lisla.idl.std.error.GetConditionErrorKind;
+import lisla.idl.std.error.StructFieldSuffixError;
+import lisla.idl.std.error.StructFieldSuffixErrorKind;
 
 class StructElementTools 
 {
@@ -68,7 +68,7 @@ class StructElementTools
         );
     }
     
-    public static function _getGuardForStruct(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LitllToEntityGuardConditionBuilder):Option<GetConditionErrorKind>
+    public static function _getGuardForStruct(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LislaToEntityGuardConditionBuilder):Option<GetConditionErrorKind>
     {
         switch (element)
         {
@@ -86,7 +86,7 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructElementKind.Normal:
-                        builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
+                        builder.add(LislaToEntityGuardConditionKind.Const([name.name => true]));
                         
                     case StructElementKind.Array:
                         builder.unlimit();
@@ -111,7 +111,7 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructElementKind.Normal:
-                        builder.add(LitllToEntityGuardConditionKind.Arr);
+                        builder.add(LislaToEntityGuardConditionKind.Arr);
                         
                     case StructElementKind.Array:
                         builder.unlimit();
@@ -136,7 +136,7 @@ class StructElementTools
         return Option.None;
     }
     
-    public static function getConditions(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LitllToEntityCaseCondition>, GetConditionErrorKind>
+    public static function getConditions(element:StructElement, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<Array<LislaToEntityCaseCondition>, GetConditionErrorKind>
     {
         var conditions = [];
         return switch (_getConditions(element, source, definitionParameters, conditions, []))
@@ -153,7 +153,7 @@ class StructElementTools
         element:StructElement, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        conditions:Array<LitllToEntityCaseCondition>,
+        conditions:Array<LislaToEntityCaseCondition>,
         history:Array<String>
     ):Option<GetConditionErrorKind>
     {
@@ -163,7 +163,7 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructElementKind.Normal | StructElementKind.Array | StructElementKind.Optional:
-                        conditions.push(LitllToEntityCaseCondition.Const(name.name));
+                        conditions.push(LislaToEntityCaseCondition.Const(name.name));
                         Option.None;
                         
                     case StructElementKind.Inline:
@@ -183,9 +183,9 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructElementKind.Normal | StructElementKind.Array | StructElementKind.Optional:
-                        var builder = new LitllToEntityGuardConditionBuilder();
-                        builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
-                        conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
+                        var builder = new LislaToEntityGuardConditionBuilder();
+                        builder.add(LislaToEntityGuardConditionKind.Const([name.name => true]));
+                        conditions.push(LislaToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
                     case StructElementKind.Inline:
@@ -221,11 +221,11 @@ class StructElementTools
                 {
                     case StructElementKind.Normal:
                         condition.canBeEmpty = false;
-                        condition.conditions.push(LitllToEntityCaseCondition.Const(name.name));
+                        condition.conditions.push(LislaToEntityCaseCondition.Const(name.name));
                         Option.None;
                         
                     case StructElementKind.Array | StructElementKind.Optional:
-                        condition.conditions.push(LitllToEntityCaseCondition.Const(name.name));
+                        condition.conditions.push(LislaToEntityCaseCondition.Const(name.name));
                         Option.None;
                         
                     case StructElementKind.Inline:
@@ -245,16 +245,16 @@ class StructElementTools
                 switch (name.kind)
                 {
                     case StructElementKind.Normal:
-                        var builder = new LitllToEntityGuardConditionBuilder();
-                        builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
+                        var builder = new LislaToEntityGuardConditionBuilder();
+                        builder.add(LislaToEntityGuardConditionKind.Const([name.name => true]));
                         condition.canBeEmpty = false;
-                        condition.conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
+                        condition.conditions.push(LislaToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
                     case StructElementKind.Array | StructElementKind.Optional:
-                        var builder = new LitllToEntityGuardConditionBuilder();
-                        builder.add(LitllToEntityGuardConditionKind.Const([name.name => true]));
-                        condition.conditions.push(LitllToEntityCaseCondition.Arr(builder.build()));
+                        var builder = new LislaToEntityGuardConditionBuilder();
+                        builder.add(LislaToEntityGuardConditionKind.Const([name.name => true]));
+                        condition.conditions.push(LislaToEntityCaseCondition.Arr(builder.build()));
                         Option.None;
                         
                     case StructElementKind.Inline:

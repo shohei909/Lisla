@@ -1,10 +1,10 @@
-package litll.idl.std.entity.idl;
+package lisla.idl.std.entity.idl;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import litll.core.LitllString;
-import litll.core.tag.StringTag;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.entity.idl.LibraryName;
+import lisla.core.LislaString;
+import lisla.core.tag.StringTag;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import lisla.idl.std.entity.idl.LibraryName;
 
 class ModulePath extends LocalModulePath
 {
@@ -17,7 +17,7 @@ class ModulePath extends LocalModulePath
     public var libraryName(get, never):LibraryName;
     private function get_libraryName():LibraryName 
     {
-        return new LibraryName(new LitllString(path[0], tag));
+        return new LibraryName(new LislaString(path[0], tag));
     }
     
 	public var packagePath(get, never):PackagePath;
@@ -43,8 +43,8 @@ class ModulePath extends LocalModulePath
         );
     }
     
-	@:litllToEntity
-	public static function litllToEntity(string:LitllString):Result<ModulePath, LitllToEntityErrorKind>
+	@:lislaToEntity
+	public static function lislaToEntity(string:LislaString):Result<ModulePath, LislaToEntityErrorKind>
 	{
 		return switch (create(string.data, string.tag))
 		{
@@ -52,7 +52,7 @@ class ModulePath extends LocalModulePath
 				Result.Ok(data);
 				
 			case Result.Err(err):
-				Result.Err(LitllToEntityErrorKind.Fatal(err));
+				Result.Err(LislaToEntityErrorKind.Fatal(err));
 		}
 	}
 	

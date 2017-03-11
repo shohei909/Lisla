@@ -1,6 +1,6 @@
-package litll.core.parse.array;
-import litll.core.char.CodePointTools;
-import litll.core.parse.ParseContext;
+package lisla.core.parse.array;
+import lisla.core.char.CodePointTools;
+import lisla.core.parse.ParseContext;
 import unifill.CodePoint;
 
 class CommentContext

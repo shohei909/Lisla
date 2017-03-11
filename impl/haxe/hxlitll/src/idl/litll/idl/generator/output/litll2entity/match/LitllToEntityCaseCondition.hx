@@ -1,9 +1,9 @@
-package litll.idl.generator.output.litll2entity.match;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardCondition;
+package lisla.idl.generator.output.lisla2entity.match;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardCondition;
 
-enum LitllToEntityCaseCondition 
+enum LislaToEntityCaseCondition 
 { 
     Const(string:String);
     Str;
-    Arr(guard:LitllToEntityGuardCondition);
+    Arr(guard:LislaToEntityGuardCondition);
 }

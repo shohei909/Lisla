@@ -1,7 +1,7 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.macro.Expr.FunctionArg;
-import litll.idl.std.entity.idl.TypeDependenceDeclaration;
-import litll.idl.generator.data.EntityOutputConfig;
+import lisla.idl.std.entity.idl.TypeDependenceDeclaration;
+import lisla.idl.generator.data.EntityOutputConfig;
 
 class TypeDependenceDeclarationTools 
 {

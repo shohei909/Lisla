@@ -1,24 +1,24 @@
-package litll.idl.generator.output.litll2entity.build;
+package lisla.idl.generator.output.lisla2entity.build;
 import haxe.ds.Option;
 import haxe.macro.Expr;
 import hxext.ds.Result;
-import litll.core.Litll;
-import litll.idl.exception.IdlException;
-import litll.idl.generator.tools.ExprBuilder;
-import litll.idl.litll2entity.LitllToEntityContext;
-import litll.idl.litll2entity.error.LitllToEntityError;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
-import litll.idl.std.entity.idl.StructElement;
-import litll.idl.std.entity.idl.StructField;
-import litll.idl.std.entity.idl.StructElementKind;
+import lisla.core.Lisla;
+import lisla.idl.exception.IdlException;
+import lisla.idl.generator.tools.ExprBuilder;
+import lisla.idl.lisla2entity.LislaToEntityContext;
+import lisla.idl.lisla2entity.error.LislaToEntityError;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import lisla.idl.std.entity.idl.StructElement;
+import lisla.idl.std.entity.idl.StructField;
+import lisla.idl.std.entity.idl.StructElementKind;
 
-class StructElementLitllToEntityBuild
+class StructElementLislaToEntityBuild
 {       
     private var element:StructElement;
     private var id:String;
-    private var parent:StructLitllToEntityBuild;
+    private var parent:StructLislaToEntityBuild;
     
-    public inline function new(parent:StructLitllToEntityBuild, element:StructElement, id:String) 
+    public inline function new(parent:StructLislaToEntityBuild, element:StructElement, id:String) 
     {
         this.parent = parent;
         this.element = element;
@@ -34,9 +34,9 @@ class StructElementLitllToEntityBuild
         {
             case haxe.ds.Option.Some(_):
                 return hxext.ds.Result.Err(
-                    litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
-                        litllData,
-                        litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementDuplicated($nameExpr)
+                    lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(
+                        lislaData,
+                        lisla.idl.lisla2entity.error.LislaToEntityErrorKind.StructElementDuplicated($nameExpr)
                     )
                 );
                 
@@ -58,7 +58,7 @@ class StructElementLitllToEntityBuild
             field.type.generalize()
         );
         return macro {
-            var context = new litll.idl.litll2entity.LitllToEntityContext(array.data[1], context.config);
+            var context = new lisla.idl.lisla2entity.LislaToEntityContext(array.data[1], context.config);
             ${ExprBuilder.createGetOrReturnExpr(callExpr)}
         }
     }
@@ -92,15 +92,15 @@ class StructElementLitllToEntityBuild
                     
                 case haxe.ds.Option.None:
                     return hxext.ds.Result.Err(
-                        litll.idl.litll2entity.error.LitllToEntityError.ofLitll(
-                            context.litll,
-                            litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementNotFound($nameExpr)
+                        lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(
+                            context.lisla,
+                            lisla.idl.lisla2entity.error.LislaToEntityErrorKind.StructElementNotFound($nameExpr)
                         )
                     );
             }
         );
     }
-    private inline function addDefaultReference(field:StructField, defaultValue:litll.core.Litll):Void
+    private inline function addDefaultReference(field:StructField, defaultValue:lisla.core.Lisla):Void
     {
         var nameExpr = ExprBuilder.getStringConstExpr(field.name.name);
         parent.references.push(

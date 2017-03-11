@@ -1,10 +1,10 @@
-package litll.idl.std.entity.idl;
-import litll.core.LitllString;
-import litll.idl.std.entity.idl.Argument;
+package lisla.idl.std.entity.idl;
+import lisla.core.LislaString;
+import lisla.idl.std.entity.idl.Argument;
 
 enum EnumConstructorConditionKind 
 {
-    Label(string:LitllString);
+    Label(string:LislaString);
     Data(name:ArgumentName, );
     Tuple(argument:Argument);
 }

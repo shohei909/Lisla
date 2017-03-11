@@ -1,6 +1,6 @@
-package litll.idl.generator.output.haxe;
+package lisla.idl.generator.output.haxe;
 import hxext.ds.Maybe;
-import litll.core.error.FileErrorSummary;
+import lisla.core.error.FileErrorSummary;
 
 class PrintHaxeErrorKindTools 
 {

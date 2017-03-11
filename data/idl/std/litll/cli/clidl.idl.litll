@@ -1,6 +1,6 @@
-[package litll.cli]
+[package lisla.cli]
 
-[import litll.util.version]
+[import lisla.util.version]
 
 [struct Clidl
     [version Version]

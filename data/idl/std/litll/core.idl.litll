@@ -1,7 +1,7 @@
 /// 'Basic types'
 /// [license "Public Domain"]
 
-[package litll]
+[package lisla]
 
 /// '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'
 [newtype Int64 [VariableInt [const 64]]]
@@ -26,14 +26,14 @@
 
 [newtype BigUInt [VariableUInt [const 0xFFFFFFFF]]]
 
-/// 'Signed integer serialized in variable length in binary(bitll) mode.'
+/// 'Signed integer serialized in variable length in binary(bisla) mode.'
 [newtype [VariableInt [bit_length UInt32]] String]
-/// 'Usigned integer serialized in variable length in binary(bitll) mode.'
+/// 'Usigned integer serialized in variable length in binary(bisla) mode.'
 [newtype [VariableUInt [bit_length UInt32]] String]
 
-/// 'Signed integer serialized in fixed length in binary(bitll) mode.'
+/// 'Signed integer serialized in fixed length in binary(bisla) mode.'
 [newtype [FixedInt [bit_length UInt32]] String]
-/// 'Unsigned integer serialized in fixed length in binary(bitll) mode.'
+/// 'Unsigned integer serialized in fixed length in binary(bisla) mode.'
 [newtype [FixedUInt [bit_length UInt32]] String]
 
 /// '''

@@ -1,11 +1,11 @@
-[target hxlitll 
+[target hxlisla 
     [version 0.0.0]
-    [haxe_package litll.idl.hxlitll]
+    [haxe_package lisla.idl.hxlisla]
 ]
 
-[import litll 
-    [haxe_source litll.hxgen.litll]
+[import lisla 
+    [haxe_source lisla.hxgen.lisla]
 ]
 
 [entity]
-[litll_to_entity]
+[lisla_to_entity]

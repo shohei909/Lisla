@@ -1,12 +1,12 @@
-/// 'Types for Litll Project'
+/// 'Types for Lisla Project'
 /// [license "Public Domain"]
-[package litll.idl]
+[package lisla.idl]
 
-[import litll.util.file]
-[import litll.idl.library]
+[import lisla.util.file]
+[import lisla.idl.library]
 
 [struct ProjectConfig
-    [litll_home? DirectoryPath]
+    [lisla_home? DirectoryPath]
     [description? String]
     [idl.. DirectoryPath]
     [extension..< FileExtensionDeclaration]

@@ -1,14 +1,14 @@
-extern crate liblitll;
+extern crate liblisla;
 extern crate rustc_serialize;
 
-use liblitll::litll::*;
-use liblitll::litll::tag::QuoteKind;
+use liblisla::lisla::*;
+use liblisla::lisla::tag::QuoteKind;
 
 use std::fs;
 use std::io::Read;
 use std::collections::HashMap;
 
-const TEST_CASES_PATH: &'static str = "./../../../spec/litll/test_case/";
+const TEST_CASES_PATH: &'static str = "./../../../spec/lisla/test_case/";
 
 #[test]
 fn test_basic() {
@@ -36,17 +36,17 @@ fn test_basic() {
         let case_data = parse::parse(string.chars(), &parse_config).unwrap();
         let mut into_iter = case_data.data.into_iter();
 
-        let litll_string = into_iter.next().unwrap().str().unwrap();
-        let litll_data = parse::parse(litll_string.chars(), &parse_config).unwrap();
+        let lisla_string = into_iter.next().unwrap().str().unwrap();
+        let lisla_data = parse::parse(lisla_string.chars(), &parse_config).unwrap();
 
         for (name, write_config) in write_configs.iter() {
-            let rewrited_string = write::write(write_config, &litll_data);
+            let rewrited_string = write::write(write_config, &lisla_data);
             println!("{}: {}", name, rewrited_string);
 
-            let reparsed_litll_data = parse::parse(rewrited_string.chars(), &parse_config).unwrap();
+            let reparsed_lisla_data = parse::parse(rewrited_string.chars(), &parse_config).unwrap();
 
-            equals(&litll_data,
-                   &reparsed_litll_data,
+            equals(&lisla_data,
+                   &reparsed_lisla_data,
                    "json_compatible" != *name,
                    entry.path().to_str().unwrap(),
                    &mut vec![]);
@@ -54,26 +54,26 @@ fn test_basic() {
     }
 }
 
-fn equals(litll0: &LitllArray,
-          litll1: &LitllArray,
+fn equals(lisla0: &LislaArray,
+          lisla1: &LislaArray,
           keeping_quote: bool,
           path: &str,
           stack: &mut Vec<usize>) {
-    assert!(litll0.data.len() == litll1.data.len(),
+    assert!(lisla0.data.len() == lisla1.data.len(),
             "unmatched array length({}:{:?}): {:?} {:?}",
             path,
             stack,
-            litll0.data.len(),
-            litll1.data.len());
+            lisla0.data.len(),
+            lisla1.data.len());
 
-    for (i, tuple) in litll0.data.iter().zip(litll1.data.iter()).enumerate() {
+    for (i, tuple) in lisla0.data.iter().zip(lisla1.data.iter()).enumerate() {
         stack.push(i);
         match tuple {
-            (&Litll::Array(ref s0), &Litll::Array(ref s1)) => {
+            (&Lisla::Array(ref s0), &Lisla::Array(ref s1)) => {
                 equals(s0, s1, keeping_quote, path, stack);
             }
 
-            (&Litll::String(ref s0), &Litll::String(ref s1)) => {
+            (&Lisla::String(ref s0), &Lisla::String(ref s1)) => {
                 assert!(s0.data.as_str() == s1.data.as_str(),
                         "unmatched string({}:{:?}): {:?} {:?}",
                         path,

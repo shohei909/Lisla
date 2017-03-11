@@ -1,23 +1,23 @@
-package litll.idl.std.tools.idl;
+package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityCaseCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardCondition;
-import litll.idl.generator.output.litll2entity.match.LitllToEntityGuardConditionBuilder;
-import litll.idl.generator.output.litll2entity.match.FirstElementCondition;
-import litll.idl.generator.source.IdlSourceProvider;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.StructElement;
-import litll.idl.std.entity.idl.TupleElement;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.error.ArgumentSuffixErrorKind;
-import litll.idl.std.error.GetConditionErrorKind;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardCondition;
+import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionBuilder;
+import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
+import lisla.idl.generator.source.IdlSourceProvider;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.StructElement;
+import lisla.idl.std.entity.idl.TupleElement;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.error.ArgumentSuffixErrorKind;
+import lisla.idl.std.error.GetConditionErrorKind;
 
 class StructTools 
 {    
-    public static function getGuard(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToEntityGuardCondition, GetConditionErrorKind>
+    public static function getGuard(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LislaToEntityGuardCondition, GetConditionErrorKind>
     {
-        var builder = new LitllToEntityGuardConditionBuilder();
+        var builder = new LislaToEntityGuardConditionBuilder();
         return switch (_getGuard(elements, source, definitionParameters, builder))
         {
             case Option.None:
@@ -28,7 +28,7 @@ class StructTools
         }
     }
     
-    public static function _getGuard(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LitllToEntityGuardConditionBuilder):Option<GetConditionErrorKind>
+    public static function _getGuard(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>, builder:LislaToEntityGuardConditionBuilder):Option<GetConditionErrorKind>
     {
         var position = builder.position;
         for (element in elements)
@@ -46,12 +46,12 @@ class StructTools
         return Option.None;
     }
     
-    public static function getCondition(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LitllToEntityCaseCondition, GetConditionErrorKind>
+    public static function getCondition(elements:Array<StructElement>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LislaToEntityCaseCondition, GetConditionErrorKind>
     {
         return switch (getGuard(elements, source, definitionParameters))
         {
             case Result.Ok(data):
-                Result.Ok(LitllToEntityCaseCondition.Arr(data));
+                Result.Ok(LislaToEntityCaseCondition.Arr(data));
                 
             case Result.Err(error):
                 Result.Err(error);
@@ -62,7 +62,7 @@ class StructTools
         elements:Array<StructElement>, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        conditions:Array<LitllToEntityCaseCondition>,
+        conditions:Array<LislaToEntityCaseCondition>,
         history:Array<String>
     ):Option<GetConditionErrorKind>
     {

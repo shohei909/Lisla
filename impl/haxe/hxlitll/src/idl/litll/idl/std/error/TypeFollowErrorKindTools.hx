@@ -1,8 +1,8 @@
-package litll.idl.std.error;
+package lisla.idl.std.error;
 import hxext.ds.Maybe;
-import litll.core.error.InlineErrorSummary;
-import litll.idl.exception.IdlException;
-import litll.idl.generator.error.LoadIdlErrorKind;
+import lisla.core.error.InlineErrorSummary;
+import lisla.idl.exception.IdlException;
+import lisla.idl.generator.error.LoadIdlErrorKind;
 
 class TypeFollowErrorKindTools
 {

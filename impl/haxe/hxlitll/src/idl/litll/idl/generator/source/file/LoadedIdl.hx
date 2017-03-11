@@ -1,5 +1,5 @@
-package litll.idl.generator.source.file;
-import litll.idl.std.entity.idl.Idl;
+package lisla.idl.generator.source.file;
+import lisla.idl.std.entity.idl.Idl;
 
 class LoadedIdl
 {

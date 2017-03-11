@@ -1,5 +1,5 @@
-package litll.idl.generator.error;
-import litll.core.error.FileErrorSummary;
+package lisla.idl.generator.error;
+import lisla.core.error.FileErrorSummary;
 
 class LoadIdlError
 {

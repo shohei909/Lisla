@@ -1,17 +1,17 @@
-package litll.idl.generator.output;
+package lisla.idl.generator.output;
 import hxext.ds.Result;
-import litll.idl.generator.data.EntityOutputConfig;
-import litll.idl.generator.data.LitllToEntityOutputConfig;
-import litll.idl.generator.error.LoadIdlError;
-import litll.idl.generator.output.entity.store.HaxeEntityInterface;
-import litll.idl.generator.output.entity.store.HaxeEntityInterfaceKindTools;
-import litll.idl.generator.source.IdlSourceReader;
-import litll.idl.hxlitll.entity.config.TargetConfig;
-import litll.idl.library.LibraryScope;
-import litll.idl.library.LibraryTypesData;
-import litll.idl.std.entity.idl.LibraryName;
-import litll.idl.std.entity.idl.library.LibraryVersion;
-import litll.idl.std.entity.util.version.Version;
+import lisla.idl.generator.data.EntityOutputConfig;
+import lisla.idl.generator.data.LislaToEntityOutputConfig;
+import lisla.idl.generator.error.LoadIdlError;
+import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
+import lisla.idl.generator.output.entity.store.HaxeEntityInterfaceKindTools;
+import lisla.idl.generator.source.IdlSourceReader;
+import lisla.idl.hxlisla.entity.config.TargetConfig;
+import lisla.idl.library.LibraryScope;
+import lisla.idl.library.LibraryTypesData;
+import lisla.idl.std.entity.idl.LibraryName;
+import lisla.idl.std.entity.idl.library.LibraryVersion;
+import lisla.idl.std.entity.util.version.Version;
 
 class HaxeGenerateConfig
 {
@@ -19,7 +19,7 @@ class HaxeGenerateConfig
     public var libraryScope(default, null):LibraryScope;
     public var sourceReader(default, null):IdlSourceReader;
     public var entityOutputConfig(default, null):EntityOutputConfig;
-    public var litllToEntityOutputConfig(default, null):LitllToEntityOutputConfig;
+    public var lislaToEntityOutputConfig(default, null):LislaToEntityOutputConfig;
     public var targetName(default, null):LibraryName;
     public var targetVersion(default, null):Version;
     
@@ -29,7 +29,7 @@ class HaxeGenerateConfig
         targetName:LibraryName,
         targetVersion:Version,
         entityOutputConfig:EntityOutputConfig,
-        litllToEntityOutputConfig:LitllToEntityOutputConfig,
+        lislaToEntityOutputConfig:LislaToEntityOutputConfig,
         sourceReader:IdlSourceReader
     )
     {
@@ -38,7 +38,7 @@ class HaxeGenerateConfig
         this.libraryScope = libraryScope;
         this.targetName = targetName;
         this.entityOutputConfig = entityOutputConfig;
-        this.litllToEntityOutputConfig = litllToEntityOutputConfig;
+        this.lislaToEntityOutputConfig = lislaToEntityOutputConfig;
         this.sourceReader = sourceReader;
     }
     

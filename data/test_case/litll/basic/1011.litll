@@ -1,6 +1,6 @@
-// Litll
+// Lisla
 ''''''''
-//! Comments start with ! are keeped when Litll is minified.
+//! Comments start with ! are keeped when Lisla is minified.
 ///! 'Keeping document comments are also avarable.'
 // //! not keeping comment
 // ///! not keeping comment

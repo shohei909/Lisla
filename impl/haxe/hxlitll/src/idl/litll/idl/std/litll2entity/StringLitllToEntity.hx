@@ -1,22 +1,22 @@
-package litll.idl.std.litll2entity;
+package lisla.idl.std.lisla2entity;
 import hxext.ds.Result;
-import litll.core.Litll;
-import litll.core.LitllString;
-import litll.idl.litll2entity.LitllToEntityContext;
-import litll.idl.litll2entity.error.LitllToEntityError;
-import litll.idl.litll2entity.error.LitllToEntityErrorKind;
+import lisla.core.Lisla;
+import lisla.core.LislaString;
+import lisla.idl.lisla2entity.LislaToEntityContext;
+import lisla.idl.lisla2entity.error.LislaToEntityError;
+import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
 
-class StringLitllToEntity
+class StringLislaToEntity
 {
-	public static inline function process(context:LitllToEntityContext):Result<LitllString, LitllToEntityError> 
+	public static inline function process(context:LislaToEntityContext):Result<LislaString, LislaToEntityError> 
 	{
-		return switch (context.litll)
+		return switch (context.lisla)
 		{
-			case Litll.Str(string):
+			case Lisla.Str(string):
 				Result.Ok(string);
 				
-			case Litll.Arr(array):
-				Result.Err(LitllToEntityError.ofLitll(context.litll, LitllToEntityErrorKind.CantBeArray));
+			case Lisla.Arr(array):
+				Result.Err(LislaToEntityError.ofLisla(context.lisla, LislaToEntityErrorKind.CantBeArray));
 		}
 	}
 }

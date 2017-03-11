@@ -1,4 +1,4 @@
-package litll.idl.generator.data;
+package lisla.idl.generator.data;
 import haxe.ds.Option;
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -6,29 +6,29 @@ import haxe.macro.ExprTools;
 import haxe.macro.Type;
 import haxe.macro.Type.BaseType;
 import hxext.ds.Maybe;
-import litll.core.Litll;
-import litll.core.LitllArray;
-import litll.core.LitllString;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
-import litll.idl.generator.output.entity.store.HaxeEntityClassInterface;
-import litll.idl.generator.output.entity.store.HaxeEntityConstructorKind;
-import litll.idl.generator.output.entity.store.HaxeEntityConstructorReturnKind;
-import litll.idl.generator.output.entity.store.HaxeEntityEnumInterface;
-import litll.idl.generator.output.entity.store.HaxeEntityInterface;
-import litll.idl.generator.output.entity.store.HaxeEntityInterfaceKind;
-import litll.idl.std.entity.idl.ArgumentName;
-import litll.idl.std.entity.idl.EnumConstructorName;
-import litll.idl.std.entity.idl.ModulePath;
-import litll.idl.std.entity.idl.PackagePath;
-import litll.idl.std.entity.idl.StructElementName;
-import litll.idl.std.entity.idl.TypeDependenceName;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.entity.idl.TypeReferenceParameter;
-import litll.idl.std.entity.idl.group.TypeGroupFilter;
-import litll.idl.std.entity.idl.group.TypeGroupPath;
-import litll.idl.std.entity.idl.library.LibraryConfig;
-import litll.idl.std.tools.idl.group.TypeGroupFilterTools;
+import lisla.core.Lisla;
+import lisla.core.LislaArray;
+import lisla.core.LislaString;
+import lisla.idl.generator.output.entity.EntityHaxeTypePath;
+import lisla.idl.generator.output.entity.store.HaxeEntityClassInterface;
+import lisla.idl.generator.output.entity.store.HaxeEntityConstructorKind;
+import lisla.idl.generator.output.entity.store.HaxeEntityConstructorReturnKind;
+import lisla.idl.generator.output.entity.store.HaxeEntityEnumInterface;
+import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
+import lisla.idl.generator.output.entity.store.HaxeEntityInterfaceKind;
+import lisla.idl.std.entity.idl.ArgumentName;
+import lisla.idl.std.entity.idl.EnumConstructorName;
+import lisla.idl.std.entity.idl.ModulePath;
+import lisla.idl.std.entity.idl.PackagePath;
+import lisla.idl.std.entity.idl.StructElementName;
+import lisla.idl.std.entity.idl.TypeDependenceName;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.entity.idl.TypeReferenceParameter;
+import lisla.idl.std.entity.idl.group.TypeGroupFilter;
+import lisla.idl.std.entity.idl.group.TypeGroupPath;
+import lisla.idl.std.entity.idl.library.LibraryConfig;
+import lisla.idl.std.tools.idl.group.TypeGroupFilterTools;
 using hxext.ds.ResultTools;
 using haxe.macro.TypeTools;
 using haxe.macro.ComplexTypeTools;
@@ -43,17 +43,17 @@ class EntityOutputConfig
 	{
 		this.filters = filters.concat(
             [
-                TypeGroupFilterTools.create("Array",          "litll.core.LitllArray"),
-                TypeGroupFilterTools.create("String",         "litll.core.LitllString"),
-                TypeGroupFilterTools.create("litll.core.Any", "litll.core.Litll"),
+                TypeGroupFilterTools.create("Array",          "lisla.core.LislaArray"),
+                TypeGroupFilterTools.create("String",         "lisla.core.LislaString"),
+                TypeGroupFilterTools.create("lisla.core.Any", "lisla.core.Lisla"),
             ]
         );
 		
 		predefinedTypes = new Map();
 		
-		this.addPredefinedType(Litll);
-		this.addPredefinedType(LitllArray);
-		this.addPredefinedType(LitllString);
+		this.addPredefinedType(Lisla);
+		this.addPredefinedType(LislaArray);
+		this.addPredefinedType(LislaString);
 		this.addPredefinedType(ArgumentName);
 		this.addPredefinedType(EnumConstructorName);
 		this.addPredefinedType(ModulePath);
@@ -89,7 +89,7 @@ class EntityOutputConfig
 		return new EntityHaxeTypePath(typePath);
 	}
 	
-	public function addPredefinedTypeDirectly(path:String, data:litll.idl.generator.output.entity.store.HaxeEntityInterface):Void
+	public function addPredefinedTypeDirectly(path:String, data:lisla.idl.generator.output.entity.store.HaxeEntityInterface):Void
 	{
 		predefinedTypes[path] = data;
 	}
@@ -128,7 +128,7 @@ class EntityOutputConfig
 				new EntityHaxeTypePath(
 					new TypePath(
 						Maybe.some(new ModulePath($v{baseType.pack})), 
-						new TypeName(new LitllString($v{baseType.name}))
+						new TypeName(new LislaString($v{baseType.name}))
 					)
 				),
 				$data
@@ -144,7 +144,7 @@ class EntityOutputConfig
 		var createFunc = Maybe.none();
 		for (field in fields)
 		{
-			if (field.meta.has(":litllToEntity"))
+			if (field.meta.has(":lislaToEntity"))
 			{
 				createFunc = Maybe.some(field);
 				break;
@@ -154,7 +154,7 @@ class EntityOutputConfig
 		var expr = switch (createFunc.toOption())
 		{
 			case Option.Some(field):
-				resolveLitllToEntity(type, field.type, field);
+				resolveLislaToEntity(type, field.type, field);
 				
 			case Option.None:
 				macro HaxeEntityConstructorKind.New;
@@ -165,7 +165,7 @@ class EntityOutputConfig
 		);
 	}
     
-    private static function resolveLitllToEntity(selfType:Type, type:Type, field:ClassField):Expr
+    private static function resolveLislaToEntity(selfType:Type, type:Type, field:ClassField):Expr
     {
         return switch (type)
         {
@@ -184,17 +184,17 @@ class EntityOutputConfig
                                 case [TPType(ok), TPType(err)]:
                                     if (ok.toString() != selfPath)
                                     {
-                                        Context.error("@:litllToEntity function requires Result<" + selfPath + ", LitllToEntityErrorKind>", field.pos);
+                                        Context.error("@:lislaToEntity function requires Result<" + selfPath + ", LislaToEntityErrorKind>", field.pos);
                                     }
                                     else
                                     {
                                         switch (err.toString())
                                         {
-                                            case "litll.idl.litll2entity.error.LitllToEntityErrorKind":
+                                            case "lisla.idl.lisla2entity.error.LislaToEntityErrorKind":
                                                 macro HaxeEntityConstructorKind.Function($v{field.name}, HaxeEntityConstructorReturnKind.Result);	
                                                 
                                             case _:
-                                                Context.error("Error type must be litll.idl.litll2entity.error.LitllToEntityErrorKind", field.pos);
+                                                Context.error("Error type must be lisla.idl.lisla2entity.error.LislaToEntityErrorKind", field.pos);
                                                 return null;
                                         }
                                     }
@@ -213,15 +213,15 @@ class EntityOutputConfig
                 }
                 else
                 {
-                    Context.error("@:litllToEntity function return type must be Result<" + selfPath + ", LitllToEntityErrorKind> or " + selfPath, field.pos);
+                    Context.error("@:lislaToEntity function return type must be Result<" + selfPath + ", LislaToEntityErrorKind> or " + selfPath, field.pos);
                     null;
                 }
                 
             case TLazy(func):
-                resolveLitllToEntity(selfType, func(), field);
+                resolveLislaToEntity(selfType, func(), field);
                 
             case _:
-                Context.error("@:litllToEntity function must be function:", field.pos);
+                Context.error("@:lislaToEntity function must be function:", field.pos);
                 null;
         }
     }

@@ -1,8 +1,8 @@
-package litll.core.parse.tag;
+package lisla.core.parse.tag;
 import unifill.CodePoint;
-import litll.core.ds.SourceMap;
-import litll.core.parse.ParserConfig;
-import litll.core.tag.ArrayTag;
+import lisla.core.ds.SourceMap;
+import lisla.core.parse.ParserConfig;
+import lisla.core.tag.ArrayTag;
 
 class UnsettledLeadingTag
 {

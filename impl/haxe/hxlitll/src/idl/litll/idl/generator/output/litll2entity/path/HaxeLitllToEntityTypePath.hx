@@ -1,8 +1,8 @@
-package litll.idl.generator.output.litll2entity.path;
-import litll.idl.generator.output.entity.EntityHaxeTypePath;
-import litll.idl.std.entity.idl.TypePath;
+package lisla.idl.generator.output.lisla2entity.path;
+import lisla.idl.generator.output.entity.EntityHaxeTypePath;
+import lisla.idl.std.entity.idl.TypePath;
 
-class HaxeLitllToEntityTypePath extends EntityHaxeTypePath
+class HaxeLislaToEntityTypePath extends EntityHaxeTypePath
 {
 	public function new(path:TypePath)
 	{

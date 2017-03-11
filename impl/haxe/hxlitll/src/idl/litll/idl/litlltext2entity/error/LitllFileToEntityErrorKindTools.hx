@@ -1,18 +1,18 @@
-package litll.idl.litlltext2entity.error;
+package lisla.idl.lislatext2entity.error;
 import hxext.ds.Maybe;
-import litll.core.error.InlineErrorSummary;
-import litll.idl.litlltext2entity.error.LitllFileToEntityErrorKind;
+import lisla.core.error.InlineErrorSummary;
+import lisla.idl.lislatext2entity.error.LislaFileToEntityErrorKind;
 
-class LitllFileToEntityErrorKindTools 
+class LislaFileToEntityErrorKindTools 
 {
-    public static function getSummary(kind:LitllFileToEntityErrorKind):InlineErrorSummary<LitllFileToEntityErrorKind>
+    public static function getSummary(kind:LislaFileToEntityErrorKind):InlineErrorSummary<LislaFileToEntityErrorKind>
     {
         return switch(kind)
         {
-			case LitllFileToEntityErrorKind.LitllTextToEntity(error):
-				LitllTextToEntityErrorKindTools.getSummary(error).replaceKind(kind);
+			case LislaFileToEntityErrorKind.LislaTextToEntity(error):
+				LislaTextToEntityErrorKindTools.getSummary(error).replaceKind(kind);
                 
-            case LitllFileToEntityErrorKind.FileNotFound:
+            case LislaFileToEntityErrorKind.FileNotFound:
                 new InlineErrorSummary(
                     Maybe.none(), 
                     "File is not found.",

@@ -1,8 +1,8 @@
-package litll.core;
+package lisla.core;
 import hxext.ds.Maybe;
-import litll.core.tag.StringTag;
+import lisla.core.tag.StringTag;
 
-class LitllString 
+class LislaString 
 {
 	public var data:String;
 	public var tag:Maybe<StringTag>;

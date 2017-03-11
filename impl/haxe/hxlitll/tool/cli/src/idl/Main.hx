@@ -1,30 +1,30 @@
 import haxe.io.Path;
-import litll.core.ds.Maybe;
-import litll.idl.generator.IdlProject;
-import litll.idl.generator.data.DataOutputConfig;
-import litll.idl.generator.data.LitllToEntityOutputConfig;
-import litll.idl.generator.data.OutputConfig;
-import litll.idl.generator.data.ProjectConfig;
-import litll.idl.generator.data.SourceConfig;
-import litll.idl.std.data.idl.group.TypeGroupPath;
-import litll.idl.std.tools.idl.path.TypePathFilterTools;
+import lisla.core.ds.Maybe;
+import lisla.idl.generator.IdlProject;
+import lisla.idl.generator.data.DataOutputConfig;
+import lisla.idl.generator.data.LislaToEntityOutputConfig;
+import lisla.idl.generator.data.OutputConfig;
+import lisla.idl.generator.data.ProjectConfig;
+import lisla.idl.generator.data.SourceConfig;
+import lisla.idl.std.data.idl.group.TypeGroupPath;
+import lisla.idl.std.tools.idl.path.TypePathFilterTools;
 import sys.FileSystem;
 using hxext.ds.ResultTools;
 
-// import litll.idl.hxlitll.litll2entity.idl.config.InputFileLitllToEntity;
+// import lisla.idl.hxlisla.lisla2entity.idl.config.InputFileLislaToEntity;
 
 class Main 
 {
 	public static function main():Void
 	{
-//        var hxinputData = File.getContent("litll/hxlitll/hxlitll.hxinput.litll");
-//        LitllStringToData.run(InputFileLitllToEntity, hxinputData);
+//        var hxinputData = File.getContent("lisla/hxlisla/hxlisla.hxinput.lisla");
+//        LislaStringToData.run(InputFileLislaToEntity, hxinputData);
 
-        remove("../../migration/litll");
+        remove("../../migration/lisla");
 		var config = new ProjectConfig(
 			new SourceConfig(
                 [
-                    "litll/idl"
+                    "lisla/idl"
                 ],
                 [
                 ]
@@ -33,21 +33,21 @@ class Main
 				"../../migration",
 				new DataOutputConfig(
 					[
-						TypeGroupPath.create("litll").getOrThrow(),
-						TypeGroupPath.create("hxlitll").getOrThrow(),
+						TypeGroupPath.create("lisla").getOrThrow(),
+						TypeGroupPath.create("hxlisla").getOrThrow(),
 					],
 					[
-                        TypePathFilterTools.createPrefix("hxlitll", "litll.idl.hxlitll.data"),
+                        TypePathFilterTools.createPrefix("hxlisla", "lisla.idl.hxlisla.data"),
                     ]
 				),
 				Maybe.some(
-					new LitllToEntityOutputConfig(
+					new LislaToEntityOutputConfig(
 						[
-							TypeGroupPath.create("litll").getOrThrow(),
-							TypeGroupPath.create("hxlitll").getOrThrow(),
+							TypeGroupPath.create("lisla").getOrThrow(),
+							TypeGroupPath.create("hxlisla").getOrThrow(),
 						],
 						[
-                            TypePathFilterTools.createPrefix("hxlitll", "litll.idl.hxlitll.litll2entity"),
+                            TypePathFilterTools.createPrefix("hxlisla", "lisla.idl.hxlisla.lisla2entity"),
                         ]
 					)
 				)

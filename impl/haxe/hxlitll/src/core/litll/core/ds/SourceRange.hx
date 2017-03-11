@@ -1,5 +1,5 @@
-package litll.core.ds;
-import litll.core.LitllString;
+package lisla.core.ds;
+import lisla.core.LislaString;
 
 /**
  * [low, high)
@@ -39,15 +39,15 @@ class SourceRange
 		return lowPosition.toString() + "-" + highPosition.toString();
 	}
     
-	public function toLitllArray():LitllArray<Litll>
+	public function toLislaArray():LislaArray<Lisla>
 	{
 		var lowPosition = map.getOuterPositionOf(low);
 		var highPosition = map.getOuterPositionOf(high);
 		
-		return new LitllArray(
+		return new LislaArray(
             [
-                Litll.Str(new LitllString(lowPosition.toString())), 
-                Litll.Str(new LitllString(highPosition.toString()))
+                Lisla.Str(new LislaString(lowPosition.toString())), 
+                Lisla.Str(new LislaString(highPosition.toString()))
             ]
         );
 	}

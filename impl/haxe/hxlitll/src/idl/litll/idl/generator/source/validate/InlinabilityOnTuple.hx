@@ -1,4 +1,4 @@
-package litll.idl.generator.source.validate;
+package lisla.idl.generator.source.validate;
 
 enum InlinabilityOnTuple
 {

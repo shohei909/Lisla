@@ -1,14 +1,14 @@
-package litll.idl.generator.error;
+package lisla.idl.generator.error;
 import hxext.ds.Maybe;
-import litll.core.Litll;
-import litll.core.tag.Tag;
-import litll.idl.litlltext2entity.error.LitllTextToEntityErrorKind;
-import litll.idl.std.entity.idl.ModulePath;
-import litll.idl.std.entity.idl.PackagePath;
-import litll.idl.std.entity.idl.TypeName;
-import litll.idl.std.entity.idl.TypePath;
-import litll.idl.std.entity.idl.LibraryName;
-import litll.idl.std.entity.util.version.Version;
+import lisla.core.Lisla;
+import lisla.core.tag.Tag;
+import lisla.idl.lislatext2entity.error.LislaTextToEntityErrorKind;
+import lisla.idl.std.entity.idl.ModulePath;
+import lisla.idl.std.entity.idl.PackagePath;
+import lisla.idl.std.entity.idl.TypeName;
+import lisla.idl.std.entity.idl.TypePath;
+import lisla.idl.std.entity.idl.LibraryName;
+import lisla.idl.std.entity.util.version.Version;
 
 enum LoadIdlErrorKind
 {
@@ -18,7 +18,7 @@ enum LoadIdlErrorKind
     LibraryVersionNotFound(name:String, version:Version);
     
     // 
-    LitllTextToEntity(error:LitllTextToEntityErrorKind);
+    LislaTextToEntity(error:LislaTextToEntityErrorKind);
     
     // Preprocess
     ModuleDuplicated(module:ModulePath, existingPath:String);
@@ -26,7 +26,7 @@ enum LoadIdlErrorKind
 	TypeNameDuplicated(path:TypePath);
 	InvalidPackage(expected:PackagePath, actual:PackagePath);
 	ModuleNotFound(module:ModulePath);
-    InvalidTypeDependenceDescription(path:Litll);
+    InvalidTypeDependenceDescription(path:Lisla);
     TypeParameterNameDuplicated(name:TypeName);
     
     // Validate

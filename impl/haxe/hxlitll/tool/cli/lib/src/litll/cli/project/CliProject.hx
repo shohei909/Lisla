@@ -1,6 +1,6 @@
-package litll.cli.project;
-import litll.idl.ds.ProcessResult;
-import litll.idl.std.data.idl.haxe.ProjectConfig;
+package lisla.cli.project;
+import lisla.idl.ds.ProcessResult;
+import lisla.idl.std.data.idl.haxe.ProjectConfig;
 
 class CliProject 
 {
