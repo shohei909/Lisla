@@ -32,14 +32,10 @@ Lislaはシンプルです。そして、十分な機能を持っています。
     <tr><th>Lisla</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
-abcd
-</pre>
+<pre lang="lisla">abcd</pre>
         </td>
         <td>
-<pre lang="lisla">
-["abcd"]
-</pre>
+<pre lang="json">["abcd"]</pre>
         </td>
     </tr>
 </table>
@@ -57,13 +53,11 @@ Lislaは最上位の階層が配列なので、単純な`abcd`という記述は
 <pre lang="lisla">
 a
 b c
-def
-</pre>
+def</pre>
         </td>
         <td>
 <pre lang="json">
-["a", "b", "c", "def"]
-</pre>
+["a", "b", "c", "def"]</pre>
         </td>
     </tr>
 </table>
