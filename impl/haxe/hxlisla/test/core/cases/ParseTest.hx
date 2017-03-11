@@ -46,7 +46,7 @@ class ParseTest extends LislaTestCase
 								fail("failed to parse file: \n" + error).label(file);
 								continue;
 						}
-						
+                        
 						assertLislaArray(lislaData, Json.parse(json.data), file);
 						
 					case _:

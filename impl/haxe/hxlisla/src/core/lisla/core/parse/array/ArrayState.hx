@@ -8,7 +8,7 @@ enum ArrayState
 {
 	Normal;
     Escape;
-	Slash(length:Int);
+	Semicolon;
     Comment(context:CommentContext);
 	OpeningQuote(singleQuoted:Bool, length:Int);
 	QuotedString(context:QuotedStringContext);

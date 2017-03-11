@@ -99,26 +99,16 @@ class ArrayContext
 			// --------------------------
 			// Slash
 			// --------------------------
-			case [CodePointTools.SLASH, ArrayState.Slash(2)]:
+			case [CodePointTools.SEMICOLON, ArrayState.Semicolon]:
 				state = ArrayState.Comment(new CommentContext(top, this, CommentKind.Document));
-			
-			case [CodePointTools.SLASH, ArrayState.Slash(length)]:
-				state = ArrayState.Slash(length + 1);
 				
-			case [_, ArrayState.Slash(2)]:
+			case [_, ArrayState.Semicolon]:
 				var commentDetail = new CommentContext(top, this, CommentKind.Normal);
 				this.state = ArrayState.Comment(commentDetail);
 				commentDetail.process(codePoint);
 				
-			case [_, ArrayState.Slash(1)]:
-				startUnquotedString(CodePoint.fromInt(CodePointTools.SLASH));
-				top.current.process(codePoint);
-				
-			case [_, ArrayState.Slash(length)]:
-				throw "invalid slash length: " + length;
-				
-			case [CodePointTools.SLASH, ArrayState.Normal]:
-				state = ArrayState.Slash(1);
+			case [CodePointTools.SEMICOLON, ArrayState.Normal]:
+				state = ArrayState.Semicolon;
 				
 			// --------------------------
 			// Separater, Normal
@@ -129,10 +119,10 @@ class ArrayContext
 			// --------------------------
 			// Bracket, Normal
 			// --------------------------
-			case [CodePointTools.OPENNING_BRACKET, ArrayState.Normal]:
+			case [CodePointTools.OPENNING_PAREN, ArrayState.Normal]:
 				startArray();
 				
-			case [CodePointTools.CLOSEING_BRACKET, ArrayState.Normal]:
+			case [CodePointTools.CLOSEING_PAREN, ArrayState.Normal]:
 				switch (parent)
 				{
                     case ArrayParent.Array(parentContext):
@@ -261,8 +251,8 @@ class ArrayContext
 	{
 		return switch (state)
         {
-            case ArrayState.Slash(_):
-                startUnquotedString(CodePoint.fromInt(CodePointTools.SLASH));
+            case ArrayState.Semicolon:
+                state = ArrayState.Normal;
                 Option.None;
                 
             case ArrayState.Normal:

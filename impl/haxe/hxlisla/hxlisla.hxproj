@@ -16,7 +16,12 @@
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
-    <class path="." />
+    <class path="test\idl" />
+    <class path="test\core" />
+    <class path="src\core" />
+    <class path="src\idl" />
+    <class path="generated" />
+    <class path="migration" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -25,11 +30,12 @@
     <option noInlineOnDebug="False" />
     <option mainClass="Preprocess" />
     <option enabledebug="False" />
-    <option additional="" />
+    <option additional="--interp " />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
-    <!-- example: <library name="..." /> -->
+    <library name="nanotest" />
+    <library name="unifill" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>

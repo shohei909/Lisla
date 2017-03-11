@@ -12,7 +12,6 @@ class UnquotedStringContext
     private var top:ParseContext;
     private var parent:ArrayContext;
 	private var string:String;
-	private var isSlash:Bool;
 	private var tag:UnsettledStringTag;
 	
 	public inline function new(top:ParseContext, parent:ArrayContext, tag:UnsettledStringTag) 
@@ -20,49 +19,36 @@ class UnquotedStringContext
 		this.parent = parent;
         this.top = top;
         string = "";
-		isSlash = false;
 		this.tag = tag;
 	}
     
 	public function process(codePoint:CodePoint):Void
 	{
-		switch [codePoint.toInt(), isSlash]
+		switch codePoint.toInt()
 		{
 			// --------------------------
 			// Slash
 			// --------------------------
-			case [CodePointTools.SLASH, true]:
-				isSlash = false;
+			case CodePointTools.SEMICOLON:
 				end();
-                parent.state = ArrayState.Slash(2);
-			
-			case [CodePointTools.SLASH, false]:
-				isSlash = true;
+                parent.state = ArrayState.Semicolon;
 				
-			case [_, true]:
-				string += "/";
-				isSlash = false;
-				process(codePoint);
-				
-			case [CodePointTools.BACK_SLASH, _]:
+			case CodePointTools.BACK_SLASH:
 				top.error(ParseErrorKind.UnquotedEscapeSequence, new SourceRange(top.sourceMap, tag.startPosition, top.position));
 				
 			// --------------------------
 			// Separater
 			// --------------------------
-			case [
-					CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB | 
-					CodePointTools.CLOSEING_BRACKET | CodePointTools.OPENNING_BRACKET | 
-					CodePointTools.DOUBLE_QUOTE | CodePointTools.SINGLE_QUOTE, 
-					false
-				]:
+			case CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB | 
+                CodePointTools.CLOSEING_PAREN | CodePointTools.OPENNING_PAREN | 
+                CodePointTools.DOUBLE_QUOTE | CodePointTools.SINGLE_QUOTE:
 				end();
 				parent.process(codePoint);
 			
 			// --------------------------
 			// Other, Normal
 			// --------------------------
-			case [_, false]:
+			case _:
 				if (CodePointTools.isBlackListedWhitespace(codePoint))
 				{
 					end();
@@ -78,12 +64,6 @@ class UnquotedStringContext
 	
 	public function end():Void
 	{
-		if (isSlash)
-		{
-			string += "/";
-            isSlash = false;
-		}
-		
-		parent.pushString(new LislaString(string, tag.settle(top.position)));
+        parent.pushString(new LislaString(string, tag.settle(top.position)));
 	}
 }

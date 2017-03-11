@@ -36,7 +36,7 @@ class EscapeSequenceContext
 			case [CodePointTools.DOUBLE_QUOTE, EscapeSequenceState.Head]:
 				EscapeResult.Letter("\"");
 				
-			case [CodePointTools.OPENNING_BRACKET, EscapeSequenceState.Head]:
+			case [CodePointTools.OPENNING_PAREN, EscapeSequenceState.Head]:
 				EscapeResult.Interpolate;
                 
 			case [0x30, EscapeSequenceState.Head]:

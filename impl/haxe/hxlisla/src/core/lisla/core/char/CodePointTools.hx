@@ -3,13 +3,13 @@ import unifill.CodePoint;
 
 class CodePointTools
 {
-	public static inline var SLASH:Int = 0x2F;
+	public static inline var SEMICOLON:Int = 0x3B;
 	public static inline var SINGLE_QUOTE:Int = 0x27;
 	public static inline var DOUBLE_QUOTE:Int = 0x22;
 	public static inline var CR:Int = 0x0D;
 	public static inline var LF:Int = 0x0A;
-	public static inline var OPENNING_BRACKET:Int = 0x5B; // [
-	public static inline var CLOSEING_BRACKET:Int = 0x5D; // ]
+	public static inline var OPENNING_PAREN:Int = 0x28; // (
+	public static inline var CLOSEING_PAREN:Int = 0x29; // )
 	public static inline var OPENNING_BRACE:Int = 0x7B; // {
 	public static inline var CLOSEING_BRACE:Int = 0x7D; // }
 	public static inline var TAB:Int = 0x09;
