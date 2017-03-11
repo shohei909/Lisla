@@ -316,7 +316,6 @@ class TypeDefinitionValidator implements IdlSourceProvider
                 Maybe.some(ok);
                 
             case Result.Err(errors):
-                trace(errors);
                 for (e in errors) errors.push(e);
                 Maybe.none();
         }

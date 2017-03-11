@@ -7,5 +7,4 @@ package litll.idl.std.data.idl;
     public static function fromString(string:String, ?tag:hxext.ds.Maybe<litll.core.tag.StringTag>) {
         return new litll.idl.std.data.idl.LibraryName(new litll.core.LitllString(string, tag));
     }
-    
 }

@@ -69,22 +69,28 @@ class LibraryConfigLitllToEntity {
                         case litllData:return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(litllData, litll.idl.litll2entity.error.LitllToEntityErrorKind.UnmatchedStructElement(["version", "description", "extension", "library"])));
                     };
                 };
-                var instance = new litll.idl.std.data.idl.library.LibraryConfig(switch (arg0) {
-                    case haxe.ds.Option.Some(data):{
-                        data;
+                switch (litll.idl.std.data.idl.library.LibraryConfig.litllToEntity(switch (arg0) {
+                        case haxe.ds.Option.Some(data):{
+                            data;
+                        };
+                        case haxe.ds.Option.None:{
+                            return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementNotFound("version")));
+                        };
+                    }, switch (arg1) {
+                        case haxe.ds.Option.Some(data):{
+                            data;
+                        };
+                        case haxe.ds.Option.None:{
+                            return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementNotFound("description")));
+                        };
+                    }, arg2, arg3)) {
+                    case hxext.ds.Result.Ok(data):{
+                        hxext.ds.Result.Ok(data);
                     };
-                    case haxe.ds.Option.None:{
-                        return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementNotFound("version")));
+                    case hxext.ds.Result.Err(data):{
+                        hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, data));
                     };
-                }, switch (arg1) {
-                    case haxe.ds.Option.Some(data):{
-                        data;
-                    };
-                    case haxe.ds.Option.None:{
-                        return hxext.ds.Result.Err(litll.idl.litll2entity.error.LitllToEntityError.ofLitll(context.litll, litll.idl.litll2entity.error.LitllToEntityErrorKind.StructElementNotFound("description")));
-                    };
-                }, arg2, arg3);
-                hxext.ds.Result.Ok(instance);
+                };
             };
         };
     };

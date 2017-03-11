@@ -9,7 +9,7 @@ class LibraryReferenceLitllToEntity {
             case litll.core.Litll.Arr(array):{
                 var arrayContext = new litll.idl.litll2entity.LitllToEntityArrayContext(array, 0, context.config);
                 var instance = {
-                    var arg0 = switch (arrayContext.read(litll.idl.std.litll2entity.idl.library.LibraryNameLitllToEntity.process)) {
+                    var arg0 = switch (arrayContext.read(litll.idl.std.litll2entity.idl.LibraryNameLitllToEntity.process)) {
                         case hxext.ds.Result.Ok(data):{
                             data;
                         };
