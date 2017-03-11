@@ -4,5 +4,8 @@
 ]
 
 [import litll 
-    [haxe_source ../../migration]
+    [haxe_source litll.hxgen.litll]
 ]
+
+[entity]
+[litll_to_entity]

@@ -2,22 +2,23 @@ package litll.idl.generator.data;
 import haxe.ds.Option;
 import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePath;
 import litll.idl.std.data.idl.TypePath;
-import litll.idl.std.data.idl.group.TypePathFilter;
+import litll.idl.std.data.idl.group.TypeGroupFilter;
+import litll.idl.std.tools.idl.group.TypeGroupFilterTools;
 
 using hxext.ds.ResultTools;
-using litll.idl.std.tools.idl.path.TypePathFilterTools;
 
 class LitllToEntityOutputConfig
 {
-	public var filters:Array<TypePathFilter>;
+	public var filters:Array<TypeGroupFilter>;
 	
-	public function new(filters:Array<TypePathFilter>) 
+	public function new(filters:Array<TypeGroupFilter>) 
 	{
-		this.filters = [
-			TypePathFilterTools.createPrefix("ArrayLitllToEntity", "litll.idl.std.litll2entity.ArrayLitllToEntity"),
-			TypePathFilterTools.createPrefix("StringLitllToEntity", "litll.idl.std.litll2entity.StringLitllToEntity"),
-			TypePathFilterTools.createPrefix("litll", "litll.idl.std.litll2entity"),
-		].concat(filters);
+		this.filters = filters.concat(
+            [
+                TypeGroupFilterTools.create("ArrayLitllToEntity", "litll.idl.std.litll2entity.ArrayLitllToEntity"),
+                TypeGroupFilterTools.create("StringLitllToEntity", "litll.idl.std.litll2entity.StringLitllToEntity"),
+            ]
+        );
 	}
 	
 	public function toHaxeLitllToEntityPath(sourcePath:TypePath):HaxeLitllToEntityTypePath

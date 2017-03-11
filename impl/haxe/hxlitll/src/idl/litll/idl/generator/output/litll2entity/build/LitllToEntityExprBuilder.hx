@@ -39,9 +39,9 @@ import litll.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
 class LitllToEntityExprBuilder
 {
-	public var context(default, null):IdlToHaxeConvertContext;
+	public var context(default, null):HaxeConvertContext;
     
-	public function new (context:IdlToHaxeConvertContext)
+	public function new (context:HaxeConvertContext)
 	{
 		this.context = context;
     }

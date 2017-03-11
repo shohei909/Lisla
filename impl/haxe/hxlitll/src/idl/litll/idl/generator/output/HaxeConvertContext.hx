@@ -12,7 +12,7 @@ import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.data.idl.TypeDefinition;
 import litll.idl.std.data.idl.TypePath;
 
-class IdlToHaxeConvertContext implements IdlSourceProvider
+class HaxeConvertContext implements IdlSourceProvider
 {
     public var libraryResolver(default, null):LibraryResolver;
     public var entityOutputConfig(default, null):EntityOutputConfig;

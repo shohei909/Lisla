@@ -2,10 +2,10 @@
 package litll.idl.std.data.ir;
 enum Ir {
     Array(data:Array<litll.idl.std.data.ir.Ir>);
-    Option(data:litll.idl.std.data.core.LitllOption<litll.idl.std.data.ir.Ir>);
+    Option(data:litll.idl.std.entity.core.LitllOption<litll.idl.std.data.ir.Ir>);
     Enum(name:litll.core.LitllString, data:Array<litll.idl.std.data.ir.Ir>);
     Tuple(data:Array<litll.idl.std.data.ir.Ir>);
-    Struct(data:litll.idl.std.data.core.LitllMap<litll.core.LitllString, litll.idl.std.data.ir.Ir>);
-    Map(data:litll.idl.std.data.core.LitllMap<litll.idl.std.data.ir.PrimitiveIr, litll.idl.std.data.ir.Ir>);
+    Struct(data:litll.idl.std.entity.core.LitllMap<litll.core.LitllString, litll.idl.std.data.ir.Ir>);
+    Map(data:litll.idl.std.entity.core.LitllMap<litll.idl.std.data.ir.PrimitiveIr, litll.idl.std.data.ir.Ir>);
     Primitive(data:litll.idl.std.data.ir.PrimitiveIr);
 }

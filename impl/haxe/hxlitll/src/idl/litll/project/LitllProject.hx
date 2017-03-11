@@ -1,18 +1,20 @@
 package litll.project;
 import haxe.ds.Option;
 import haxe.io.Path;
-import haxe.macro.Expr.TypeDefinition;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
 import hxext.error.ErrorBuffer;
 import litll.idl.generator.data.EntityOutputConfig;
 import litll.idl.generator.data.HaxePrintConfig;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
-import litll.idl.generator.output.IdlToHaxeGenerateContext;
-import litll.idl.generator.output.IdlToHaxeGenerator;
+import litll.idl.generator.output.HaxeGenerateConfigFactory;
+import litll.idl.generator.output.HaxeGenerateConfig;
+import litll.idl.generator.output.HaxeGenerateConfigFactoryContext;
+import litll.idl.generator.output.HaxeGenerator;
 import litll.idl.generator.output.error.CompileIdlToHaxeErrorKind;
-import litll.idl.generator.output.error.GenerateHaxeErrorKind;
+import litll.idl.generator.output.error.GetConfigErrorKind;
 import litll.idl.generator.output.haxe.HaxePrinter;
+import litll.idl.generator.source.IdlFileSourceReader;
 import litll.idl.hxlitll.litll2entity.config.InputConfigLitllToEntity;
 import litll.idl.library.LibraryScope;
 import litll.idl.litlltext2entity.LitllFileToEntityRunner;
@@ -64,7 +66,7 @@ class LitllProject
         libraries = Maybe.none();
     }
     
-    public function getLibraries():Result<LibraryScope, Array<LitllFileToEntityError>>
+    public function getLibraryScope():Result<LibraryScope, Array<LitllFileToEntityError>>
     {
         switch libraries.toOption()
         {
@@ -89,35 +91,48 @@ class LitllProject
         return result;
     }
     
-    private function findLibraries(file:String, map:LibraryScope, errors:Array<LitllFileToEntityError>):Void
+    private function findLibraries(file:String, scope:LibraryScope, errors:Array<LitllFileToEntityError>):Void
     {
         if (FileSystem.exists(file))
         {
             if (FileSystem.isDirectory(file))
-            {
+            {   
                 for (child in FileSystem.readDirectory(file))
                 {
-                    findLibraries(file + "/" + child, map, errors);
+                    findLibraries(file + "/" + child, scope, errors);
                 }
             }
             else if (StringTools.endsWith(file, ".library.litll"))
             {
                 var fileName = Path.withoutDirectory(file);
                 var name = fileName.substr(0, fileName.length - ".library.litll".length);
-                map.read(name, file, errors);
+                scope.read(name, file, errors);
             }
         }
     }
     
-    public function compileIdlToHaxe(inputFilePath:String, outputDirectory:String):Maybe<Array<CompileIdlToHaxeErrorKind>>
-    {
-        var types = switch (generateHaxe(inputFilePath))
+    public function compileIdlToHaxe(
+        configFilePath:String, 
+        outputDirectory:String,
+        configFactoryFunction:HaxeGenerateConfigFactoryContext->HaxeGenerateConfig
+    ):Maybe<Array<CompileIdlToHaxeErrorKind>>
+    {   
+        var config = switch getHaxeGenerationConfig(configFilePath, configFactoryFunction)
         {
             case Result.Err(errors):
-                return Maybe.some(errors.map(CompileIdlToHaxeErrorKind.Generate));
+                return Maybe.some(errors.map(CompileIdlToHaxeErrorKind.GetConfig));
+                 
+            case Result.Ok(_config):
+                _config;
+        }
+        
+        var types = switch (HaxeGenerator.run(config))
+        {
+            case Result.Err(errors):
+                return Maybe.some(errors.map(CompileIdlToHaxeErrorKind.LoadIdl));
                 
-            case Result.Ok(data):
-                data;
+            case Result.Ok(_types):
+                _types;
         }
         
         var printConfig = new HaxePrintConfig(outputDirectory);
@@ -126,45 +141,61 @@ class LitllProject
         return printer.printTypes(types).mapAll(CompileIdlToHaxeErrorKind.Print);
     }
     
-    public function generateHaxe(inputFilePath:String):Result<Array<TypeDefinition>, Array<GenerateHaxeErrorKind>>
+    public function getHaxeGenerationConfig(configFilePath:String, configFactoryFunction:HaxeGenerateConfigFactoryContext->HaxeGenerateConfig):Result<HaxeGenerateConfig, Array<GetConfigErrorKind>>
     {
         var errorBuffer = new ErrorBuffer();
-        var libraries = switch(getLibraries())
+        var libraryScope = switch(getLibraryScope())
         {
             case Result.Ok(_libraries):
                 _libraries;
                 
             case Result.Err(errors):
-                errorBuffer.mapAndPushAll(errors, GenerateHaxeErrorKind.GetLibrary);
+                errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetLibrary);
                 null;
         }
-        var inputConfig = switch (LitllFileToEntityRunner.run(InputConfigLitllToEntity, inputFilePath))
+        var inputConfig = switch (LitllFileToEntityRunner.run(InputConfigLitllToEntity, configFilePath))
         {
             case Result.Ok(_inputConfig):
                 _inputConfig;
                 
             case Result.Err(errors):
-                errorBuffer.mapAndPushAll(errors, GenerateHaxeErrorKind.GetInputConfig);
+                errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetInputConfig);
                 null;
         }
         
         // error check
         if (errorBuffer.hasError()) return Result.Err(errorBuffer.toArray());
         
-        var context = new IdlToHaxeGenerateContext(
-            this,
-            inputFilePath,
-            inputConfig,
-            libraries
-        );
-        
-        return switch (IdlToHaxeGenerator.run(context))
+        var baseDirectory = Path.directory(configFilePath);
+        var requiredInputConfigs = [];
+        for (imported in inputConfig._import)
         {
-            case Result.Ok(ok):
-                Result.Ok(ok);
-                
-            case Result.Err(errors):
-                Result.Err([for (error in errors) GenerateHaxeErrorKind.LoadIdl(error)]);
+            var filePath = Path.join([baseDirectory, imported.data.haxeSource.data]);
+            switch (LitllFileToEntityRunner.run(InputConfigLitllToEntity, filePath))
+            {
+                case Result.Ok(_inputConfig):
+                    requiredInputConfigs.push(_inputConfig);
+                    
+                case Result.Err(errors):
+                    errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetInputConfig);
+            }
+        }
+        
+        // error check
+        return if (errorBuffer.hasError()) 
+        {
+            Result.Err(errorBuffer.toArray());
+        }
+        else
+        {
+            var context = new HaxeGenerateConfigFactoryContext(
+                configFilePath,
+                libraryScope,
+                inputConfig,
+                requiredInputConfigs
+            );
+            
+            Result.Ok(configFactoryFunction(context));
         }
     }
 }

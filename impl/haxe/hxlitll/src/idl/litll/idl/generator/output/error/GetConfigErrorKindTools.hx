@@ -3,19 +3,16 @@ import litll.core.error.FileErrorSummary;
 import litll.idl.litlltext2entity.error.LitllFileToEntityErrorKind;
 import litll.idl.litlltext2entity.error.LitllFileToEntityErrorKindTools;
 
-class GenerateHaxeErrorKindTools 
+class GetConfigErrorKindTools
 {
-    public static function getSummary(kind:GenerateHaxeErrorKind):FileErrorSummary<GenerateHaxeErrorKind>
+    public static function getSummary(kind:GetConfigErrorKind):FileErrorSummary<GetConfigErrorKind>
     {
         return switch (kind)
         {
-            case GenerateHaxeErrorKind.GetInputConfig(error):
+            case GetConfigErrorKind.GetInputConfig(error):
                 error.getSummary().replaceKind(kind);
                 
-            case GenerateHaxeErrorKind.GetLibrary(error):
-                error.getSummary().replaceKind(kind);
-                
-            case GenerateHaxeErrorKind.LoadIdl(error):
+            case GetConfigErrorKind.GetLibrary(error):
                 error.getSummary().replaceKind(kind);
         }
     }

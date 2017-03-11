@@ -1,0 +1,26 @@
+[target litll 
+    [version 0.0.0]
+    [haxe_package litll.idl.std]
+]
+
+[entity
+    // for Litll Standard Library
+    [filter litll.core.Option   litll.idl.std.entity.core.LitllOption]
+    [filter litll.core.Single   litll.idl.std.entity.core.LitllSingle]
+    [filter litll.core.Int64    litll.idl.std.entity.core.LitllInt64]
+    [filter litll.core.Int32    litll.idl.std.entity.core.LitllInt32]
+    [filter litll.core.Int16    litll.idl.std.entity.core.LitllInt16]
+    [filter litll.core.Int8     litll.idl.std.entity.core.LitllInt8]
+    [filter litll.core.UInt64   litll.idl.std.entity.core.LitllUInt64]
+    [filter litll.core.UInt32   litll.idl.std.entity.core.LitllUInt32]
+    [filter litll.core.UInt16   litll.idl.std.entity.core.LitllUInt16  ]
+    [filter litll.core.UInt8    litll.idl.std.entity.core.LitllUInt8]
+    [filter litll.core.Map      litll.idl.std.entity.core.LitllMap]
+    [filter litll.core.Boolean  litll.idl.std.entity.core.LitllBoolean]
+    [filter litll.core.Float64  litll.idl.std.entity.core.LitllFloat64]
+    [filter litll.core.Date     litll.idl.std.entity.core.LitllDate]
+    [filter litll.core.Time     litll.idl.std.entity.core.LitllTime]
+    [filter litll.core.DateTime litll.idl.std.entity.core.LitllDateTime]
+]
+
+[litll_to_entity]

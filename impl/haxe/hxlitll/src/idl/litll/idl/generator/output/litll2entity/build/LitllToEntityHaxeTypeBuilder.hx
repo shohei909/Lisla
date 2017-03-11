@@ -8,7 +8,7 @@ import haxe.macro.Expr.TypeDefKind;
 import hxext.ds.Result;
 import litll.core.Litll;
 import litll.idl.generator.data.LitllToEntityOutputConfig;
-import litll.idl.generator.output.IdlToHaxeConvertContext;
+import litll.idl.generator.output.HaxeConvertContext;
 import litll.idl.generator.output.entity.store.HaxeEntityInterface;
 import litll.idl.generator.output.litll2entity.path.HaxeLitllToEntityTypePathPair;
 import litll.idl.generator.source.validate.InlinabilityOnTuple;
@@ -38,12 +38,12 @@ class LitllToEntityHaxeTypeBuilder
     private var parameters:TypeParameterDeclarationCollection;
     private var definition:IdlTypeDefinition;
     
-	private function new (context:IdlToHaxeConvertContext)
+	private function new (context:HaxeConvertContext)
 	{
 		this.builder = new LitllToEntityExprBuilder(context);
 	}
 	
-	public static function convertType(pathPair:HaxeLitllToEntityTypePathPair, context:IdlToHaxeConvertContext):HaxeTypeDefinition
+	public static function convertType(pathPair:HaxeLitllToEntityTypePathPair, context:HaxeConvertContext):HaxeTypeDefinition
 	{
 		return new LitllToEntityHaxeTypeBuilder(context).run(pathPair);
 	}

@@ -25,45 +25,29 @@ import litll.idl.std.data.idl.TypeDependenceName;
 import litll.idl.std.data.idl.TypeName;
 import litll.idl.std.data.idl.TypePath;
 import litll.idl.std.data.idl.TypeReferenceParameter;
+import litll.idl.std.data.idl.group.TypeGroupFilter;
 import litll.idl.std.data.idl.group.TypeGroupPath;
-import litll.idl.std.data.idl.group.TypePathFilter;
 import litll.idl.std.data.idl.library.LibraryConfig;
-
+import litll.idl.std.tools.idl.group.TypeGroupFilterTools;
 using hxext.ds.ResultTools;
-using litll.idl.std.tools.idl.path.TypePathFilterTools;
 using haxe.macro.TypeTools;
 using haxe.macro.ComplexTypeTools;
 
 class EntityOutputConfig
 {
-	public var filters(default, null):Array<TypePathFilter>;
+	public var filters(default, null):Array<TypeGroupFilter>;
 	public var predefinedTypes(default, null):Map<String, HaxeEntityInterface>;
 	
 	#if !macro
-	public function new(filters:Array<TypePathFilter>) 
+	public function new(filters:Array<TypeGroupFilter>) 
 	{
-		this.filters = [	
-			TypePathFilterTools.createPrefix("litll", "litll.idl.std.data"),
-			TypePathFilterTools.createPrefix("Array", "litll.core.LitllArray"),
-			TypePathFilterTools.createPrefix("String", "litll.core.LitllString"),
-			TypePathFilterTools.createPrefix("litll.core.Any", "litll.core.Litll"),
-			TypePathFilterTools.createPrefix("litll.core.Option", "litll.idl.std.data.core.LitllOption"),
-			TypePathFilterTools.createPrefix("litll.core.Single", "litll.idl.std.data.core.LitllSingle"),
-			TypePathFilterTools.createPrefix("litll.core.Int64", "litll.idl.std.data.core.LitllInt64"),
-			TypePathFilterTools.createPrefix("litll.core.Int32", "litll.idl.std.data.core.LitllInt32"),
-			TypePathFilterTools.createPrefix("litll.core.Int16", "litll.idl.std.data.core.LitllInt16"),
-			TypePathFilterTools.createPrefix("litll.core.Int8", "litll.idl.std.data.core.LitllInt8"),
-			TypePathFilterTools.createPrefix("litll.core.UInt64", "litll.idl.std.data.core.LitllUInt64"),
-			TypePathFilterTools.createPrefix("litll.core.UInt32", "litll.idl.std.data.core.LitllUInt32"),
-			TypePathFilterTools.createPrefix("litll.core.UInt16", "litll.idl.std.data.core.LitllUInt16"),
-			TypePathFilterTools.createPrefix("litll.core.UInt8", "litll.idl.std.data.core.LitllUInt8"),
-			TypePathFilterTools.createPrefix("litll.core.Map", "litll.idl.std.data.core.LitllMap"),
-			TypePathFilterTools.createPrefix("litll.core.Boolean", "litll.idl.std.data.core.LitllBoolean"),
-			TypePathFilterTools.createPrefix("litll.core.Float64", "litll.idl.std.data.core.LitllFloat64"),
-			TypePathFilterTools.createPrefix("litll.core.Date", "litll.idl.std.data.core.LitllDate"),
-			TypePathFilterTools.createPrefix("litll.core.Time", "litll.idl.std.data.core.LitllTime"),
-			TypePathFilterTools.createPrefix("litll.core.DateTime", "litll.idl.std.data.core.LitllDateTime"),
-		].concat(filters);
+		this.filters = filters.concat(
+            [
+                TypeGroupFilterTools.create("Array",          "litll.core.LitllArray"),
+                TypeGroupFilterTools.create("String",         "litll.core.LitllString"),
+                TypeGroupFilterTools.create("litll.core.Any", "litll.core.Litll"),
+            ]
+        );
 		
 		predefinedTypes = new Map();
 		
@@ -80,7 +64,7 @@ class EntityOutputConfig
 		this.addPredefinedType(TypeReferenceParameter);
 		this.addPredefinedType(StructElementName);
 		this.addPredefinedType(TypeGroupPath);
-		this.addPredefinedType(TypePathFilter);
+		this.addPredefinedType(TypeGroupFilter);
         this.addPredefinedType(LibraryConfig);
 	}
 	#end
@@ -88,7 +72,6 @@ class EntityOutputConfig
 	public function toHaxePath(typePath:TypePath):EntityHaxeTypePath
 	{
         var l = filters.length;
-        
         
 		for (i in 0...l)
 		{
@@ -98,7 +81,7 @@ class EntityOutputConfig
 				case Option.Some(convertedPath):
                     typePath = convertedPath;
 					break;
-					
+                    
 				case Option.None:
 			}
 		}

@@ -20,7 +20,9 @@
 ]
 
 [tuple TargetDeclaration
-    target [name String] [data< TargetConfig]
+    target 
+    [name LibraryName] 
+    [data< TargetConfig]
 ]
 [struct TargetConfig
     [version Version]

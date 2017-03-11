@@ -2,12 +2,12 @@ package litll.idl.generator.output.entity;
 import hxext.ds.Result;
 import litll.idl.generator.error.ReadIdlError;
 import litll.idl.generator.output.EntityTypeInfomation;
-import litll.idl.generator.output.IdlToHaxeGenerateContext;
+import litll.idl.generator.output.HaxeGenerateConfig;
 import haxe.macro.Expr.TypeDefinition;
 
 class EntityHaxeGenerator 
 {
-    public static function generateTypes(context:IdlToHaxeGenerateContext):Result<Array<TypeDefinition>, Array<ReadIdlError>>
+    public static function generateTypes(context:HaxeGenerateConfig):Result<Array<TypeDefinition>, Array<ReadIdlError>>
     {
         return switch context.resolveTargets()
 		{

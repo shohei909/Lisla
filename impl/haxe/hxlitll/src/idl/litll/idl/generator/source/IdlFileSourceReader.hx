@@ -7,6 +7,8 @@ import litll.idl.generator.error.ReadIdlErrorKind;
 import litll.idl.std.data.idl.LocalModulePath;
 import litll.idl.std.data.idl.ModulePath;
 import litll.idl.std.data.idl.PackagePath;
+
+#if sys
 import sys.FileSystem;
 import sys.io.File;
 
@@ -75,3 +77,4 @@ class IdlFileSourceReader implements IdlSourceReader
 	    return directory + "/" + localPath + ".idl.litll";
     }
 }
+#end

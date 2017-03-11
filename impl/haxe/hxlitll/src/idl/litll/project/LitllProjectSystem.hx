@@ -38,7 +38,7 @@ class LitllProjectSystem
         {
             if (path == "") break;
             
-            var projectPath = path + "/.project.litll";
+            var projectPath = path + "/main.project.litll";
             if (FileSystem.exists(projectPath)) return Maybe.some(path);
             
             path = Path.normalize(path + "/..");
@@ -51,9 +51,9 @@ class LitllProjectSystem
     {
         var project = new LitllProject();
         
-        if (FileSystem.exists(projectHome + "/.project.litll"))
+        if (FileSystem.exists(projectHome + "/main.project.litll"))
         {
-            switch (readProjectConfig(projectHome + "/.project.litll"))
+            switch (readProjectConfig(projectHome + "/main.project.litll"))
             {
                 case Result.Ok(config):
                     project.apply(projectHome, config);

@@ -1,6 +1,7 @@
 import haxe.io.Path;
 import hxext.ds.Result;
 import litll.idl.generator.io.StandardIoProvider;
+import litll.idl.generator.output.HaxeGenerateConfigFactory;
 import litll.idl.generator.output.error.CompileIdlToHaxeErrorKind;
 import litll.project.LitllProjectSystem;
 import litll.project.error.HxlitllErrorKind;
@@ -25,8 +26,17 @@ class Preprocess
                 return;
         }
         
-        litllProject.compileIdlToHaxe("litll/hxlitll/litll.hxinput.litll", "migration").iter(outputCompileIdlToHaxeErrorAndClose);
-        litllProject.compileIdlToHaxe("litll/hxlitll/hxlitll.hxinput.litll", "migration").iter(outputCompileIdlToHaxeErrorAndClose);
+        litllProject.compileIdlToHaxe(
+            "litll/hxlitll/litll.hxgen.litll", 
+            "migration",
+            new LitllHaxeGenerateConfigFactory().create
+        ).iter(outputCompileIdlToHaxeErrorAndClose);
+        
+        litllProject.compileIdlToHaxe(
+            "litll/hxlitll/hxlitll.hxgen.litll", 
+            "migration",
+            new HxlitllHaxeGenerateConfigFactory().create
+        ).iter(outputCompileIdlToHaxeErrorAndClose);
     }
     
     private static function outputCompileIdlToHaxeErrorAndClose(errors:Array<CompileIdlToHaxeErrorKind>):Void
@@ -65,4 +75,12 @@ class Preprocess
 			}
 		}
 	} 
+}
+
+private class LitllHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
+{
+}
+
+private class HxlitllHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
+{
 }
