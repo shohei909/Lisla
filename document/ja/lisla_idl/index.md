@@ -257,6 +257,8 @@ true
     </tr>
 </table>
 
+この例では、`description`に対する値を省略しています。
+
 #### 可変長引数  `..`
 
 引数名に`..`のサフィックスをつけることで、引数を0個以上の可変長にすることができます。
@@ -268,7 +270,7 @@ true
 <pre lang="lisla">
 (tuple VariableArgumentSample
     (title String)
-    (tags.. String)  
+    (tags.. String)
 )
 </pre>
         </td>
@@ -280,6 +282,7 @@ true
     </tr>
 </table>
 
+この例では、`tags`に対して「タグ1」と「タグ2」の2つの値を指定しています。
 
 #### スプレッド引数 `<`
 
@@ -291,7 +294,7 @@ true
         <td>
 <pre lang="lisla">
 (tuple SpreadArgumentSample
-    (user String)
+    (user_name String)
     (page< WebPage)
 )
 
@@ -308,6 +311,8 @@ true
         </td>
     </tr>
 </table>
+
+この例では、ユーザー名とそのウェブページに関する情報について、フラットな配列で記述しています。
 
 #### デフォルト値
 
@@ -334,6 +339,8 @@ true
     </tr>
 </table>
 
+この例では`alpha`の値が省略されており、代わりにデフォルト値の`255`が使われます。
+
 #### 各機能の複合的な利用
 
 tupleとenumの引数の高度な機能に以下の組み合わせについては重複した利用が可能です
@@ -352,11 +359,27 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
 
 ラベルは、structの要素としてそのラベルと一致する文字列を含むことを要求します。
 
-(tuple 
-    (title String)
-    (url Url) 
-    (authors.. String)  
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(struct LabelElementSample 
+    a
+    b
+    c
 )
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(a c b)
+</pre>
+        </td>
+    </tr>
+</table>
+
+この例では、ラベル`a`, `b`, `c`すべてを含むことが要求されています。
 
 #### 配列ラベル
 
@@ -364,15 +387,186 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
 
 配列ラベルは、structの要素としてそのラベルと一致する文字列一つのみからなる配列を含むことを要求します。
 
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(struct ArrayLabelElementSample 
+    (a)
+    (b)
+    (c)
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+((a) (c) (b))
+</pre>
+        </td>
+    </tr>
+</table>
+
+この例では、ラベル`(a)`, `(b)`, `(c)`すべてを含むことが要求されています。
+
+ラベルと配列ラベルは、それ単体で使用することはあまりなく、基本的にオプショナルなラベルや可変長のラベルとして使います。
+
 #### オプショナル要素 `?`
+
+要素名に`?`のサフィックスをつけると、その要素が省略可能になります。
+
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(struct OptionalElementSample
+    (title String)
+    (description? String)  
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(
+    (title オプショナル要素サンプル)
+)
+</pre>
+        </td>
+    </tr>
+</table>
+
+この例では、`description`が省略されています。
 
 #### 可変長要素 `..`
 
+要素名に`?`のサフィックスをつけると、その要素が可変長になります。
+
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(struct VariableElementSample
+    (title String)
+    (tag.. String)  
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(
+    (title 可変長要素サンプル)
+    (tag タグ1)
+    (tag タグ2)
+)
+</pre>
+        </td>
+    </tr>
+</table>
+
+この例では、「タグ1」と「タグ2」の2つが`tag`として指定されています。
+
 #### スプレッド要素 `<`
+
+要素名に`<`のサフィックスをつけることで、その型の情報をキーの記述なしでそのまま要素として記述することができるようになります。
+
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(struct SpreadArgumentSample
+    (user_name String)
+    (page< WebPageStruct)
+)
+
+(struct WebPageStruct
+    (title String)
+    (url Url)
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(
+    (user_name shohei)
+    (
+        (title "Example Domain")
+        (url http://example.com)
+    )
+)
+</pre>
+        </td>
+    </tr>
+</table>
+
+この例では、ユーザー名とそのウェブページに関する情報について、`page`キーなしで値を直接`struct`の要素として記述しています。
 
 #### structのマージ `<<`
 
+要素名に`<<`のサフィックスをつけることで、その`struct`の型のキーと値のペアをマージして記述することが可能です。
+
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(struct SpreadArgumentSample
+    (user_name String)
+    (page<< WebPageStruct)
+)
+
+(struct WebPageStruct
+    (title String)
+    (url Url)
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(
+    (user_name shohei)
+    (title "Example Domain")
+    (url http://example.com)
+)
+</pre>
+        </td>
+    </tr>
+</table>
+
+この例では、ユーザー名とそのウェブページに関する情報について、フラットな`struct`のように記述しています。
+
 #### デフォルト値
+
+要素の名前と型の、次の要素として値を記述することで、その引数は省略可能となり省略時のデフォルト値としてその値が使用されます。
+
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(struct RgbaColorStruct
+    (red UInt8)
+    (green UInt8)
+    (blue UInt8)
+    (alpha UInt8 255)
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(
+    (red 255) 
+    (green 220)
+    (blue 200)
+)
+</pre>
+        </td>
+    </tr>
+</table>
+
+この例では`alpha`の値が省略されており、代わりにデフォルト値の`255`が使われます。
 
 #### 各機能の複合的な利用
 
