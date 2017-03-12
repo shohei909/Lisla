@@ -109,6 +109,7 @@ class TupleTools
                                                 
                                             case FollowedTypeDefinition.Enum(_):
                                                 // TODO: Check inlinanability
+                                                // TODO: EnumTools._getGuard
                                                 builder.unlimit();
                                         }
                                         
@@ -132,11 +133,9 @@ class TupleTools
                                                 // nothing to do
                                                 
                                             case FollowedTypeDefinition.Struct(elements):
-                                                builder.unlimit();
                                                 StructTools._getGuard(elements, source, definitionParameters, builder);
                                                 
                                             case FollowedTypeDefinition.Tuple(elements):
-                                                builder.unlimit();
                                                 TupleTools._getGuard(elements, source, definitionParameters, builder, parentTypes.concat([name]));
                                                 
                                             case FollowedTypeDefinition.Str:
@@ -144,6 +143,7 @@ class TupleTools
                                                 
                                             case FollowedTypeDefinition.Enum(_):
                                                 // TODO: Check inlinanability
+                                                // TODO: EnumTools._getGuard
                                         }
                                         
                                     case Result.Err(error):
