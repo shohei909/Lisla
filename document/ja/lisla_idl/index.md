@@ -96,7 +96,7 @@ http://example.com
 <pre lang="lisla">
 (tuple WebPage
     (title String)
-    (url   Url)
+    (url Url)
 )
 </pre>
         </td>
@@ -125,7 +125,7 @@ http://example.com
 <pre lang="lisla">
 (struct WebPageStruct
     (title String)
-    (url   Url)
+    (url Url)
 )
 </pre>
         </td>
@@ -133,7 +133,7 @@ http://example.com
 <pre lang="lisla">
 (
     (title "Example Domain")
-    (url   http://example.com)
+    (url http://example.com)
 )
 </pre>
         </td>
@@ -144,7 +144,7 @@ http://example.com
 
 ```
 (
-    (url   http://example.com)
+    (url http://example.com)
     (title "Example Domain")
 )
 ```
@@ -244,7 +244,7 @@ true
         <td>
 <pre lang="lisla">
 (tuple OptionalArgumentSample
-    (title        String)
+    (title String)
     (description? String)  
 )
 </pre>
@@ -269,7 +269,7 @@ true
         <td>
 <pre lang="lisla">
 (tuple VariableArgumentSample
-    (title  String)
+    (title String)
     (tags.. String)
 )
 </pre>
@@ -295,12 +295,12 @@ true
 <pre lang="lisla">
 (tuple SpreadArgumentSample
     (user_name String)
-    (page<     WebPage)
+    (page< WebPage)
 )
 
 (tuple WebPage
     (title String)
-    (url   Url)
+    (url Url)
 )
 </pre>
         </td>
@@ -324,9 +324,9 @@ true
         <td>
 <pre lang="lisla">
 (tuple RgbaColor
-    (red   UInt8)
+    (red UInt8)
     (green UInt8)
-    (blue  UInt8)
+    (blue UInt8)
     (alpha UInt8 255)
 )
 </pre>
@@ -421,7 +421,7 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
         <td>
 <pre lang="lisla">
 (struct OptionalElementSample
-    (title        String)
+    (title String)
     (description? String)  
 )
 </pre>
@@ -478,12 +478,12 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
 <pre lang="lisla">
 (struct SpreadArgumentSample
     (user_name String)
-    (page<     WebPageStruct)
+    (page< WebPageStruct)
 )
 
 (struct WebPageStruct
     (title String)
-    (url   Url)
+    (url Url)
 )
 </pre>
         </td>
@@ -493,7 +493,7 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
     (user_name shohei)
     (
         (title "Example Domain")
-        (url   http://example.com)
+        (url http://example.com)
     )
 )
 </pre>
@@ -514,12 +514,12 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
 <pre lang="lisla">
 (struct SpreadArgumentSample
     (user_name String)
-    (page<<    WebPageStruct)
+    (page<< WebPageStruct)
 )
 
 (struct WebPageStruct
     (title String)
-    (url   Url)
+    (url Url)
 )
 </pre>
         </td>
@@ -527,8 +527,8 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
 <pre lang="lisla">
 (
     (user_name shohei)
-    (title     "Example Domain")
-    (url       http://example.com)
+    (title "Example Domain")
+    (url http://example.com)
 )
 </pre>
         </td>
@@ -547,9 +547,9 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
         <td>
 <pre lang="lisla">
 (struct RgbaColorStruct
-    (red   UInt8)
+    (red UInt8)
     (green UInt8)
-    (blue  UInt8)
+    (blue UInt8)
     (alpha UInt8 255)
 )
 </pre>
@@ -557,9 +557,9 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
         <td>
 <pre lang="lisla">
 (
-    (red   255) 
+    (red 255) 
     (green 220)
-    (blue  200)
+    (blue 200)
 )
 </pre>
         </td>
