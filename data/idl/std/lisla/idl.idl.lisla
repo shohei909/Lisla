@@ -56,10 +56,10 @@
 ;; Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
 ;; Additionally, the following suffixes are supported.
 ;; "?"   : Optional argument. (default value is disabled)
-;; ".."  : Valiable arguments. (default value is disabled)
+;; ".."  : Variable arguments. (default value is disabled)
 ;; "<"   : Inlined argument. (default value is disabled)
 ;; "?<"  : Optional spread argument. (default value is disabled)
-;; "..<" : Valiable spread argument. (default value is disabled)
+;; "..<" : Variable spread argument. (default value is disabled)
 ;; 
 ;; ## Restriction
 ;; 
@@ -119,10 +119,10 @@
 ;; Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
 ;; Additionally, the following suffixes are supported
 ;; "?"   : Optional field. (default value is disabled)
-;; ".."  : Valiable field. (default value is disabled)
+;; ".."  : Variable field. (default value is disabled)
 ;; "<"   : Spread field. 
 ;; "?<"  : Optional spread field. (default value is disabled)
-;; "..<" : Valiable spread field. (default value is disabled)
+;; "..<" : Variable spread field. (default value is disabled)
 ;; "<<"  : Merge struct fields. (default value is disabled)
 ;; 
 ;; ## Restriction

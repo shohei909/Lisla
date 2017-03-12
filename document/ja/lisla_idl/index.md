@@ -243,16 +243,15 @@ true
     <tr>
         <td>
 <pre lang="lisla">
-(tuple WebPageWithAuthor
+(tuple OptionalArgumentSample
     (title String)
-    (url Url) 
-    (author? String)  
+    (description? String)  
 )
 </pre>
         </td>
         <td>
 <pre lang="lisla">
-("Example Domain" http://example.com)
+(省略可能引数サンプル)
 </pre>
         </td>
     </tr>
@@ -267,16 +266,15 @@ true
     <tr>
         <td>
 <pre lang="lisla">
-(tuple WebPageWithAuthors
+(tuple VariableArgumentSample
     (title String)
-    (url Url) 
-    (authors.. String)  
+    (tags.. String)  
 )
 </pre>
         </td>
         <td>
 <pre lang="lisla">
-("Example Domain" http://example.com author_a author_b)
+(可変長引数サンプル タグ1 タグ2)
 </pre>
         </td>
     </tr>
@@ -287,9 +285,54 @@ true
 
 引数名に`<`のサフィックスをつけることで、その引数の型に応じた引数列をその位置に展開した形で記述させることができます。
 
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(tuple SpreadArgumentSample
+    (user String)
+    (page< WebPage)
+)
+
+(tuple WebPage
+    (title String)
+    (url Url)
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(shohei "Example Domain" http://example.com)
+</pre>
+        </td>
+    </tr>
+</table>
+
 #### デフォルト値
 
 引数の名前と型の、次の要素として値を記述することで、その引数は省略可能となり省略時のデフォルト値としてその値が使用されます。
+
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(tuple RgbaColor
+    (red UInt8)
+    (green UInt8)
+    (blue UInt8)
+    (alpha UInt8 255)
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(255 220 200)
+</pre>
+        </td>
+    </tr>
+</table>
 
 #### 各機能の複合的な利用
 
@@ -304,6 +347,22 @@ tupleとenumの引数の高度な機能に以下の組み合わせについて�
 ### structの要素の高度な機能
 
 #### ラベル
+
+要素の名前と型のペアを記述する代わりに、文字列を置くことで「ラベル」を配置することができます。
+
+ラベルは、structの要素としてそのラベルと一致する文字列を含むことを要求します。
+
+(tuple 
+    (title String)
+    (url Url) 
+    (authors.. String)  
+)
+
+#### 配列ラベル
+
+要素の名前と型のペアを記述する代わりに、要素名のみの配列を置くことで「配列ラベル」を配置することができます。
+
+配列ラベルは、structの要素としてそのラベルと一致する文字列一つのみからなる配列を含むことを要求します。
 
 #### オプショナル要素 `?`
 
