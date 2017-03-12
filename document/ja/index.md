@@ -16,7 +16,7 @@ Lisla DSL ツールキットでは、IDLを記述するだけでさまざま機�
 * [ ] エディタによる支援
     * [ ] 入力補完
     * [ ] より詳細なシンタックスハイライト
-* [x] バリデーション
+* [ ] バリデーション
 * [ ] 各種変換
     * [ ] JSON
     * [ ] MessagePack
@@ -32,10 +32,8 @@ Lisla DSL ツールキットでは、IDLを記述するだけでさまざま機�
 
 ### Lislaプロジェクトファイル
 
-Lislaプロジェクトファイルは、
-
-[Lislaプロジェクトファイル仕様](lisla_dsl/idl.md)
+[Lislaプロジェクトファイル仕様](lisla_project/index.md)
 
 ### HaxeのLisla DSLツールキット実装「hxlisla」
 
-[hxlislaの概要](lisla_dsl/idl.md)
+[hxlislaの概要](hxlisla/index.md)

@@ -2,4 +2,3 @@
 
 ;; 'UUID Version 4. `RRRRRRRR-RRRR-4RRR-rRRR-RRRRRRRRRRRR` format.'
 (newtype Uuid4 String)
-

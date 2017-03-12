@@ -7,3 +7,4 @@
 (extension clidl.lisla    lisla.cli.clidl.Clidl)
 (extension libref.lisla   lisla.idl.library.LibraryRootDirectory)
 (extension ir.lisla       lisla.ir.Ir)
+(extension xml.lisla      (Array lisla.xml.lixml.LixmlContent))
