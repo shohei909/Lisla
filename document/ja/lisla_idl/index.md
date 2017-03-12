@@ -582,18 +582,72 @@ structの要素の高度な機能に以下の組み合わせについては重�
 
 ### enumの列挙子の高度な機能
 
-#### タプル列挙子
+#### タプル列挙子 `:`
 
-#### スプレッド列挙子
+列挙子名に`:`サフィックスをつけることで、列挙子の配列の第一要素に自由な引数またはラベルを設定できるようになります。
+
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(enum NumberOperation
+    (addition:       (number0 Float64) + (number1 Float64))
+    (subtraction:    (number0 Float64) - (number1 Float64))
+    (multiplication: (number0 Float64) * (number1 Float64))
+    (division:       (number0 Float64) / (number1 Float64))
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(1.5 + 3.5)
+</pre>
+        </td>
+    </tr>
+</table>
+
+この例では、`Operation.addition`の列挙子名は`addition`ですが第一要素が`(number0 Float64)`になるように指定しています。
+
+#### スプレッド列挙子 ``
+
+列挙子名に`<`サフィックスをつけることで、
+
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(enum Expression
+    (number< Float64)
+    (operation< Operation)
+)
+
+(enum Operation
+    (addition:       (expr0 Expression) + (expr1 Expression))
+    (subtraction:    (expr0 Expression) - (expr1 Expression))
+    (multiplication: (expr0 Expression) * (expr1 Expression))
+    (division:       (expr0 Expression) / (expr1 Expression))
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+(1.5 + (3.5 * 4.5))
+</pre>
+        </td>
+    </tr>
+</table>
+
+`Expression`型は、列挙子として浮動小数点数または`Operation`をとります。これにより自由にネストが可能な四則演算の計算式を表現しています。
 
 #### 各機能の複合的な利用
 
-enumの列挙子の高度な機能
-
+enumの列挙子の高度な機能は重複した利用はできません。
 
 ## 相互変換性
 
-Lisla IDLによってLisla文書の構造の明確化する目的の1つに、Lisla文書とプログラムの内部データとの相互変換の自動化があります。
+Lisla IDLによってLisla文書の構造の明確化する目的の1つに、Lisla文書とプログラムの内部データとの相互変換があります。
 
 この相互変換というのは、以下の2つの方向の変換のことです。
 
@@ -643,8 +697,8 @@ Lisla IDL自身についてもLisla IDLによる文書構造の定義がされ�
 * 型名: PascalCase
 * 引数名: snake_case
 * 列挙子名: snake_case
-* structの要素名: snake_case
+* `struct`の要素名: snake_case
 
-ただし、列挙子名とstructの要素名は、実際の文書構造に影響を与えます。このため実際の文書の都合上、この規約にしたがえない場合は実際の文書の都合を優先してかまいません。
+列挙子名と`struct`の要素名は、実際の文書構造に影響を与えます。このため実際の文書の都合上、この規約にしたがえない場合は実際の文書の都合を優先してかまいません。
 
-また、IDLを元にプログラミング言語などのソースコードを出力する場合には、出力の過程でそのプログラミング言語にあった記法に変換してかまいません。
+ただし、hxlislaではHaxeのソースコードを出力する時に、Haxeのコーディング規約にあった変数名などに変換して出力をしているため、ケース違いの同じ名前が使用されていると正しく出力ができない場合があります。
