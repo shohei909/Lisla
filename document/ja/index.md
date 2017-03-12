@@ -29,11 +29,3 @@ Lisla DSL ツールキットでは、IDLを記述するだけでさまざま機�
 ### Lisla IDL(インターフェース記述言語)
 
 [Lisla IDL仕様](lisla_idl/index.md)
-
-### Lislaプロジェクトファイル
-
-[Lislaプロジェクトファイル仕様](lisla_project/index.md)
-
-### HaxeのLisla DSLツールキット実装「hxlisla」
-
-[hxlislaの概要](hxlisla/index.md)
