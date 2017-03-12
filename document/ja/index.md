@@ -28,7 +28,7 @@ Lisla DSL ツールキットでは、IDLを記述するだけでさまざま機�
 
 ### Lisla IDL(インターフェース記述言語)
 
-[Lisla IDL仕様](lisla_dsl/idl.md)
+[Lisla IDL仕様](lisla_idl/index.md)
 
 ### Lislaプロジェクトファイル
 

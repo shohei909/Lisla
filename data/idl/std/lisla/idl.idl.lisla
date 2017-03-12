@@ -62,14 +62,15 @@
 ;; "..<" : Multiple inlining argument. (default value is disabled)
 ;; 
 ;; ## Restriction
+;; 
 ;; ### Inlinable type
-;;     String
 ;;     Array
 ;;     Tuple
 ;;     Enum
 ;;     Struct
 ;; 
-;; In other words, all type can be inlined. Newtype resolves to one of the above types.
+;; #### Not unfoldable type
+;;     String
 ;; '''
 (newtype ArgumentName String)
 
@@ -89,13 +90,13 @@
 ;; 
 ;; ## Restriction
 ;; ### Inlinable type
+;;     String
 ;;     Array
 ;;     Tuple
 ;;     Enum
 ;;     Struct
-;; 
-;; #### Not unfoldable type
-;;     String
+;;
+;; In other words, all type can be inlined. Newtype resolves to one of the above types.
 ;; '''
 (newtype EnumConstructorName String)
 
@@ -132,7 +133,7 @@
 ;; * Enum
 ;; * Struct
 ;; 
-;; In other words, all type can be inlined. Newtype resolves to one of the above types.
+;; In other words, all type can be inlined.
 ;;
 ;; ### Mergeable type:    
 ;; * Struct
