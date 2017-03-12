@@ -4,7 +4,7 @@
 ;;! 'Keeping document comments are also avarable.'
 ; ;! not keeping comment
 ; ;;! not keeping comment
-;;/! not keeping comment
+;;;! not keeping comment
 ''''''''
 
 ; Json

@@ -1,5 +1,5 @@
 ;; ''
-;; (license "Public Domain")
+
 (package lisla.idl)
 
 (import lisla.idl)

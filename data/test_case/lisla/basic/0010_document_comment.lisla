@@ -3,14 +3,17 @@
 ;; '''
 ;; # Sample for document comment.
 ;; 
-;; This is comment for various tools (e.g. editor, document generation).
+;; Documment comment is comment for various tools (e.g. editor, document generation).
+;; This comment is documment comment for first element.
+;; '''
+aaa
+
+;; '''
+;; This is documment comment for whole document.
 ;; '''
 ;; (author shohei909)
-;; (license "Public Domain")
+;; (license Unlicense)
 ;; (document_markup markdown)
-
-;; 'This is documment for first element'
-aaa
 ''''''''
 
 ; Json

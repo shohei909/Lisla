@@ -1,5 +1,3 @@
-;; 'Types for Lisla Project'
-;; (license "Public Domain")
 (package lisla.idl)
 
 (import lisla.util.file)
@@ -11,3 +9,5 @@
     (idl.. DirectoryPath)
     (extension..< FileExtensionDeclaration)
 )
+
+;; 'Types for Lisla Project'

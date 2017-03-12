@@ -1,4 +1,3 @@
-;; (license "Public Domain")
 (package lisla.util)
 
 ;; 'ISO 639 Code'
@@ -9,3 +8,4 @@
 
 ;; 'IETF language tag (see RFC 5646)'
 (newtype LanguageTag String)
+

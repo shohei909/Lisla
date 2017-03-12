@@ -22,14 +22,12 @@ class ArrayContext
 	private var tag:UnsettledArrayTag;
 	private var elementTag:UnsettledLeadingTag;
     private var top:ParseContext;
-    public var isInHead(default, null):Bool;
     
     public var state:ArrayState;
     
-	public function new(top:ParseContext, parent:ArrayParent, isInHead:Bool, tag:UnsettledArrayTag) 
+	public function new(top:ParseContext, parent:ArrayParent, tag:UnsettledArrayTag) 
 	{
         this.top = top;
-        this.isInHead = isInHead;
         this.parent = parent;
         this.state = ArrayState.Normal;
 		this.tag = tag;
@@ -78,10 +76,10 @@ class ArrayContext
                 switch (parent)
                 {
                     case ArrayParent.QuotedString(stringContext, store):
-                        var arr = new LislaArray<Lisla>(data, tag.settle(top.position));
+                        var arr = new LislaArray<Lisla>(data, tag.settle(top.position, elementTag));
                         store.array.push(arr);
                         
-                        var nextContext = new ArrayContext(top, this.parent, false, new UnsettledLeadingTag(top.sourceMap).toArrayTag(top.position));
+                        var nextContext = new ArrayContext(top, this.parent, new UnsettledLeadingTag(top.sourceMap).toArrayTag(top.position));
                         top.current = nextContext;
                         
                     case ArrayParent.Array(_) | ArrayParent.Top:
@@ -180,7 +178,7 @@ class ArrayContext
 	private inline function startArray():Void 
 	{
         var tag = popArrayTag(top.position - 1);
-        var child = new ArrayContext(top, ArrayParent.Array(this), false, tag);
+        var child = new ArrayContext(top, ArrayParent.Array(this), tag);
 		top.current = child;
 	}
 
@@ -210,7 +208,7 @@ class ArrayContext
     
     private function endArray(destination:ArrayContext):Void
 	{
-		var arr = new LislaArray<Lisla>(data, tag.settle(top.position));
+		var arr = new LislaArray<Lisla>(data, tag.settle(top.position, elementTag));
 		
 		destination.data.push(Lisla.Arr(arr));
 		top.current = destination;
@@ -218,7 +216,7 @@ class ArrayContext
     
     private function endInterporation(stringContext:QuotedStringContext, store:QuotedStringArrayPair):Void
     {
-    	var arr = new LislaArray<Lisla>(data, tag.settle(top.position));
+    	var arr = new LislaArray<Lisla>(data, tag.settle(top.position, elementTag));
         store.array.push(arr);
 		stringContext.store(store);
         
@@ -238,13 +236,13 @@ class ArrayContext
     
     public function writeDocument(codePoint:CodePoint):Void
     {
-        var tag = if (isInHead) tag.leadingTag else elementTag;
+        var tag = elementTag;
         tag.writeDocument(top.config, codePoint, top.position - 1);
     }
     
 	public inline function endTop():LislaArray<Lisla>
 	{
-		return new LislaArray<Lisla>(data, tag.settle(top.position));
+		return new LislaArray<Lisla>(data, tag.settle(top.position, elementTag));
 	}
     
     public inline function getData():Option<LislaArray<Lisla>> 

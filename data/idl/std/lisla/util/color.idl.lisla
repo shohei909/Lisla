@@ -1,6 +1,6 @@
-;; (license "Public Domain")
 (package lisla.util)
 (import lisla.core)
 
 (newtype Argb32 (FixedUInt (const 32)))
 (newtype Rgb24 (FixedUInt (const 24)))
+

@@ -1,5 +1,3 @@
-;; 'for File System'
-;; (license "Public Domain")
 (package lisla.util)
 
 (newtype FileOrDirectoryPath String)
@@ -9,3 +7,4 @@
 (newtype (FilePathWithExtension (extensions (Array FileExtension))) String)
 (newtype (FilePathWithoutExtension (extensions (Array FileExtension))) String)
 
+;; 'for File System'

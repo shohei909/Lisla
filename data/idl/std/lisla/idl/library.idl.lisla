@@ -1,5 +1,3 @@
-;; 'IDL for Lisla IDL configure file(.config.lisla)'
-;; (license "Public Domain")
 (package lisla.idl)
 
 (import lisla.util.file)
@@ -28,3 +26,6 @@
 (tuple LibraryReference
     (name LibraryName) (version LibraryVersion)
 )
+
+;; 'IDL for Lisla IDL configure file(.config.lisla)'
+

@@ -1,7 +1,3 @@
-;; 'IDL for Lisla Document Comment'
-;; (license "Public Domain")
-
-
 (package lisla)
 (import lisla.idl)
 (import lisla.idl.portable)
@@ -27,11 +23,13 @@
 
 ;; (completion_const "MIT License")
 ;; (completion_const "Apache License 2.0")
-;; (completion_const "Public Domain")
 ;; (completion_const "GNU Lesser General Public License Version 3 (LGPLv3)")
 ;; (completion_const "GNU Lesser General Public License Version 2.1 (LGPLv2.1)")
+;; (completion_const Unlicense)
 ;; (completion)
 (newtype License String)
 
 ;; (completion)
 (newtype Author String)
+
+;; 'IDL for Lisla Document Comment'

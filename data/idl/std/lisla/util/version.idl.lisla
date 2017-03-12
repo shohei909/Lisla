@@ -1,5 +1,5 @@
-;; (license "Public Domain")
 (package lisla.util)
 
 ;; 'major(-suffix)(.minor(-suffix)((.patch(-suffix)).release(-suffix)))'
 (newtype Version String)
+

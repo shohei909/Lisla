@@ -1,4 +1,3 @@
-;; 'Types for .tmTheme'
 (package lisla.util)
 
 ;; (completion_const comment)
@@ -21,3 +20,5 @@
 ;; (completion_const entity.name.function)
 ;; (completion_const entity.name.function)
 (newtype HighlightScope String)
+
+;; 'Types for .tmTheme'

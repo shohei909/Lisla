@@ -1,6 +1,3 @@
-;; 'IDL for Lisla Interface Description Language (Lisla IDL)'
-;; (license "Public Domain")
-
 (package lisla)
 
 (import lisla.core)
@@ -170,3 +167,5 @@
     (type_path TypePath) (parameters.. TypeReferenceParameter)
 )
 (newtype TypeReferenceParameter Any)
+
+;; 'IDL for Lisla Interface Description Language (Lisla IDL)'

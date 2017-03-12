@@ -1,5 +1,3 @@
-;; 'Document tags for Lisla IDL'
-;; (license "Public Domain")
 (package lisla.idl)
 
 (import lisla.idl)
@@ -20,3 +18,5 @@
     (completion_const.. Any)
     (completion_type.. TypeReference)
 )
+
+;; 'Document tags for Lisla IDL'

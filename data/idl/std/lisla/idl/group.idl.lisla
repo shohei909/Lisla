@@ -1,5 +1,3 @@
-;; 'Type for matching Lisla IDL Data'
-;; (license "Public Domain")
 (package lisla.idl)
 (import lisla.idl)
 
@@ -7,3 +5,5 @@
     (from TypeGroupPath) (to TypeGroupPath)
 )
 (newtype TypeGroupPath String)
+
+;; 'Type for matching Lisla IDL Data'

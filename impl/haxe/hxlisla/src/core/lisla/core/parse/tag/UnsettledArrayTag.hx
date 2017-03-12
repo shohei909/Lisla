@@ -17,15 +17,16 @@ class UnsettledArrayTag
 		this.startPosition = startPosition;
 	}
 	
-	public function settle(position:Int):ArrayTag
+	public function settle(position:Int, footerTag:UnsettledLeadingTag):ArrayTag
 	{
 		var tag = new ArrayTag();
-		tag.range = Maybe.some(new SourceRange(leadingTag.sourceMap, startPosition, position));
+		tag.range = Maybe.some(
+            new SourceRange(leadingTag.sourceMap, startPosition, position)
+        );
+        
+        // TODO: Document comment
+        // TODO: Concat footerTag
+        
 		return tag;
-	}
-	
-	public function writeDocument(config:ParserConfig, codePoint:CodePoint, position:Int):Void 
-	{
-		
 	}
 }

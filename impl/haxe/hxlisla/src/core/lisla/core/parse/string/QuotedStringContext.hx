@@ -67,7 +67,7 @@ class QuotedStringContext
                         state = QuotedStringState.Body;
                         
                         var arrayTag = new UnsettledLeadingTag(tag.leadingTag.sourceMap).toArrayTag(0);
-                        top.current = new ArrayContext(top, ArrayParent.QuotedString(this, store), false, arrayTag);
+                        top.current = new ArrayContext(top, ArrayParent.QuotedString(this, store), arrayTag);
                         
 					case EscapeResult.Continue:
                         // nothing to do.

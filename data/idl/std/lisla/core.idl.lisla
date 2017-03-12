@@ -1,6 +1,3 @@
-;; 'Basic types'
-;; (license "Public Domain")
-
 (package lisla)
 
 ;; '64 bit integer. Decimal style (1234) and Hexadecimal(0xFF) are available.'
@@ -88,3 +85,6 @@
 
 ;; 'Base64 encoded binary'
 (newtype Binary String)
+
+
+;; 'Basic types'
