@@ -609,9 +609,9 @@ structの要素の高度な機能に以下の組み合わせについては重�
 
 この例では、`Operation.addition`の列挙子名は`addition`ですが第一要素が`(number0 Float64)`になるように指定しています。
 
-#### スプレッド列挙子 ``
+#### スプレッド列挙子 `<`
 
-列挙子名に`<`サフィックスをつけることで、
+列挙子名に`<`サフィックスをつけることで、その1つ目の引数がそのまま列挙子の値として使われます。
 
 <table>
     <tr><th>IDL</th><th>データ例</th></tr>
@@ -619,8 +619,8 @@ structの要素の高度な機能に以下の組み合わせについては重�
         <td>
 <pre lang="lisla">
 (enum Expression
-    (number< Float64)
-    (operation< Operation)
+    (number< (number Float64))
+    (operation< (operation Operation))
 )
 
 (enum Operation
