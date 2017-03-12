@@ -236,14 +236,60 @@ true
 
 #### オプショナル引数 `?`
 
+引数名に`?`の接尾辞(サフィックス)をつけることで、引数を省略可能にすることができます。
 
-
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(tuple WebPageWithAuthor
+    (title String)
+    (url Url) 
+    (author? String)  
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+("Example Domain" http://example.com)
+</pre>
+        </td>
+    </tr>
+</table>
 
 #### 可変長引数  `..`
 
+引数名に`..`のサフィックスをつけることで、引数を0個以上の可変長にすることができます。
+
+<table>
+    <tr><th>IDL</th><th>データ例</th></tr>
+    <tr>
+        <td>
+<pre lang="lisla">
+(tuple WebPageWithAuthors
+    (title String)
+    (url Url) 
+    (authors.. String)  
+)
+</pre>
+        </td>
+        <td>
+<pre lang="lisla">
+("Example Domain" http://example.com author_a author_b)
+</pre>
+        </td>
+    </tr>
+</table>
+
+
 #### スプレッド引数 `<`
 
+引数名に`<`のサフィックスをつけることで、その引数の型に応じた引数列をその位置に展開した形で記述させることができます。
+
 #### デフォルト値
+
+引数の名前と型の、次の要素として値を記述することで、その引数は省略可能となり省略時のデフォルト値としてその値が使用されます。
 
 #### 各機能の複合的な利用
 
@@ -305,7 +351,7 @@ Lisla IDLはこの2方向の変換を行った場合に、データが欠損し�
 
 例えば以下のようなものです。
 
-* 条件の重複する列挙子の禁止
+* 条件の重複するenumの列挙子の禁止
 * 条件の重複するstruct要素の禁止
 * オプション引数や可変長引数の直後での条件の重複する引数の禁止。
 
@@ -314,7 +360,6 @@ Lisla IDLはこの2方向の変換を行った場合に、データが欠損し�
 ## 型の引数
 
 ## その他の制限
-
 
 ## Lisla IDL のモジュールシステム
 
@@ -326,9 +371,15 @@ Lisla IDLはこの2方向の変換を行った場合に、データが欠損し�
 
 ## 標準ライブラリ
 
+使用頻度の高い型について、標準のIDLライブラリとして提供しています。
+
+[Lisla IDL 標準ライブラリ](../../../data/idl/std)
+
 ### Lisla IDL の IDL
 
-Lisla IDL自身についても、Lisla IDLによる文書構造の定義がされており、
+Lisla IDL自身についてもLisla IDLによる文書構造の定義がされており、これも標準ライブラリに含まれています。
+
+[lisla/idl.idl.lisla](../../../data/idl/std/lisla/idl.idl.lisla)
 
 ## コーディング規約
 

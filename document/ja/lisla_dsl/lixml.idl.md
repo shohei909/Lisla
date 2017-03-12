@@ -46,4 +46,3 @@ Lislaのキーピングコメント(`;!`, `;;!`)によって書かれたコメ�
 ## IDL
 
 [lisla/xml/lixml.idl.lisla](../../../data/idl/std/lisla/xml/lixml.idl.lisla)
-
