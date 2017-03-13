@@ -10,7 +10,12 @@ class PackageDeclarationLislaToEntity {
                 var arrayContext = new lisla.idl.lisla2entity.LislaToEntityArrayContext(array, 0, context.config);
                 var instance = {
                     arrayContext.readLabel("package");
-                    var arg0 = switch (arrayContext.read(lisla.idl.std.lisla2entity.idl.PackagePathLislaToEntity.process)) {
+                    var arg0 = switch (arrayContext.readWithDefault(lisla.idl.std.lisla2entity.idl.PackagePathLislaToEntity.process, function(data) {
+                            return switch data {
+                                case lisla.core.Lisla.Str(_):true;
+                                case _:false;
+                            };
+                        }, lisla.core.Lisla.Str(new lisla.core.LislaString("")))) {
                         case hxext.ds.Result.Ok(data):{
                             data;
                         };

@@ -9,7 +9,12 @@ class IdlLislaToEntity {
             case lisla.core.Lisla.Arr(array):{
                 var arrayContext = new lisla.idl.lisla2entity.LislaToEntityArrayContext(array, 0, context.config);
                 var instance = {
-                    var arg0 = switch (arrayContext.read(lisla.idl.std.lisla2entity.idl.PackageDeclarationLislaToEntity.process)) {
+                    var arg0 = switch (arrayContext.readWithDefault(lisla.idl.std.lisla2entity.idl.PackageDeclarationLislaToEntity.process, function(data) {
+                            return switch data {
+                                case lisla.core.Lisla.Arr(array) if (1 <= array.length && array.length <= 2 && array.data[0].match(lisla.core.Lisla.Str(_.data => "package"))):true;
+                                case _:false;
+                            };
+                        }, lisla.core.Lisla.Arr(new lisla.core.LislaArray([lisla.core.Lisla.Str(new lisla.core.LislaString("package")), lisla.core.Lisla.Str(new lisla.core.LislaString(""))])))) {
                         case hxext.ds.Result.Ok(data):{
                             data;
                         };
