@@ -7,11 +7,12 @@ class EntityConfigLislaToEntity {
         };
         case lisla.core.Lisla.Arr(array):{
             {
-                var arg0 = [];
+                var arg0 = haxe.ds.Option.None;
+                var arg1 = [];
                 for (lislaData in array.data) {
                     var context = new lisla.idl.lisla2entity.LislaToEntityContext(lislaData, context.config);
                     switch lislaData {
-                        case lisla.core.Lisla.Arr(array) if (1 <= array.length && array.data[0].match(lisla.core.Lisla.Str(_.data => "filter"))):arg0.push(switch (lisla.idl.hxlisla.lisla2entity.config.FilterDeclarationLislaToEntity.process(context)) {
+                        case lisla.core.Lisla.Arr(array) if (1 <= array.length && array.data[0].match(lisla.core.Lisla.Str(_.data => "filter"))):arg1.push(switch (lisla.idl.hxlisla.lisla2entity.config.FilterDeclarationLislaToEntity.process(context)) {
                             case hxext.ds.Result.Ok(data):{
                                 data;
                             };
@@ -19,13 +20,12 @@ class EntityConfigLislaToEntity {
                                 return hxext.ds.Result.Err(data);
                             };
                         });
-                        case lislaData:return hxext.ds.Result.Err(lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(lislaData, lisla.idl.lisla2entity.error.LislaToEntityErrorKind.UnmatchedStructElement(["filter"])));
+                        case lislaData:return hxext.ds.Result.Err(lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(lislaData, lisla.idl.lisla2entity.error.LislaToEntityErrorKind.UnmatchedStructElement(["no_output", "filter"])));
                     };
                 };
-                var instance = new lisla.idl.hxlisla.entity.config.EntityConfig(arg0);
+                var instance = new lisla.idl.hxlisla.entity.config.EntityConfig(arg0, arg1);
                 hxext.ds.Result.Ok(instance);
             };
         };
     };
-    public static function variableInlineProcess(arrayContext:lisla.idl.lisla2entity.LislaToEntityArrayContext):hxext.ds.Result<lisla.idl.hxlisla.entity.config.EntityConfig, lisla.idl.lisla2entity.error.LislaToEntityError> return null;
 }

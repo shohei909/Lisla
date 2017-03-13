@@ -22,19 +22,21 @@ class LislaToEntityHaxeGenerator
                     config
                 );
                 
-                Result.Ok(
-                    [
-                        for (info in data.infomations)
-                        {
-                            var pathPair = new HaxeLislaToEntityTypePathPair(
-                                info,
-                                config.toHaxeLislaToEntityPath(info.typePath)
-                            );
-                            
-                            LislaToEntityHaxeTypeBuilder.convertType(pathPair, convertContext);
-                        }
-                    ]
-                );
+                var types = [];
+                if (!config.noOutput)
+                {
+                    for (info in data.infomations)
+                    {
+                        
+                        var pathPair = new HaxeLislaToEntityTypePathPair(
+                            info,
+                            config.toHaxeLislaToEntityPath(info.typePath)
+                        );
+                        
+                        types.push(LislaToEntityHaxeTypeBuilder.convertType(pathPair, convertContext));
+                    }
+                }
+                Result.Ok(types);
                 
 			case Result.Err(errors):
                 Result.Err(errors);

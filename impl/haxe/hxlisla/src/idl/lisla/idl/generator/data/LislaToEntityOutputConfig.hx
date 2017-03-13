@@ -1,6 +1,7 @@
 package lisla.idl.generator.data;
 import haxe.ds.Option;
 import lisla.idl.generator.output.lisla2entity.path.HaxeLislaToEntityTypePath;
+import lisla.idl.hxlisla.entity.config.LislaToEntityConfig;
 import lisla.idl.std.entity.idl.TypePath;
 import lisla.idl.std.entity.idl.group.TypeGroupFilter;
 import lisla.idl.std.tools.idl.group.TypeGroupFilterTools;
@@ -10,9 +11,11 @@ using hxext.ds.ResultTools;
 class LislaToEntityOutputConfig
 {
 	public var filters:Array<TypeGroupFilter>;
-	
-	public function new(filters:Array<TypeGroupFilter>) 
+	public var noOutput:Bool;
+    
+	public function new(noOutput:Bool, filters:Array<TypeGroupFilter>) 
 	{
+        this.noOutput = noOutput;
 		this.filters = filters.concat(
             [
                 TypeGroupFilterTools.create("ArrayLislaToEntity", "lisla.idl.std.lisla2entity.ArrayLislaToEntity"),

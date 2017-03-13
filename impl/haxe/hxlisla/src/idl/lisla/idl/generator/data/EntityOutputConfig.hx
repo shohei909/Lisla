@@ -35,13 +35,15 @@ using haxe.macro.ComplexTypeTools;
 
 class EntityOutputConfig
 {
+    public var noOutput:Bool;
 	public var filters(default, null):Array<TypeGroupFilter>;
 	public var predefinedTypes(default, null):Map<String, HaxeEntityInterface>;
 	
 	#if !macro
-	public function new(filters:Array<TypeGroupFilter>) 
+	public function new(noOutput:Bool, filters:Array<TypeGroupFilter>) 
 	{
-		this.filters = filters.concat(
+		this.noOutput = noOutput;
+        this.filters = filters.concat(
             [
                 TypeGroupFilterTools.create("Array",          "lisla.core.LislaArray"),
                 TypeGroupFilterTools.create("String",         "lisla.core.LislaString"),

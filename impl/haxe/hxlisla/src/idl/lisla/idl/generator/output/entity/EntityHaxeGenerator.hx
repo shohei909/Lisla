@@ -13,20 +13,20 @@ class EntityHaxeGenerator
 		{
 			case Result.Ok(data):
                 var config = context.entityOutputConfig;
-                
-                Result.Ok(
-                    [
-                        for (info in data.infomations)
+                var types = [];
+                if (!config.noOutput)
+                {
+                    for (info in data.infomations)
+                    {
+                        if (config.predefinedTypes.exists(info.haxePath.toString()))
                         {
-                            if (config.predefinedTypes.exists(info.haxePath.toString()))
-                            {
-                                continue;
-                            }
-                            
-                            EntityHaxeTypeBuilder.convertType(info, config);
+                            continue;
                         }
-                    ]
-                );
+                        
+                        types.push(EntityHaxeTypeBuilder.convertType(info, config));
+                    }
+                }
+                Result.Ok(types);
                 
 			case Result.Err(errors):
                 Result.Err(errors);

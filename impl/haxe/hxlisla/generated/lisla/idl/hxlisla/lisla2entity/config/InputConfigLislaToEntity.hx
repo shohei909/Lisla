@@ -68,21 +68,6 @@ class InputConfigLislaToEntity {
                                 });
                             };
                         };
-                        case lisla.core.Lisla.Arr(array) if (array.length == 1 && array.data[0].match(lisla.core.Lisla.Str(_.data => "no_lisla_to_entity"))):switch (arg3) {
-                            case haxe.ds.Option.Some(_):{
-                                return hxext.ds.Result.Err(lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(lislaData, lisla.idl.lisla2entity.error.LislaToEntityErrorKind.StructElementDuplicated("lisla_to_entity")));
-                            };
-                            case haxe.ds.Option.None:{
-                                arg3 = haxe.ds.Option.Some(switch (lisla.idl.hxlisla.lisla2entity.config.LislaToEntityDeclarationLislaToEntity.process(context)) {
-                                    case hxext.ds.Result.Ok(data):{
-                                        data;
-                                    };
-                                    case hxext.ds.Result.Err(data):{
-                                        return hxext.ds.Result.Err(data);
-                                    };
-                                });
-                            };
-                        };
                         case lisla.core.Lisla.Arr(array) if (1 <= array.length && array.data[0].match(lisla.core.Lisla.Str(_.data => "entity_to_lisla"))):switch (arg4) {
                             case haxe.ds.Option.Some(_):{
                                 return hxext.ds.Result.Err(lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(lislaData, lisla.idl.lisla2entity.error.LislaToEntityErrorKind.StructElementDuplicated("entity_to_lisla")));

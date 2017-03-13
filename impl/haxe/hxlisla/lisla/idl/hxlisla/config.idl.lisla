@@ -44,14 +44,15 @@
     entity (data< EntityConfig)
 )
 (struct EntityConfig
+    no_output?
     (filter..< FilterDeclaration)
 )
 
-(enum LislaToEntityDeclaration 
-    (lisla_to_entity (data< LislaToEntityConfig))
-    (no_lisla_to_entity)
+(tuple LislaToEntityDeclaration 
+    lisla_to_entity (data< LislaToEntityConfig)
 )
 (struct LislaToEntityConfig
+    no_output?
     (filter..< FilterDeclaration)
 )
 

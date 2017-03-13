@@ -1,5 +1,6 @@
 package lisla.idl.generator.output;
 
+import hxext.ds.OptionTools;
 import lisla.idl.generator.data.EntityOutputConfig;
 import lisla.idl.generator.data.LislaToEntityOutputConfig;
 import lisla.idl.generator.output.HaxeGenerateConfigFactoryContext;
@@ -69,7 +70,8 @@ class HaxeGenerateConfigFactory
             }
         }
         
-        return new EntityOutputConfig(filters);
+        var noOutput = OptionTools.isSome(context.inputConfig.entity.data.noOutput);
+        return new EntityOutputConfig(noOutput, filters);
     }
     
     private function getLislaToEntityOutputConfig(context:HaxeGenerateConfigFactoryContext):LislaToEntityOutputConfig
@@ -86,10 +88,14 @@ class HaxeGenerateConfigFactory
                 )
             );
             
-            // TODO:
+            for (filter in inputConfig.lislaToEntity.data.filter)
+            {
+                filters.push(filter.data);
+            }
         }
         
-        return new LislaToEntityOutputConfig(filters);
+        var noOutput = OptionTools.isSome(context.inputConfig.lislaToEntity.data.noOutput);
+        return new LislaToEntityOutputConfig(noOutput, filters);
     }
     
     private function getSourceReader(context:HaxeGenerateConfigFactoryContext):IdlSourceReader
