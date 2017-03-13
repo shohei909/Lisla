@@ -15,7 +15,7 @@ import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
 import lisla.idl.generator.output.error.GetConfigErrorKind;
 import lisla.idl.generator.output.haxe.HaxePrinter;
 import lisla.idl.generator.source.IdlFileSourceReader;
-import lisla.idl.hxlisla.lisla2entity.config.GenerationConfigLislaToEntity;
+import lisla.idl.hxlisla.lisla2entity.GenerationConfigLislaToEntity;
 import lisla.idl.library.LibraryScope;
 import lisla.idl.lislatext2entity.LislaFileToEntityRunner;
 import lisla.idl.lislatext2entity.error.LislaFileToEntityError;

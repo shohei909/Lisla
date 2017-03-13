@@ -1,5 +1,5 @@
 package lisla.idl.generator.output;
-import lisla.idl.hxlisla.entity.config.GenerationConfig;
+import lisla.idl.hxlisla.entity.GenerationConfig;
 import lisla.idl.library.LibraryScope;
 
 class HaxeGenerateConfigFactoryContext 

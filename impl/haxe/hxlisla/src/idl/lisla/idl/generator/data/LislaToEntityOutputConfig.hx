@@ -1,7 +1,7 @@
 package lisla.idl.generator.data;
 import haxe.ds.Option;
 import lisla.idl.generator.output.lisla2entity.path.HaxeLislaToEntityTypePath;
-import lisla.idl.hxlisla.entity.config.LislaToEntityConfig;
+import lisla.idl.hxlisla.entity.LislaToEntityConfig;
 import lisla.idl.std.entity.idl.TypePath;
 import lisla.idl.std.entity.idl.group.TypeGroupFilter;
 import lisla.idl.std.tools.idl.group.TypeGroupFilterTools;

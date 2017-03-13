@@ -6,7 +6,7 @@ import lisla.idl.generator.error.LoadIdlError;
 import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
 import lisla.idl.generator.output.entity.store.HaxeEntityInterfaceKindTools;
 import lisla.idl.generator.source.IdlSourceReader;
-import lisla.idl.hxlisla.entity.config.TargetConfig;
+import lisla.idl.hxlisla.entity.TargetConfig;
 import lisla.idl.library.LibraryScope;
 import lisla.idl.library.LibraryTypesData;
 import lisla.idl.std.entity.idl.LibraryName;

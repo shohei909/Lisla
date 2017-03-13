@@ -22,13 +22,13 @@ class LoadIdlErrorKindTools
 		return switch (errorKind)
 		{
             case LoadIdlErrorKind.LibraryNotFoundInLibraryConfig(configTag, referencerName, referenceeName):
-                summary(configTag.upCast(), "Library " + referenceeName + " is referenced in " + referencerName + ", but it is not found in library config file");
+                summary(configTag.upCast(), "Library '" + referenceeName + "' is referenced in '" + referencerName + "', but it is not found in library config file");
             
             case LoadIdlErrorKind.LibraryNotFound(name):
-                summary(name.tag.upCast(), "Library " + name.data + " is not found");
+                summary(name.tag.upCast(), "Library '" + name.data + "' is not found");
             
             case LoadIdlErrorKind.LibraryVersionNotFound(name, version):
-                summary(version.tag.upCast(), "Library " + name + " version " + version.data + " is not found");
+                summary(version.tag.upCast(), "Library '" + name + "' version '" + version.data + "' is not found");
                 
 			case LoadIdlErrorKind.LislaTextToEntity(error):
 				LislaTextToEntityErrorKindTools.getSummary(error).replaceKind(errorKind);
@@ -36,18 +36,18 @@ class LoadIdlErrorKindTools
 			case LoadIdlErrorKind.ModuleDuplicated(module, existingPath):
                 new InlineErrorSummary(
                     Maybe.none(), 
-                    "Module " + module.toString() + " is duplicated with " + existingPath.toString(),
+                    "Module '" + module.toString() + "' is duplicated with " + existingPath.toString(),
                     errorKind
                 );
 				
 			case LoadIdlErrorKind.TypeNameDuplicated(typePath):
-                summary(typePath.tag.upCast(), "Type " + typePath.toString() + " is duplicated");
+                summary(typePath.tag.upCast(), "Type '" + typePath.toString() + "' is duplicated");
 				
 			case LoadIdlErrorKind.TypeParameterNameDuplicated(name):
-				summary(name.tag.upCast(), "Type parameter name " + name.toString() + " is duplicated");
+				summary(name.tag.upCast(), "Type parameter name '" + name.toString() + "' is duplicated");
 				
 			case LoadIdlErrorKind.InvalidPackage(expected, actual):
-				summary(actual.tag.upCast(), "Package name " + expected.toString() + " is expected but " + actual.toString());
+				summary(actual.tag.upCast(), "Package name '" + expected.toString() + "' is expected but '" + actual.toString() + "'");
 				
 			case LoadIdlErrorKind.TypeNotFound(path):
 				summary(path.tag.upCast(), "Type " + path.toString() + " is not found");
@@ -56,7 +56,7 @@ class LoadIdlErrorKindTools
 				summary(path.tag.upCast(), "Module " + path.toString() + " is not found");
                 
             case LoadIdlErrorKind.InvalidTypeDependenceDescription(lisla):
-                summary(LislaTools.getTag(lisla).upCast(), "Invalid " + LislaTools.toString(lisla) + " is loop");
+                summary(LislaTools.getTag(lisla).upCast(), "Invalid '" + LislaTools.toString(lisla) + "' is loop");
                 
             case LoadIdlErrorKind.Validation(error):
                 IdlValidationErrorKindTools.getSummary(error).replaceKind(errorKind);

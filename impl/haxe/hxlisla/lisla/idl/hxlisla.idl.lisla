@@ -1,0 +1,79 @@
+(import lisla.util.version)
+(import lisla.util.file)
+(import lisla.idl)
+(import lisla.idl.group)
+
+(struct GenerationConfig
+    (target< TargetDeclaration)
+    (import..< ImportDeclaration)
+    (entity< EntityDeclaration 
+        (entity)
+    )
+    (lisla_to_entity< LislaToEntityDeclaration 
+        (lisla_to_entity)
+    )
+    (entity_to_lisla< EntityToLislaDeclaration 
+        (entity_to_lisla)
+    )
+)
+
+(tuple TargetDeclaration
+    target 
+    (name LibraryName) 
+    (data< TargetConfig)
+)
+(struct TargetConfig
+    (version Version)
+    (haxe_package PackagePath)
+)
+
+(tuple ImportDeclaration
+    import (name String) (data< ImportConfig)
+)
+(struct ImportConfig
+    (haxe_source DirectoryPath)
+)
+
+(tuple FilterDeclaration
+    filter (data< TypeGroupFilter)
+)
+
+(tuple EntityDeclaration
+    entity (data< EntityConfig)
+)
+(struct EntityConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)
+
+(tuple LislaToEntityDeclaration 
+    lisla_to_entity (data< LislaToEntityConfig)
+)
+(struct LislaToEntityConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)
+
+(tuple EntityToLislaDeclaration 
+    entity_to_lisla (data< EntityToLislaConfig)
+)
+(struct EntityToLislaConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)
+
+(tuple BislaToEntityDeclaration 
+    bisla_to_entity (data< BislaToEntityConfig)
+)
+(struct BislaToEntityConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)
+
+(tuple EntityToBislaDeclaration 
+    entity_to_bisla (data< EntityToBislaConfig)
+)
+(struct EntityToBislaConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)
