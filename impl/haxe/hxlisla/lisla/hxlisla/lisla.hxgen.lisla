@@ -13,7 +13,7 @@
     (filter lisla.core.Int8     lisla.idl.std.entity.core.LislaInt8)
     (filter lisla.core.UInt64   lisla.idl.std.entity.core.LislaUInt64)
     (filter lisla.core.UInt32   lisla.idl.std.entity.core.LislaUInt32)
-    (filter lisla.core.UInt16   lisla.idl.std.entity.core.LislaUInt16  )
+    (filter lisla.core.UInt16   lisla.idl.std.entity.core.LislaUInt16)
     (filter lisla.core.UInt8    lisla.idl.std.entity.core.LislaUInt8)
     (filter lisla.core.Map      lisla.idl.std.entity.core.LislaMap)
     (filter lisla.core.Boolean  lisla.idl.std.entity.core.LislaBoolean)
@@ -22,5 +22,3 @@
     (filter lisla.core.Time     lisla.idl.std.entity.core.LislaTime)
     (filter lisla.core.DateTime lisla.idl.std.entity.core.LislaDateTime)
 )
-
-(lisla_to_entity)

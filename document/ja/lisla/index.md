@@ -418,7 +418,7 @@ LislaはUTF-8のみをサポートしています。
 
 ### Haxe
 
-- hxlisla : 公式実装
+- hxlisla : 標準実装
 
 ## 新しいLislaパーサを実装する上で
 

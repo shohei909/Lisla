@@ -55,25 +55,26 @@
     (filter..< FilterDeclaration)
 )
 
-(enum EntityToLislaDeclaration 
-    (entity_to_bisla (data< EntityToLislaConfig))
-    (no_entity_to_bisla)
+(tuple EntityToLislaDeclaration 
+    entity_to_lisla (data< EntityToLislaConfig)
 )
 (struct EntityToLislaConfig
+    no_output?
     (filter..< FilterDeclaration)
 )
 
-(enum BislaToEntityDeclaration 
-    (bisla_to_entity (data< BislaToEntityConfig))
-    (no_bisla_to_entity)
+(tuple BislaToEntityDeclaration 
+    bisla_to_entity (data< BislaToEntityConfig)
 )
 (struct BislaToEntityConfig
+    no_output?
     (filter..< FilterDeclaration)
 )
-(enum EntityToBislaDeclaration 
-    (entity_to_bisla (data< EntityToBislaConfig))
-    (no_entity_to_bisla)
+
+(tuple EntityToBislaDeclaration 
+    entity_to_bisla (data< EntityToBislaConfig)
 )
 (struct EntityToBislaConfig
+    no_output?
     (filter..< FilterDeclaration)
 )

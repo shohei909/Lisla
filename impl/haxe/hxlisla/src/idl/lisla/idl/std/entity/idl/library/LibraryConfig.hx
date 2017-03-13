@@ -62,7 +62,7 @@ class LibraryConfig
         description:LislaString, 
         extensions:Array<FileExtensionDeclaration>, 
         libraries:Array<LibraryDependenceDeclaration>
-    ):Result<LibraryConfig, LislaToEntityErrorKind> // TODO: Array error
+    ):Result<LibraryConfig, LislaToEntityErrorKind> 
 	{
         return Result.Ok(
             new LibraryConfig(

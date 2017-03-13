@@ -6,6 +6,3 @@
 (import lisla 
     (haxe_source lisla.hxgen.lisla)
 )
-
-(entity)
-(lisla_to_entity)

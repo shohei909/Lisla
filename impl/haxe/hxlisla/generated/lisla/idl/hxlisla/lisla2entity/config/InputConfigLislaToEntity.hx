@@ -83,22 +83,7 @@ class InputConfigLislaToEntity {
                                 });
                             };
                         };
-                        case lisla.core.Lisla.Arr(array) if (1 <= array.length && array.data[0].match(lisla.core.Lisla.Str(_.data => "entity_to_bisla"))):switch (arg4) {
-                            case haxe.ds.Option.Some(_):{
-                                return hxext.ds.Result.Err(lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(lislaData, lisla.idl.lisla2entity.error.LislaToEntityErrorKind.StructElementDuplicated("entity_to_lisla")));
-                            };
-                            case haxe.ds.Option.None:{
-                                arg4 = haxe.ds.Option.Some(switch (lisla.idl.hxlisla.lisla2entity.config.EntityToLislaDeclarationLislaToEntity.process(context)) {
-                                    case hxext.ds.Result.Ok(data):{
-                                        data;
-                                    };
-                                    case hxext.ds.Result.Err(data):{
-                                        return hxext.ds.Result.Err(data);
-                                    };
-                                });
-                            };
-                        };
-                        case lisla.core.Lisla.Arr(array) if (array.length == 1 && array.data[0].match(lisla.core.Lisla.Str(_.data => "no_entity_to_bisla"))):switch (arg4) {
+                        case lisla.core.Lisla.Arr(array) if (1 <= array.length && array.data[0].match(lisla.core.Lisla.Str(_.data => "entity_to_lisla"))):switch (arg4) {
                             case haxe.ds.Option.Some(_):{
                                 return hxext.ds.Result.Err(lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(lislaData, lisla.idl.lisla2entity.error.LislaToEntityErrorKind.StructElementDuplicated("entity_to_lisla")));
                             };
@@ -128,21 +113,45 @@ class InputConfigLislaToEntity {
                         data;
                     };
                     case haxe.ds.Option.None:{
-                        null;
+                        var childContext = new lisla.idl.lisla2entity.LislaToEntityContext(lisla.core.Lisla.Arr(new lisla.core.LislaArray([lisla.core.Lisla.Str(new lisla.core.LislaString("entity"))])), context.config);
+                        switch (lisla.idl.hxlisla.lisla2entity.config.EntityDeclarationLislaToEntity.process(childContext)) {
+                            case hxext.ds.Result.Ok(data):{
+                                data;
+                            };
+                            case hxext.ds.Result.Err(data):{
+                                return hxext.ds.Result.Err(data);
+                            };
+                        };
                     };
                 }, switch (arg3) {
                     case haxe.ds.Option.Some(data):{
                         data;
                     };
                     case haxe.ds.Option.None:{
-                        null;
+                        var childContext = new lisla.idl.lisla2entity.LislaToEntityContext(lisla.core.Lisla.Arr(new lisla.core.LislaArray([lisla.core.Lisla.Str(new lisla.core.LislaString("lisla_to_entity"))])), context.config);
+                        switch (lisla.idl.hxlisla.lisla2entity.config.LislaToEntityDeclarationLislaToEntity.process(childContext)) {
+                            case hxext.ds.Result.Ok(data):{
+                                data;
+                            };
+                            case hxext.ds.Result.Err(data):{
+                                return hxext.ds.Result.Err(data);
+                            };
+                        };
                     };
                 }, switch (arg4) {
                     case haxe.ds.Option.Some(data):{
                         data;
                     };
                     case haxe.ds.Option.None:{
-                        null;
+                        var childContext = new lisla.idl.lisla2entity.LislaToEntityContext(lisla.core.Lisla.Arr(new lisla.core.LislaArray([lisla.core.Lisla.Str(new lisla.core.LislaString("entity_to_lisla"))])), context.config);
+                        switch (lisla.idl.hxlisla.lisla2entity.config.EntityToLislaDeclarationLislaToEntity.process(childContext)) {
+                            case hxext.ds.Result.Ok(data):{
+                                data;
+                            };
+                            case hxext.ds.Result.Err(data):{
+                                return hxext.ds.Result.Err(data);
+                            };
+                        };
                     };
                 });
                 hxext.ds.Result.Ok(instance);

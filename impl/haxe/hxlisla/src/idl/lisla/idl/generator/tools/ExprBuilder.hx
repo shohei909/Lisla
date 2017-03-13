@@ -1,6 +1,11 @@
 package lisla.idl.generator.tools;
 import haxe.macro.Expr;
+import hxext.ds.Maybe;
 import hxext.ds.Result;
+import lisla.core.Lisla;
+import lisla.core.LislaArray;
+import lisla.core.LislaString;
+import lisla.core.tag.StringTag;
 
 class ExprBuilder 
 {
@@ -61,5 +66,23 @@ class ExprBuilder
     {
         var exprs = [for (v in values) getStringConstExpr(v)];
         return macro [$a{exprs}];
+    }
+    
+    public static function lislaExpr(lisla:Lisla):Expr
+    {
+        return switch lisla
+        {
+            case Lisla.Arr(arr):
+                var arrExpr = [for (child in arr.data) lislaExpr(child)];
+                macro lisla.core.Lisla.Arr(
+                    new lisla.core.LislaArray([$a{arrExpr}])
+                );
+                
+            case Lisla.Str(str):
+                var strExpr = getStringConstExpr(str.data);
+                macro lisla.core.Lisla.Str(
+                    new lisla.core.LislaString($strExpr)
+                );
+        }
     }
 }

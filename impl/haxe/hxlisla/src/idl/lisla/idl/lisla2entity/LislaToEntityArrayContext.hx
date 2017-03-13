@@ -147,7 +147,7 @@ class LislaToEntityArrayContext
         }
 	}
     
-	public inline function readWithDefault<T>(process:ProcessFunction<T>, match:Lisla->Bool, defaultValue:T):Result<T, LislaToEntityError>
+	public inline function readWithDefault<T>(process:ProcessFunction<T>, match:Lisla->Bool, defaultLisla:Lisla):Result<T, LislaToEntityError>
 	{
         return if (matchNext(match))
         {
@@ -162,7 +162,8 @@ class LislaToEntityArrayContext
         }
         else
         {
-            Result.Ok(defaultValue);
+            var context = new LislaToEntityContext(defaultLisla, config);
+            process(context);
         }
 	}
     

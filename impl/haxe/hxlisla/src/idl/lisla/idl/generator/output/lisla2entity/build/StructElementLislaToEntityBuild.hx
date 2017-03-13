@@ -103,6 +103,13 @@ class StructElementLislaToEntityBuild
     private inline function addDefaultReference(field:StructField, defaultValue:lisla.core.Lisla):Void
     {
         var nameExpr = ExprBuilder.getStringConstExpr(field.name.name);
+        var callExpr = parent.builder.createProcessCallExpr(
+            (macro childContext), 
+            parent.parameters, 
+            field.type.generalize()
+        );
+        var lislaExpr = ExprBuilder.lislaExpr(defaultValue);
+        
         parent.references.push(
             macro switch ($i{id})
             {
@@ -110,8 +117,8 @@ class StructElementLislaToEntityBuild
                     data;
                     
                 case haxe.ds.Option.None:
-                    // TODO:
-                    null;
+                    var childContext = new lisla.idl.lisla2entity.LislaToEntityContext($lislaExpr, context.config);
+                    ${ExprBuilder.createGetOrReturnExpr(callExpr)};
             }
         );
     }

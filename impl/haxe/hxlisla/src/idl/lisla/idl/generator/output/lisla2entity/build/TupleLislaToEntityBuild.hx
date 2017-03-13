@@ -51,7 +51,15 @@ class TupleLislaToEntityBuild
                         case [ArgumentKind.Normal, Option.Some(value)]:
                             var processFunc = builder.createProcessFuncExpr(parameters, destType);
                             var guardFunction = getGuardFuncExpr(data.type);
-                            ExprBuilder.createGetOrReturnExpr(macro arrayContext.readWithDefault($processFunc, $guardFunction, null));
+                            var lisla = ExprBuilder.lislaExpr(value);
+                            
+                            ExprBuilder.createGetOrReturnExpr(
+                                macro arrayContext.readWithDefault(
+                                    $processFunc,
+                                    $guardFunction, 
+                                    $lisla
+                                )
+                            );
                             
                         case [ArgumentKind.Normal, Option.None]:
                             var processFunc = builder.createProcessFuncExpr(parameters, destType);
