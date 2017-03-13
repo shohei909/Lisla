@@ -4,13 +4,13 @@
 
 ;; (document_tag lisla.idl.document.IdlDocumentTag)
 (tuple Idl
-    (package_declaration PackageDeclaration)
+    (package_declaration PackageDeclaration (package ""))
     (import_declarations.. ImportDeclaration)
     (type_definitions.. TypeDefinition)
 )
 
 (tuple PackageDeclaration
-    package (package PackagePath)
+    package (package PackagePath "")
 )
 
 (tuple ImportDeclaration
