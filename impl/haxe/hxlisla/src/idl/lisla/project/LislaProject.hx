@@ -15,7 +15,7 @@ import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
 import lisla.idl.generator.output.error.GetConfigErrorKind;
 import lisla.idl.generator.output.haxe.HaxePrinter;
 import lisla.idl.generator.source.IdlFileSourceReader;
-import lisla.idl.hxlisla.lisla2entity.config.InputConfigLislaToEntity;
+import lisla.idl.hxlisla.lisla2entity.config.GenerationConfigLislaToEntity;
 import lisla.idl.library.LibraryScope;
 import lisla.idl.lislatext2entity.LislaFileToEntityRunner;
 import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
@@ -153,13 +153,13 @@ class LislaProject
                 errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetLibrary);
                 null;
         }
-        var inputConfig = switch (LislaFileToEntityRunner.run(InputConfigLislaToEntity, configFilePath))
+        var GenerationConfig = switch (LislaFileToEntityRunner.run(GenerationConfigLislaToEntity, configFilePath))
         {
-            case Result.Ok(_inputConfig):
-                _inputConfig;
+            case Result.Ok(_GenerationConfig):
+                _GenerationConfig;
                 
             case Result.Err(errors):
-                errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetInputConfig);
+                errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetGenerationConfig);
                 null;
         }
         
@@ -167,17 +167,17 @@ class LislaProject
         if (errorBuffer.hasError()) return Result.Err(errorBuffer.toArray());
         
         var baseDirectory = Path.directory(configFilePath);
-        var requiredInputConfigs = [];
-        for (imported in inputConfig._import)
+        var requiredGenerationConfigs = [];
+        for (imported in GenerationConfig._import)
         {
             var filePath = Path.join([baseDirectory, imported.data.haxeSource.data]);
-            switch (LislaFileToEntityRunner.run(InputConfigLislaToEntity, filePath))
+            switch (LislaFileToEntityRunner.run(GenerationConfigLislaToEntity, filePath))
             {
-                case Result.Ok(_inputConfig):
-                    requiredInputConfigs.push(_inputConfig);
+                case Result.Ok(_GenerationConfig):
+                    requiredGenerationConfigs.push(_GenerationConfig);
                     
                 case Result.Err(errors):
-                    errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetInputConfig);
+                    errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetGenerationConfig);
             }
         }
         
@@ -191,8 +191,8 @@ class LislaProject
             var context = new HaxeGenerateConfigFactoryContext(
                 configFilePath,
                 libraryScope,
-                inputConfig,
-                requiredInputConfigs
+                GenerationConfig,
+                requiredGenerationConfigs
             );
             
             Result.Ok(configFactoryFunction(context));

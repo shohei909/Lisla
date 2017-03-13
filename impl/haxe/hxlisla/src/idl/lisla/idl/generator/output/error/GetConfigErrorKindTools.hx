@@ -9,7 +9,7 @@ class GetConfigErrorKindTools
     {
         return switch (kind)
         {
-            case GetConfigErrorKind.GetInputConfig(error):
+            case GetConfigErrorKind.GetGenerationConfig(error):
                 error.getSummary().replaceKind(kind);
                 
             case GetConfigErrorKind.GetLibrary(error):

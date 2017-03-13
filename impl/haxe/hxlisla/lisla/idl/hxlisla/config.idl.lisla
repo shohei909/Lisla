@@ -5,7 +5,7 @@
 (import lisla.idl)
 (import lisla.idl.group)
 
-(struct InputConfig
+(struct GenerationConfig
     (target< TargetDeclaration)
     (import..< ImportDeclaration)
     (entity< EntityDeclaration 

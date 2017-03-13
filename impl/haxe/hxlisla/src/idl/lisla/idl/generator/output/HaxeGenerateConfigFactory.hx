@@ -42,59 +42,59 @@ class HaxeGenerateConfigFactory
     
     private function getTargetName(context:HaxeGenerateConfigFactoryContext):LibraryName
     {
-        return context.inputConfig.target.name;
+        return context.generationConfig.target.name;
     }
     
     
     private function getTargetVersion(context:HaxeGenerateConfigFactoryContext):Version
     {
-        return context.inputConfig.target.data.version;
+        return context.generationConfig.target.data.version;
     }
     
     private function getEntityOutputConfig(context:HaxeGenerateConfigFactoryContext):EntityOutputConfig
     {
         var filters:Array<TypeGroupFilter> = [];
-        var configs = context.requiredLibraryConfigs.concat([context.inputConfig]);
-        for (inputConfig in configs)
+        var configs = context.requiredLibraryConfigs.concat([context.generationConfig]);
+        for (generationConfig in configs)
         {
             filters.push(
                 TypeGroupFilterTools.create(
-                    inputConfig.target.name.data, 
-                    inputConfig.target.data.haxePackage.toString() + ".entity"
+                    generationConfig.target.name.data, 
+                    generationConfig.target.data.haxePackage.toString() + ".entity"
                 )
             );
             
-            for (filter in inputConfig.entity.data.filter)
+            for (filter in generationConfig.entity.data.filter)
             {
                 filters.push(filter.data);
             }
         }
         
-        var noOutput = OptionTools.isSome(context.inputConfig.entity.data.noOutput);
+        var noOutput = OptionTools.isSome(context.generationConfig.entity.data.noOutput);
         return new EntityOutputConfig(noOutput, filters);
     }
     
     private function getLislaToEntityOutputConfig(context:HaxeGenerateConfigFactoryContext):LislaToEntityOutputConfig
     {
         var filters = [];
-        var configs = context.requiredLibraryConfigs.concat([context.inputConfig]);
+        var configs = context.requiredLibraryConfigs.concat([context.generationConfig]);
         
-        for (inputConfig in configs)
+        for (generationConfig in configs)
         {
             filters.push(
                 TypeGroupFilterTools.create(
-                    inputConfig.target.name.data, 
-                    inputConfig.target.data.haxePackage.toString() + ".lisla2entity"
+                    generationConfig.target.name.data, 
+                    generationConfig.target.data.haxePackage.toString() + ".lisla2entity"
                 )
             );
             
-            for (filter in inputConfig.lislaToEntity.data.filter)
+            for (filter in generationConfig.lislaToEntity.data.filter)
             {
                 filters.push(filter.data);
             }
         }
         
-        var noOutput = OptionTools.isSome(context.inputConfig.lislaToEntity.data.noOutput);
+        var noOutput = OptionTools.isSome(context.generationConfig.lislaToEntity.data.noOutput);
         return new LislaToEntityOutputConfig(noOutput, filters);
     }
     
