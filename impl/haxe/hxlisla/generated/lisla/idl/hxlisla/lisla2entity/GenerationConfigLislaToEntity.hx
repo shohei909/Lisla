@@ -30,7 +30,7 @@ class GenerationConfigLislaToEntity {
                                 });
                             };
                         };
-                        case lisla.core.Lisla.Arr(array) if (2 <= array.length && array.data[0].match(lisla.core.Lisla.Str(_.data => "import")) && array.data[1].match(lisla.core.Lisla.Str(_))):arg1.push(switch (lisla.idl.hxlisla.lisla2entity.ImportDeclarationLislaToEntity.process(context)) {
+                        case lisla.core.Lisla.Arr(array) if (1 <= array.length && array.data[0].match(lisla.core.Lisla.Str(_.data => "import"))):arg1.push(switch (lisla.idl.hxlisla.lisla2entity.ImportDeclarationLislaToEntity.process(context)) {
                             case hxext.ds.Result.Ok(data):{
                                 data;
                             };

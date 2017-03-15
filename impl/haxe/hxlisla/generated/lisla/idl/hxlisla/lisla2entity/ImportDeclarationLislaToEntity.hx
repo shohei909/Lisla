@@ -10,7 +10,7 @@ class ImportDeclarationLislaToEntity {
                 var arrayContext = new lisla.idl.lisla2entity.LislaToEntityArrayContext(array, 0, context.config);
                 var instance = {
                     arrayContext.readLabel("import");
-                    var arg0 = switch (arrayContext.read(lisla.idl.std.lisla2entity.StringLislaToEntity.process)) {
+                    var arg0 = switch (arrayContext.readFixedInline(lisla.idl.hxlisla.lisla2entity.ImportConfigLislaToEntity.process, arrayContext.length - 0)) {
                         case hxext.ds.Result.Ok(data):{
                             data;
                         };
@@ -18,15 +18,7 @@ class ImportDeclarationLislaToEntity {
                             return hxext.ds.Result.Err(data);
                         };
                     };
-                    var arg1 = switch (arrayContext.readFixedInline(lisla.idl.hxlisla.lisla2entity.ImportConfigLislaToEntity.process, arrayContext.index + 1)) {
-                        case hxext.ds.Result.Ok(data):{
-                            data;
-                        };
-                        case hxext.ds.Result.Err(data):{
-                            return hxext.ds.Result.Err(data);
-                        };
-                    };
-                    var instance = new lisla.idl.hxlisla.entity.ImportDeclaration(arg0, arg1);
+                    var instance = new lisla.idl.hxlisla.entity.ImportDeclaration(arg0);
                     hxext.ds.Result.Ok(instance);
                 };
                 switch (arrayContext.closeOrError()) {

@@ -15,8 +15,17 @@
     (entity_to_lisla< EntityToLislaDeclaration 
         (entity_to_lisla)
     )
+    (bisla_to_entity< BislaToEntityDeclaration 
+        (bisla_to_entity)
+    )
+    (entity_to_bisla< EntityToBislaDeclaration 
+        (entity_to_bisla)
+    )
 )
 
+; -----------------------------
+; target
+; -----------------------------
 (tuple TargetDeclaration
     target 
     (name LibraryName) 
@@ -27,17 +36,27 @@
     (haxe_package PackagePath)
 )
 
+; -----------------------------
+; import
+; -----------------------------
 (tuple ImportDeclaration
-    import (name String) (data< ImportConfig)
+    import (data< ImportConfig)
 )
-(struct ImportConfig
-    (haxe_source DirectoryPath)
+(enum ImportConfig
+    (file (file FilePath))
+    (inline (config< GenerationConfig))
 )
 
+; -----------------------------
+; output
+; -----------------------------
 (tuple FilterDeclaration
     filter (data< TypeGroupFilter)
 )
 
+; -----------------------------
+; Entity
+; -----------------------------
 (tuple EntityDeclaration
     entity (data< EntityConfig)
 )
@@ -46,6 +65,9 @@
     (filter..< FilterDeclaration)
 )
 
+; -----------------------------
+; Lisla => Entity
+; -----------------------------
 (tuple LislaToEntityDeclaration 
     lisla_to_entity (data< LislaToEntityConfig)
 )
@@ -54,6 +76,9 @@
     (filter..< FilterDeclaration)
 )
 
+; -----------------------------
+; Entity => Lisla
+; -----------------------------
 (tuple EntityToLislaDeclaration 
     entity_to_lisla (data< EntityToLislaConfig)
 )
@@ -62,6 +87,9 @@
     (filter..< FilterDeclaration)
 )
 
+; -----------------------------
+; Bisla => Entity
+; -----------------------------
 (tuple BislaToEntityDeclaration 
     bisla_to_entity (data< BislaToEntityConfig)
 )
@@ -70,6 +98,9 @@
     (filter..< FilterDeclaration)
 )
 
+; -----------------------------
+; Entity => Bisla
+; -----------------------------
 (tuple EntityToBislaDeclaration 
     entity_to_bisla (data< EntityToBislaConfig)
 )

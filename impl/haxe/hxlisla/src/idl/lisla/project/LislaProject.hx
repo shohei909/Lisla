@@ -15,6 +15,7 @@ import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
 import lisla.idl.generator.output.error.GetConfigErrorKind;
 import lisla.idl.generator.output.haxe.HaxePrinter;
 import lisla.idl.generator.source.IdlFileSourceReader;
+import lisla.idl.hxlisla.entity.ImportConfig;
 import lisla.idl.hxlisla.lisla2entity.GenerationConfigLislaToEntity;
 import lisla.idl.library.LibraryScope;
 import lisla.idl.lislatext2entity.LislaFileToEntityRunner;
@@ -170,14 +171,21 @@ class LislaProject
         var requiredGenerationConfigs = [];
         for (imported in GenerationConfig._import)
         {
-            var filePath = Path.join([baseDirectory, imported.data.haxeSource.data]);
-            switch (LislaFileToEntityRunner.run(GenerationConfigLislaToEntity, filePath))
+            switch (imported.data)
             {
-                case Result.Ok(_GenerationConfig):
-                    requiredGenerationConfigs.push(_GenerationConfig);
-                    
-                case Result.Err(errors):
-                    errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetGenerationConfig);
+                case ImportConfig.File(fileName):
+                    var filePath = Path.join([baseDirectory, fileName.data]);
+                    switch (LislaFileToEntityRunner.run(GenerationConfigLislaToEntity, filePath))
+                    {
+                        case Result.Ok(_GenerationConfig):
+                            requiredGenerationConfigs.push(_GenerationConfig);
+                            
+                        case Result.Err(errors):
+                            errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetGenerationConfig);
+                    }
+                
+                case ImportConfig.Inline(generationConfig):
+                    requiredGenerationConfigs.push(generationConfig);
             }
         }
         

@@ -57,19 +57,19 @@
 ;; Additionally, the following suffixes are supported.
 ;; "?"   : Optional argument. (default value is disabled)
 ;; ".."  : Variable arguments. (default value is disabled)
-;; "<"   : Inlined argument. (default value is disabled)
+;; "<"   : Spread argument. (default value is disabled)
 ;; "?<"  : Optional spread argument. (default value is disabled)
 ;; "..<" : Variable spread argument. (default value is disabled)
 ;; 
 ;; ## Restriction
 ;; 
-;; ### Inlinable type
+;; ### Spreadable type
 ;;     Array
 ;;     Tuple
 ;;     Enum
 ;;     Struct
 ;; 
-;; #### Not unfoldable type
+;; #### Not spreadable type
 ;;     String
 ;; '''
 (newtype ArgumentName String)
@@ -86,17 +86,17 @@
 ;; Uppercase and lowercase ASCII Latin letters A-Z (\u0041-\u005a), and a-z (\u0061-\u007a), and the ASCII underscore(_) are allowed. 
 ;; Additionally, the following suffixes are supported.
 ;; ":"   : Tuple style . Its first element have not to be label.
-;; "<"   : Spread constructor. Its argument must be one and the argument will be inlined.
+;; "<"   : Spread constructor. Its argument must be one and the argument will be spread.
 ;; 
 ;; ## Restriction
-;; ### Inlinable type
+;; ### Spreadable type
 ;;     String
 ;;     Array
 ;;     Tuple
 ;;     Enum
 ;;     Struct
 ;;
-;; In other words, all type can be inlined. Newtype resolves to one of the above types.
+;; In other words, all type can be spread. Newtype resolves to one of the above types.
 ;; '''
 (newtype EnumConstructorName String)
 
@@ -126,14 +126,14 @@
 ;; "<<"  : Merge struct fields. (default value is disabled)
 ;; 
 ;; ## Restriction
-;; ### Inlinable type
+;; ### Spreadable type
 ;; * String
 ;; * Array
 ;; * Tuple
 ;; * Enum
 ;; * Struct
 ;; 
-;; In other words, all type can be inlined.
+;; In other words, all type can be spread.
 ;;
 ;; ### Mergeable type:    
 ;; * Struct

@@ -3,6 +3,4 @@
     (haxe_package lisla.idl.hxlisla)
 )
 
-(import lisla 
-    (haxe_source lisla.hxgen.lisla)
-)
+(import file lisla.hxgen.lisla)
