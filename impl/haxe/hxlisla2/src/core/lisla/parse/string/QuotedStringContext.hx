@@ -1,9 +1,11 @@
 package lisla.parse.string;
 using lisla.parse.char.CodePointTools;
 
-import String;
 import lisla.data.meta.core.Metadata;
+import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Range;
+import lisla.data.tree.array.ArrayTree;
+import lisla.data.tree.array.ArrayTreeKind;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseContext;
 import lisla.parse.array.ArrayContext;
@@ -12,6 +14,7 @@ import lisla.parse.array.ArrayState;
 import lisla.parse.tag.UnsettledLeadingTag;
 import lisla.parse.tag.UnsettledStringTag;
 import unifill.CodePoint;
+import lisla.data.leaf.template.TemplateLeaf;
 
 class QuotedStringContext 
 {
@@ -20,6 +23,8 @@ class QuotedStringContext
     
 	private var currentLine:QuotedStringLine;
     private var currentString:Array<QuotedStringLine>;
+	private var storedData:Array<QuotedStringArrayPair>;
+	
 	private var state:QuotedStringState;
 	private var singleQuoted:Bool;
 	private var startQuoteCount:Int;
@@ -35,11 +40,18 @@ class QuotedStringContext
 		this.startQuoteCount = startQuoteCount;
 		this.tag = tag;
         this.currentString = [];
+		this.storedData = [];
 		this.currentLine = new QuotedStringLine(tag.startPosition);
 		this.state = QuotedStringState.Indent;
         
         this.lastIndent = "";
 	}
+	
+    public function store(data:QuotedStringArrayPair):Void
+    {
+        tag = new UnsettledLeadingTag().toStringTag(top.position);
+        storedData.push(data);
+    }
     
     public function process(codePoint:CodePoint):Void
 	{
@@ -51,6 +63,17 @@ class QuotedStringContext
 					case EscapeResult.Letter(string):
                         currentLine.content += string;
 						state = QuotedStringState.Body;
+                        
+					case EscapeResult.Interpolate:
+                        currentString.push(currentLine);
+                        var store = new QuotedStringArrayPair(currentString, tag.settle(top.position));
+                        
+                        currentString = [];
+                        this.currentLine = new QuotedStringLine(top.position);
+                        state = QuotedStringState.Body;
+                        
+                        var arrayTag = new UnsettledLeadingTag().toArrayTag(top.position);
+                        top.current = new ArrayContext(top, ArrayParent.QuotedString(this, store), arrayTag);
                         
 					case EscapeResult.Continue:
                         // nothing to do.
@@ -248,6 +271,16 @@ class QuotedStringContext
             
             parent.pushString(string, tag);
             isFirstGroup = false;
+        }
+        
+        for (pair in storedData)
+        {
+            addString(pair.string, false, pair.tag);
+            
+            for (tree in pair.trees)
+            {
+                parent.push(tree);
+            }
         }
         
         if (currentString.length == 0 || !currentLine.isWhite())

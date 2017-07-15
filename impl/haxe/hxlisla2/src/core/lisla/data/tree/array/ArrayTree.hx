@@ -15,6 +15,7 @@ class ArrayTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
     
     public function new(kind:ArrayTreeKind<LeafType>, metadata:Metadata) 
     {
+        if (metadata == null) throw "test";
         super(metadata);
         this.kind = kind;
     }

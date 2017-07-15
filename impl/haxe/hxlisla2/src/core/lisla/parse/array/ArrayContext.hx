@@ -9,6 +9,7 @@ import lisla.data.tree.array.ArrayTreeKind;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseContext;
 import lisla.parse.array.ArrayParent;
+import lisla.parse.string.QuotedStringArrayPair;
 import lisla.parse.string.QuotedStringContext;
 import lisla.parse.string.UnquotedStringContext;
 import lisla.parse.tag.UnsettledArrayTag;
@@ -74,9 +75,19 @@ class ArrayContext
 			// Escape
 			// --------------------------
 			case [CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB, ArrayState.Escape]:
-                top.error(BasicParseErrorKind.InvalidInterpolationSeparator, Range.createWithEnd(tag.startPosition, top.position));
-                state = ArrayState.Normal;
-				
+                switch (parent)
+                {
+                    case ArrayParent.QuotedString(stringContext, store):
+                        store.pushArray(data, tag.settle(top.position, elementTag));
+                        
+                        var nextContext = new ArrayContext(top, this.parent, new UnsettledLeadingTag().toArrayTag(top.position));
+                        top.current = nextContext;
+                        
+                    case ArrayParent.Array(_) | ArrayParent.Top:
+                        top.error(BasicParseErrorKind.InvalidInterpolationSeparator, Range.createWithEnd(tag.startPosition, top.position));
+                        state = ArrayState.Normal;
+				}
+                
 			case [_, ArrayState.Escape]:
 				top.error(BasicParseErrorKind.UnquotedEscapeSequence, Range.createWithEnd(tag.startPosition, top.position));
 				state = ArrayState.Normal;
@@ -115,6 +126,9 @@ class ArrayContext
 				{
                     case ArrayParent.Array(parentContext):
                         endArray(parentContext);
+                        
+                    case ArrayParent.QuotedString(stringContext, store):
+                        endInterporation(stringContext, store);
                     
                     case ArrayParent.Top:
                         top.error(BasicParseErrorKind.TooManyClosingBracket);
@@ -198,6 +212,14 @@ class ArrayContext
 		top.current = destination;
 	}
     
+    private function endInterporation(stringContext:QuotedStringContext, store:QuotedStringArrayPair):Void
+    {
+        store.pushArray(data, tag.settle(top.position, elementTag));
+		stringContext.store(store);
+        
+		top.current = stringContext.parent;
+    }
+    
     public function push(tree:ArrayTree<TemplateLeaf>):Void
     {
         data.push(tree);
@@ -245,6 +267,11 @@ class ArrayContext
                     case ArrayParent.Array(arrayContext):
                         top.error(BasicParseErrorKind.UnclosedArray, Range.createWithLength(tag.startPosition, 1));
                         endArray(arrayContext);
+                        Option.None;
+                        
+                    case ArrayParent.QuotedString(stringContext, store):
+                        top.error(BasicParseErrorKind.UnclosedArray, Range.createWithLength(tag.startPosition, 1));
+                        endInterporation(stringContext, store);
                         Option.None;
                         
                     case ArrayParent.Top:
