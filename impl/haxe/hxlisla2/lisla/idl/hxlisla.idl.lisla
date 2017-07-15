@@ -1,0 +1,110 @@
+(import lisla.util.version)
+(import lisla.util.file)
+(import lisla.idl)
+(import lisla.idl.group)
+
+(struct GenerationConfig
+    (target< TargetDeclaration)
+    (import..< ImportDeclaration)
+    (entity< EntityDeclaration 
+        (entity)
+    )
+    (lisla_to_entity< LislaToEntityDeclaration 
+        (lisla_to_entity)
+    )
+    (entity_to_lisla< EntityToLislaDeclaration 
+        (entity_to_lisla)
+    )
+    (bisla_to_entity< BislaToEntityDeclaration 
+        (bisla_to_entity)
+    )
+    (entity_to_bisla< EntityToBislaDeclaration 
+        (entity_to_bisla)
+    )
+)
+
+; -----------------------------
+; target
+; -----------------------------
+(tuple TargetDeclaration
+    target 
+    (name LibraryName) 
+    (data< TargetConfig)
+)
+(struct TargetConfig
+    (version Version)
+    (haxe_package PackagePath)
+)
+
+; -----------------------------
+; import
+; -----------------------------
+(tuple ImportDeclaration
+    import (data< ImportConfig)
+)
+(enum ImportConfig
+    (file (file FilePath))
+    (inline (config< GenerationConfig))
+)
+
+; -----------------------------
+; output
+; -----------------------------
+(tuple FilterDeclaration
+    filter (data< TypeGroupFilter)
+)
+
+; -----------------------------
+; Entity
+; -----------------------------
+(tuple EntityDeclaration
+    entity (data< EntityConfig)
+)
+(struct EntityConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)
+
+; -----------------------------
+; Lisla => Entity
+; -----------------------------
+(tuple LislaToEntityDeclaration 
+    lisla_to_entity (data< LislaToEntityConfig)
+)
+(struct LislaToEntityConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)
+
+; -----------------------------
+; Entity => Lisla
+; -----------------------------
+(tuple EntityToLislaDeclaration 
+    entity_to_lisla (data< EntityToLislaConfig)
+)
+(struct EntityToLislaConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)
+
+; -----------------------------
+; Bisla => Entity
+; -----------------------------
+(tuple BislaToEntityDeclaration 
+    bisla_to_entity (data< BislaToEntityConfig)
+)
+(struct BislaToEntityConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)
+
+; -----------------------------
+; Entity => Bisla
+; -----------------------------
+(tuple EntityToBislaDeclaration 
+    entity_to_bisla (data< EntityToBislaConfig)
+)
+(struct EntityToBislaConfig
+    no_output?
+    (filter..< FilterDeclaration)
+)

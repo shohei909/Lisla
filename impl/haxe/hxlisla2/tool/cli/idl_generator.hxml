@@ -1,0 +1,10 @@
+-main Main
+-lib unifill
+-cp src/generator
+-cp ../../src/core
+-cp ../../src/idl
+-cp ../../generated
+-cp ../../migration
+-cp src/idl
+-dce full
+-neko bin/idl_generator.n

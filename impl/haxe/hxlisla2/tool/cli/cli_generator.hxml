@@ -1,0 +1,11 @@
+-main Main
+-lib unifill
+-cp src/cli
+-cp ../../src/core
+-cp ../../src/idl
+-cp ../../generated
+-cp lib/src
+-cp lib/generated
+-cp lib/migration
+-dce full
+-neko bin/cli_generator.n
