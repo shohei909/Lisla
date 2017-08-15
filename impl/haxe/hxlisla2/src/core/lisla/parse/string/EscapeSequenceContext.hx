@@ -99,7 +99,7 @@ class EscapeSequenceContext
 					}
 					catch (e:Exception)
 					{
-						top.error(BasicParseErrorKind.InvalidUnicode);
+						top.errorWithCurrentPosition(BasicParseErrorKind.InvalidUnicode);
 						EscapeResult.Letter("");
 					}
 				}

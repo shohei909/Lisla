@@ -12,4 +12,9 @@ abstract ErrorName(String)
     {
         return new ErrorName(Type.getEnumName(Type.getEnum(kind)) + "." + EnumValueTools.getName(kind));
     }
+    
+    public static function fromClass(clazz:Class<Dynamic>, kind:String):ErrorName
+    {
+        return new ErrorName(Type.getClassName(clazz) + "." + kind);
+    }
 }

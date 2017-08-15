@@ -4,15 +4,15 @@ using lisla.parse.char.CodePointTools;
 import lisla.data.meta.core.Metadata;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Range;
-import lisla.data.tree.array.ArrayTree;
-import lisla.data.tree.array.ArrayTreeKind;
+import lisla.data.tree.al.AlTree;
+import lisla.data.tree.al.AlTreeKind;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseContext;
 import lisla.parse.array.ArrayContext;
 import lisla.parse.array.ArrayParent;
 import lisla.parse.array.ArrayState;
-import lisla.parse.tag.UnsettledLeadingTag;
-import lisla.parse.tag.UnsettledStringTag;
+import lisla.parse.metadata.UnsettledLeadingTag;
+import lisla.parse.metadata.UnsettledStringTag;
 import unifill.CodePoint;
 import lisla.data.leaf.template.TemplateLeaf;
 
@@ -28,20 +28,20 @@ class QuotedStringContext
 	private var state:QuotedStringState;
 	private var singleQuoted:Bool;
 	private var startQuoteCount:Int;
-	private var tag:UnsettledStringTag;
+	private var metadata:UnsettledStringTag;
     
     private var lastIndent:String;
     
-	public function new(top:ParseContext, parent:ArrayContext, singleQuoted:Bool, startQuoteCount:Int, tag:UnsettledStringTag) 
+	public function new(top:ParseContext, parent:ArrayContext, singleQuoted:Bool, startQuoteCount:Int, metadata:UnsettledStringTag) 
 	{
 		this.top = top;
         this.parent = parent;
         this.singleQuoted = singleQuoted;
 		this.startQuoteCount = startQuoteCount;
-		this.tag = tag;
+		this.metadata = metadata;
         this.currentString = [];
 		this.storedData = [];
-		this.currentLine = new QuotedStringLine(tag.startPosition);
+		this.currentLine = new QuotedStringLine(metadata.startPosition);
 		this.state = QuotedStringState.Indent;
         
         this.lastIndent = "";
@@ -49,7 +49,7 @@ class QuotedStringContext
 	
     public function store(data:QuotedStringArrayPair):Void
     {
-        tag = new UnsettledLeadingTag().toStringTag(top.position);
+        metadata = new UnsettledLeadingTag().toStringTag(top.position);
         storedData.push(data);
     }
     
@@ -66,7 +66,7 @@ class QuotedStringContext
                         
 					case EscapeResult.Interpolate:
                         currentString.push(currentLine);
-                        var store = new QuotedStringArrayPair(currentString, tag.settle(top.position));
+                        var store = new QuotedStringArrayPair(currentString, metadata.settle(top.position));
                         
                         currentString = [];
                         this.currentLine = new QuotedStringLine(top.position);
@@ -212,14 +212,14 @@ class QuotedStringContext
 				}
 				
 			case EscapeSequence(context):
-				top.error(BasicParseErrorKind.InvalidEscapeSequence, Range.createWithEnd(tag.startPosition, top.position));
+				top.error(BasicParseErrorKind.InvalidEscapeSequence, Range.createWithEnd(metadata.startPosition, top.position));
 		}
 	}
 	
 	private function endUnclosedQuotedString(endQuoteCount:Int):Void
 	{
-		var startPosition = tag.startPosition;
-		top.error(BasicParseErrorKind.UnclosedQuote, Range.createWithEnd(tag.startPosition - startQuoteCount, startPosition));
+		var startPosition = metadata.startPosition;
+		top.error(BasicParseErrorKind.UnclosedQuote, Range.createWithEnd(metadata.startPosition - startQuoteCount, startPosition));
 		parent.state = ArrayState.Normal;
 	}
 	
@@ -233,7 +233,7 @@ class QuotedStringContext
         var isFirstGroup = true;
         var lastIndentSize = lastIndent.length;
         
-        function addString(lines:Array<QuotedStringLine>, isLastGroup:Bool, tag:Metadata):Void
+        function addString(lines:Array<QuotedStringLine>, isLastGroup:Bool, metadata:Metadata):Void
         {
             var string = "";
             var isGroupTop = true;
@@ -269,13 +269,13 @@ class QuotedStringContext
                 isGroupTop = false;
             }
             
-            parent.pushString(string, tag);
+            parent.pushString(string, metadata);
             isFirstGroup = false;
         }
         
         for (pair in storedData)
         {
-            addString(pair.string, false, pair.tag);
+            addString(pair.string, false, pair.metadata);
             
             for (tree in pair.trees)
             {
@@ -292,6 +292,6 @@ class QuotedStringContext
             currentString[currentString.length - 1].newLine = "";
         }
         
-        addString(currentString, true, tag.settle(top.position));
+        addString(currentString, true, metadata.settle(top.position));
 	}
 }

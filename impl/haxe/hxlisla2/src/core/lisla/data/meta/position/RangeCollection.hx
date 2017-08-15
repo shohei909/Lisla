@@ -1,6 +1,7 @@
 package lisla.data.meta.position;
+import haxe.ds.Option;
 import lisla.algorithm.SearchTools;
-import lisla.error.exception.FatalException;
+import lisla.error.exception.FatalInlineException;
 
 class RangeCollection 
 {
@@ -27,13 +28,13 @@ class RangeCollection
         }
     }
     
-    public function localize(localRanges:RangeCollection):RangeCollection
+    public function merge(localRanges:RangeCollection):RangeCollection
     {
         var result = [];
         
         for (range in localRanges.ranges)
         {
-            for (localRange in localizeRange(range))
+            for (localRange in mergeRange(range))
             {
                 result.push(localRange);
             }
@@ -42,17 +43,27 @@ class RangeCollection
         return new RangeCollection(result);
     }
     
-    public function localizeRange(localRange:Range):Array<Range>
+    public function mergeRange(localRange:Range):Array<Range>
     {
         var length = ranges.length;
         if (localRange.start < new CodePointIndex(0))
         {
-            throw new FatalException("localRange.start is lower out of range.", RangeCollection, "LocalRangeStartIsLowerOutOfRange");
+            throw new FatalInlineException(
+                "localRange.start is lower out of range.", 
+                RangeCollection, 
+                "LocalRangeStartIsLowerOutOfRange",
+                Option.Some(localRange)
+            );
         }
         var last = indexes[length];
         if (last < localRange.end)
         {
-            throw new FatalException("localRange.end is higher out of range.", RangeCollection, "LocalRangeEndIsUpperOutOfRange");
+            throw new FatalInlineException(
+                "localRange.end is higher out of range.", 
+                RangeCollection, 
+                "LocalRangeEndIsUpperOutOfRange",
+                Option.Some(localRange)
+            );
         }
      
         var startRangeIndex = getRangeIndexAt(localRange.start);

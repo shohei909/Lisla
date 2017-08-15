@@ -1,4 +1,5 @@
 package lisla.data.meta.position;
+import haxe.ds.Option;
 import lisla.data.meta.position.Range;
 import lisla.data.meta.position.SourceMap;
 
@@ -16,18 +17,18 @@ class SourceMap
         this.lineIndexes = lines;
     }
     
-    public function localize(childMap:SourceMap):SourceMap
+    public function merge(localMap:SourceMap):SourceMap
     {
         return new SourceMap(
-            ranges.localize(childMap.ranges),
+            ranges.merge(localMap.ranges),
             lineIndexes
         );
     }
     
-    public function localizeRange(range:Range):SourceMap
+    public function mergeRange(range:Range):SourceMap
     {
         return new SourceMap(
-            new RangeCollection(ranges.localizeRange(range)),
+            new RangeCollection(ranges.mergeRange(range)),
             lineIndexes
         );
     }
@@ -64,5 +65,17 @@ class SourceMap
         }
         
         return result;
+    }
+    
+    public static function mergeOption(parentSourceMap:Option<SourceMap>, localSourceMap:Option<SourceMap>):Option<SourceMap>
+    {
+        return switch [parentSourceMap, localSourceMap]
+        {
+            case [Option.Some(_parentSourceMap), Option.Some(_localSourceMap)]:
+                Option.Some(_parentSourceMap.merge(_localSourceMap));
+                
+            case _:
+                Option.None;
+        }
     }
 }

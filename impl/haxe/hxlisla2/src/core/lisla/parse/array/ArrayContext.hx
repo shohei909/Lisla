@@ -4,35 +4,35 @@ import lisla.data.leaf.template.TemplateLeaf;
 import lisla.data.meta.core.Metadata;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Range;
-import lisla.data.tree.array.ArrayTree;
-import lisla.data.tree.array.ArrayTreeKind;
+import lisla.data.tree.al.AlTree;
+import lisla.data.tree.al.AlTreeKind;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseContext;
 import lisla.parse.array.ArrayParent;
 import lisla.parse.string.QuotedStringArrayPair;
 import lisla.parse.string.QuotedStringContext;
 import lisla.parse.string.UnquotedStringContext;
-import lisla.parse.tag.UnsettledArrayTag;
-import lisla.parse.tag.UnsettledLeadingTag;
+import lisla.parse.metadata.UnsettledArrayTag;
+import lisla.parse.metadata.UnsettledLeadingTag;
 import unifill.CodePoint;
 using lisla.parse.char.CodePointTools;
 
 class ArrayContext
 {
     private var parent:ArrayParent;
-    private var data:Array<ArrayTree<TemplateLeaf>>;
-	private var tag:UnsettledArrayTag;
+    private var data:Array<AlTree<TemplateLeaf>>;
+	private var metadata:UnsettledArrayTag;
 	private var elementTag:UnsettledLeadingTag;
     private var top:ParseContext;
     
     public var state:ArrayState;
     
-	public function new(top:ParseContext, parent:ArrayParent, tag:UnsettledArrayTag) 
+	public function new(top:ParseContext, parent:ArrayParent, metadata:UnsettledArrayTag) 
 	{
         this.top = top;
         this.parent = parent;
         this.state = ArrayState.Normal;
-		this.tag = tag;
+		this.metadata = metadata;
 		this.data = [];
 		this.elementTag = new UnsettledLeadingTag();
 	}
@@ -78,18 +78,18 @@ class ArrayContext
                 switch (parent)
                 {
                     case ArrayParent.QuotedString(stringContext, store):
-                        store.pushArray(data, tag.settle(top.position, elementTag));
+                        store.pushArray(data, metadata.settle(top.position, elementTag));
                         
                         var nextContext = new ArrayContext(top, this.parent, new UnsettledLeadingTag().toArrayTag(top.position));
                         top.current = nextContext;
                         
                     case ArrayParent.Array(_) | ArrayParent.Top:
-                        top.error(BasicParseErrorKind.InvalidInterpolationSeparator, Range.createWithEnd(tag.startPosition, top.position));
+                        top.error(BasicParseErrorKind.InvalidInterpolationSeparator, Range.createWithEnd(metadata.startPosition, top.position));
                         state = ArrayState.Normal;
 				}
                 
 			case [_, ArrayState.Escape]:
-				top.error(BasicParseErrorKind.UnquotedEscapeSequence, Range.createWithEnd(tag.startPosition, top.position));
+				top.error(BasicParseErrorKind.UnquotedEscapeSequence, Range.createWithEnd(metadata.startPosition, top.position));
 				state = ArrayState.Normal;
                 
 			case [CodePointTools.BACK_SLASH, ArrayState.Normal]:
@@ -131,7 +131,7 @@ class ArrayContext
                         endInterporation(stringContext, store);
                     
                     case ArrayParent.Top:
-                        top.error(BasicParseErrorKind.TooManyClosingBracket);
+                        top.errorWithCurrentPosition(BasicParseErrorKind.TooManyClosingBracket);
 				}
                 
 				state = ArrayState.Normal;
@@ -151,7 +151,7 @@ class ArrayContext
 			case [_, ArrayState.Normal]:
 				if (CodePointTools.isBlackListedWhitespace(codePoint))
 				{
-					top.error(BasicParseErrorKind.BlacklistedWhitespace(codePoint));
+					top.errorWithCurrentPosition(BasicParseErrorKind.BlacklistedWhitespace(codePoint));
 				}
 				else
 				{
@@ -178,8 +178,8 @@ class ArrayContext
 	// =============================
 	private inline function startArray():Void 
 	{
-        var tag = popArrayTag(top.position - 1);
-        var child = new ArrayContext(top, ArrayParent.Array(this), tag);
+        var metadata = popArrayTag(top.position - 1);
+        var child = new ArrayContext(top, ArrayParent.Array(this), metadata);
 		top.current = child;
 	}
 
@@ -208,19 +208,19 @@ class ArrayContext
     
     private function endArray(destination:ArrayContext):Void
 	{
-		destination.pushArray(data, tag.settle(top.position, elementTag));
+		destination.pushArray(data, metadata.settle(top.position, elementTag));
 		top.current = destination;
 	}
     
     private function endInterporation(stringContext:QuotedStringContext, store:QuotedStringArrayPair):Void
     {
-        store.pushArray(data, tag.settle(top.position, elementTag));
+        store.pushArray(data, metadata.settle(top.position, elementTag));
 		stringContext.store(store);
         
 		top.current = stringContext.parent;
     }
     
-    public function push(tree:ArrayTree<TemplateLeaf>):Void
+    public function push(tree:AlTree<TemplateLeaf>):Void
     {
         data.push(tree);
 		state = ArrayState.Normal;
@@ -228,32 +228,32 @@ class ArrayContext
     
     public function pushString(string:String, metadata:Metadata):Void
     {
-        var kind = ArrayTreeKind.Leaf(TemplateLeaf.Str(string));
-        push(new ArrayTree(kind, metadata));
+        var kind = AlTreeKind.Leaf(TemplateLeaf.Str(string));
+        push(new AlTree(kind, metadata));
     }
     
-    public function pushArray(trees:Array<ArrayTree<TemplateLeaf>>, metadata:Metadata):Void
+    public function pushArray(trees:Array<AlTree<TemplateLeaf>>, metadata:Metadata):Void
     {
-        var kind = ArrayTreeKind.Arr(trees);
-        push(new ArrayTree(kind, metadata));
+        var kind = AlTreeKind.Arr(trees);
+        push(new AlTree(kind, metadata));
     }
     
     public function writeDocument(codePoint:CodePoint):Void
     {
-        var tag = elementTag;
-        tag.writeDocument(top.config, codePoint, top.position - 1);
+        var metadata = elementTag;
+        metadata.writeDocument(top.config, codePoint, top.position - 1);
     }
     
-	public inline function endTop():{trees:Array<ArrayTree<TemplateLeaf>>, metadata:Metadata}
+	public inline function endTop():{trees:Array<AlTree<TemplateLeaf>>, metadata:Metadata}
 	{
-        var kind = ArrayTreeKind.Arr(data);
+        var kind = AlTreeKind.Arr(data);
 		return {
             trees: data, 
-            metadata: tag.settle(top.position, elementTag)
+            metadata: metadata.settle(top.position, elementTag)
         }
 	}
     
-    public inline function getData():Option<{trees:Array<ArrayTree<TemplateLeaf>>, metadata:Metadata}> 
+    public inline function getData():Option<{trees:Array<AlTree<TemplateLeaf>>, metadata:Metadata}> 
 	{
 		return switch (state)
         {
@@ -265,12 +265,12 @@ class ArrayContext
                 switch (parent)
                 {
                     case ArrayParent.Array(arrayContext):
-                        top.error(BasicParseErrorKind.UnclosedArray, Range.createWithLength(tag.startPosition, 1));
+                        top.error(BasicParseErrorKind.UnclosedArray, Range.createWithLength(metadata.startPosition, 1));
                         endArray(arrayContext);
                         Option.None;
                         
                     case ArrayParent.QuotedString(stringContext, store):
-                        top.error(BasicParseErrorKind.UnclosedArray, Range.createWithLength(tag.startPosition, 1));
+                        top.error(BasicParseErrorKind.UnclosedArray, Range.createWithLength(metadata.startPosition, 1));
                         endInterporation(stringContext, store);
                         Option.None;
                         
@@ -295,7 +295,7 @@ class ArrayContext
                 Option.None;
                 
             case ArrayState.Escape:
-				top.error(BasicParseErrorKind.UnquotedEscapeSequence, Range.createWithEnd(tag.startPosition, top.position));
+				top.error(BasicParseErrorKind.UnquotedEscapeSequence, Range.createWithEnd(metadata.startPosition, top.position));
                 state = ArrayState.Normal;
                 Option.None;
         }

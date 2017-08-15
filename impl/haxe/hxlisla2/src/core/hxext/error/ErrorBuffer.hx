@@ -34,12 +34,12 @@ class ErrorBuffer<Error> implements IErrorBuffer<Error>
     
     public inline function toResult<T>(okValue:T):Result<T, Array<Error>>
     {
-        return if (hasError()) Result.Ok(okValue) else Result.Err(array);
+        return if (hasError()) Result.Ok(okValue) else Result.Error(array);
     }
     
     public inline function mapToResult<T, DestError>(okValue:T, errorFunc:Error->DestError):Result<T, Array<DestError>>
     {
-        return if (hasError()) Result.Ok(okValue) else Result.Err(mapToArray(errorFunc));
+        return if (hasError()) Result.Ok(okValue) else Result.Error(mapToArray(errorFunc));
     }
     
     public inline function toMaybe():Maybe<Array<Error>>

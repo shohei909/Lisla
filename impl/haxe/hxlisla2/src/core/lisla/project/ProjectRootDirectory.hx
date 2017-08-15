@@ -1,5 +1,5 @@
 package lisla.project;
-import lisla.data.meta.position.FilePathFromProjectRoot;
+import lisla.project.FilePathFromProjectRoot;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -40,18 +40,36 @@ abstract ProjectRootDirectory(String)
         }
     }
     
-    public function getContent(filePath:FilePathFromProjectRoot):String
+    public function getContent(path:FilePathFromProjectRoot):String
     {
-        return File.getContent(this + "/" + filePath);
+        return File.getContent(concat(path));
     }
     
     public function readDirectory(path:FilePathFromProjectRoot):Array<String>
     {
-        return FileSystem.readDirectory(this + "/" + path);
+        return FileSystem.readDirectory(concat(path));
     }
     
     public function isDirectory(path:FilePathFromProjectRoot):Bool
     {
-        return FileSystem.isDirectory(this + "/" + path);
+        return FileSystem.isDirectory(concat(path));
+    }
+    
+    public function exists(path:FilePathFromProjectRoot):Bool
+    {
+        return FileSystem.exists(concat(path));
+    }
+    
+    public function concat(path:FilePathFromProjectRoot):String
+    {
+        return this + "/" + path;
+    }
+    
+    public function makePair(filePath:FilePathFromProjectRoot):ProjectRootAndFilePath
+    {
+        return new ProjectRootAndFilePath(
+            new ProjectRootDirectory(this), 
+            filePath
+        );
     }
 }

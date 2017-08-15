@@ -1,11 +1,12 @@
 package lisla.parse.string;
+import haxe.ds.Option;
 import lisla.data.meta.position.Range;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseContext;
 import lisla.parse.array.ArrayContext;
 import lisla.parse.array.ArrayState;
 import lisla.parse.char.CodePointTools;
-import lisla.parse.tag.UnsettledStringTag;
+import lisla.parse.metadata.UnsettledStringTag;
 import unifill.CodePoint;
 
 class UnquotedStringContext 
@@ -13,14 +14,14 @@ class UnquotedStringContext
     private var top:ParseContext;
     private var parent:ArrayContext;
 	private var string:String;
-	private var tag:UnsettledStringTag;
+	private var metadata:UnsettledStringTag;
 	
-	public inline function new(top:ParseContext, parent:ArrayContext, tag:UnsettledStringTag) 
+	public inline function new(top:ParseContext, parent:ArrayContext, metadata:UnsettledStringTag) 
 	{
 		this.parent = parent;
         this.top = top;
         string = "";
-		this.tag = tag;
+		this.metadata = metadata;
 	}
     
 	public function process(codePoint:CodePoint):Void
@@ -35,7 +36,10 @@ class UnquotedStringContext
                 parent.state = ArrayState.Semicolon;
 				
 			case CodePointTools.BACK_SLASH:
-				top.error(BasicParseErrorKind.UnquotedEscapeSequence, Range.createWithEnd(tag.startPosition, top.position));
+				top.error(
+                    BasicParseErrorKind.UnquotedEscapeSequence, 
+                    Range.createWithEnd(metadata.startPosition, top.position)
+                );
 				
 			// --------------------------
 			// Separater
@@ -65,6 +69,6 @@ class UnquotedStringContext
 	
 	public function end():Void
 	{
-        parent.pushString(string, tag.settle(top.position));
+        parent.pushString(string, metadata.settle(top.position));
 	}
 }

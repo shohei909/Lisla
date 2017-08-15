@@ -1,5 +1,5 @@
 package lisla.project;
-import lisla.data.meta.position.FilePathFromProjectRoot;
+import lisla.project.FilePathFromProjectRoot;
 import sys.FileSystem;
 import sys.io.File;
 

@@ -5,7 +5,6 @@ import lisla.idl.generator.output.HaxeGenerateConfigFactory;
 import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
 import lisla.project.LislaProjectSystem;
 import lisla.project.error.HxlislaErrorKind;
-import lisla.project.error.HxlislaErrorKindTools;
 import sys.FileSystem;
 using hxext.ds.ResultTools;
 
@@ -21,7 +20,7 @@ class Preprocess
             case Result.Ok(lislaProject):
                 lislaProject;
                 
-            case Result.Err(errors):
+            case Result.Error(errors):
                 outputErrorAndClose(errors, HxlislaErrorKind.LoadProject);
                 return;
         }

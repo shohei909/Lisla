@@ -1,11 +1,12 @@
 package;
 import cases.IdlTest;
 import cases.ParseTest;
+import lisla.project.FilePathFromProjectRoot;
 import nanotest.NanoTestRunner;
 
 class TestIdl
 {
-	public static var IDL_DIRECTORY:String = "../../../data/idl";
+	public static var IDL_DIRECTORY = new FilePathFromProjectRoot("data/idl");
 	
 	public static function main():Void
 	{

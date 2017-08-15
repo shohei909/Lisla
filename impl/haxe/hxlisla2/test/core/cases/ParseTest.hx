@@ -1,8 +1,10 @@
 package cases;
 import haxe.Json;
+import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.data.tree.array.ArrayTreeKind;
-import lisla.error.core.ErrorStringfier.ErrorStringifier;
+import lisla.data.meta.position.SourceMap;
+import lisla.data.tree.al.AlTreeKind;
+import lisla.error.core.ErrorStringifier;
 import lisla.parse.Parser;
 import lisla.project.ProjectRootDirectory;
 
@@ -22,17 +24,17 @@ class ParseTest extends LislaTestCase
 		for (filePath in rootDirectory.searchFiles(TestCore.BASIC_DIRECTORY, ".lisla"))
 		{
             var content = rootDirectory.getContent(filePath);
+            var pair = rootDirectory.makePair(filePath);
             
             var caseDocument = switch (Parser.parse(content))
             {
                 case Result.Ok(data):
                     data;
                     
-                case Result.Error(errorResult):
-                    var sourceMap = errorResult.getSourceMap();
-                    for (error in errorResult.errors)
+                case Result.Error(errors):
+                    for (error in errors)
                     {
-                        var message = ErrorStringifier.fromErrorInFile(filePath, sourceMap, error);
+                        var message = ErrorStringifier.fromBlockErrorWithFilePath(error, pair);
                         fail("failed to parse case file: " + message).label(filePath);
                     }
                     continue;
@@ -40,25 +42,27 @@ class ParseTest extends LislaTestCase
             
             switch [caseDocument.data[0].kind, caseDocument.data[1].kind]
             {
-                case [ArrayTreeKind.Leaf(arrayTree), ArrayTreeKind.Leaf(json)]:				
-                    var arrayTreeDocument = switch (Parser.parse(arrayTree))
+                case [AlTreeKind.Leaf(alTree), AlTreeKind.Leaf(json)]:				
+                    var alTreeDocument = switch (Parser.parse(alTree))
                     {
                         case Result.Ok(_document):
                             _document;
                             
-                        case Result.Error(errorResult):
-                            var caseSourceMap = caseDocument.getSourceMap();
-                            var sourceMap = caseSourceMap.localize(errorResult.getSourceMap());
-                            
-                            for (error in errorResult.errors)
+                        case Result.Error(errors):
+                            for (error in errors)
                             {
-                                var message = ErrorStringifier.fromErrorInFile(filePath, sourceMap, error);
+                                var sourceMap = SourceMap.mergeOption(
+                                    Option.Some(caseDocument.sourceMap),
+                                    error.sourceMap
+                                );
+                                var message = ErrorStringifier.fromBlockErrorWithFilePath(error, pair);
                                 fail("failed to parse input: " + message).label(filePath);
                             }
+                            
                             continue;
                     }
             
-                    assertArray(arrayTreeDocument.data, Json.parse(json), filePath);
+                    assertArray(alTreeDocument.data, Json.parse(json), filePath);
                     
                 case _:
                     fail("test case data must be [lisla, json]").label(filePath);

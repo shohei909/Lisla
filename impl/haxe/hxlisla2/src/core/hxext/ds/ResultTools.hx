@@ -10,7 +10,7 @@ class ResultTools
 			case Result.Ok(data):
 				data;
 				
-			case Result.Err(error):
+			case Result.Error(error):
 				throw if (errorFunc == null)
 				{
 					error;
@@ -29,8 +29,8 @@ class ResultTools
 			case Result.Ok(data):
 				Result.Ok(func(data));
 				
-			case Result.Err(error):
-				Result.Err(error);
+			case Result.Error(error):
+				Result.Error(error);
 		}
 	}
 }

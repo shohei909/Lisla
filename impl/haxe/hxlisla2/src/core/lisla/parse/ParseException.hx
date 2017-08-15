@@ -1,15 +1,14 @@
 package lisla.parse;
-import lisla.data.leaf.template.TemplateLeaf;
-import lisla.data.meta.position.DataWithRange;
+
+import lisla.error.core.InlineToBlockErrorWrapper;
 import lisla.error.parse.BasicParseError;
-import lisla.parse.result.ParseErrorResult;
 
 class ParseException 
 {
-    public var errorResult:ParseErrorResult<BasicParseError>;
+    public var errors:Array<InlineToBlockErrorWrapper<BasicParseError>>;
     
-    public function new(errorResult:ParseErrorResult<BasicParseError>) 
+    public function new(errors:Array<InlineToBlockErrorWrapper<BasicParseError>>) 
     {
-        this.errorResult = errorResult;
+        this.errors = errors;
     }
 }

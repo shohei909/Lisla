@@ -1,5 +1,6 @@
 package lisla.data.meta.position;
 import lisla.algorithm.SearchTools;
+import lisla.data.meta.position.PositionWithLineNumber;
 
 class LineIndexes
 {

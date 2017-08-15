@@ -1,24 +1,24 @@
 package;
 import haxe.PosInfos;
-import lisla.data.tree.array.ArrayTree;
-import lisla.data.tree.array.ArrayTreeKind;
+import lisla.data.tree.al.AlTree;
+import lisla.data.tree.al.AlTreeKind;
 import nanotest.NanoTestCase;
 
 class LislaTestCase extends NanoTestCase
 {
-	private function assertTree(tree:ArrayTree<String>, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
+	private function assertTree(tree:AlTree<String>, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
 	{
 		switch (tree.kind)
 		{
-			case ArrayTreeKind.Leaf(leaf):
+			case AlTreeKind.Leaf(leaf):
 				assertLeaf(leaf, json, path, pos);
 			
-			case ArrayTreeKind.Arr(array):
+			case AlTreeKind.Arr(array):
 				assertArray(array, json, path, pos);
 		}
 	}
     
-	private function assertArray(trees:Array<ArrayTree<String>>, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
+	private function assertArray(trees:Array<AlTree<String>>, json:Dynamic, path:String = "_", ?pos:PosInfos):Void
 	{
 		if (!Std.is(json, Array))
 		{

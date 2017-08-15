@@ -1,7 +1,7 @@
 package;
 
 import cases.ParseTest;
-import lisla.data.meta.position.FilePathFromProjectRoot;
+import lisla.project.FilePathFromProjectRoot;
 import lisla.project.ProjectRootDirectory;
 import nanotest.NanoTestRunner;
 

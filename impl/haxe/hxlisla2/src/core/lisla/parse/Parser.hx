@@ -1,15 +1,19 @@
 package lisla.parse;
 
+import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.error.parse.ArrayTreeParseError;
-import lisla.parse.result.ArrayTreeParseResult;
-import lisla.parse.result.ArrayTreeTemplateParseResult;
+import lisla.data.tree.al.AlTreeArrayTools;
+import lisla.data.tree.al.AlTreeBlock;
+import lisla.error.parse.AlTreeParseError;
+import lisla.error.parse.AlTreeParseErrorKind;
+import lisla.parse.result.AlTreeParseResult;
+import lisla.parse.result.AlTreeTemplateParseResult;
 import lisla.template.TemplateFinalizer;
 using unifill.Unifill;
 
 class Parser
 {
-    public static function parse(string:String, ?config:ParserConfig):ArrayTreeParseResult
+    public static function parse(string:String, ?config:ParserConfig):AlTreeParseResult
     {
 		if (config == null) 
 		{
@@ -21,21 +25,25 @@ class Parser
             case Result.Ok(ok):
                 ok;
                 
-            case Result.Error(errorResult):
-                return Result.Error(errorResult.map(ArrayTreeParseError.fromBasic));
+            case Result.Error(errors):
+                return Result.Error(
+                    [for (error in errors) new AlTreeParseError(AlTreeParseErrorKind.Basic(error.error), error.getOptionSourceMap())]
+                );
         }
         
-        return switch (template.mapOrError(TemplateFinalizer.finalize, config.persevering))
+        return switch (AlTreeArrayTools.mapOrError(template.data, TemplateFinalizer.finalize, config.persevering))
         {
             case Result.Ok(ok):
-                Result.Ok(ok);
+                Result.Ok(new AlTreeBlock(ok, template.metadata, template.sourceMap));
                 
-            case Result.Error(errorResult):
-                Result.Error(errorResult.map(ArrayTreeParseError.fromTemplateFinalize));
+            case Result.Error(errors):
+                Result.Error(
+                    [for (error in errors) new AlTreeParseError(AlTreeParseErrorKind.TemplateFinalize(error), Option.Some(template.sourceMap))]
+                );
         }
     }
     
-	public static function parseTemplate(string:String, ?config:ParserConfig):ArrayTreeTemplateParseResult
+	public static function parseTemplate(string:String, ?config:ParserConfig):AlTreeTemplateParseResult
 	{
 		if (config == null) 
 		{
@@ -55,7 +63,7 @@ class Parser
 		}
 		catch (exception:ParseException)
 		{
-			return Result.Error(exception.errorResult);
+			return Result.Error(exception.errors);
 		}
 	}
 }

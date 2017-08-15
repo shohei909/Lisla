@@ -1,0 +1,11 @@
+[package]
+name = "lisla"
+version = "0.1.0"
+authors = ["shohei909 <909mmsphere@gmail.com>"]
+
+[dependencies]
+linked-hash-map = "0.5.0"
+lisla_derive = { version = "0.1.0", path = "../lisla_derive" }
+
+[lib]
+name="lisla"
