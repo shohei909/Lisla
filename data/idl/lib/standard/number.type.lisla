@@ -1,0 +1,6 @@
+;; a rational number
+(tuple Fraction
+    (var numerator)
+    (label /)
+    (var denominator)
+)

@@ -1,0 +1,4 @@
+(tuple DateTime
+    (var date : Date)
+    (var time : Time)
+)

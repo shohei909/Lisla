@@ -1,0 +1,21 @@
+; -------------------- Markup --------------------------
+;; HyperText Markup Language
+(newtype Html : String)
+(newtype Markdown : String)
+
+
+; -------------------- Style --------------------------
+;; Cascading Style Sheets
+(newtype Css : String)
+
+
+; -------------------- Script --------------------------
+(newtype JavaScript : String)
+
+
+; -------------------- Data --------------------------
+;; Extensible Markup Language
+(newtype Xml : String)
+
+;; JavaScript Object Notation
+(newtype Json : String)

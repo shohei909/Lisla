@@ -1,11 +1,8 @@
 use data::tag::*;
-use data::leaf::*;
 use data::position::*;
 use super::*;
 use super::array::*;
 use super::string::*;
-use super::escape::*;
-use super::space::is_blacklist_whitespace;
 
 #[derive(Debug, Clone)]
 pub struct QuoteContext {
@@ -15,55 +12,69 @@ pub struct QuoteContext {
 
 impl QuoteContext {
     pub fn process(
-        self, 
+        mut self, 
         input: &CharacterInput, 
         mut data: StringData,
-        errors: &mut ErrorWrite<ParseError>
+        errors: &mut ErrorWrite<ParseError>, 
     ) -> ProcessAction {
         let context = match (input.character, self.quote.kind) {
-            ('\'', QuoteKind::Single) | ('\'', QuoteKind::Single) => {
+            ('\'', QuoteKind::Single) | ('\"', QuoteKind::Double) => {
+                self.close_count += 1;
                 StringBodyContext {
                     quote: Option::Some(self),
-                    escape: Option::None,
                 }
             }
+
             _ => {
-                for _ in 0..self.close_count {
-                    data.content.push(self.quote.kind.character());
-                }
-
-                match (input.character, self.quote.kind) {
-                    ('\\', QuoteKind::Double) => {
-                        StringBodyContext {
-                            quote: Option::Some(self),
-                            escape: Option::Some(EscapeContext::Top),
-                        }
+                if self.close_count < self.quote.count {
+                    for _ in 0..self.close_count {
+                        data.content.push(self.quote.kind.character());
                     }
-
-                    (_, _) => {
-                        data.content.push(input.character);
-                        StringBodyContext {
-                            quote: Option::Some(self),
-                            escape: Option::None,
-                        }
+                    self.close_count = 0;
+                    data.content.push(input.character);
+                    StringBodyContext {
+                        quote: Option::Some(self),
                     }
+                } else {
+                    if self.quote.count < self.close_count {
+                        let range = Range::with_length(
+                            input.index - self.quote.count, 
+                            self.quote.count
+                        );
+                        errors.push(ParseError::from(TooLongClosingQuoteError{ range }));
+                    }
+                    return data.complete_and_process(
+                        input, 
+                        Option::Some(self.quote),
+                        errors,
+                    );
                 }
             }
         };
         
-        data.continue_action(
-            StringContextKind::Body(context)
-        )
+        data.continue_body(context)
     }
 
     pub fn complete(
         self, 
         input: &EndInput, 
         data: StringData,
-        errors: &mut ErrorWrite<ParseError>
+        errors: &mut ErrorWrite<ParseError>, 
     ) -> ATree<TemplateLeaf> {
-        let range = Range::with_end(data.start, input.index);
-        errors.push(ParseError::from(UnclosedQuoteError{ range, quote: self.quote.clone() }));
-        data.complete(input.index, Option::Some(self.quote))
+        if self.close_count < self.quote.count {
+            let range = Range::with_end(data.start, input.index);
+            errors.push(ParseError::from(UnclosedQuoteError{ range, quote: self.quote.clone() }));
+            data.complete(input.config, input.index, Option::Some(self.quote), errors)
+        } else {
+            if self.quote.count < self.close_count {
+                let range = Range::with_length(
+                    input.index - self.quote.count, 
+                    self.quote.count
+                );
+                errors.push(ParseError::from(TooLongClosingQuoteError{ range }));
+            }
+            
+            data.complete(input.config, input.index, Option::Some(self.quote), errors)
+        }
     }
 }

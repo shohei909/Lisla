@@ -1,7 +1,6 @@
 use template::error::PlaceholderCompleteError;
 use data::position::*;
 use data::tag::*;
-use error::Error;
 
 #[derive(Error)]
 #[derive(Debug, Clone)]
@@ -21,14 +20,11 @@ pub enum ParseError {
     
     BlacklistedWhiteSpace(BlacklistedWhiteSpaceError),
     TooManyClosingBrackets(TooManyClosingBracketsError),
-    SeparaterRequired(SeparaterRequiredError),
+    TooLongClosingQuote(TooLongClosingQuoteError),
     UnmatchedIndent(UnmatchedIndentError),
     
-    InvalidEscape(InvalidEscapeError),
-    InvalidUnicode(InvalidUnicodeError),
-    InvalidUnicodeDigit(InvalidUnicodeDigitError),
-
     InvalidPlaceholderPosition(InvalidPlaceholderPositionError),
+    EmptyPlaceholder(EmptyPlaceholderError),
 }
 
 #[derive(Error)]
@@ -75,9 +71,9 @@ pub struct TooManyClosingBracketsError {
 
 #[derive(Error)]
 #[derive(Debug, Clone)]
-#[message = "separater is required"]
+#[message = "too long closing quote"]
 #[code = "7afbcea2-0b6e-4abf-a945-8c1468f99ff7"]
-pub struct SeparaterRequiredError {
+pub struct TooLongClosingQuoteError {
     pub range: Range,
 }
 
@@ -143,5 +139,13 @@ pub struct InvalidUnicodeDigitError {
 #[message = "invalid placeholder position"]
 #[code = "9fae0ca2-1489-4cd6-aaef-5c9a0f6b380d"]
 pub struct InvalidPlaceholderPositionError {
+    pub range: Range,
+}
+
+#[derive(Error)]
+#[derive(Debug, Clone)]
+#[message = "empty placeholder"]
+#[code = "25577736-d376-4444-8218-1aca1efadd60"]
+pub struct EmptyPlaceholderError {
     pub range: Range,
 }

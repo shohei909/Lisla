@@ -68,7 +68,7 @@ impl Display for Range {
             "{}-{}",
             self.start(),
             self.end(),
-        );
+        )?;
         
         Result::Ok(())
     }
@@ -87,7 +87,7 @@ impl SourceMap {
     pub fn local(&self, local_range:&Range) -> SourceMap {
         let mut result = SourceMap::new();
 
-        let mut local_start = local_range.start();
+        let local_start = local_range.start();
         let start_index = match self.ranges.binary_search_by(|range| range.inner_start.cmp(&local_start)) {
             Result::Ok(index)  => index,
             Result::Err(0)     => 0,
@@ -98,7 +98,6 @@ impl SourceMap {
 
         for index in start_index..self.ranges.len() {
             let range = &self.ranges[index];
-            let mut inner_start = local_start - range.inner_start;
             
             if range.range.end() < local_end {
                 result.add_range(
@@ -131,7 +130,7 @@ impl SourceMap {
 impl Display for SourceMap {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         for range in &self.ranges {
-            range.range.fmt(formatter);
+            range.range.fmt(formatter)?;
         }
         Result::Ok(())
     }

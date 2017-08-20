@@ -1,0 +1,222 @@
+(import standard.type.TypeReference)
+(import standard.type.TypePath)
+
+(newtype Idl = (Array Declaration))
+
+(union Declaration
+    (case Import : ImportDeclaration)
+    (case Tuple : TupleDeclaration)
+    (case Struct : StructDeclaration)
+    (case Union : UnionDeclaration)
+    (case Newtype : NewtypeDeclaration)
+)
+
+
+; -------------------- Name --------------------------
+(newtype TypePath : String)
+(newtype VariableName : String)
+(newtype KindName : String)
+(newtype TypeName : String)
+
+
+; -------------------- Type Reference --------------------------
+(union TypeReference
+    (case Primitive : TypePath)
+    (case Generic : GenericTypeReference)
+)
+(tuple GenericTypeReference
+    (var name : TypePath)
+    (rest arguments : TypeArgument)
+)
+(newtype TypeArgument : Any)
+
+
+
+; -------------------- Type Declaration --------------------------
+(union TypeDeclaration
+    (case Primitive : TypeName)
+    (case Generic : GenericTypeDeclaration)
+)
+(tuple GenericTypeDeclaration
+    (var name : TypeName)
+    (rest parameters : TypeParameterDeclaration)
+)
+(union TypeParameterDeclaration
+    (case Value : ValueTypeParameterDeclaration)
+    (case Type : TypeTypeParameterDeclaration)
+)
+(tuple ValueTypeParameterDeclaration
+    (label value)
+    (var name : VariableName)
+    (label :)
+    (var type : TypeReference)
+)
+(tuple TypeTypeParameterDeclaration
+    (label type)
+    (var name : TypeName)
+)
+(tuple KindTypeParameterDeclaration
+    (label kind)
+    (var name : KindDeclaration)
+)
+(tuple KindDeclaration
+    (var name : KindName)
+    (rest parameters : KindParameter)
+)
+(union KindParameter
+    (case Type : TypeKindParameter)
+    (case Array : (Array KindParameter))
+)
+(newtype TypeKindParameter : (Const (value _))
+
+
+; -------------------- Import --------------------------
+(tuple ImportDeclaration 
+    (label package)
+    (var path : TypePath)
+    (optional spreads new_name : ImportAsDeclaration)
+)
+(tuple ImportAsDeclaration
+    (label as)
+    (var name : TypeName)
+)
+
+
+; -------------------- Struct --------------------------
+(tuple StructDeclaration 
+    (label struct)
+    (var path : TypeDeclaration)
+    (rest elements : StructElement)
+)
+(union StructElement
+    (case Var : VarStructElement)
+    (case OptionalVar : OptionalVarStructElement)
+    (case Label : LabelStructElement)
+    (case Spreads : SpreadsElement)
+)
+(tuple LabelStructElement
+    (label label)
+    (var key : String)
+    (label :)
+    (var value : Any)
+)
+(tuple VarElement
+    (label var)
+    (var name : VariableName)
+    (label :)
+    (var type : TypeReference)
+    (spreads attributes : VarAttributes)
+)
+(struct VarAttributes
+    (optional var tag : Int32)
+)
+(tuple OptionalVarElement
+    (label optional)
+    (label var)
+    (var name : VariableName)
+    (label :)
+    (var type : TypeReference)
+    (spreads attributes : OptionalVarAttributes)
+)
+(struct OptionalVarAttributes
+    (optional var tag : Int32)
+    (optional var default : Any)
+)
+(tuple SpreadsElement
+    (label spreads)
+    (var name : VariableName)
+    (label :)
+    (var type : TypeReference)
+    (spreads attributes : VarAttributes)
+)
+
+
+; -------------------- Union --------------------------
+(newtype VariantName : String)
+(tuple UnionDeclaration
+    (label union)
+    (var type : UnionDeclaration)
+    (rest elements : UnionElement)
+)
+(tuple UnionElement
+    (case Case : CaseUnionElement)
+)
+(tuple CaseUnionElement
+    (label case)
+    (var name : VariantName)
+    (label :)
+    (var type : TypeReference)
+    (spreads attributes : CaseUnionAttributes)
+)
+(struct CaseUnionAttributes
+    (optional var tag : Int32)
+)
+
+
+; -------------------- Tuple --------------------------
+(tuple TupleDeclaration
+    (label tuple)
+    (var type : TypeDeclaration)
+    (rest elements : TupleElement)
+)
+(union TupleElement
+    (case Label : LabelElement)
+    (case Var : VarElement)
+    (case OptionalVar : OptionalVarElement)
+    (case RestVar : RestVarElement)
+    (case Spreads : SpreadsElement)
+    (case OptionalSpreads : OptionalSpreadsElement)
+    (case RestSpreads : RestSpreadsElement)
+)
+(tuple RestVarElement
+    (label rest)
+    (label var)
+    (var name : VariableName)
+    (label :)
+    (var type : TypeReference)
+    (spreads attributes : VarAttributes)
+)
+(tuple OptionalSpreadsElement
+    (label optional)
+    (label spreads)
+    (var name : VariableName)
+    (label :)
+    (var type : TypeReference)
+    (spreads attributes : OptionalVarAttributes)
+)
+(tuple SpreadsElement
+    (label rest)
+    (label spreads)
+    (var name : VariableName)
+    (label :)
+    (var type : TypeReference)
+    (spreads attributes : VarAttributes)
+)
+
+
+; -------------------- Newtype --------------------------
+(tuple NewtypeDeclaration
+    (label newtype)
+    (var type : TypeDeclaration)
+    (label :)
+    (var underly_type : TypeReference)
+)
+
+
+; ------------------- Enum ------------------------------ 
+(tuple EnumDeclaration
+    (label enum)
+    (var type : TypeDeclaration)
+    (rest elements : EnumElement)
+)
+(union EnumElement
+    (case Case : CaseEnumElement)
+)
+(tuple CaseEnumElement
+    (label case)
+    (var name : VariableName)
+    (spreads attributes : CaseEnumAttributes)
+)
+(struct CaseEnumAttributes
+    (optional var value : Int32 (key =))
+)

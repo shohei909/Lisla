@@ -2,8 +2,6 @@ use data::position::*;
 use data::tree::*;
 use std::cell::RefCell;
 use parse::error::ParseStringError;
-use macros;
-use std::fmt::Debug;
 
 #[derive(Debug, Clone)]
 pub struct Tag {
@@ -36,6 +34,7 @@ pub enum TagKind {
 pub struct LeafTag {
     pub quote: Option<Quote>,
     pub raw_content: String,
+    pub is_placeholder: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -95,6 +94,15 @@ pub struct Quote {
     pub count: usize,
 }
 
+impl Quote {
+    pub fn new(kind:QuoteKind) -> Self {
+        Quote {
+            kind,
+            count: 1, 
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 pub enum NewlineKind {
     CrLf,
@@ -111,8 +119,8 @@ pub enum QuoteKind {
 impl QuoteKind {
     pub fn character(&self) -> char {
         match self {
-            Single => '\'',
-            Double => '\"',
+            &QuoteKind::Single => '\'',
+            &QuoteKind::Double => '\"',
         }
     }
 }

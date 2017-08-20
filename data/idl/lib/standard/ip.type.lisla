@@ -1,0 +1,2 @@
+(newtype Ipv4Address : String)
+(newtype Ipv6Address : String)

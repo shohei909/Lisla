@@ -61,16 +61,17 @@ impl ArrayContext {
 
         self.data.do_action(input, action, errors)
     }
+
     // 入力の終了
     pub fn complete(mut self, input:&EndInput, errors:&mut ErrorWrite<ParseError>) -> ATreeArrayBranch<TemplateLeaf> {
         let footer_space = match self.kind {
             ArrayContextKind::Space(context) => 
-                context.complete(input, errors),
+                context.complete(input),
 
             ArrayContextKind::String(context) => {
                 let tree = context.complete(input, errors);
                 self.data.detail.elements.push(tree);
-                SpaceContext::new(input.index).complete(input, errors)
+                SpaceContext::new(input.index).complete(input)
             }
         };
 
@@ -101,7 +102,7 @@ impl ArrayData {
             }
 
             ProcessAction::OpenArray{ space } => 
-                self.open_array(input, space, errors),
+                self.open_array(input, space),
 
             ProcessAction::CloseArray{ space } => 
                 self.close_array(input, space, errors),
@@ -148,7 +149,7 @@ impl ArrayData {
     }
     
     // `[`に対する処理。Arrayを1つ開く。
-    fn open_array(self, input:&CharacterInput, leading_space:Option<Space>, errors:&mut ErrorWrite<ParseError>) -> ArrayContext {
+    fn open_array(self, input:&CharacterInput, leading_space:Option<Space>) -> ArrayContext {
         ArrayContext::new(
             ArrayParentKind::Array(Box::new(self)),
             input.index,
@@ -167,14 +168,14 @@ impl ArrayData {
 
         match self.parent {
             ArrayParentKind::Array(mut data) => {
-                // ']'が無い
+                // ')'が無い
                 let range = Range::with_length(start, 1);
                 errors.push(ParseError::from(UnclosedArrayError { range }));
 
                 // ここで、配列を閉じる
                 let tree = ATree::Array(branch);
                 data.detail.elements.push(tree);
-                let footer_space = SpaceContext::new(input.index).complete(input, errors);
+                let footer_space = SpaceContext::new(input.index).complete(input);
 
                 data.complete(input, footer_space, errors)
             }
@@ -195,7 +196,7 @@ pub struct ArrayDetail {
 
 impl ArrayDetail {
     fn complete(
-        self, 
+        self,
         config: &ParseConfig,
         end_index:usize, 
         footer_space:Option<Space>) -> ATreeArrayBranch<TemplateLeaf> 

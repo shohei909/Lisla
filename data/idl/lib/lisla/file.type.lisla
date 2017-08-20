@@ -1,0 +1,18 @@
+(newtype 
+    (FilePathInProject
+        (var media_type : MediaType (default any))
+        (var prefix : String (default ""))
+        (var suffix : String (default ""))
+    ) : (PathInProject (reference prefix))
+)
+
+(enum MediaType
+    (case any)
+    (case directory)
+    (case file)
+    (case text)
+    (case binary)
+    (case image)
+    (case audio)
+    (case video)
+)

@@ -1,5 +1,3 @@
-use data::position::Range;
-use data::newtype::StringNewtype;
 use std::fmt::{self, Display, Debug};
 use std::clone::Clone;
 use data::position::Position;
@@ -20,7 +18,7 @@ impl Display for Error {
             self.message(),
             self.name(),
             self.code().value,
-        );
+        )?;
 
         Result::Ok(())
     }
@@ -59,9 +57,30 @@ impl<Data, Error> ResumableResult<Data, Error> where
     pub fn error(errors:Errors<Error>) -> Self {
         ResumableResult::new(Option::None, errors)
     }
-    
+
     pub fn error_with_data(errors:Errors<Error>, data:Data) -> Self {
         ResumableResult::new(Option::Some(data), errors)
+    }
+
+    pub fn to_result(self) -> Result<Data, Errors<Error>> {
+        match self.data {
+            Option::Some(data) => {
+                if self.errors.len() == 0 {
+                    Result::Ok(data)
+                } else {
+                    Result::Err(self.errors)
+                }
+            }
+            Option::None => Result::Err(self.errors),
+        }
+    }
+
+    pub fn unwrap(self) -> Data {
+        self.to_result().unwrap()
+    }
+    
+    pub fn unwrap_err(self) -> Errors<Error> {
+        self.to_result().unwrap_err()
     }
 }
 

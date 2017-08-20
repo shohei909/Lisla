@@ -8,7 +8,7 @@ use ::error::*;
 //#[derive(StringNewtype)]
 #[derive(Debug, Clone)]
 pub struct Placeholder {
-    pub string: String,
+    pub key: String,
 }
 
 #[derive(Debug, Clone)]
@@ -73,7 +73,7 @@ impl TemplateProcessor {
 
                         Result::Err(error) => {
                             // 復帰方法プレースホルダーをそのままの文字列として扱う
-                            let string = format!("\\({})", error.placeholder.string);
+                            let string = format!("\\({})", error.placeholder.key);
 
                             errors.push(error);
                             if errors.len() > self.config.continuous_error_limit {

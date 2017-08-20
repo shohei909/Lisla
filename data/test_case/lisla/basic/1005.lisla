@@ -4,7 +4,8 @@ test;comment
 "; not comment"; comment "\n" comment \r comment
 '; not comment
   ; not comment
-  ; not comment'
+  ; not comment
+  '
 ;
 ''''''''
 

@@ -1,0 +1,2 @@
+(newtype RgbColor : UnsingedInt32)
+(newtype ArgbColor : UnsingedInt32)

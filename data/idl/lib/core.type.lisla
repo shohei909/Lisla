@@ -1,0 +1,85 @@
+; -------------------- VarInt -------------------------- 
+(newtype 
+    (VarInt
+        (var size : IntegerSize (default 64))
+        (var kind : IntegerKind (default normal))
+        (var base : IntegerBase (default standard))
+    ) : String
+)
+
+(enum IntegerSize
+    (case size32 (= 32) (key 32))
+    (case size64 (= 64) (key 64))
+    (case big    (= 0))
+)
+
+(enum IntegerKind
+    (case normal)
+    (case signed)
+    (case unsinged)
+)
+
+(enum IntegerBase
+    (case standard   (= 10) (key 10))
+    (case binary     (= 2)  (key 2))
+    (case octal      (= 8)  (key 8))
+    (case hexdecimal (= 16) (key 16))
+)
+
+
+; -------------------- Primitive --------------------------
+(newtype Int64 : (VarInt 64 normal))
+(newtype Int32 : (VarInt 32 normal))
+
+(newtype SingedInt64 : (VarInt 64 singed))
+(newtype SingedInt32 : (VarInt 32 singed))
+
+(newtype UnsingedInt64 : (VarInt 64 unsined))
+(newtype UnsingedInt32 : (VarInt 32 unsined))
+
+(newtype UnsingedFixedInt64 : String)
+(newtype UnsingedFixedInt32 : String)
+
+(newtype SingedFixedInt64 : String)
+(newtype SingedFixedInt32 : String)
+
+(newtype Float64 : String)
+(newtype Float32 : String)
+
+(enum Bool
+    (case false (= 0))
+    (case true (= 1))
+)
+
+
+; -------------------- Phantom Data --------------------------
+(tuple Unit)
+(enum (Const (value const : String))
+    (case const (key (reference const)))
+)
+
+
+; -------------------- Special --------------------------
+(union Any
+    (case string : String)
+    (case array : (Array Any))
+)
+(newtype (Map (type Key) (type Value)) : 
+    (Array (KeyValuePair Key Value))
+)
+(tuple (KeyValuePair (type Key) (type Value))
+    (var key : Key)
+    (var value : Value)
+)
+
+(union (Option (type T))
+    (case None : Unit)
+    (case Some : T)
+)
+
+
+; -------------------- Special String --------------------------
+(newtype Base64 : String)
+(newtype Uuid : String)
+(newtype Date : String)
+(newtype Time : String)

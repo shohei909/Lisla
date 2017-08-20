@@ -11,7 +11,6 @@
 
 (newtype BigInt (VariableInt (const 0xFFFFFFFF)))
 
-
 ;; 'unsigned 64 bit integer'
 (newtype UInt64 (VariableUInt (const 64)))
 ;; 'unsigned 32 bit integer'

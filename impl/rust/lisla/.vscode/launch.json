@@ -7,7 +7,7 @@
             "request": "launch",
             "target": "target/debug/lisla",
             "cwd": "${workspaceRoot}",
-            "preLaunchTask": "build"
+            "preLaunchTask": "test"
         }
     ]
 }

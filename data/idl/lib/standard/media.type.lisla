@@ -1,0 +1,2 @@
+;; Multipurpose Internet Mail Extension (RFC 2045)
+(newtype MimeType : String)

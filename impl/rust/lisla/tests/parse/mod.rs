@@ -1,21 +1,18 @@
-extern crate liblisla;
-extern crate rustc_serialize;
-
-use liblisla::lisla::*;
 
 use std::fs;
 use std::io::Read;
-use rustc_serialize::json::Json;
+use serde_json::Value;
+use serde_json;
+use lisla_lang::parse::*;
+use lisla_lang::data::tree::*;
 
-
-const TEST_CASES_PATH: &'static str = "./../../../spec/lisla/test_case/";
+const TEST_CASES_PATH: &'static str = "./../../../data/test_case/lisla/";
 
 #[test]
 fn test_basic() {
     let path = format!("{}{}", TEST_CASES_PATH, "basic");
     let dir = fs::read_dir(path).unwrap();
-    let mut config = parse::Config::new();
-    config.is_persevering = true;
+    let parser = Parser::new();
 
     for result in dir {
         let entry = result.unwrap();
@@ -28,44 +25,44 @@ fn test_basic() {
         let mut string = String::new();
         file.read_to_string(&mut string).unwrap();
 
-        let case_data = parse::parse(string.chars(), &config).unwrap();
-        let mut into_iter = case_data.data.into_iter();
+        let case_data = parser.parse(&mut string).unwrap();
+        let mut into_iter = case_data.array.into_iter();
 
-        let lisla_string = into_iter.next().unwrap().str().unwrap();
-        let json_string = into_iter.next().unwrap().str().unwrap();
-        let lisla_data = parse::parse(lisla_string.chars(), &config).unwrap();
-        let json_data = Json::from_str(json_string.as_str()).unwrap();
+        let lisla_string = into_iter.next().unwrap().to_leaf().unwrap().leaf;
+        let json_string = into_iter.next().unwrap().to_leaf().unwrap().leaf;
+        let lisla_data = parser.parse(&lisla_string).unwrap();
+        let json_data = serde_json::from_str(json_string.as_str()).unwrap();
 
-        equals(&Lisla::Array(lisla_data),
+        equals(&ATree::Array(lisla_data),
                &json_data,
                entry.path().to_str().unwrap(),
                &mut vec![]);
     }
 }
 
-fn equals(lisla: &Lisla, json: &Json, path: &str, stack: &mut Vec<usize>) {
+fn equals(lisla: &ATree<String>, json: &Value, path: &str, stack: &mut Vec<usize>) {
     match (lisla, json) {
-        (&Lisla::Array(ref s), &Json::Array(ref j)) => {
-            assert!(s.data.len() == j.len(),
+        (&ATree::Array(ref s), &Value::Array(ref j)) => {
+            assert!(s.array.len() == j.len(),
                     "unmatched array length({}:{:?}): {:?} {:?}",
                     path,
                     stack,
-                    s.data.len(),
+                    s.array.len(),
                     j.len());
 
-            for (i, (sc, jc)) in s.data.iter().zip(j.iter()).enumerate() {
+            for (i, (sc, jc)) in s.array.iter().zip(j.iter()).enumerate() {
                 stack.push(i);
                 equals(sc, jc, path, stack);
                 stack.pop();
             }
         }
 
-        (&Lisla::String(ref s), &Json::String(ref j)) => {
-            assert!(s.data.as_str() == j.as_str(),
+        (&ATree::Leaf(ref s), &Value::String(ref j)) => {
+            assert!(s.leaf.as_str() == j.as_str(),
                     "unmatched string({}:{:?}): {:?} {:?}",
                     path,
                     stack,
-                    s.data,
+                    s.leaf,
                     j);
         }
 
@@ -79,8 +76,7 @@ fn equals(lisla: &Lisla, json: &Json, path: &str, stack: &mut Vec<usize>) {
 fn test_invalid_nonfatal() {
     let path = format!("{}{}", TEST_CASES_PATH, "advanced/invalid/nonfatal");
     let dir = fs::read_dir(path).unwrap();
-    let mut config = parse::Config::new();
-    config.is_persevering = true;
+    let parser = Parser::new();
 
     for result in dir {
         let entry = result.unwrap();
@@ -94,7 +90,7 @@ fn test_invalid_nonfatal() {
         let mut file = fs::File::open(path).unwrap();
         let mut string = String::new();
         file.read_to_string(&mut string).unwrap();
-        let result = parse::parse(string.chars(), &config);
+        let result = parser.parse(&string).to_result();
 
         match result {
             Ok(data) => {

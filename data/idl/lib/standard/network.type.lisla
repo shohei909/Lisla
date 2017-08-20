@@ -1,0 +1,2 @@
+(newtype Domain : String)
+(newtype Port : Int32)

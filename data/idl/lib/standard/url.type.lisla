@@ -1,0 +1,4 @@
+;; Uniform Resource Locator (RFC 1738)
+(newtype Url : String)
+
+(newtype UrlScheme : String)

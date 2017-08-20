@@ -1,0 +1,4 @@
+(newtype HashValue : (VarInt big unsigned hexdecimal))
+(newtype Sha256 : HashValue)
+(newtype Sha384 : HashValue)
+(newtype Sha512 : HashValue)
