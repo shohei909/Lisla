@@ -1,10 +1,10 @@
 ; -------------------- VarInt -------------------------- 
-(newtype 
-    (VarInt
-        (var size : IntegerSize (default 64))
-        (var kind : IntegerKind (default normal))
-        (var base : IntegerBase (default standard))
-    ) : String
+(newtype (VarInt (var config : VarIntConfig)) : String)
+
+(struct VarIntConfig
+    (var size : IntegerSize (default 64))
+    (var kind : IntegerKind (default normal))
+    (var base : IntegerBase (default standard))
 )
 
 (enum IntegerSize
@@ -26,16 +26,53 @@
     (case hexdecimal (= 16) (key 16))
 )
 
+; -------------------- Integer Configuration --------------------------
+(const INT64_CONFIG : VarIntConfig = 
+    (
+        (size 64)
+        (kind normal)
+    )
+)
+(const INT32_CONFIG : VarIntConfig = 
+    (
+        (size 32)
+        (kind normal)
+    )
+)
+(const SIGNED_INT64_CONFIG : VarIntConfig = 
+    (
+        (size 64)
+        (kind signed)
+    )
+)
+(const SIGNED_INT32_CONFIG : VarIntConfig = 
+    (
+        (size 32)
+        (kind signed)
+    )
+)
+(const UNSIGNED_INT64_CONFIG : VarIntConfig = 
+    (
+        (size 64)
+        (kind signed)
+    )
+)
+(const UNSIGNED_INT32_CONFIG : VarIntConfig = 
+    (
+        (size 32)
+        (kind signed)
+    )
+)
 
 ; -------------------- Primitive --------------------------
-(newtype Int64 : (VarInt 64 normal))
-(newtype Int32 : (VarInt 32 normal))
+(newtype Int64 : (VarInt INT64_CONFIG))
+(newtype Int32 : (VarInt INT32_CONFIG))
 
-(newtype SingedInt64 : (VarInt 64 singed))
-(newtype SingedInt32 : (VarInt 32 singed))
+(newtype SingedInt64 : (VarInt SIGNED_INT64_CONFIG))
+(newtype SingedInt32 : (VarInt SIGNED_INT32_CONFIG))
 
-(newtype UnsingedInt64 : (VarInt 64 unsined))
-(newtype UnsingedInt32 : (VarInt 32 unsined))
+(newtype UnsingedInt64 : (VarInt UNSIGNED_INT64_CONFIG))
+(newtype UnsingedInt32 : (VarInt UNSIGNED_INT32_CONFIG))
 
 (newtype UnsingedFixedInt64 : String)
 (newtype UnsingedFixedInt32 : String)
@@ -46,14 +83,14 @@
 (newtype Float64 : String)
 (newtype Float32 : String)
 
-(enum Bool
+(enum Boolean
     (case false (= 0))
     (case true (= 1))
 )
 
 
 ; -------------------- Phantom Data --------------------------
-(tuple Unit)
+(tuple Void)
 (enum (Const (value const : String))
     (case const (key (reference const)))
 )

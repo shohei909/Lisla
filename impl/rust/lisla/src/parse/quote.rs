@@ -37,17 +37,21 @@ impl QuoteContext {
                     }
                 } else {
                     if self.quote.count < self.close_count {
-                        let range = Range::with_length(
-                            input.index - self.quote.count, 
-                            self.quote.count
-                        );
-                        errors.push(ParseError::from(TooLongClosingQuoteError{ range }));
+                         
                     }
-                    return data.complete_and_process(
-                        input, 
+
+                    let tree = data.complete(
+                        input.config, 
+                        input.index, 
                         Option::Some(self.quote),
                         errors,
                     );
+                    let space = SpaceContext::new(input.index + 1);
+                    let next = ArrayContextKind::Space(space);
+                    return ProcessAction::Add{
+                        element: tree,
+                        action: Box::new(ProcessAction::Next(next)),
+                    }
                 }
             }
         };
@@ -61,20 +65,8 @@ impl QuoteContext {
         data: StringData,
         errors: &mut ErrorWrite<ParseError>, 
     ) -> ATree<TemplateLeaf> {
-        if self.close_count < self.quote.count {
-            let range = Range::with_end(data.start, input.index);
-            errors.push(ParseError::from(UnclosedQuoteError{ range, quote: self.quote.clone() }));
-            data.complete(input.config, input.index, Option::Some(self.quote), errors)
-        } else {
-            if self.quote.count < self.close_count {
-                let range = Range::with_length(
-                    input.index - self.quote.count, 
-                    self.quote.count
-                );
-                errors.push(ParseError::from(TooLongClosingQuoteError{ range }));
-            }
-            
-            data.complete(input.config, input.index, Option::Some(self.quote), errors)
-        }
+        let range = Range::with_end(data.start, input.index);
+        errors.push(ParseError::from(UnclosedQuoteError{ range, quote: self.quote.clone() }));
+        data.complete(input.config, input.index, Option::Some(self.quote), errors)
     }
 }

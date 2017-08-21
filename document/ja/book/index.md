@@ -75,7 +75,7 @@ Lisla標準ツールキットは以下をふくみます。
     * 各種変換
         * JSON
         * MessagePack
-        * Bisla(独自バイナリフォーマット)
+        * Protocol Buffers
     * フォーマット
     * 省サイズ化
     * バリデーション
