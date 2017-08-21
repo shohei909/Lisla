@@ -2,7 +2,7 @@ use quote::Tokens;
 use syn::*;
 
 
-// lisla::error::Errorを実装する
+// lisla::lisla_core::error::Errorを実装する
 pub fn impl_error(ast: &DeriveInput) -> Tokens {
     let error = match ast.body {
         Body::Enum(ref _enum) =>
@@ -23,15 +23,15 @@ fn impl_error_for_struct(ast: &DeriveInput, variant:&VariantData) -> Tokens {
     let position = impl_position_for_struct(ast, variant);
     
     quote! {
-        impl ::error::Error for #name {
+        impl ::lisla_core::error::Error for #name {
             fn message(&self) -> String {
                 // TODO:
                 "message".to_string()
             }
 
-            fn code(&self) -> ::error::ErrorCode {
+            fn code(&self) -> ::lisla_core::error::ErrorCode {
                 // TODO:
-                ::error::ErrorCode{ value: "code".to_string() }
+                ::lisla_core::error::ErrorCode{ value: "code".to_string() }
             }
 
             fn name(&self) -> String {
@@ -122,39 +122,39 @@ fn impl_error_for_enum(ast: &DeriveInput, variants:&Vec<Variant>) -> Tokens {
 
     quote! {
         // このエラー情報をそのまま伝搬する
-        impl ::error::Error for #name {
+        impl ::lisla_core::error::Error for #name {
             fn message(&self) -> String {
-                ::error::ErrorHolder::child_error(self).message()
+                ::lisla_core::error::ErrorHolder::child_error(self).message()
             }
 
-            fn code(&self) -> ::error::ErrorCode {
-                ::error::ErrorHolder::child_error(self).code()
+            fn code(&self) -> ::lisla_core::error::ErrorCode {
+                ::lisla_core::error::ErrorHolder::child_error(self).code()
             }
 
             fn name(&self) -> String {
-                ::error::ErrorHolder::child_error(self).name()
+                ::lisla_core::error::ErrorHolder::child_error(self).name()
             }
         }
 
         // 子のエラーの位置情報をそのまま伝搬する
         impl ::data::position::Position for #name {
             fn range(&self)->Option<&Range> {
-                ::error::ErrorHolder::child_error(self).range()
+                ::lisla_core::error::ErrorHolder::child_error(self).range()
             }
             fn source_map(&self)->Option<&SourceMap> {
-                ::error::ErrorHolder::child_error(self).source_map()
+                ::lisla_core::error::ErrorHolder::child_error(self).source_map()
             }
             fn file_path(&self)->Option<&FilePathFromProjectRoot> {
-                ::error::ErrorHolder::child_error(self).file_path()
+                ::lisla_core::error::ErrorHolder::child_error(self).file_path()
             }
             fn project_root(&self)->Option<&ProjectRootPath> {
-                ::error::ErrorHolder::child_error(self).project_root()
+                ::lisla_core::error::ErrorHolder::child_error(self).project_root()
             }
         }
 
         // enumのErrorは、さらに子となるエラーを持つ
-        impl ::error::ErrorHolder for #name {
-            fn child_error(&self) -> &::error::Error {
+        impl ::lisla_core::error::ErrorHolder for #name {
+            fn child_error(&self) -> &::lisla_core::error::Error {
                 match self {
                     #arms
                 }

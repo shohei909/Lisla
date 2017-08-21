@@ -1,0 +1,12 @@
+[package]
+name = "lisla_lang"
+version = "0.1.0"
+authors = ["shohei909 <909mmsphere@gmail.com>"]
+
+[dependencies]
+lisla_derive = { version = "0.1.0", path = "../lisla_derive" }
+lisla_core = { version = "0.1.0", path = "../lisla_core" }
+
+[dev-dependencies]
+serde="1.0.11"
+serde_json="1.0.2"
