@@ -12,6 +12,8 @@ use self::error::*;
 use self::array::*;
 use self::space::*;
 use ::error::*;
+use tag::*;
+use leaf::*;
 
 #[derive(Debug, Clone)]
 pub struct Parser {
@@ -76,7 +78,7 @@ impl Parser {
     } 
 
     // テンプレート形式のlislaをパースします。
-    pub fn parse_template_from_read(&self, read:&mut Read) -> ResumableResult<ATreeArrayBranch<TemplateLeaf>, ParseError> {
+    pub fn parse_template_from_read(&self, read:&mut Read) -> ResumableResult<WithTag<ArrayBranch<WithTag<ArrayTree<TemplateLeaf>>>>, ParseError> {
         let mut errors = Errors::new();
         match read_to_string(read, &mut errors) {
             Result::Ok(string) => {
@@ -87,7 +89,7 @@ impl Parser {
         }
     }
 
-    pub fn parse_template<'a>(&self, string:&'a str) -> ResumableResult<ATreeArrayBranch<TemplateLeaf>, ParseError> {
+    pub fn parse_template<'a>(&self, string:&'a str) -> ResumableResult<WithTag<ArrayBranch<WithTag<ArrayTree<TemplateLeaf>>>>, ParseError> {
         let mut errors = Errors::new();
         let tree = self.parse_template_internal(string, &mut errors);
         ResumableResult::new(tree, errors)
@@ -95,7 +97,7 @@ impl Parser {
 
     // ライブラリの内部利用用の、テンプレート形式のlislaをパース。
     // エラーをResultではなく、ErrorWriteで行う。
-    pub fn parse_template_internal<'a>(&self, input:&'a str, errors:&mut ErrorWrite<ParseError>) -> Option<ATreeArrayBranch<TemplateLeaf>> {
+    pub fn parse_template_internal<'a>(&self, input:&'a str, errors:&mut ErrorWrite<ParseError>) -> Option<WithTag<ArrayBranch<WithTag<ArrayTree<TemplateLeaf>>>>> {
         let mut context = ArrayContext::new(ArrayParentKind::Top, 0, Option::None);
         let mut last_index = 0;
         
@@ -129,7 +131,7 @@ impl Parser {
 
     // lislaをパースします。
     // placeholderが残っている場合、エラーになります。
-    pub fn parse_from_read(&self, read:&mut Read) -> ResumableResult<ATreeArrayBranch<String>, ParseStringError> {
+    pub fn parse_from_read(&self, read:&mut Read) -> ResumableResult<WithTag<ArrayBranch<WithTag<ArrayTree<StringLeaf>>>>, ParseStringError> {
         let mut errors = Errors::new();
         let result = {
             let mut errors_wrapper = ErrorsWrapper{ errors: &mut errors };
@@ -147,7 +149,7 @@ impl Parser {
         }
     }
 
-    pub fn parse<'a>(&self, string:&'a str) -> ResumableResult<ATreeArrayBranch<String>, ParseStringError> {
+    pub fn parse<'a>(&self, string:&'a str) -> ResumableResult<WithTag<ArrayBranch<WithTag<ArrayTree<StringLeaf>>>>, ParseStringError> {
         let mut errors = Errors::new();
         let tree = self.parse_internal(string, &mut errors);
         ResumableResult::new(tree, errors)
@@ -155,7 +157,7 @@ impl Parser {
 
     // ライブラリの内部利用用の、通常形式のlislaをパース。
     // エラーをResultではなく、ErrorWriteで行う。
-    pub fn parse_internal<'a>(&self, input:&'a str, errors:&mut ErrorWrite<ParseStringError>) -> Option<ATreeArrayBranch<String>> {
+    pub fn parse_internal<'a>(&self, input:&'a str, errors:&mut ErrorWrite<ParseStringError>) -> Option<WithTag<ArrayBranch<WithTag<ArrayTree<StringLeaf>>>>> {
         // テンプレートとして、読み込む。
         let mut errors_wrapper = ErrorsWrapper{ errors };
         if let Option::Some(template_tree) = self.parse_template_internal(input, &mut errors_wrapper) {
@@ -163,7 +165,8 @@ impl Parser {
                 continuous_error_limit: self.config.continuous_error_limit 
             };
             let template_processor = TemplateProcessor::new(config);
-            template_processor.complete(template_tree, &mut errors_wrapper)
+            
+            template_processor.array_complete(template_tree, &mut errors_wrapper)
         } else {
             Option::None
         }

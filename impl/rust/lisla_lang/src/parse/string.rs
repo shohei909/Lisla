@@ -1,5 +1,4 @@
 use tag::*;
-use tree::leaf::*;
 use data::position::*;
 use super::*;
 use super::array::*;
@@ -69,7 +68,7 @@ impl StringContext {
         self, 
         input:&EndInput, 
         errors:&mut ErrorWrite<ParseError>
-    ) -> ATree<TemplateLeaf> {
+    ) -> WithTag<ArrayTree<TemplateLeaf>> {
         match self.kind {
             StringContextKind::Head(context) => {
                 context.complete(input, self.data, errors)
@@ -106,7 +105,7 @@ impl StringData {
         end_index:usize,
         quote:Option<Quote>,
         errors:&mut ErrorWrite<ParseError>,
-    ) -> ATree<TemplateLeaf> {
+    ) -> WithTag<ArrayTree<TemplateLeaf>> {
         let range = Range::with_end(self.start, end_index);
         let node_kind = match config.tag_infomation {
             TagInfomationLevel::All => {
@@ -143,9 +142,7 @@ impl StringData {
             TemplateLeaf::String(self.content)
         };
 
-        ATree::Leaf(
-            Leaf { leaf, tag }
-        )
+        WithTag { data: ArrayTree::Leaf(leaf), tag }
     }
 
     fn continue_action(self, kind:StringContextKind) -> ProcessAction {
@@ -282,7 +279,7 @@ impl StringHeadContext {
         input:&EndInput, 
         data:StringData, 
         errors:&mut ErrorWrite<ParseError>
-    ) -> ATree<TemplateLeaf> {
+    ) -> WithTag<ArrayTree<TemplateLeaf>> {
         match self {
             StringHeadContext::Quote{ quote } => {
                 if quote.count == 2 {
@@ -370,7 +367,7 @@ impl StringBodyContext {
         input:&EndInput, 
         data:StringData, 
         errors:&mut ErrorWrite<ParseError>
-    ) -> ATree<TemplateLeaf> {
+    ) -> WithTag<ArrayTree<TemplateLeaf>> {
         match self.quote {
             Option::None => {
                 data.complete(input.config, input.index, Option::None, errors)

@@ -2,7 +2,7 @@ use quote::Tokens;
 use syn::*;
 
 
-// lisla::lisla_core::error::Errorを実装する
+// lisla_core::error::Errorを実装する
 pub fn impl_error(ast: &DeriveInput) -> Tokens {
     let error = match ast.body {
         Body::Enum(ref _enum) =>
@@ -71,17 +71,17 @@ fn impl_position_for_struct(ast: &DeriveInput, variant:&VariantData) -> Tokens {
     }
     
     quote! {
-        impl ::data::position::Position for #name {
-            fn range(&self)->Option<&::data::position::Range> {
+        impl ::lisla_core::data::position::Position for #name {
+            fn range(&self)->Option<&::lisla_core::data::position::Range> {
                 #range
             }
-            fn source_map(&self)->Option<&::data::position::SourceMap> {
+            fn source_map(&self)->Option<&::lisla_core::data::position::SourceMap> {
                 #source_map
             }
-            fn file_path(&self)->Option<&::data::position::FilePathFromProjectRoot> {
+            fn file_path(&self)->Option<&::lisla_core::data::position::FilePathFromProjectRoot> {
                 #file_path
             }
-            fn project_root(&self)->Option<&::data::position::ProjectRootPath> {
+            fn project_root(&self)->Option<&::lisla_core::data::position::ProjectRootPath> {
                 #project_root
             }
         }
@@ -137,7 +137,7 @@ fn impl_error_for_enum(ast: &DeriveInput, variants:&Vec<Variant>) -> Tokens {
         }
 
         // 子のエラーの位置情報をそのまま伝搬する
-        impl ::data::position::Position for #name {
+        impl ::lisla_core::data::position::Position for #name {
             fn range(&self)->Option<&Range> {
                 ::lisla_core::error::ErrorHolder::child_error(self).range()
             }

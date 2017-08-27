@@ -64,7 +64,7 @@ impl ArrayContext {
     }
 
     // 入力の終了
-    pub fn complete(mut self, input:&EndInput, errors:&mut ErrorWrite<ParseError>) -> ATreeArrayBranch<TemplateLeaf> {
+    pub fn complete(mut self, input:&EndInput, errors:&mut ErrorWrite<ParseError>) -> WithTag<ArrayBranch<WithTag<ArrayTree<TemplateLeaf>>>> {
         let footer_space = match self.kind {
             ArrayContextKind::Space(context) => 
                 context.complete(input),
@@ -124,8 +124,8 @@ impl ArrayData {
     ) -> ArrayContext {
         let data = match self.parent {
             ArrayParentKind::Array(mut data) => {
-                let tree = ATree::Array(self.detail.complete(input.config, input.index, footer_space));
-                data.detail.elements.push(tree);
+                let tree = self.detail.complete(input.config, input.index, footer_space);
+                data.detail.elements.push(tree.into());
                 *data
             }
             
@@ -162,7 +162,7 @@ impl ArrayData {
         self, 
         input:&EndInput, 
         footer_space:Option<Space>, 
-        errors:&mut ErrorWrite<ParseError>) -> ATreeArrayBranch<TemplateLeaf> 
+        errors:&mut ErrorWrite<ParseError>) -> WithTag<ArrayBranch<WithTag<ArrayTree<TemplateLeaf>>>>
     {
         let start = self.detail.start;
         let branch = self.detail.complete(input.config, input.index, footer_space);
@@ -174,8 +174,7 @@ impl ArrayData {
                 errors.push(ParseError::from(UnclosedArrayError { range }));
 
                 // ここで、配列を閉じる
-                let tree = ATree::Array(branch);
-                data.detail.elements.push(tree);
+                data.detail.elements.push(branch.into());
                 let footer_space = SpaceContext::new(input.index, false).complete(input);
 
                 data.complete(input, footer_space, errors)
@@ -192,7 +191,7 @@ impl ArrayData {
 pub struct ArrayDetail {
     start: usize,
     leading_space: Option<Space>,
-    elements: Vec<ATree<TemplateLeaf>>,
+    elements: Vec<WithTag<ArrayTree<TemplateLeaf>>>,
 }
 
 impl ArrayDetail {
@@ -200,7 +199,7 @@ impl ArrayDetail {
         self,
         config: &ParseConfig,
         end_index:usize,
-        footer_space:Option<Space>) -> ATreeArrayBranch<TemplateLeaf> 
+        footer_space:Option<Space>) -> WithTag<ArrayBranch<WithTag<ArrayTree<TemplateLeaf>>>>
     {
         let tag_kind = match config.tag_infomation {
             TagInfomationLevel::Low => {
@@ -217,8 +216,8 @@ impl ArrayDetail {
             }
         };
 
-        ArrayBranch {
-            array: self.elements,
+        WithTag {
+            data: ArrayBranch{ vec: self.elements },
             tag: Tag::new(
                 self.leading_space, 
                 Range::with_end(self.start, end_index),
@@ -232,7 +231,7 @@ impl ArrayDetail {
 #[derive(Debug, Clone)]
 pub enum ProcessAction {
     Add{
-        element: ATree<TemplateLeaf>, 
+        element: WithTag<ArrayTree<TemplateLeaf>>, 
         action: Box<ProcessAction>,
     },
     Next(ArrayContextKind),

@@ -2,10 +2,40 @@ use data::position::*;
 use tree::*;
 use std::cell::RefCell;
 use parse::error::ParseStringError;
+use std::fmt::Debug;
+use leaf::*;
+
+#[derive(Debug, Clone)]
+pub struct WithTag<T:Debug + Clone> {
+    pub data: T,
+    pub tag: Tag,
+}
+
+impl<T:Debug + Clone + Eq> Eq for WithTag<T> {
+}
+
+impl<T:Debug + Clone + PartialEq> PartialEq for WithTag<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.data == other.data
+    }
+}
+
+impl<T:Debug + Clone> WithTag<T> {
+    pub fn into<U:Debug + Clone + From<T>>(self) -> WithTag<U> {
+        WithTag {
+            data: From::from(self.data),
+            tag: self.tag
+        }
+    }
+}
+
+pub trait GetTag {
+    fn get_tag() -> Tag;
+}
 
 #[derive(Debug, Clone)]
 pub struct Tag {
-    pub content_range: Range,
+    pub content_range: Option<Range>,
     pub leading_space: Option<Space>,
     pub kind: Option<TagKind>,
 
@@ -17,9 +47,18 @@ impl Tag {
     pub fn new(leading_space:Option<Space>, content_range:Range, tag_kind:Option<TagKind>) -> Tag {
         Tag {
             leading_space,
-            content_range,
+            content_range: Option::Some(content_range),
             document: RefCell::new(DocumentState::None),
             kind: tag_kind
+        }
+    }
+
+    pub fn empty() -> Tag {
+        Tag {
+            leading_space: Option::None,
+            content_range: Option::None,
+            document: RefCell::new(DocumentState::None),
+            kind: Option::None,
         }
     }
 }
@@ -46,7 +85,7 @@ pub struct ArrayTag {
 #[derive(Debug, Clone)]
 pub enum DocumentState {
     None,
-    Parsed(Result<Box<ATreeArrayBranch<String>>, ParseStringError>),
+    Parsed(Result<Box<WithTag<ArrayBranch<WithTag<ArrayTree<StringLeaf>>>>>, ParseStringError>),
 }
 
 #[derive(Debug, Clone)]

@@ -1,10 +1,8 @@
 
 use std::fs;
 use std::io::Read;
-use serde_json::Value;
 use serde_json;
 use lisla_lang::parse::*;
-use lisla_lang::tree::*;
 
 const TEST_CASES_PATH: &'static str = "./../../../data/test_case/lisla/";
 
@@ -26,51 +24,20 @@ fn test_basic() {
         file.read_to_string(&mut string).unwrap();
 
         let case_data = parser.parse(&mut string).unwrap();
-        let mut into_iter = case_data.array.into_iter();
+        let mut into_iter = case_data.data.vec.into_iter();
 
-        let lisla_string = into_iter.next().unwrap().to_leaf().unwrap().leaf;
-        let json_string = into_iter.next().unwrap().to_leaf().unwrap().leaf;
+        let lisla_string = into_iter.next().unwrap().data.to_leaf().unwrap().string;
+        let json_string = into_iter.next().unwrap().data.to_leaf().unwrap().string;
         let lisla_data = parser.parse(&lisla_string).unwrap();
         let json_data = serde_json::from_str(json_string.as_str()).unwrap();
 
-        equals(&ATree::Array(lisla_data),
+        ::equals(&lisla_data.into(),
                &json_data,
                entry.path().to_str().unwrap(),
                &mut vec![]);
     }
 }
 
-fn equals(lisla: &ATree<String>, json: &Value, path: &str, stack: &mut Vec<usize>) {
-    match (lisla, json) {
-        (&ATree::Array(ref s), &Value::Array(ref j)) => {
-            assert!(s.array.len() == j.len(),
-                    "unmatched array length({}:{:?}): {:?} {:?}",
-                    path,
-                    stack,
-                    s.array.len(),
-                    j.len());
-
-            for (i, (sc, jc)) in s.array.iter().zip(j.iter()).enumerate() {
-                stack.push(i);
-                equals(sc, jc, path, stack);
-                stack.pop();
-            }
-        }
-
-        (&ATree::Leaf(ref s), &Value::String(ref j)) => {
-            assert!(s.leaf.as_str() == j.as_str(),
-                    "unmatched string({}:{:?}): {:?} {:?}",
-                    path,
-                    stack,
-                    s.leaf,
-                    j);
-        }
-
-        (_, _) => {
-            panic!("unmatched({}:{:?}): {:?} {:?}", path, stack, lisla, json);
-        }
-    }
-}
 
 #[test]
 fn test_invalid_nonfatal() {

@@ -61,7 +61,7 @@ impl QuoteContext {
         input: &EndInput, 
         data: StringData,
         errors: &mut ErrorWrite<ParseError>, 
-    ) -> ATree<TemplateLeaf> {
+    ) -> WithTag<ArrayTree<TemplateLeaf>> {
         if self.close_count < self.quote.count {
             let range = Range::with_end(data.start, input.index);
             errors.push(ParseError::from(UnclosedQuoteError{ range, quote: self.quote.clone() }));

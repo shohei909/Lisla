@@ -1,0 +1,15 @@
+(trait IsValidString
+    (fn is_valid_string (self (string : String)) : Boolean)
+)
+
+(impl IsValidString for Uuid
+    (fn is_valid_string (self (string : String)) : Boolean
+        (call (RegularExpression match)
+            (call 
+                (RegularExpression new)
+                (literal string "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
+            )
+            (refence string)
+        )
+    )
+)

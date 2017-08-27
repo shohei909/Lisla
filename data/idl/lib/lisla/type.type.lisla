@@ -23,7 +23,7 @@
 )
 (tuple GenericTypeReference
     (var name : TypePath)
-    (rest arguments : TypeArgument)
+    (spreads arguments : (Array TypeArgument))
 )
 (newtype TypeArgument : Any)
 
@@ -36,7 +36,7 @@
 )
 (tuple GenericTypeDeclaration
     (var name : TypeName)
-    (rest parameters : TypeParameterDeclaration)
+    (spreads parameters : (Array TypeParameterDeclaration))
 )
 (union TypeParameterDeclaration
     (case Value : ValueTypeParameterDeclaration)
@@ -58,7 +58,7 @@
 )
 (tuple KindDeclaration
     (var name : KindName)
-    (rest parameters : KindParameter)
+    (spreads parameters : (Array KindParameter))
 )
 (union KindParameter
     (case Type : TypeKindParameter)
@@ -83,7 +83,7 @@
 (tuple StructDeclaration 
     (label struct)
     (var path : TypeDeclaration)
-    (rest elements : StructElement)
+    (spreads elements : (Array StructElement))
 )
 (union StructElement
     (case Var : VarStructElement)
@@ -133,7 +133,7 @@
 (tuple UnionDeclaration
     (label union)
     (var type : UnionDeclaration)
-    (rest elements : UnionElement)
+    (spreads elements : (Array UnionElement))
 )
 (tuple UnionElement
     (case Case : CaseUnionElement)
@@ -154,24 +154,14 @@
 (tuple TupleDeclaration
     (label tuple)
     (var type : TypeDeclaration)
-    (rest elements : TupleElement)
+    (spreads elements : (Array TupleElement))
 )
 (union TupleElement
     (case Label : LabelElement)
     (case Var : VarElement)
     (case OptionalVar : OptionalVarElement)
-    (case RestVar : RestVarElement)
     (case Spreads : SpreadsElement)
     (case OptionalSpreads : OptionalSpreadsElement)
-    (case RestSpreads : RestSpreadsElement)
-)
-(tuple RestVarElement
-    (label rest)
-    (label var)
-    (var name : VariableName)
-    (label :)
-    (var type : TypeReference)
-    (spreads attributes : VarAttributes)
 )
 (tuple OptionalSpreadsElement
     (label optional)
@@ -182,7 +172,6 @@
     (spreads attributes : OptionalVarAttributes)
 )
 (tuple SpreadsElement
-    (label rest)
     (label spreads)
     (var name : VariableName)
     (label :)
@@ -204,7 +193,7 @@
 (tuple EnumDeclaration
     (label enum)
     (var type : TypeDeclaration)
-    (rest elements : EnumElement)
+    (spreads elements : (Array EnumElement))
 )
 (union EnumElement
     (case Case : CaseEnumElement)

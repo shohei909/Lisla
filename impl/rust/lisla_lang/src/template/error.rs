@@ -7,5 +7,5 @@ use data::position::Range;
 #[code = "2abc0deb-9fbb-4b11-9bcc-14a2a48105a9"]
 pub struct PlaceholderCompleteError {
     pub placeholder: Placeholder,
-    pub range: Range,
+    pub range:Option<Range>,
 }
