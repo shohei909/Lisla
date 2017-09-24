@@ -38,49 +38,30 @@ pub trait FromArrayTree : Sized + Clone + Debug {
         }
     }
 
-    #[allow(unused_variables)]
     fn from_array_tree_array(
         config:&FromArrayTreeConfig,
         tree:ArrayBranch<WithTag<ArrayTree<StringLeaf>>>,
         tag:Tag,
         parameters: Self::Parameters,
         errors:&mut ErrorWrite<FromArrayTreeError>
-    ) -> Result<WithTag<Self>, ()> {
-        errors.push(
-            FromArrayTreeError::from(
-                CantBeArrayError {
-                    range: tag.content_range
-                }
-            )
-        );
-        Result::Err(())
-    }
+    ) -> Result<WithTag<Self>, ()>;
 
-    #[allow(unused_variables)]
+    
     fn from_array_tree_string(
         config:&FromArrayTreeConfig,
         leaf:StringLeaf,
         tag:Tag,
         parameters: Self::Parameters,
         errors:&mut ErrorWrite<FromArrayTreeError>
-    ) -> Result<WithTag<Self>, ()> {
-        errors.push(
-            FromArrayTreeError::from(
-                CantBeStringError {
-                    range: tag.content_range
-                }
-            )
-        );
-        Result::Err(())
-    }
+    ) -> Result<WithTag<Self>, ()>;
 
 
     fn match_array_tree(
-        config:&matchArrayTreeConfig,
+        config:&FromArrayTreeConfig,
         tree:WithTag<ArrayTree<StringLeaf>>,
         parameters: Self::Parameters,
         errors:&mut ErrorWrite<FromArrayTreeError>
-    ) -> Bool {
+    ) -> bool {
         match tree.data {
             ArrayTree::Array(array) => {
                 Self::match_array_tree_array(
@@ -105,11 +86,11 @@ pub trait FromArrayTree : Sized + Clone + Debug {
 
     fn match_array_tree_array(
         config:&FromArrayTreeConfig,
-        leaf:StringLeaf,
+        tree:ArrayBranch<WithTag<ArrayTree<StringLeaf>>>,
         tag:Tag,
         parameters: Self::Parameters,
         errors:&mut ErrorWrite<FromArrayTreeError>
-    );
+    ) -> bool;
 
     fn match_array_tree_string(
         config:&FromArrayTreeConfig,
@@ -117,7 +98,7 @@ pub trait FromArrayTree : Sized + Clone + Debug {
         tag:Tag,
         parameters: Self::Parameters,
         errors:&mut ErrorWrite<FromArrayTreeError>
-    );
+    ) -> bool;
 }
 
 pub struct FromArrayTreeConfig {

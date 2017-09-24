@@ -11,12 +11,12 @@ pub struct WithTag<T:Debug + Clone> {
     pub tag: Tag,
 }
 
-impl<T:Debug + Clone + Eq> Eq for WithTag<T> {
+impl<T:Debug + Clone + PartialEq> Eq for WithTag<T> {
 }
 
 impl<T:Debug + Clone + PartialEq> PartialEq for WithTag<T> {
     fn eq(&self, other: &Self) -> bool {
-        self.data == other.data
+        false //self.data == other.data
     }
 }
 

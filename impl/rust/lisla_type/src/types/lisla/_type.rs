@@ -5,6 +5,11 @@ use ::lisla_lang::leaf::*;
 use ::lisla_lang::from::error::*;
 use ::lisla_core::error::*;
 
+#[derive(LislaNewtype)]
+#[derive(Debug, Clone)]
+pub struct TypeArgument {
+    pub value: ArrayTree<StringLeaf>
+}
 
 #[derive(LislaNewtype)]
 #[derive(Debug, Clone)]
@@ -18,28 +23,11 @@ pub struct TypeName {
     pub value: StringLeaf,
 }
 
-#[derive(LislaNewtype)]
-#[derive(Debug, Clone)]
-pub struct TypeArgument {
-    pub value: ArrayTree<StringLeaf>
-}
-
 #[derive(LislaUnion)]
 #[derive(Debug, Clone)]
 pub enum TypeReferece {
     Primitive(TypePath),
     Generic(GenericTypeReferece),
-}
-
-impl TypeReference {
-    pub fn from_array_tree {
-    }
-
-    pub fn from_array_tree_array {
-    }
-
-    pub fn from_array_tree_array {
-    }
 }
 
 #[derive(LislaTuple)]

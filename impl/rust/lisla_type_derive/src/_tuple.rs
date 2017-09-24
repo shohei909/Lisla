@@ -98,6 +98,44 @@ pub fn impl_tuple(ast: &DeriveInput) -> Tokens {
                     }  
                 )
             }
+
+            #[allow(unused_variables)]
+            fn from_array_tree_string(
+                config:& ::lisla_lang::from::FromArrayTreeConfig,
+                leaf: ::lisla_lang::leaf::StringLeaf,
+                tag: ::lisla_lang::tag::Tag,
+                parameters: Self::Parameters,
+                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
+            ) -> Result<WithTag<Self>, ()> {
+                errors.push(
+                    FromArrayTreeError::from(
+                        CantBeStringError {
+                            range: tag.content_range
+                        }
+                    )
+                );
+                Result::Err(())
+            }
+
+            fn match_array_tree_array(
+                config:& ::lisla_lang::from::FromArrayTreeConfig,
+                mut array: ::lisla_lang::tree::ArrayBranch<::lisla_lang::tag::WithTag<::lisla_lang::tree::ArrayTree<::lisla_lang::leaf::StringLeaf>>>,
+                tag: ::lisla_lang::tag::Tag,
+                parameters: Self::Parameters,
+                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
+            ) -> bool {
+                true
+            }
+
+            fn match_array_tree_string(
+                config:& ::lisla_lang::from::FromArrayTreeConfig,
+                leaf: ::lisla_lang::leaf::StringLeaf,
+                tag: ::lisla_lang::tag::Tag,
+                parameters: Self::Parameters,
+                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
+            ) -> bool {
+                false
+            }
         }
     }
 }

@@ -24,6 +24,60 @@ impl FromArrayTree for ArrayTree<StringLeaf> {
     ) -> Result<WithTag<ArrayTree<StringLeaf>>, ()> {
         Result::Ok(tree)
     }
+
+    #[allow(unused_variables)]
+    fn from_array_tree_array(
+        config:&FromArrayTreeConfig,
+        array:ArrayBranch<WithTag<ArrayTree<StringLeaf>>>,
+        tag:Tag,
+        parameters: Self::Parameters,
+        errors:&mut ErrorWrite<FromArrayTreeError>
+    ) -> Result<WithTag<Self>, ()> {
+        Result::Ok(
+            WithTag {
+                data: ArrayTree::Array(array),
+                tag,
+            }
+        )
+    }
+
+    #[allow(unused_variables)]
+    fn from_array_tree_string(
+        config:&FromArrayTreeConfig,
+        leaf:StringLeaf,
+        tag:Tag,
+        parameters: Self::Parameters,
+        errors:&mut ErrorWrite<FromArrayTreeError>
+    ) -> Result<WithTag<Self>, ()> {
+        Result::Ok(
+            WithTag {
+                data: ArrayTree::Leaf(leaf),
+                tag,
+            }
+        )
+    }
+
+    #[allow(unused_variables)]
+    fn match_array_tree_array(
+        config:&FromArrayTreeConfig,
+        array:ArrayBranch<WithTag<ArrayTree<StringLeaf>>>, 
+        tag:Tag,
+        parameters: Self::Parameters,
+        errors: &mut ErrorWrite<FromArrayTreeError>,
+    ) -> bool {
+        true
+    }
+    
+    #[allow(unused_variables)]
+    fn match_array_tree_string(
+        config:&FromArrayTreeConfig,
+        leaf:StringLeaf,
+        tag:Tag,
+        parameters: Self::Parameters,
+        errors:&mut ErrorWrite<FromArrayTreeError>
+    ) -> bool {
+        false
+    }
 }
 
 impl<LeafType:Leaf> From<ArrayBranch<WithTag<ArrayTree<LeafType>>>> for ArrayTree<LeafType> {
@@ -56,6 +110,8 @@ pub struct ArrayBranch<TreeType:Debug + Clone> {
 }
 
 impl<TreeType:Debug + Clone> ArrayBranch<TreeType> {
+    
+    #[allow(unused_variables)]
     pub fn shift(
         &mut self,
         config: &FromArrayTreeConfig,
@@ -73,6 +129,7 @@ impl<TreeType:Debug + Clone> ArrayBranch<TreeType> {
         }
     }
 
+    #[allow(unused_variables)]
     pub fn split_off(
         &mut self, 
         config: &FromArrayTreeConfig,
@@ -101,6 +158,7 @@ impl<TreeType:Debug + Clone> ArrayBranch<TreeType> {
         self.split_off(config, len, tag, errors)
     }
 
+    #[allow(unused_variables)]
     pub fn finish(
         self,
         config: &FromArrayTreeConfig,
@@ -152,5 +210,45 @@ impl<T:Debug + Clone + FromArrayTree> FromArrayTree for ArrayBranch<WithTag<T>> 
                 tag
             }
         )
+    }
+
+    #[allow(unused_variables)]
+    fn from_array_tree_string(
+        config:&FromArrayTreeConfig,
+        leaf:StringLeaf,
+        tag:Tag,
+        parameters: Self::Parameters,
+        errors:&mut ErrorWrite<FromArrayTreeError>
+    ) -> Result<WithTag<Self>, ()> {
+        errors.push(
+            FromArrayTreeError::from(
+                CantBeStringError {
+                    range: tag.content_range
+                }
+            )
+        );
+        Result::Err(())
+    }
+
+    #[allow(unused_variables)]
+    fn match_array_tree_array(
+        config:&FromArrayTreeConfig,
+        array:ArrayBranch<WithTag<ArrayTree<StringLeaf>>>, 
+        tag:Tag,
+        parameters: T::Parameters,
+        errors: &mut ErrorWrite<FromArrayTreeError>,
+    ) -> bool {
+        true
+    }
+    
+    #[allow(unused_variables)]
+    fn match_array_tree_string(
+        config:&FromArrayTreeConfig,
+        leaf:StringLeaf,
+        tag:Tag,
+        parameters: Self::Parameters,
+        errors:&mut ErrorWrite<FromArrayTreeError>
+    ) -> bool {
+        false
     }
 }

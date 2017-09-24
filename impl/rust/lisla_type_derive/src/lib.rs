@@ -1,5 +1,5 @@
 #![feature(attr_literals)]
-#![recursion_limit="128"]
+#![recursion_limit="256"]
 
 extern crate proc_macro;
 extern crate syn;
@@ -17,6 +17,7 @@ mod union;
 use structure::impl_structure;
 use newtype::impl_newtype;
 use _tuple::impl_tuple;
+use union::impl_union;
 
 #[proc_macro_derive(LislaStruct, attributes(lisla))]
 pub fn derive_structure(input: TokenStream) -> TokenStream {
