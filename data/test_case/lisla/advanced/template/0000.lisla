@@ -1,0 +1,37 @@
+; Lisla
+''''''''
+template
+$first $2 $3rd
+$'single quoted'
+$"double quoted"
+$""
+$''
+$"""'multi-double quoted'"""
+$template
+''''''''
+
+; valid test cases
+(
+    (
+        ; Context
+        (
+            ("single quoted" 4)
+            ("double quoted" 5)
+            ("" 6)
+            ("" 7)
+            ("template" 8)
+            ("first" 1)
+            ("2" 2)
+            ("3rd" 3)
+        )
+
+        ; Result
+        """
+        ["template" "1", "2", "3", "4", "5", "6", "6", "7", "8"]
+        """
+    )
+)
+
+; invalid test cases
+(
+)

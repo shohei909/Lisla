@@ -1,5 +1,6 @@
 package lisla.parse.array;
 import haxe.ds.Option;
+import lisla.data.leaf.template.Placeholder;
 import lisla.data.leaf.template.TemplateLeaf;
 import lisla.data.meta.core.Metadata;
 import lisla.data.meta.position.CodePointIndex;
@@ -182,7 +183,7 @@ class ArrayContext
             return top.errorWithCurrentPosition(BasicParseErrorKind.BlacklistedWhitespace(codePoint));
         }
         
-		var stringContext = new UnquotedStringContext(top, this, popStringTag(top.position));
+		var stringContext = new UnquotedStringContext(top, this, isPlaceholder, popStringTag(top.position));
 		state = ArrayState.UnquotedString(stringContext);
 		
 		stringContext.process(codePoint);
@@ -195,11 +196,11 @@ class ArrayContext
 	{
 		if (length == 2)
 		{
-            pushString("", popStringTag(top.position - 2).settle(top.position));
+            pushString("", isPlaceholder, popStringTag(top.position - 2).settle(top.position));
 		}
 		else
 		{
-			state = ArrayState.QuotedString(new QuotedStringContext(top, this, singleQuoted, length, popStringTag(top.position - length)));
+			state = ArrayState.QuotedString(new QuotedStringContext(top, this, singleQuoted, isPlaceholder, length, popStringTag(top.position - length)));
 		}
 	}
     
@@ -215,10 +216,17 @@ class ArrayContext
 		state = ArrayState.Normal(separated);
     }
     
-    public function pushString(string:String, metadata:Metadata):Void
+    public function pushString(string:String, isPlaceholder:Bool, metadata:Metadata):Void
     {
-        var kind = ArrayTreeKind.Leaf(TemplateLeaf.Str(string));
-        push(new ArrayTree(kind, metadata), false);
+        var kind = if (isPlaceholder)
+        {
+            TemplateLeaf.Placeholder(new Placeholder(string));
+        }
+        else
+        {
+            TemplateLeaf.Str(string);
+        }
+        push(new ArrayTree(ArrayTreeKind.Leaf(kind), metadata), false);
     }
     
     public function pushArray(trees:Array<ArrayTree<TemplateLeaf>>, metadata:Metadata):Void

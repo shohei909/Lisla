@@ -15,10 +15,12 @@ class UnquotedStringContext
     private var parent:ArrayContext;
 	private var string:String;
 	private var metadata:UnsettledStringTag;
+    private var isPlaceholder:Bool;
 	
-	public inline function new(top:ParseContext, parent:ArrayContext, metadata:UnsettledStringTag) 
+	public inline function new(top:ParseContext, parent:ArrayContext, isPlaceholder:Bool, metadata:UnsettledStringTag) 
 	{
-		this.parent = parent;
+		this.isPlaceholder = isPlaceholder;
+        this.parent = parent;
         this.top = top;
         string = "";
 		this.metadata = metadata;
@@ -62,7 +64,7 @@ class UnquotedStringContext
    
 	public function end():Void
 	{
-        parent.pushString(string, metadata.settle(top.position));
+        parent.pushString(string, isPlaceholder, metadata.settle(top.position));
         parent.state = ArrayState.Normal(false);
 	}
 }

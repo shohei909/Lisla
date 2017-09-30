@@ -8,8 +8,7 @@ import lisla.error.core.ErrorStringifier;
 import lisla.parse.Parser;
 import lisla.project.ProjectRootDirectory;
 
-
-class ParseTest extends LislaTestCase
+class TemplateTest extends LislaTestCase
 {
     private var rootDirectory:ProjectRootDirectory;
     
@@ -19,9 +18,9 @@ class ParseTest extends LislaTestCase
         rootDirectory = TestCore.PROJECT_ROOT;
 	}
 
-	public function testSuccess():Void
+	public function test():Void
 	{
-		for (filePath in rootDirectory.searchFiles(TestCore.BASIC_DIRECTORY, ".lisla"))
+		for (filePath in rootDirectory.searchFiles(TestCore.TEMPLATE_DIRECTORY, ".lisla"))
 		{
             var content = rootDirectory.getContent(filePath);
             var pair = rootDirectory.makePair(filePath);
@@ -39,11 +38,12 @@ class ParseTest extends LislaTestCase
                     }
                     continue;
             }
-
-            switch [caseDocument.data[0].kind, caseDocument.data[1].kind]
+            
+            /*
+            switch [caseDocument.data[0].kind, caseDocument.data[1].kind, caseDocument.data[2].kind]
             {
-                case [ArrayTreeKind.Leaf(alTree), ArrayTreeKind.Leaf(json)]:				
-                    var arrayTreeDocument = switch (Parser.parse(alTree))
+                case [ArrayTreeKind.Leaf(arrayTree), ArrayTreeKind.Arr(validData), ArrayTreeKind.Arr(invalidData)]:
+                    var arrayTreeDocument = switch (Parser.parseTemplate(arrayTree))
                     {
                         case Result.Ok(_document):
                             _document;
@@ -61,28 +61,29 @@ class ParseTest extends LislaTestCase
                             
                             continue;
                     }
-            
-                    assertArray(arrayTreeDocument.data, Json.parse(json), filePath);
                     
+                    for (data in validData)
+                    {
+                        var map = data.getMap();
+                        switch data[1].kind
+                        {
+                            case ArrayTreeKind.Leaf(json):
+                                fail("TODO");
+                                
+                            case _:
+                                fail("valid test case data must be [context, json]").label(filePath);
+                        }
+                    }
+
+                    for (data in validData)
+                    {
+                        fail("TODO");
+                    }
+
                 case _:
-                    fail("test case data must be [lisla, json]").label(filePath);
+                    fail("test case data must be [lisla, valid cases, invalid cases]").label(filePath);
             }
-		}
-	}
-	
-	public function testFailure():Void
-	{
-		for (filePath in rootDirectory.searchFiles(TestCore.INVALID_NONFATAL_DIRECTORY, ".lisla"))
-		{
-            var content = rootDirectory.getContent(filePath);
-            switch (Parser.parse(content))
-            {
-                case Result.Ok(_):
-                    fail("parser must be fail.").label(filePath);
-                    
-                case Result.Error(errors):
-                    success();
-            }
-		}
+            */
+        }
 	}
 }

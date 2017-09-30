@@ -31,10 +31,12 @@ class QuotedStringContext
 	private var metadata:UnsettledStringTag;
     
     private var lastIndent:String;
+    private var isPlaceholder:Bool;
     
-	public function new(top:ParseContext, parent:ArrayContext, singleQuoted:Bool, startQuoteCount:Int, metadata:UnsettledStringTag) 
+	public function new(top:ParseContext, parent:ArrayContext, singleQuoted:Bool, isPlaceholder:Bool, startQuoteCount:Int, metadata:UnsettledStringTag) 
 	{
-		this.top = top;
+		this.isPlaceholder = isPlaceholder;
+        this.top = top;
         this.parent = parent;
         this.singleQuoted = singleQuoted;
 		this.startQuoteCount = startQuoteCount;
@@ -242,7 +244,7 @@ class QuotedStringContext
                 isGroupTop = false;
             }
             
-            parent.pushString(string, metadata);
+            parent.pushString(string, isPlaceholder, metadata);
             isFirstGroup = false;
         }
         

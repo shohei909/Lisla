@@ -19,5 +19,5 @@ class ArrayTreeBlock<LeafType> extends BlockData<Array<ArrayTree<LeafType>>>
     public function getArrayWithMetadata():ArrayWithMetadata<ArrayTree<LeafType>>
     {
         return new ArrayWithMetadata(data, metadata);
-    }
+    }    
 }
