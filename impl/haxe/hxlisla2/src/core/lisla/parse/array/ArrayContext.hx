@@ -4,8 +4,8 @@ import lisla.data.leaf.template.TemplateLeaf;
 import lisla.data.meta.core.Metadata;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Range;
-import lisla.data.tree.al.AlTree;
-import lisla.data.tree.al.AlTreeKind;
+import lisla.data.tree.array.ArrayTree;
+import lisla.data.tree.array.ArrayTreeKind;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseContext;
 import lisla.parse.array.ArrayParent;
@@ -20,7 +20,7 @@ using lisla.parse.char.CodePointTools;
 class ArrayContext
 {
     private var parent:ArrayParent;
-    private var data:Array<AlTree<TemplateLeaf>>;
+    private var data:Array<ArrayTree<TemplateLeaf>>;
 	private var metadata:UnsettledArrayTag;
 	private var elementTag:UnsettledLeadingTag;
     private var top:ParseContext;
@@ -31,7 +31,7 @@ class ArrayContext
 	{
         this.top = top;
         this.parent = parent;
-        this.state = ArrayState.Normal;
+        this.state = ArrayState.Normal(true);
 		this.metadata = metadata;
 		this.data = [];
 		this.elementTag = new UnsettledLeadingTag();
@@ -59,8 +59,8 @@ class ArrayContext
 	{
 		switch [codePoint.toInt(), this.state] 
     	{
-            case [_, ArrayState.OpeningQuote(singleQuoted, length)]:
-                processOpeningQuote(codePoint, singleQuoted, length);
+            case [_, ArrayState.OpeningQuote(singleQuoted, isPlaceholder, length)]:
+                processOpeningQuote(codePoint, singleQuoted, isPlaceholder, length);
                 
             case [_, ArrayState.Comment(context)]:
 				context.process(codePoint);
@@ -72,31 +72,7 @@ class ArrayContext
 				context.process(codePoint);
 
 			// --------------------------
-			// Escape
-			// --------------------------
-			case [CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB, ArrayState.Escape]:
-                switch (parent)
-                {
-                    case ArrayParent.QuotedString(stringContext, store):
-                        store.pushArray(data, metadata.settle(top.position, elementTag));
-                        
-                        var nextContext = new ArrayContext(top, this.parent, new UnsettledLeadingTag().toArrayTag(top.position));
-                        top.current = nextContext;
-                        
-                    case ArrayParent.Array(_) | ArrayParent.Top:
-                        top.error(BasicParseErrorKind.InvalidInterpolationSeparator, Range.createWithEnd(metadata.startPosition, top.position));
-                        state = ArrayState.Normal;
-				}
-                
-			case [_, ArrayState.Escape]:
-				top.error(BasicParseErrorKind.UnquotedEscapeSequence, Range.createWithEnd(metadata.startPosition, top.position));
-				state = ArrayState.Normal;
-                
-			case [CodePointTools.BACK_SLASH, ArrayState.Normal]:
-                state = ArrayState.Escape;
-                
-			// --------------------------
-			// Slash
+			// Semicolon
 			// --------------------------
 			case [CodePointTools.SEMICOLON, ArrayState.Semicolon]:
 				state = ArrayState.Comment(new CommentContext(top, this, CommentKind.Document));
@@ -106,69 +82,85 @@ class ArrayContext
 				this.state = ArrayState.Comment(commentDetail);
 				commentDetail.process(codePoint);
 				
-			case [CodePointTools.SEMICOLON, ArrayState.Normal]:
+			case [CodePointTools.SEMICOLON, ArrayState.Normal(_)]:
 				state = ArrayState.Semicolon;
 				
 			// --------------------------
 			// Separater, Normal
 			// --------------------------
-			case [CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB, ArrayState.Normal]:
-				// nothing to do.
+			case [CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB, ArrayState.Normal(_)]:
+                state = ArrayState.Normal(true);
 			
 			// --------------------------
 			// Bracket, Normal
 			// --------------------------
-			case [CodePointTools.OPENNING_PAREN, ArrayState.Normal]:
+			case [CodePointTools.OPENNING_PAREN, ArrayState.Normal(_)]:
 				startArray();
 				
-			case [CodePointTools.CLOSEING_PAREN, ArrayState.Normal]:
+			case [CodePointTools.CLOSEING_PAREN, ArrayState.Normal(_)]:
 				switch (parent)
 				{
                     case ArrayParent.Array(parentContext):
                         endArray(parentContext);
                         
-                    case ArrayParent.QuotedString(stringContext, store):
-                        endInterporation(stringContext, store);
-                    
                     case ArrayParent.Top:
                         top.errorWithCurrentPosition(BasicParseErrorKind.TooManyClosingBracket);
 				}
                 
-				state = ArrayState.Normal;
+				state = ArrayState.Normal(true);
 			
 			// --------------------------
 			// QuotedString, Normal
 			// --------------------------
-			case [CodePointTools.DOUBLE_QUOTE, ArrayState.Normal]:
-				state = ArrayState.OpeningQuote(false, 1);
+			case [CodePointTools.DOUBLE_QUOTE, ArrayState.Normal(separated)]:
+                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, Range.createWithLength(top.position - 1, 1));
+				state = ArrayState.OpeningQuote(false, false, 1);
 				
-			case [CodePointTools.SINGLE_QUOTE, ArrayState.Normal]:
-				state = ArrayState.OpeningQuote(true, 1);
+			case [CodePointTools.SINGLE_QUOTE, ArrayState.Normal(separated)]:
+                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, Range.createWithLength(top.position - 1, 1));
+				state = ArrayState.OpeningQuote(true, false, 1);
 				
+			// --------------------------
+			// Dollar
+			// --------------------------
+			case [CodePointTools.DOLLAR, ArrayState.Normal(separated)]:
+                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, Range.createWithLength(top.position - 1, 1));
+				state = ArrayState.Dollar;
+				
+			case [CodePointTools.DOUBLE_QUOTE, ArrayState.Dollar]:
+				state = ArrayState.OpeningQuote(false, true, 1);
+				
+			case [CodePointTools.SINGLE_QUOTE, ArrayState.Dollar]:
+				state = ArrayState.OpeningQuote(true, true, 1);
+                
+            case [
+                CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB | CodePointTools.CLOSEING_PAREN | CodePointTools.OPENNING_PAREN | CodePointTools.SEMICOLON | CodePointTools.DOLLAR,
+                ArrayState.Dollar
+            ]:
+                top.error(BasicParseErrorKind.EmptyPlaceholder, Range.createWithLength(top.position - 1, 1));
+                state = ArrayState.Normal(false);
+                process(codePoint);
+                
+			case [_, ArrayState.Dollar]:
+                startUnquotedString(codePoint, true);
 			// --------------------------
 			// Other, Normal
 			// --------------------------
-			case [_, ArrayState.Normal]:
-				if (CodePointTools.isBlackListedWhitespace(codePoint))
-				{
-					top.errorWithCurrentPosition(BasicParseErrorKind.BlacklistedWhitespace(codePoint));
-				}
-				else
-				{
-					startUnquotedString(codePoint);
-				}
+			case [_, ArrayState.Normal(separated)]:
+                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, Range.createWithLength(top.position - 1, 1));
+				startUnquotedString(codePoint, false);
 		}
 	}
     
-	public inline function processOpeningQuote(codePoint:CodePoint, singleQuoted:Bool, length:Int):Void
+	public inline function processOpeningQuote(codePoint:CodePoint, singleQuoted:Bool, isPlaceholder:Bool, length:Int):Void
 	{
 		switch [codePoint.toInt(), singleQuoted]
 		{
 			case [CodePointTools.SINGLE_QUOTE, true] | [CodePointTools.DOUBLE_QUOTE, false]:
-				state = ArrayState.OpeningQuote(singleQuoted, length + 1);
+				state = ArrayState.OpeningQuote(singleQuoted, isPlaceholder, length + 1);
 				
 			case _:
-				endOpennigQuote(singleQuoted, length);
+				endOpennigQuote(singleQuoted, isPlaceholder, length);
 				top.current.process(codePoint);
 		}
 	}
@@ -183,8 +175,13 @@ class ArrayContext
 		top.current = child;
 	}
 
-	private inline function startUnquotedString(codePoint:CodePoint):Void
+	private inline function startUnquotedString(codePoint:CodePoint, isPlaceholder:Bool):Void
 	{
+        if (CodePointTools.isBlackListedWhitespace(codePoint))
+        {
+            return top.errorWithCurrentPosition(BasicParseErrorKind.BlacklistedWhitespace(codePoint));
+        }
+        
 		var stringContext = new UnquotedStringContext(top, this, popStringTag(top.position));
 		state = ArrayState.UnquotedString(stringContext);
 		
@@ -194,7 +191,7 @@ class ArrayContext
 	// =============================
 	// end
 	// =============================
-	private inline function endOpennigQuote(singleQuoted:Bool, length:Int):Void
+	private inline function endOpennigQuote(singleQuoted:Bool, isPlaceholder:Bool, length:Int):Void
 	{
 		if (length == 2)
 		{
@@ -212,30 +209,22 @@ class ArrayContext
 		top.current = destination;
 	}
     
-    private function endInterporation(stringContext:QuotedStringContext, store:QuotedStringArrayPair):Void
-    {
-        store.pushArray(data, metadata.settle(top.position, elementTag));
-		stringContext.store(store);
-        
-		top.current = stringContext.parent;
-    }
-    
-    public function push(tree:AlTree<TemplateLeaf>):Void
+    public function push(tree:ArrayTree<TemplateLeaf>, separated:Bool):Void
     {
         data.push(tree);
-		state = ArrayState.Normal;
+		state = ArrayState.Normal(separated);
     }
     
     public function pushString(string:String, metadata:Metadata):Void
     {
-        var kind = AlTreeKind.Leaf(TemplateLeaf.Str(string));
-        push(new AlTree(kind, metadata));
+        var kind = ArrayTreeKind.Leaf(TemplateLeaf.Str(string));
+        push(new ArrayTree(kind, metadata), false);
     }
     
-    public function pushArray(trees:Array<AlTree<TemplateLeaf>>, metadata:Metadata):Void
+    public function pushArray(trees:Array<ArrayTree<TemplateLeaf>>, metadata:Metadata):Void
     {
-        var kind = AlTreeKind.Arr(trees);
-        push(new AlTree(kind, metadata));
+        var kind = ArrayTreeKind.Arr(trees);
+        push(new ArrayTree(kind, metadata), true);
     }
     
     public function writeDocument(codePoint:CodePoint):Void
@@ -244,24 +233,24 @@ class ArrayContext
         metadata.writeDocument(top.config, codePoint, top.position - 1);
     }
     
-	public inline function endTop():{trees:Array<AlTree<TemplateLeaf>>, metadata:Metadata}
+	public inline function endTop():{trees:Array<ArrayTree<TemplateLeaf>>, metadata:Metadata}
 	{
-        var kind = AlTreeKind.Arr(data);
+        var kind = ArrayTreeKind.Arr(data);
 		return {
             trees: data, 
             metadata: metadata.settle(top.position, elementTag)
         }
 	}
     
-    public inline function getData():Option<{trees:Array<AlTree<TemplateLeaf>>, metadata:Metadata}> 
+    public inline function getData():Option<{trees:Array<ArrayTree<TemplateLeaf>>, metadata:Metadata}> 
 	{
 		return switch (state)
         {
             case ArrayState.Semicolon:
-                state = ArrayState.Normal;
+                state = ArrayState.Normal(true);
                 Option.None;
                 
-            case ArrayState.Normal:
+            case ArrayState.Normal(_):
                 switch (parent)
                 {
                     case ArrayParent.Array(arrayContext):
@@ -269,15 +258,15 @@ class ArrayContext
                         endArray(arrayContext);
                         Option.None;
                         
-                    case ArrayParent.QuotedString(stringContext, store):
-                        top.error(BasicParseErrorKind.UnclosedArray, Range.createWithLength(metadata.startPosition, 1));
-                        endInterporation(stringContext, store);
-                        Option.None;
-                        
                     case ArrayParent.Top:
                         Option.Some(endTop());
                 }
-            
+                
+            case ArrayState.Dollar:
+                top.error(BasicParseErrorKind.EmptyPlaceholder, Range.createWithLength(top.position - 1, 1));
+                state = ArrayState.Normal(false);
+                Option.None;
+                
             case ArrayState.QuotedString(context):
                 context.end();
                 Option.None;
@@ -286,17 +275,12 @@ class ArrayContext
                 context.end();
                 Option.None;
                         
-            case ArrayState.OpeningQuote(singleQuoted, length):
-                endOpennigQuote(singleQuoted, length);
+            case ArrayState.OpeningQuote(singleQuoted, isPlaceholder, length):
+                endOpennigQuote(singleQuoted, isPlaceholder, length);
                 Option.None;
                 
             case ArrayState.Comment(context):
                 context.end();
-                Option.None;
-                
-            case ArrayState.Escape:
-				top.error(BasicParseErrorKind.UnquotedEscapeSequence, Range.createWithEnd(metadata.startPosition, top.position));
-                state = ArrayState.Normal;
                 Option.None;
         }
 	}

@@ -6,5 +6,4 @@ enum ArrayParent
 {
     Top;
     Array(context:ArrayContext);
-    QuotedString(stringContext:QuotedStringContext, store:QuotedStringArrayPair);
 }

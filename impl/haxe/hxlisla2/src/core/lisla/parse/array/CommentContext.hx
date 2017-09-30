@@ -54,10 +54,10 @@ class CommentContext
 		switch (kind)
 		{
 			case CommentKind.Document:
-				parent.state = ArrayState.Normal;
+				parent.state = ArrayState.Normal(true);
 			
 			case CommentKind.Normal:
-				parent.state = ArrayState.Normal;
+				parent.state = ArrayState.Normal(true);
 		}
 	}
     

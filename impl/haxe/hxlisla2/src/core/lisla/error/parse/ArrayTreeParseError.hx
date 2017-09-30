@@ -6,12 +6,12 @@ import lisla.error.core.BlockError;
 import lisla.error.core.InlineError;
 import lisla.error.template.TemplateFinalizeError;
 
-class AlTreeParseError implements BlockError
+class ArrayTreeParseError implements BlockError
 {
-    public var kind(default, null):AlTreeParseErrorKind;
+    public var kind(default, null):ArrayTreeParseErrorKind;
     public var sourceMap:Option<SourceMap>;
     
-    public inline function new (kind:AlTreeParseErrorKind, sourceMap:Option<SourceMap>)
+    public inline function new (kind:ArrayTreeParseErrorKind, sourceMap:Option<SourceMap>)
     {
         this.sourceMap = sourceMap;
         this.kind = kind;
@@ -26,10 +26,10 @@ class AlTreeParseError implements BlockError
     {
         return switch (kind)
         {
-            case AlTreeParseErrorKind.Basic(error):
+            case ArrayTreeParseErrorKind.Basic(error):
                 error;
                 
-            case AlTreeParseErrorKind.TemplateFinalize(error):
+            case ArrayTreeParseErrorKind.TemplateFinalize(error):
                 error;
         }
     } 

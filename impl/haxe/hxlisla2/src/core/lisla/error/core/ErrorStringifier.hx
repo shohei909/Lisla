@@ -52,7 +52,7 @@ class ErrorStringifier
     public static function fromBlockError(errorHolder:BlockErrorHolder):String
     {
         var error = errorHolder.getBlockError();
-        var sourceMap = error.getOptionSourceMap();
+        var sourceMap = Option.None;//error.getOptionSourceMap();
         
         return switch (sourceMap)
         {

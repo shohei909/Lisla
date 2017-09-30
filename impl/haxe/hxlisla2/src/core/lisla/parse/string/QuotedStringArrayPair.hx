@@ -1,13 +1,13 @@
 package lisla.parse.string;
 import lisla.data.leaf.template.TemplateLeaf;
 import lisla.data.meta.core.Metadata;
-import lisla.data.tree.al.AlTree;
-import lisla.data.tree.al.AlTreeKind;
+import lisla.data.tree.array.ArrayTree;
+import lisla.data.tree.array.ArrayTreeKind;
 
 class QuotedStringArrayPair
 {
     public var string:Array<QuotedStringLine>;
-    public var trees:Array<AlTree<TemplateLeaf>>;
+    public var trees:Array<ArrayTree<TemplateLeaf>>;
     public var metadata:Metadata;
 
     public function new(string:Array<QuotedStringLine>, metadata:Metadata)
@@ -17,10 +17,10 @@ class QuotedStringArrayPair
         this.metadata = metadata;
     }
     
-    public function pushArray(data:Array<AlTree<TemplateLeaf>>, metadata:Metadata):Void
+    public function pushArray(data:Array<ArrayTree<TemplateLeaf>>, metadata:Metadata):Void
     {
-        var kind = AlTreeKind.Arr(data);
-    	var arr = new AlTree<TemplateLeaf>(kind, metadata);
+        var kind = ArrayTreeKind.Arr(data);
+    	var arr = new ArrayTree<TemplateLeaf>(kind, metadata);
         trees.push(arr);
     }
 }

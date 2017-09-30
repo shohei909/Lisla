@@ -4,8 +4,8 @@ using lisla.parse.char.CodePointTools;
 import lisla.data.meta.core.Metadata;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Range;
-import lisla.data.tree.al.AlTree;
-import lisla.data.tree.al.AlTreeKind;
+import lisla.data.tree.array.ArrayTree;
+import lisla.data.tree.array.ArrayTreeKind;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseContext;
 import lisla.parse.array.ArrayContext;
@@ -57,28 +57,6 @@ class QuotedStringContext
 	{
 		switch (state) 
 		{
-			case QuotedStringState.EscapeSequence(context):
-                switch (context.process(codePoint, true))
-                {
-					case EscapeResult.Letter(string):
-                        currentLine.content += string;
-						state = QuotedStringState.Body;
-                        
-					case EscapeResult.Interpolate:
-                        currentString.push(currentLine);
-                        var store = new QuotedStringArrayPair(currentString, metadata.settle(top.position));
-                        
-                        currentString = [];
-                        this.currentLine = new QuotedStringLine(top.position);
-                        state = QuotedStringState.Body;
-                        
-                        var arrayTag = new UnsettledLeadingTag().toArrayTag(top.position);
-                        top.current = new ArrayContext(top, ArrayParent.QuotedString(this, store), arrayTag);
-                        
-					case EscapeResult.Continue:
-                        // nothing to do.
-				}
-			
 			case QuotedStringState.CarriageReturn:
 				switch (codePoint.toInt())
 				{
@@ -141,9 +119,6 @@ class QuotedStringContext
 					
 				case CodePointTools.LF:
 					newLine("\n");
-					
-				case CodePointTools.BACK_SLASH if (!singleQuoted):
-                    state = QuotedStringState.EscapeSequence(new EscapeSequenceContext(top));
 					
 				case _:
 					currentLine.content += codePoint.toString();
@@ -210,9 +185,6 @@ class QuotedStringContext
 				{
 					endClosedQuotedString(length);
 				}
-				
-			case EscapeSequence(context):
-				top.error(BasicParseErrorKind.InvalidEscapeSequence, Range.createWithEnd(metadata.startPosition, top.position));
 		}
 	}
 	
@@ -220,7 +192,7 @@ class QuotedStringContext
 	{
 		var startPosition = metadata.startPosition;
 		top.error(BasicParseErrorKind.UnclosedQuote, Range.createWithEnd(metadata.startPosition - startQuoteCount, startPosition));
-		parent.state = ArrayState.Normal;
+		parent.state = ArrayState.Normal(false);
 	}
 	
 	private function endClosedQuotedString(endQuoteCount:Int):Void
@@ -231,7 +203,8 @@ class QuotedStringContext
 		}
 		
         var isFirstGroup = true;
-        var lastIndentSize = lastIndent.length;
+        var skipIndent = if (currentLine.isWhite()) lastIndent else "";
+        var skipIndentSize = skipIndent.length;
         
         function addString(lines:Array<QuotedStringLine>, isLastGroup:Bool, metadata:Metadata):Void
         {
@@ -253,13 +226,13 @@ class QuotedStringContext
                         {
                             // nothing to do.
                         }
-                        else if (line.content.substr(0, lastIndentSize) == lastIndent)
+                        else if (line.content.substr(0, skipIndentSize) == skipIndent)
                         {
-                            string += line.content.substr(lastIndentSize);
+                            string += line.content.substr(skipIndentSize);
                         }
                         else
                         {
-                            top.error(BasicParseErrorKind.UnmatchedIndentWhiteSpaces, Range.createWithLength(line.startPosition, lastIndentSize));
+                            top.error(BasicParseErrorKind.UnmatchedIndentWhiteSpaces, Range.createWithLength(line.startPosition, skipIndentSize));
                             string += line.content;
                         }
                     }
@@ -279,7 +252,7 @@ class QuotedStringContext
             
             for (tree in pair.trees)
             {
-                parent.push(tree);
+                parent.push(tree, false);
             }
         }
         

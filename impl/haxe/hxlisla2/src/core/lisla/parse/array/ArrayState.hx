@@ -6,11 +6,11 @@ import lisla.parse.metadata.UnsettledLeadingTag;
 
 enum ArrayState
 {
-	Normal;
-    Escape;
+	Normal(separated:Bool);
+	Dollar;
 	Semicolon;
     Comment(context:CommentContext);
-	OpeningQuote(singleQuoted:Bool, length:Int);
+	OpeningQuote(singleQuoted:Bool, placeholder:Bool, length:Int);
 	QuotedString(context:QuotedStringContext);
 	UnquotedString(context:UnquotedStringContext);
 }

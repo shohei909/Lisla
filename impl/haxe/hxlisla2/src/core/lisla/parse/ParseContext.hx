@@ -6,14 +6,14 @@ import lisla.data.meta.position.LineIndexes;
 import lisla.data.meta.position.Range;
 import lisla.data.meta.position.RangeCollection;
 import lisla.data.meta.position.SourceMap;
-import lisla.data.tree.al.AlTreeBlock;
+import lisla.data.tree.array.ArrayTreeBlock;
 import lisla.error.core.InlineToBlockErrorWrapper;
 import lisla.error.parse.BasicParseError;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.array.ArrayContext;
 import lisla.parse.array.ArrayParent;
 import lisla.parse.char.CodePointTools;
-import lisla.parse.result.AlTreeTemplateParseResult;
+import lisla.parse.result.ArrayTreeTemplateParseResult;
 import lisla.parse.metadata.UnsettledLeadingTag;
 import unifill.CodePoint;
 
@@ -69,7 +69,7 @@ class ParseContext
         current.process(codePoint);
     }
     
-    public inline function end():AlTreeTemplateParseResult
+    public inline function end():ArrayTreeTemplateParseResult
 	{
 		position += 1;
 		
@@ -93,7 +93,7 @@ class ParseContext
 		else
 		{
             var sourceMap = getSourceMap();
-			Result.Ok(new AlTreeBlock(data.trees, data.metadata, sourceMap));
+			Result.Ok(new ArrayTreeBlock(data.trees, data.metadata, sourceMap));
 		}
 	}
     

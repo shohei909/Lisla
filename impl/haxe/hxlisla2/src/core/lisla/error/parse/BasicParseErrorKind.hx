@@ -4,15 +4,12 @@ import unifill.CodePoint;
 enum BasicParseErrorKind 
 {
     BlacklistedWhitespace(chararacter:CodePoint);
-    InvalidEscapeSequence;
-    InvalidDigitUnicodeEscape;
-    InvalidUnicode;
-    InvalidInterpolationSeparator;
-    UnquotedEscapeSequence;
+    SeparaterRequired;
     UnclosedArray;
     UnclosedQuote;
     TooManyClosingQuotes(expected:Int, actual:Int);
 	TooManyClosingBracket;
-	TooShortIndent;
 	UnmatchedIndentWhiteSpaces;
+    InvalidPlaceholderPosition;
+    EmptyPlaceholder;
 }

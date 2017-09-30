@@ -29,24 +29,18 @@ class UnquotedStringContext
 		switch codePoint.toInt()
 		{
 			// --------------------------
-			// Slash
+			// Semicolon
 			// --------------------------
 			case CodePointTools.SEMICOLON:
 				end();
                 parent.state = ArrayState.Semicolon;
-				
-			case CodePointTools.BACK_SLASH:
-				top.error(
-                    BasicParseErrorKind.UnquotedEscapeSequence, 
-                    Range.createWithEnd(metadata.startPosition, top.position)
-                );
 				
 			// --------------------------
 			// Separater
 			// --------------------------
 			case CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB | 
                 CodePointTools.CLOSEING_PAREN | CodePointTools.OPENNING_PAREN | 
-                CodePointTools.DOUBLE_QUOTE | CodePointTools.SINGLE_QUOTE:
+                CodePointTools.DOUBLE_QUOTE | CodePointTools.SINGLE_QUOTE | CodePointTools.DOLLAR:
 				end();
 				parent.process(codePoint);
 			
@@ -65,10 +59,10 @@ class UnquotedStringContext
 				}
 		}
 	}
-    
-	
+   
 	public function end():Void
 	{
         parent.pushString(string, metadata.settle(top.position));
+        parent.state = ArrayState.Normal(false);
 	}
 }

@@ -1,58 +1,58 @@
-package lisla.data.tree.asel;
+package lisla.data.tree.ase;
 import hxext.ds.Result;
 import lisla.data.meta.core.MetadataHolderImpl;
 import lisla.data.tree.core.Tree;
 
-class AselTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
+class AseTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
 {
-    public var kind(default, null):AselTreeKind<LeafType>;
+    public var kind(default, null):AseTreeKind<LeafType>;
     
-    public function new(kind:AselTreeKind<LeafType>, metadata:Metadata) 
+    public function new(kind:AseTreeKind<LeafType>, metadata:Metadata) 
     {
         if (metadata == null) throw "test";
         super(metadata);
         this.kind = kind;
     }
     
-    public function map<NewLeafType>(func:LeafType->NewLeafType):AselTree<NewLeafType>
+    public function map<NewLeafType>(func:LeafType->NewLeafType):AseTree<NewLeafType>
     {
         return switch (kind)
         {
-            case AselTreeKind.Arr(array):
+            case AseTreeKind.Arr(array):
                 var kind = [for (element in array) element.map(func)];
-                new AselTree(AselTreeKind.Arr(kind), metadata.shallowClone());
+                new AseTree(AseTreeKind.Arr(kind), metadata.shallowClone());
                 
-            case AselTreeKind.Enum(label, array):
+            case AseTreeKind.Enum(label, array):
                 var kind = [for (element in array) element.map(func)];
-                new AselTree(AselTreeKind.Enum(label, kind), metadata.shallowClone());
+                new AseTree(AseTreeKind.Enum(label, kind), metadata.shallowClone());
                 
-            case AselTreeKind.Leaf(leaf):
-                new AselTree(AselTreeKind.Leaf(func(leaf)), metadata.shallowClone());
+            case AseTreeKind.Leaf(leaf):
+                new AseTree(AseTreeKind.Leaf(func(leaf)), metadata.shallowClone());
         }
     }
     
     public function mapOrError<NewLeafType, ErrorType>(
         func:LeafType->Result<NewLeafType, Array<ErrorType>>,
         persevering:Bool
-    ):Result<AselTree<NewLeafType>, Array<DataWithRange<ErrorType>>>
+    ):Result<AseTree<NewLeafType>, Array<DataWithRange<ErrorType>>>
     {
         return switch (kind)
         {
-            case AselTreeKind.Arr(array):
+            case AseTreeKind.Arr(array):
                 switch (AselTreeArrayTools.mapOrError(array, func, persevering))
                 {
                     case Result.Ok(ok):
-                        Result.Ok(new AselTree(AselTreeKind.Arr(ok), metadata.shallowClone()));
+                        Result.Ok(new AseTree(AseTreeKind.Arr(ok), metadata.shallowClone()));
                         
                     case Result.Error(errors):
                         Result.Error(errors);
                 }
                 
-            case AselTreeKind.Leaf(leaf):
+            case AseTreeKind.Leaf(leaf):
                 switch (func(leaf))
                 {
                     case Result.Ok(ok):
-                        Result.Ok(new AselTree(AselTreeKind.Leaf(ok), metadata.shallowClone()));
+                        Result.Ok(new AseTree(AseTreeKind.Leaf(ok), metadata.shallowClone()));
                         
                     case Result.Error(errors):
                         var range = OptionTools.getOrElse(metadata.range, Range.zero());

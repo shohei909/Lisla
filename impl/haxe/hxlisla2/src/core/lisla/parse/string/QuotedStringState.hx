@@ -6,5 +6,4 @@ enum QuotedStringState
 	Body;
 	CarriageReturn;
 	Quotes(length:Int);
-	EscapeSequence(context:EscapeSequenceContext);
 }

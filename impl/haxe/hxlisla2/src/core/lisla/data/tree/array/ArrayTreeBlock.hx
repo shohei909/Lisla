@@ -1,14 +1,14 @@
-package lisla.data.tree.al;
+package lisla.data.tree.array;
 
 import lisla.data.meta.core.ArrayWithMetadata;
 import lisla.data.meta.core.BlockData;
 import lisla.data.meta.core.Metadata;
 import lisla.data.meta.position.SourceMap;
 
-class AlTreeBlock<LeafType> extends BlockData<Array<AlTree<LeafType>>>
+class ArrayTreeBlock<LeafType> extends BlockData<Array<ArrayTree<LeafType>>>
 {   
     public function new(
-        data:Array<AlTree<LeafType>>,
+        data:Array<ArrayTree<LeafType>>,
         metadata:Metadata,
         sourceMap:SourceMap
     ) 
@@ -16,7 +16,7 @@ class AlTreeBlock<LeafType> extends BlockData<Array<AlTree<LeafType>>>
         super(data, metadata, sourceMap);
     }
     
-    public function getArrayWithMetadata():ArrayWithMetadata<AlTree<LeafType>>
+    public function getArrayWithMetadata():ArrayWithMetadata<ArrayTree<LeafType>>
     {
         return new ArrayWithMetadata(data, metadata);
     }

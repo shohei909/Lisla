@@ -4,7 +4,7 @@ import lisla.data.meta.position.SourceMap;
 import lisla.error.core.BlockError;
 import lisla.error.core.InlineError;
 
-class AlTemplateParseError implements BlockError
+class ArrayTemplateParseError implements BlockError
 {
     
 }

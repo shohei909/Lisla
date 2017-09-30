@@ -1,15 +1,15 @@
-package lisla.data.tree.al;
+package lisla.data.tree.array;
 import hxext.ds.Result;
 import lisla.data.meta.core.Metadata;
-import lisla.data.tree.al.AlTree;
+import lisla.data.tree.array.ArrayTree;
 
-class AlTreeArrayTools 
+class ArrayTreeArrayTools 
 {
     public static function mapOrError<LeafType, NewLeafType, ErrorType>(
-        array:Array<AlTree<LeafType>>,
+        array:Array<ArrayTree<LeafType>>,
         func:LeafType->Metadata->Result<NewLeafType, Array<ErrorType>>,
         persevering:Bool
-    ):Result<Array<AlTree<NewLeafType>>, Array<ErrorType>> {
+    ):Result<Array<ArrayTree<NewLeafType>>, Array<ErrorType>> {
         var errors = [];
         var data = [];
         for (element in array) {

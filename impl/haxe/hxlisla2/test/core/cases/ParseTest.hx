@@ -3,7 +3,7 @@ import haxe.Json;
 import haxe.ds.Option;
 import hxext.ds.Result;
 import lisla.data.meta.position.SourceMap;
-import lisla.data.tree.al.AlTreeKind;
+import lisla.data.tree.array.ArrayTreeKind;
 import lisla.error.core.ErrorStringifier;
 import lisla.parse.Parser;
 import lisla.project.ProjectRootDirectory;
@@ -18,7 +18,7 @@ class ParseTest extends LislaTestCase
 		super();
         rootDirectory = TestCore.PROJECT_ROOT;
 	}
-	
+
 	public function testSuccess():Void
 	{
 		for (filePath in rootDirectory.searchFiles(TestCore.BASIC_DIRECTORY, ".lisla"))
@@ -42,7 +42,7 @@ class ParseTest extends LislaTestCase
             
             switch [caseDocument.data[0].kind, caseDocument.data[1].kind]
             {
-                case [AlTreeKind.Leaf(alTree), AlTreeKind.Leaf(json)]:				
+                case [ArrayTreeKind.Leaf(alTree), ArrayTreeKind.Leaf(json)]:				
                     var alTreeDocument = switch (Parser.parse(alTree))
                     {
                         case Result.Ok(_document):
@@ -78,7 +78,7 @@ class ParseTest extends LislaTestCase
             switch (Parser.parse(content))
             {
                 case Result.Ok(_):
-                    fail("paser must be fail.").label(filePath);
+                    fail("parser must be fail.").label(filePath);
                     
                 case Result.Error(errors):
                     success();
