@@ -1,39 +1,56 @@
 package lisla.parse;
 import haxe.ds.Option;
+import haxe.macro.Expr.Position;
 import hxext.ds.Result;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.LineIndexes;
 import lisla.data.meta.position.Range;
 import lisla.data.meta.position.RangeCollection;
+import lisla.data.meta.position.SourceContext;
 import lisla.data.meta.position.SourceMap;
-import lisla.data.tree.array.ArrayTreeBlock;
-import lisla.error.core.InlineToBlockErrorWrapper;
+import lisla.data.tree.array.ArrayTreeDocument;
+import lisla.error.core.Error;
 import lisla.error.parse.BasicParseError;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.array.ArrayContext;
 import lisla.parse.array.ArrayParent;
 import lisla.parse.char.CodePointTools;
-import lisla.parse.result.ArrayTreeTemplateParseResult;
 import lisla.parse.metadata.UnsettledLeadingTag;
+import lisla.parse.result.ArrayTreeTemplateParseResult;
 import unifill.CodePoint;
 
-class ParseContext
+class ParseState
 {
-    public var config(default, null):ParserConfig;
+    public var context(default, null):SourceContext;
+    public var sourceMap(default, null):SourceMap;
+    public var config(default, null):ParseConfig;
     public var errors(default, null):Array<BasicParseError>;
-    public var lines(default, null):LineIndexes;
     public var position(default, null):CodePointIndex;
     public var current:ArrayContext;
     private var cr:Bool;
     private var string:String;
+    private var currentRange:Range;
     
-	public inline function new(string:String, config:ParserConfig) 
+	public inline function new(
+        string:String, 
+        config:ParseConfig, 
+        context:SourceContext,
+        startPosition:CodePointIndex
+    ) 
 	{
-		this.string = string;
+        this.string = string;
 		this.config = config;
+        this.sourceMap = new SourceMap(
+            new RangeCollection([]),
+            new LineIndexes()
+        );
+		this.context = new SourceContext(
+            context.projectRoot,
+            context.filePath,
+            context.sourceMaps.concat([sourceMap])
+        );
         
 	    position = new CodePointIndex(0);
-		lines = new LineIndexes();
 		errors = [];
 		cr = false;
         
@@ -42,10 +59,19 @@ class ParseContext
             ArrayParent.Top,
             new UnsettledLeadingTag().toArrayTag(position)
         );
+        
+        startRange(startPosition);
+    }
+    
+    public function startRange(codePointIndex:CodePointIndex):Void
+    {
+        currentRange = Range.createWithLength(codePointIndex, 0);
+        sourceMap.ranges.ranges.push(currentRange);
     }
     
     public function process(codePoint:CodePoint):Void
     {
+        currentRange.length++;
 		position++;
 		var c = codePoint.toInt();
 		if (c == CodePointTools.CR)
@@ -55,13 +81,13 @@ class ParseContext
 		else if (c == CodePointTools.LF)
 		{
 			cr = false;
-			lines.addLine(position);
+			sourceMap.lines.addLine(position);
 		}
 		else
 		{
 			if (cr)
 			{
-				lines.addLine(position - 1);
+				sourceMap.lines.addLine(position - 1);
 			}
 			cr = false;
 		}
@@ -88,12 +114,11 @@ class ParseContext
         
 		return if (errors.length > 0)
 		{
-			Result.Error(wrapErrors(errors));
+			Result.Error(errors);
 		}
 		else
 		{
-            var sourceMap = getSourceMap();
-			Result.Ok(new ArrayTreeBlock(data.trees, data.metadata, sourceMap));
+			Result.Ok(new ArrayTreeDocument(data.trees, context, data.metadata));
 		}
 	}
     
@@ -103,32 +128,19 @@ class ParseContext
     
 	public inline function error(kind:BasicParseErrorKind, range:Range):Void 
     {
-    	var entry = new BasicParseError(kind, range);
-		errors.push(entry);
+        var position = context.getPosition(range);
+    	var error = new BasicParseError(kind, position);
+		errors.push(error);
 		
 		if (!config.persevering)
 		{
-			throw new ParseException(wrapErrors(errors));
+			throw new ParseException(errors);
 		}
 	}
-    
-    private function wrapErrors(errors:Array<BasicParseError>):Array<InlineToBlockErrorWrapper<BasicParseError>>
-    {
-        var sourceMap = getSourceMap();
-        return [for (error in errors) new InlineToBlockErrorWrapper(error, Option.Some(sourceMap))];
-    }
     
     public inline function errorWithCurrentPosition(kind:BasicParseErrorKind):Void 
     {
         var range = Range.createWithEnd(this.position - 1, this.position);
 		return error(kind, range);
-    }
-    
-    private function getSourceMap():SourceMap
-    {
-        return new SourceMap(
-            new RangeCollection([Range.createWithLength(new CodePointIndex(0), position)]), 
-            lines
-        );
     }
 }

@@ -4,6 +4,7 @@ import hxext.ds.Maybe;
 import lisla.data.meta.core.Metadata;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Range;
+import lisla.data.meta.position.SourceContext;
 
 class UnsettledArrayTag
 {
@@ -16,10 +17,11 @@ class UnsettledArrayTag
 		this.startPosition = startPosition;
 	}
 	
-	public function settle(position:CodePointIndex, footerTag:UnsettledLeadingTag):Metadata
+	public function settle(context:SourceContext, position:CodePointIndex, footerTag:UnsettledLeadingTag):Metadata
 	{
-		var metadata = new Metadata();
-		metadata.range = Option.Some(Range.createWithEnd(startPosition, position));
+        var range = Range.createWithEnd(startPosition, position);
+        var position = context.getPosition(range);
+		var metadata = new Metadata(position);
         
         // TODO: Document comment
         // TODO: Concat footerTag

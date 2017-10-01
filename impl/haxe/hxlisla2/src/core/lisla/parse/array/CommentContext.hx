@@ -1,17 +1,17 @@
 package lisla.parse.array;
 import lisla.parse.char.CodePointTools;
-import lisla.parse.ParseContext;
+import lisla.parse.ParseState;
 import unifill.CodePoint;
 
 class CommentContext
 {
     private var parent:ArrayContext;
-    private var top:ParseContext;
+    private var top:ParseState;
 	private var keeping:Bool;
 	private var state:CommentState;
 	private var kind:CommentKind;
     
-	public inline function new (top:ParseContext, parent:ArrayContext, kind:CommentKind)
+	public inline function new (top:ParseState, parent:ArrayContext, kind:CommentKind)
 	{
 		this.top = top;
         this.parent = parent;

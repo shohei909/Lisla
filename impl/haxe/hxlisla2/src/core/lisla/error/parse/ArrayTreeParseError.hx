@@ -1,41 +1,58 @@
 package lisla.error.parse;
 import haxe.ds.Option;
-import lisla.data.meta.position.Range;
+import lisla.data.meta.position.Position;
 import lisla.data.meta.position.SourceMap;
-import lisla.error.core.BlockError;
-import lisla.error.core.InlineError;
+import lisla.error.core.Error;
+import lisla.error.core.IErrorDetail;
+import lisla.error.core.IErrorDetailHolder;
 import lisla.error.template.TemplateFinalizeError;
+using hxext.ds.OptionTools;
 
-class ArrayTreeParseError implements BlockError
+class ArrayTreeParseError extends Error<ArrayTreeParseErrorDetail>
+{
+    public function new(kind:ArrayTreeParseErrorKind, position:Position) 
+    {
+        super(
+            new ArrayTreeParseErrorDetail(kind),
+            position
+        );
+    }
+    
+    public static function errorFromBasic(sourceError:BasicParseError):ArrayTreeParseError
+    {
+        return new ArrayTreeParseError(
+            ArrayTreeParseErrorKind.Basic(sourceError.detailHolder),
+            sourceError.position
+        );
+    }
+    
+    public static function errorFromTemplateFinalize(sourceError:TemplateFinalizeError):ArrayTreeParseError
+    {
+        return new ArrayTreeParseError(
+            ArrayTreeParseErrorKind.TemplateFinalize(sourceError.detailHolder),
+            sourceError.position
+        );
+    }
+}
+
+class ArrayTreeParseErrorDetail implements IErrorDetailHolder
 {
     public var kind(default, null):ArrayTreeParseErrorKind;
-    public var sourceMap:Option<SourceMap>;
     
-    public inline function new (kind:ArrayTreeParseErrorKind, sourceMap:Option<SourceMap>)
+    public function new (kind:ArrayTreeParseErrorKind)
     {
-        this.sourceMap = sourceMap;
         this.kind = kind;
     }
     
-    public function getBlockError():BlockError
-    {
-        return this;
-    }
-    
-    public function getInlineError():InlineError
+    public function getDetail():IErrorDetail
     {
         return switch (kind)
         {
             case ArrayTreeParseErrorKind.Basic(error):
-                error;
+                error.getDetail();
                 
             case ArrayTreeParseErrorKind.TemplateFinalize(error):
-                error;
+                error.getDetail();
         }
-    } 
-   
-    public function getOptionSourceMap():Option<SourceMap>
-    {
-        return sourceMap;
     }
 }

@@ -1,7 +1,7 @@
 package lisla.parse.metadata;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.LineIndexes;
-import lisla.parse.ParserConfig;
+import lisla.parse.ParseConfig;
 import unifill.CodePoint;
 
 class UnsettledLeadingTag
@@ -10,7 +10,7 @@ class UnsettledLeadingTag
 	{
 	}
 	
-	public function writeDocument(config:ParserConfig, codePoint:CodePoint, position:Int):Void
+	public function writeDocument(config:ParseConfig, codePoint:CodePoint, position:Int):Void
 	{
 		// TODO
 	}

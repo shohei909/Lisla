@@ -2,7 +2,7 @@ package lisla.parse.string;
 import haxe.ds.Option;
 import lisla.data.meta.position.Range;
 import lisla.error.parse.BasicParseErrorKind;
-import lisla.parse.ParseContext;
+import lisla.parse.ParseState;
 import lisla.parse.array.ArrayContext;
 import lisla.parse.array.ArrayState;
 import lisla.parse.char.CodePointTools;
@@ -11,13 +11,13 @@ import unifill.CodePoint;
 
 class UnquotedStringContext 
 {
-    private var top:ParseContext;
+    private var top:ParseState;
     private var parent:ArrayContext;
 	private var string:String;
 	private var metadata:UnsettledStringTag;
     private var isPlaceholder:Bool;
 	
-	public inline function new(top:ParseContext, parent:ArrayContext, isPlaceholder:Bool, metadata:UnsettledStringTag) 
+	public inline function new(top:ParseState, parent:ArrayContext, isPlaceholder:Bool, metadata:UnsettledStringTag) 
 	{
 		this.isPlaceholder = isPlaceholder;
         this.parent = parent;
@@ -64,7 +64,11 @@ class UnquotedStringContext
    
 	public function end():Void
 	{
-        parent.pushString(string, isPlaceholder, metadata.settle(top.position));
+        parent.pushString(
+            string, 
+            isPlaceholder, 
+            metadata.settle(top.context, top.position)
+        );
         parent.state = ArrayState.Normal(false);
 	}
 }

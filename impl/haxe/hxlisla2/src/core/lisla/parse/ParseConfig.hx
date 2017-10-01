@@ -1,6 +1,8 @@
 package lisla.parse;
+import lisla.data.meta.position.Position;
+import lisla.data.meta.position.Range;
 
-class ParserConfig
+class ParseConfig
 {
 	public var persevering:Bool = false;
 	public var outputsPosition:Bool = false;
@@ -9,4 +11,5 @@ class ParserConfig
 	public function new() 
 	{
 	}
+    
 }

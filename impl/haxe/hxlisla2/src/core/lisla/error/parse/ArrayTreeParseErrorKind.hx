@@ -1,8 +1,9 @@
 package lisla.error.parse;
+import lisla.error.parse.BasicParseError.BasicParseErrorDetail;
 import lisla.error.template.TemplateFinalizeError;
 
 enum ArrayTreeParseErrorKind
 {
-    TemplateFinalize(error:TemplateFinalizeError);
-    Basic(parse:BasicParseError);
+    TemplateFinalize(error:TemplateFinalizeErrorDetail);
+    Basic(parse:BasicParseErrorDetail);
 }

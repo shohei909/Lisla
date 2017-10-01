@@ -1,21 +1,29 @@
 package lisla.error.parse;
 import haxe.ds.Option;
+import lisla.data.meta.position.Position;
 import lisla.data.meta.position.Range;
-import lisla.error.core.ElementaryError;
+import lisla.error.core.Error;
 import lisla.error.core.ErrorName;
-import lisla.error.core.InlineError;
+import lisla.error.core.IErrorDetail;
 
-class BasicParseError
-    implements InlineError 
-    implements ElementaryError
+class BasicParseError extends Error<BasicParseErrorDetail>
+{
+    public function new(kind:BasicParseErrorKind, position:Position)
+    {
+        super(
+            new BasicParseErrorDetail(kind),
+            position
+        );
+    }
+}
+
+class BasicParseErrorDetail implements IErrorDetail
 {
     public var kind(default, null):BasicParseErrorKind;
-    public var range(default, null):Range;
     
-    public inline function new (kind:BasicParseErrorKind, range:Range)
+    public inline function new (kind:BasicParseErrorKind)
     {
         this.kind = kind;
-        this.range = range;
     }
     
     public function getMessage():String 
@@ -56,17 +64,7 @@ class BasicParseError
         return ErrorName.fromEnum(kind);
     }
     
-    public function getOptionRange():Option<Range>
-    {
-        return Option.Some(range); 
-    }
-    
-    public function getInlineError():InlineError
-    {
-        return this;
-    }
-    
-    public function getElementaryError():ElementaryError 
+    public function getDetail():IErrorDetail
     {
         return this;
     }

@@ -1,5 +1,5 @@
 package lisla.project;
-import lisla.project.FilePathFromProjectRoot;
+import lisla.project.LocalPath;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -10,7 +10,7 @@ abstract ProjectRootDirectory(String)
         this = path;
     }
     
-    public function searchFiles(baseDirectory:FilePathFromProjectRoot, suffix:String):Array<FilePathFromProjectRoot>
+    public function searchFiles(baseDirectory:LocalPath, suffix:String):Array<LocalPath>
     {
         var result = [];
         _searchFiles(baseDirectory, suffix, result);
@@ -18,9 +18,9 @@ abstract ProjectRootDirectory(String)
     }
     
     private function _searchFiles(
-        baseDirectory:FilePathFromProjectRoot, 
+        baseDirectory:LocalPath, 
         suffix:String, 
-        result:Array<FilePathFromProjectRoot>
+        result:Array<LocalPath>
     ):Void
     {
         for (fileName in readDirectory(baseDirectory))
@@ -40,34 +40,34 @@ abstract ProjectRootDirectory(String)
         }
     }
     
-    public function getContent(path:FilePathFromProjectRoot):String
+    public function getContent(path:LocalPath):String
     {
         return File.getContent(concat(path));
     }
     
-    public function readDirectory(path:FilePathFromProjectRoot):Array<String>
+    public function readDirectory(path:LocalPath):Array<String>
     {
         return FileSystem.readDirectory(concat(path));
     }
     
-    public function isDirectory(path:FilePathFromProjectRoot):Bool
+    public function isDirectory(path:LocalPath):Bool
     {
         return FileSystem.isDirectory(concat(path));
     }
     
-    public function exists(path:FilePathFromProjectRoot):Bool
+    public function exists(path:LocalPath):Bool
     {
         return FileSystem.exists(concat(path));
     }
     
-    public function concat(path:FilePathFromProjectRoot):String
+    public function concat(path:LocalPath):String
     {
         return this + "/" + path;
     }
     
-    public function makePair(filePath:FilePathFromProjectRoot):ProjectRootAndFilePath
+    public function makePair(filePath:LocalPath):FullPath
     {
-        return new ProjectRootAndFilePath(
+        return new FullPath(
             new ProjectRootDirectory(this), 
             filePath
         );

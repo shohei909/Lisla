@@ -5,12 +5,12 @@ import lisla.data.meta.position.SourceMap;
 
 class FileSourceRange
 {    
-    public var filePath:ProjectRootAndFilePath;
+    public var filePath:FullPath;
     public var sourceMap:SourceMap;
     public var range:Option<Range>;
     
     public function new(
-        filePath:ProjectRootAndFilePath, 
+        filePath:FullPath, 
         sourceMap:SourceMap,
         range:Option<Range>
     ) 

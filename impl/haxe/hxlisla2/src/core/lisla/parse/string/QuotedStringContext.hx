@@ -7,7 +7,7 @@ import lisla.data.meta.position.Range;
 import lisla.data.tree.array.ArrayTree;
 import lisla.data.tree.array.ArrayTreeKind;
 import lisla.error.parse.BasicParseErrorKind;
-import lisla.parse.ParseContext;
+import lisla.parse.ParseState;
 import lisla.parse.array.ArrayContext;
 import lisla.parse.array.ArrayParent;
 import lisla.parse.array.ArrayState;
@@ -19,7 +19,7 @@ import lisla.data.leaf.template.TemplateLeaf;
 class QuotedStringContext 
 {
     public var parent(default, null):ArrayContext;
-    private var top:ParseContext;
+    private var top:ParseState;
     
 	private var currentLine:QuotedStringLine;
     private var currentString:Array<QuotedStringLine>;
@@ -33,7 +33,7 @@ class QuotedStringContext
     private var lastIndent:String;
     private var isPlaceholder:Bool;
     
-	public function new(top:ParseContext, parent:ArrayContext, singleQuoted:Bool, isPlaceholder:Bool, startQuoteCount:Int, metadata:UnsettledStringTag) 
+	public function new(top:ParseState, parent:ArrayContext, singleQuoted:Bool, isPlaceholder:Bool, startQuoteCount:Int, metadata:UnsettledStringTag) 
 	{
 		this.isPlaceholder = isPlaceholder;
         this.top = top;
@@ -267,6 +267,6 @@ class QuotedStringContext
             currentString[currentString.length - 1].newLine = "";
         }
         
-        addString(currentString, true, metadata.settle(top.position));
+        addString(currentString, true, metadata.settle(top.context, top.position));
 	}
 }

@@ -1,24 +1,24 @@
 package lisla.project;
-import lisla.project.FilePathFromProjectRoot;
+import lisla.project.LocalPath;
 import sys.FileSystem;
 import sys.io.File;
 
-class ProjectRootAndFilePath
+class FullPath
 {
     public var projectRoot(default, null):ProjectRootDirectory;
-    public var filePath(default, null):FilePathFromProjectRoot;
+    public var localPath(default, null):LocalPath;
     
     public function new(
         projectRoot:ProjectRootDirectory,
-        filePath:FilePathFromProjectRoot
+        filePath:LocalPath
     )
     {
         this.projectRoot = projectRoot;
-        this.filePath = filePath;
+        this.localPath = filePath;
     }
     
     public function toString():String
     {
-        return projectRoot.concat(filePath);
+        return projectRoot.concat(localPath);
     }
 }

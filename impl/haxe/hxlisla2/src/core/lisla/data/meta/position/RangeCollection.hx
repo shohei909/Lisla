@@ -1,7 +1,7 @@
 package lisla.data.meta.position;
 import haxe.ds.Option;
 import lisla.algorithm.SearchTools;
-import lisla.error.exception.FatalInlineException;
+import lisla.error.exception.FatalException;
 
 class RangeCollection 
 {
@@ -28,13 +28,13 @@ class RangeCollection
         }
     }
     
-    public function merge(localRanges:RangeCollection):RangeCollection
+    public function merge(localRanges:RangeCollection, context:SourceContext):RangeCollection
     {
         var result = [];
         
         for (range in localRanges.ranges)
         {
-            for (localRange in mergeRange(range))
+            for (localRange in mergeRange(range, context))
             {
                 result.push(localRange);
             }
@@ -43,26 +43,26 @@ class RangeCollection
         return new RangeCollection(result);
     }
     
-    public function mergeRange(localRange:Range):Array<Range>
+    public function mergeRange(localRange:Range, context:SourceContext):Array<Range>
     {
         var length = ranges.length;
         if (localRange.start < new CodePointIndex(0))
         {
-            throw new FatalInlineException(
+            throw new FatalException(
                 "localRange.start is lower out of range.", 
                 RangeCollection, 
                 "LocalRangeStartIsLowerOutOfRange",
-                Option.Some(localRange)
+                context.getPosition(localRange)
             );
         }
         var last = indexes[length];
         if (last < localRange.end)
         {
-            throw new FatalInlineException(
+            throw new FatalException(
                 "localRange.end is higher out of range.", 
                 RangeCollection, 
                 "LocalRangeEndIsUpperOutOfRange",
-                Option.Some(localRange)
+                context.getPosition(localRange)
             );
         }
      

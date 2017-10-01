@@ -4,7 +4,6 @@ import haxe.ds.Option;
 import hxext.ds.Result;
 import lisla.data.meta.position.SourceMap;
 import lisla.data.tree.array.ArrayTreeKind;
-import lisla.error.core.ErrorStringifier;
 import lisla.parse.Parser;
 import lisla.project.ProjectRootDirectory;
 
@@ -33,7 +32,7 @@ class TemplateTest extends LislaTestCase
                 case Result.Error(errors):
                     for (error in errors)
                     {
-                        var message = ErrorStringifier.fromBlockErrorWithFilePath(error, pair);
+                        var message = error.toString();
                         fail("failed to parse case file: " + message).label(filePath);
                     }
                     continue;

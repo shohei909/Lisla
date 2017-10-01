@@ -3,7 +3,7 @@ package lisla.data.meta.position;
 class Range
 {
     public var start(default, null):CodePointIndex;
-    public var length(default, null):CodePointIndex;
+    public var length:CodePointIndex;
     
     public var end(get, never):CodePointIndex;
     private function get_end():CodePointIndex 

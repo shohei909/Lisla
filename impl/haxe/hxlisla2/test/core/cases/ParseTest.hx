@@ -4,8 +4,9 @@ import haxe.ds.Option;
 import hxext.ds.Result;
 import lisla.data.meta.position.SourceMap;
 import lisla.data.tree.array.ArrayTreeKind;
-import lisla.error.core.ErrorStringifier;
+import lisla.parse.ParseState;
 import lisla.parse.Parser;
+import lisla.project.Project;
 import lisla.project.ProjectRootDirectory;
 
 
@@ -23,10 +24,8 @@ class ParseTest extends LislaTestCase
 	{
 		for (filePath in rootDirectory.searchFiles(TestCore.BASIC_DIRECTORY, ".lisla"))
 		{
-            var content = rootDirectory.getContent(filePath);
-            var pair = rootDirectory.makePair(filePath);
-            
-            var caseDocument = switch (Parser.parse(content))
+            var project = new Project(rootDirectory);            
+            var caseDocument = switch (project.parse(filePath))
             {
                 case Result.Ok(data):
                     data;
@@ -34,7 +33,7 @@ class ParseTest extends LislaTestCase
                 case Result.Error(errors):
                     for (error in errors)
                     {
-                        var message = ErrorStringifier.fromBlockErrorWithFilePath(error, pair);
+                        var message = error.toString();
                         fail("failed to parse case file: " + message).label(filePath);
                     }
                     continue;
@@ -51,11 +50,7 @@ class ParseTest extends LislaTestCase
                         case Result.Error(errors):
                             for (error in errors)
                             {
-                                var sourceMap = SourceMap.mergeOption(
-                                    Option.Some(caseDocument.sourceMap),
-                                    error.sourceMap
-                                );
-                                var message = ErrorStringifier.fromBlockErrorWithFilePath(error, pair);
+                                var message = error.toString();
                                 fail("failed to parse input: " + message).label(filePath);
                             }
                             

@@ -1,26 +1,30 @@
 package lisla.error.template;
 import haxe.ds.Option;
+import lisla.data.meta.position.Position;
 import lisla.data.meta.position.Range;
-import lisla.error.core.ElementaryError;
+import lisla.error.core.Error;
 import lisla.error.core.ErrorName;
-import lisla.error.core.InlineError;
+import lisla.error.core.IErrorDetail;
 
-class TemplateFinalizeError 
-    implements InlineError 
-    implements ElementaryError
+class TemplateFinalizeError extends Error<TemplateFinalizeErrorDetail>
+{
+    public inline function new (kind:TemplateFinalizeErrorKind, position:Position)
+    {
+        super(
+            new TemplateFinalizeErrorDetail(kind), 
+            position
+        );
+    }
+}
+
+class TemplateFinalizeErrorDetail implements IErrorDetail
 {
     public var kind(default, null):TemplateFinalizeErrorKind;
-    public var range(default, null):Option<Range>;
-    
-    public inline function new (kind:TemplateFinalizeErrorKind, range:Option<Range>)
+    public inline function new (
+        kind:TemplateFinalizeErrorKind
+    )
     {
         this.kind = kind;
-        this.range = range;
-    }
-    
-    public function getOptionRange():Option<Range>
-    {
-        return range; 
     }
     
     public function getMessage():String
@@ -37,12 +41,7 @@ class TemplateFinalizeError
         return ErrorName.fromEnum(kind);
     }
     
-    public function getInlineError():InlineError
-    {
-        return this;
-    }
-    
-    public function getElementaryError():ElementaryError 
+    public function getDetail():IErrorDetail
     {
         return this;
     }

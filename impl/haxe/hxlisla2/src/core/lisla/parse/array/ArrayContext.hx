@@ -8,7 +8,7 @@ import lisla.data.meta.position.Range;
 import lisla.data.tree.array.ArrayTree;
 import lisla.data.tree.array.ArrayTreeKind;
 import lisla.error.parse.BasicParseErrorKind;
-import lisla.parse.ParseContext;
+import lisla.parse.ParseState;
 import lisla.parse.array.ArrayParent;
 import lisla.parse.string.QuotedStringArrayPair;
 import lisla.parse.string.QuotedStringContext;
@@ -24,11 +24,11 @@ class ArrayContext
     private var data:Array<ArrayTree<TemplateLeaf>>;
 	private var metadata:UnsettledArrayTag;
 	private var elementTag:UnsettledLeadingTag;
-    private var top:ParseContext;
+    private var top:ParseState;
     
     public var state:ArrayState;
     
-	public function new(top:ParseContext, parent:ArrayParent, metadata:UnsettledArrayTag) 
+	public function new(top:ParseState, parent:ArrayParent, metadata:UnsettledArrayTag) 
 	{
         this.top = top;
         this.parent = parent;
@@ -196,7 +196,8 @@ class ArrayContext
 	{
 		if (length == 2)
 		{
-            pushString("", isPlaceholder, popStringTag(top.position - 2).settle(top.position));
+            var tag = popStringTag(top.position - 2).settle(top.context, top.position);
+            pushString("", isPlaceholder, tag);
 		}
 		else
 		{
@@ -206,7 +207,8 @@ class ArrayContext
     
     private function endArray(destination:ArrayContext):Void
 	{
-		destination.pushArray(data, metadata.settle(top.position, elementTag));
+        var tag = metadata.settle(top.context, top.position, elementTag);
+		destination.pushArray(data, tag);
 		top.current = destination;
 	}
     
@@ -243,10 +245,9 @@ class ArrayContext
     
 	public inline function endTop():{trees:Array<ArrayTree<TemplateLeaf>>, metadata:Metadata}
 	{
-        var kind = ArrayTreeKind.Arr(data);
 		return {
             trees: data, 
-            metadata: metadata.settle(top.position, elementTag)
+            metadata: metadata.settle(top.context, top.position, elementTag)
         }
 	}
     

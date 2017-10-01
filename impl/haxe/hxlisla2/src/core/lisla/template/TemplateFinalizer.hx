@@ -18,7 +18,14 @@ class TemplateFinalizer
                 Result.Ok(string);
                 
             case TemplateLeaf.Placeholder(placeholder):
-                Result.Error([new TemplateFinalizeError(TemplateFinalizeErrorKind.UnbindedPlaceholderExists(placeholder), metadata.range)]);
+                Result.Error(
+                    [
+                        new TemplateFinalizeError(
+                            TemplateFinalizeErrorKind.UnbindedPlaceholderExists(placeholder), 
+                            metadata.position
+                        )
+                    ]
+                );
         }
     }
 }
