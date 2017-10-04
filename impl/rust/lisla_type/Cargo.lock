@@ -1,11 +1,11 @@
 [root]
-name = "lisla_type"
+name = "arraytree_type"
 version = "0.1.0"
 dependencies = [
- "lisla_core 0.1.0",
- "lisla_derive 0.1.0",
- "lisla_lang 0.1.0",
- "lisla_type_derive 0.1.0",
+ "arraytree_core 0.1.0",
+ "arraytree_derive 0.1.0",
+ "arraytree_lang 0.1.0",
+ "arraytree_type_derive 0.1.0",
  "serde 1.0.11 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -21,11 +21,11 @@ version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "lisla_core"
+name = "arraytree_core"
 version = "0.1.0"
 
 [[package]]
-name = "lisla_derive"
+name = "arraytree_derive"
 version = "0.1.0"
 dependencies = [
  "quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -33,15 +33,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "lisla_lang"
+name = "arraytree_lang"
 version = "0.1.0"
 dependencies = [
- "lisla_core 0.1.0",
- "lisla_derive 0.1.0",
+ "arraytree_core 0.1.0",
+ "arraytree_derive 0.1.0",
 ]
 
 [[package]]
-name = "lisla_type_derive"
+name = "arraytree_type_derive"
 version = "0.1.0"
 dependencies = [
  "quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",

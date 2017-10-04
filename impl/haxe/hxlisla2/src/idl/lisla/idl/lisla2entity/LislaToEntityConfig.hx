@@ -1,6 +1,6 @@
-package lisla.idl.lisla2entity;
+package arraytree.idl.arraytree2entity;
 
-class LislaToEntityConfig
+class ArrayTreeToEntityConfig
 {
 	public var persevering:Bool;
 	

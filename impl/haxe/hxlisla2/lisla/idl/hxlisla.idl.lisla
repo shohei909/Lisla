@@ -1,7 +1,7 @@
-(import lisla.util.version)
-(import lisla.util.file)
-(import lisla.idl)
-(import lisla.idl.group)
+(import arraytree.util.version)
+(import arraytree.util.file)
+(import arraytree.idl)
+(import arraytree.idl.group)
 
 (struct GenerationConfig
     (target< TargetDeclaration)
@@ -9,11 +9,11 @@
     (entity< EntityDeclaration 
         (entity)
     )
-    (lisla_to_entity< LislaToEntityDeclaration 
-        (lisla_to_entity)
+    (arraytree_to_entity< ArrayTreeToEntityDeclaration 
+        (arraytree_to_entity)
     )
-    (entity_to_lisla< EntityToLislaDeclaration 
-        (entity_to_lisla)
+    (entity_to_arraytree< EntityToArrayTreeDeclaration 
+        (entity_to_arraytree)
     )
     (bisla_to_entity< BislaToEntityDeclaration 
         (bisla_to_entity)
@@ -66,23 +66,23 @@
 )
 
 ; -----------------------------
-; Lisla => Entity
+; ArrayTree => Entity
 ; -----------------------------
-(tuple LislaToEntityDeclaration 
-    lisla_to_entity (data< LislaToEntityConfig)
+(tuple ArrayTreeToEntityDeclaration 
+    arraytree_to_entity (data< ArrayTreeToEntityConfig)
 )
-(struct LislaToEntityConfig
+(struct ArrayTreeToEntityConfig
     no_output?
     (filter..< FilterDeclaration)
 )
 
 ; -----------------------------
-; Entity => Lisla
+; Entity => ArrayTree
 ; -----------------------------
-(tuple EntityToLislaDeclaration 
-    entity_to_lisla (data< EntityToLislaConfig)
+(tuple EntityToArrayTreeDeclaration 
+    entity_to_arraytree (data< EntityToArrayTreeConfig)
 )
-(struct EntityToLislaConfig
+(struct EntityToArrayTreeConfig
     no_output?
     (filter..< FilterDeclaration)
 )

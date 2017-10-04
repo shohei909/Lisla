@@ -1,5 +1,5 @@
-package lisla.idl.exception;
-import lisla.idl.generator.error.LoadIdlError;
+package arraytree.idl.exception;
+import arraytree.idl.generator.error.LoadIdlError;
 
 class ConversionExeption extends IdlException
 {

@@ -1,4 +1,4 @@
-package lisla.idl.generator.output.haxe;
+package arraytree.idl.generator.output.haxe;
 
 enum PrintHaxeErrorKind 
 {

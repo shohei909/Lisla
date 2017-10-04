@@ -1,12 +1,12 @@
-package lisla.idl.generator.output.error;
-import lisla.core.error.FileErrorSummary;
-import lisla.error.core.InlineErrorSummary;
-import lisla.error.core.LislaError;
-import lisla.idl.generator.output.error.GetConfigErrorKind;
-import lisla.idl.generator.output.haxe.PrintHaxeErrorKind;
-import lisla.idl.generator.output.haxe.PrintHaxeErrorKindTools;
+package arraytree.idl.generator.output.error;
+import arraytree.core.error.FileErrorSummary;
+import arraytree.error.core.InlineErrorSummary;
+import arraytree.error.core.ArrayTreeError;
+import arraytree.idl.generator.output.error.GetConfigErrorKind;
+import arraytree.idl.generator.output.haxe.PrintHaxeErrorKind;
+import arraytree.idl.generator.output.haxe.PrintHaxeErrorKindTools;
 
-class CompileIdlToHaxeError implements LislaError
+class CompileIdlToHaxeError implements ArrayTreeError
 {
     public var kind:CompileIdlToHaxeErrorKind;
     public function new(kind:CompileIdlToHaxeErrorKind)

@@ -1,8 +1,8 @@
-package lisla.idl.generator.source;
+package arraytree.idl.generator.source;
 import haxe.ds.Option;
-import lisla.idl.std.entity.idl.ModulePath;
-import lisla.idl.std.entity.idl.PackagePath;
-import lisla.project.FilePathFromProjectRoot;
+import arraytree.idl.std.entity.idl.ModulePath;
+import arraytree.idl.std.entity.idl.PackagePath;
+import arraytree.project.FilePathFromProjectRoot;
 
 interface IdlSourceReader 
 {

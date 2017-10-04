@@ -1,9 +1,9 @@
-package lisla.idl.library;
+package arraytree.idl.library;
 import hxext.ds.Result;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.source.validate.TypeDefinitionValidationResult;
-import lisla.idl.std.entity.idl.TypeDefinition;
-import lisla.project.ProjectRootAndFilePath;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.source.validate.TypeDefinitionValidationResult;
+import arraytree.idl.std.entity.idl.TypeDefinition;
+import arraytree.project.ProjectRootAndFilePath;
 enum ModuleState 
 {
 	None;

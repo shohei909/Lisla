@@ -1,13 +1,13 @@
-package lisla.idl.std.entity.idl;
-import lisla.idl.std.entity.idl.EnumConstructor;
-import lisla.idl.std.entity.idl.StructElement;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeReference;
+package arraytree.idl.std.entity.idl;
+import arraytree.idl.std.entity.idl.EnumConstructor;
+import arraytree.idl.std.entity.idl.StructElement;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeReference;
 
 enum SpecializedTypeDefinition 
 {
-    Newtype(type:lisla.idl.std.entity.idl.TypeReference);
-    Tuple(arguments:Array<lisla.idl.std.entity.idl.TupleElement>);
-    Enum(constructors:Array<lisla.idl.std.entity.idl.EnumConstructor>);
-    Struct(fields:Array<lisla.idl.std.entity.idl.StructElement>);
+    Newtype(type:arraytree.idl.std.entity.idl.TypeReference);
+    Tuple(arguments:Array<arraytree.idl.std.entity.idl.TupleElement>);
+    Enum(constructors:Array<arraytree.idl.std.entity.idl.EnumConstructor>);
+    Struct(fields:Array<arraytree.idl.std.entity.idl.StructElement>);
 }

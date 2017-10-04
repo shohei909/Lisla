@@ -1,23 +1,23 @@
-package lisla.idl.std.lisla2entity;
+package arraytree.idl.std.arraytree2entity;
 import hxext.ds.Result;
-import lisla.data.tree.al.AlTree;
-import lisla.data.meta.core.StringWithtag;
-import lisla.data.tree.al.AlTreeKind;
-import lisla.idl.lisla2entity.LislaToEntityContext;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import arraytree.data.tree.al.AlTree;
+import arraytree.data.meta.core.StringWithtag;
+import arraytree.data.tree.al.AlTreeKind;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityContext;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
 
-class StringLislaToEntity
+class StringArrayTreeToEntity
 {
-	public static inline function process(context:LislaToEntityContext):Result<StringWithtag, Array<LislaToEntityError>> 
+	public static inline function process(context:ArrayTreeToEntityContext):Result<StringWithtag, Array<ArrayTreeToEntityError>> 
 	{
-		return switch (context.lisla.kind)
+		return switch (context.arraytree.kind)
 		{
 			case AlTreeKind.Leaf(string):
-				Result.Ok(new StringWithtag(string, context.lisla.tag));
+				Result.Ok(new StringWithtag(string, context.arraytree.tag));
 				
 			case AlTreeKind.Arr(array):
-				Result.Error(LislaToEntityError.ofLisla(context.lisla, LislaToEntityErrorKind.CantBeArray));
+				Result.Error(ArrayTreeToEntityError.ofArrayTree(context.arraytree, ArrayTreeToEntityErrorKind.CantBeArray));
 		}
 	}
 }

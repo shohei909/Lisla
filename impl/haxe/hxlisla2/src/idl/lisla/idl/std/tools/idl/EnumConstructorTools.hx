@@ -1,25 +1,25 @@
-package lisla.idl.std.tools.idl;
+package arraytree.idl.std.tools.idl;
 import haxe.ds.Option;
-import lisla.data.meta.core.StringWithtag;
+import arraytree.data.meta.core.StringWithtag;
 import hxext.ds.Result;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
-import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
-import lisla.idl.generator.source.IdlSourceProvider;
-import lisla.idl.std.entity.idl.ArgumentName;
-import lisla.idl.std.entity.idl.EnumConstructor;
-import lisla.idl.std.entity.idl.EnumConstructorKind;
-import lisla.idl.std.entity.idl.EnumConstructorName;
-import lisla.idl.std.entity.idl.ParameterizedEnumConstructor;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.error.ArgumentSuffixErrorKind;
-import lisla.idl.std.error.EnumConstructorSuffixError;
-import lisla.idl.std.error.EnumConstructorSuffixErrorKind;
-import lisla.idl.std.error.GetConditionError;
-import lisla.idl.std.error.GetConditionErrorKind;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.FirstElementCondition;
+import arraytree.idl.generator.source.IdlSourceProvider;
+import arraytree.idl.std.entity.idl.ArgumentName;
+import arraytree.idl.std.entity.idl.EnumConstructor;
+import arraytree.idl.std.entity.idl.EnumConstructorKind;
+import arraytree.idl.std.entity.idl.EnumConstructorName;
+import arraytree.idl.std.entity.idl.ParameterizedEnumConstructor;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.error.ArgumentSuffixErrorKind;
+import arraytree.idl.std.error.EnumConstructorSuffixError;
+import arraytree.idl.std.error.EnumConstructorSuffixErrorKind;
+import arraytree.idl.std.error.GetConditionError;
+import arraytree.idl.std.error.GetConditionErrorKind;
 
-using lisla.idl.std.tools.idl.TypeReferenceTools;
+using arraytree.idl.std.tools.idl.TypeReferenceTools;
 
 class EnumConstructorTools 
 {    
@@ -71,7 +71,7 @@ class EnumConstructorTools
         constructor:EnumConstructor, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>
-    ):Result<Array<LislaToEntityCaseCondition>, GetConditionError>
+    ):Result<Array<ArrayTreeToEntityCaseCondition>, GetConditionError>
     {
         var result = [];
         return switch (_getConditions(constructor, source, definitionParameters, result, []))
@@ -88,14 +88,14 @@ class EnumConstructorTools
         constructor:EnumConstructor, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        result:Array<LislaToEntityCaseCondition>,
+        result:Array<ArrayTreeToEntityCaseCondition>,
         history:Array<String>
     ):Option<GetConditionError>
     {
         return switch (constructor)
         {
             case EnumConstructor.Primitive(name):
-                result.push(LislaToEntityCaseCondition.Const(name.name));
+                result.push(ArrayTreeToEntityCaseCondition.Const(name.name));
                 Option.None;
                 
             case EnumConstructor.Parameterized(parameterized):
@@ -106,7 +106,7 @@ class EnumConstructorTools
                         switch (TupleTools.getGuard([label].concat(parameterized.elements), source, definitionParameters))
                         {
                             case Result.Ok(data):
-                                result.push(LislaToEntityCaseCondition.Arr(data));
+                                result.push(ArrayTreeToEntityCaseCondition.Arr(data));
                                 Option.None;
                                 
                             case Result.Error(error):
@@ -117,7 +117,7 @@ class EnumConstructorTools
                         switch (TupleTools.getGuard(parameterized.elements, source, definitionParameters))
                         {
                             case Result.Ok(data):
-                                result.push(LislaToEntityCaseCondition.Arr(data));
+                                result.push(ArrayTreeToEntityCaseCondition.Arr(data));
                                 Option.None;
                                 
                             case Result.Error(error):
@@ -159,7 +159,7 @@ class EnumConstructorTools
                                         }
                                     }
                                     
-                                case TupleElement.Label(lislaString):
+                                case TupleElement.Label(arraytreeString):
                                     Option.Some(error(parameterized.name, EnumConstructorSuffixErrorKind.InvalidInlineEnumConstructorLabel));
                             }
                         }
@@ -221,7 +221,7 @@ class EnumConstructorTools
                 switch (parameterized.name.kind)
                 {
                     case EnumConstructorKind.Normal:
-                        condition.conditions.push(LislaToEntityCaseCondition.Const(parameterized.name.name));
+                        condition.conditions.push(ArrayTreeToEntityCaseCondition.Const(parameterized.name.name));
                         Option.None;
                         
                     case EnumConstructorKind.Tuple:

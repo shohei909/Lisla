@@ -1,6 +1,6 @@
-package lisla.idl.generator.output.entity.store;
-import lisla.idl.generator.output.entity.store.HaxeEntityClassInterface;
-import lisla.idl.std.entity.idl.TypeDefinition;
+package arraytree.idl.generator.output.entity.store;
+import arraytree.idl.generator.output.entity.store.HaxeEntityClassInterface;
+import arraytree.idl.std.entity.idl.TypeDefinition;
 
 class HaxeEntityInterfaceKindTools 
 {

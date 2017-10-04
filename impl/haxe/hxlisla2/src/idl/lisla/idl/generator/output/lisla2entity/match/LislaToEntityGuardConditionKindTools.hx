@@ -1,8 +1,8 @@
-package lisla.idl.generator.output.lisla2entity.match;
+package arraytree.idl.generator.output.arraytree2entity.match;
 
-class LislaToEntityGuardConditionKindTools 
+class ArrayTreeToEntityGuardConditionKindTools 
 {
-    public static function intersects(kind1:LislaToEntityGuardConditionKind, kind2:LislaToEntityGuardConditionKind):Bool
+    public static function intersects(kind1:ArrayTreeToEntityGuardConditionKind, kind2:ArrayTreeToEntityGuardConditionKind):Bool
     {
         return switch [kind1, kind2]
         {
@@ -47,7 +47,7 @@ class LislaToEntityGuardConditionKindTools
         }
     }
     
-    public static function merge(kind1:LislaToEntityGuardConditionKind, kind2:LislaToEntityGuardConditionKind):LislaToEntityGuardConditionKind
+    public static function merge(kind1:ArrayTreeToEntityGuardConditionKind, kind2:ArrayTreeToEntityGuardConditionKind):ArrayTreeToEntityGuardConditionKind
     {
         return switch [kind1, kind2]
         {

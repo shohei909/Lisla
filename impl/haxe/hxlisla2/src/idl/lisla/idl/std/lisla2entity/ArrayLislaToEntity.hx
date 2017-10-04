@@ -1,27 +1,27 @@
-package lisla.idl.std.lisla2entity;
+package arraytree.idl.std.arraytree2entity;
 import hxext.ds.Result;
-import lisla.data.meta.core.ArrayWithtag;
-import lisla.data.tree.al.AlTree;
-import lisla.data.tree.al.AlTreeKind;
-import lisla.idl.lisla2entity.LislaToEntityContext;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import arraytree.data.meta.core.ArrayWithtag;
+import arraytree.data.tree.al.AlTree;
+import arraytree.data.tree.al.AlTreeKind;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityContext;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
 
-class ArrayLislaToEntity
+class ArrayArrayTreeToEntity
 {
-    public static function process<T>(context:LislaToEntityContext, tLislaToEntity):Result<ArrayWithtag<AlTree<T>>, Array<LislaToEntityError>> 
+    public static function process<T>(context:ArrayTreeToEntityContext, tArrayTreeToEntity):Result<ArrayWithtag<AlTree<T>>, Array<ArrayTreeToEntityError>> 
 	{
-		return switch (context.lisla.kind)
+		return switch (context.arraytree.kind)
 		{
 			case AlTreeKind.Leaf(string):
-				Result.Error(LislaToEntityError.ofLisla(context.lisla, LislaToEntityErrorKind.CantBeString));
+				Result.Error(ArrayTreeToEntityError.ofArrayTree(context.arraytree, ArrayTreeToEntityErrorKind.CantBeString));
 				
 			case AlTreeKind.Arr(array):
 				var data = [];
-				for (lisla in array)
+				for (arraytree in array)
 				{
-					var tContext = new LislaToEntityContext(lisla, context.config);
-					switch (tLislaToEntity.process(tContext))
+					var tContext = new ArrayTreeToEntityContext(arraytree, context.config);
+					switch (tArrayTreeToEntity.process(tContext))
 					{
 						case Result.Error(error):
 							Result.Error(error);
@@ -30,7 +30,7 @@ class ArrayLislaToEntity
 							data.push(o);
 					}
 				}
-				Result.Ok(new ArrayWithtag(data, context.lisla.tag));
+				Result.Ok(new ArrayWithtag(data, context.arraytree.tag));
 		}
 	}
 }

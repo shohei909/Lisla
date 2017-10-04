@@ -2,7 +2,7 @@ use quote::Tokens;
 use syn::*;
 
 
-// lisla_core::error::Errorを実装する
+// arraytree_core::error::Errorを実装する
 pub fn impl_error(ast: &DeriveInput) -> Tokens {
     let error = match ast.body {
         Body::Enum(ref _enum) =>
@@ -23,15 +23,15 @@ fn impl_error_for_struct(ast: &DeriveInput, variant:&VariantData) -> Tokens {
     let position = impl_position_for_struct(ast, variant);
     
     quote! {
-        impl ::lisla_core::error::Error for #name {
+        impl ::arraytree_core::error::Error for #name {
             fn message(&self) -> String {
                 // TODO:
                 "message".to_string()
             }
 
-            fn code(&self) -> ::lisla_core::error::ErrorCode {
+            fn code(&self) -> ::arraytree_core::error::ErrorCode {
                 // TODO:
-                ::lisla_core::error::ErrorCode{ value: "code".to_string() }
+                ::arraytree_core::error::ErrorCode{ value: "code".to_string() }
             }
 
             fn name(&self) -> String {
@@ -71,17 +71,17 @@ fn impl_position_for_struct(ast: &DeriveInput, variant:&VariantData) -> Tokens {
     }
     
     quote! {
-        impl ::lisla_core::data::position::Position for #name {
-            fn range(&self)->Option<&::lisla_core::data::position::Range> {
+        impl ::arraytree_core::data::position::Position for #name {
+            fn range(&self)->Option<&::arraytree_core::data::position::Range> {
                 #range
             }
-            fn source_map(&self)->Option<&::lisla_core::data::position::SourceMap> {
+            fn source_map(&self)->Option<&::arraytree_core::data::position::SourceMap> {
                 #source_map
             }
-            fn file_path(&self)->Option<&::lisla_core::data::position::FilePathFromProjectRoot> {
+            fn file_path(&self)->Option<&::arraytree_core::data::position::FilePathFromProjectRoot> {
                 #file_path
             }
-            fn project_root(&self)->Option<&::lisla_core::data::position::ProjectRootPath> {
+            fn project_root(&self)->Option<&::arraytree_core::data::position::ProjectRootPath> {
                 #project_root
             }
         }
@@ -122,39 +122,39 @@ fn impl_error_for_enum(ast: &DeriveInput, variants:&Vec<Variant>) -> Tokens {
 
     quote! {
         // このエラー情報をそのまま伝搬する
-        impl ::lisla_core::error::Error for #name {
+        impl ::arraytree_core::error::Error for #name {
             fn message(&self) -> String {
-                ::lisla_core::error::ErrorHolder::child_error(self).message()
+                ::arraytree_core::error::ErrorHolder::child_error(self).message()
             }
 
-            fn code(&self) -> ::lisla_core::error::ErrorCode {
-                ::lisla_core::error::ErrorHolder::child_error(self).code()
+            fn code(&self) -> ::arraytree_core::error::ErrorCode {
+                ::arraytree_core::error::ErrorHolder::child_error(self).code()
             }
 
             fn name(&self) -> String {
-                ::lisla_core::error::ErrorHolder::child_error(self).name()
+                ::arraytree_core::error::ErrorHolder::child_error(self).name()
             }
         }
 
         // 子のエラーの位置情報をそのまま伝搬する
-        impl ::lisla_core::data::position::Position for #name {
+        impl ::arraytree_core::data::position::Position for #name {
             fn range(&self)->Option<&Range> {
-                ::lisla_core::error::ErrorHolder::child_error(self).range()
+                ::arraytree_core::error::ErrorHolder::child_error(self).range()
             }
             fn source_map(&self)->Option<&SourceMap> {
-                ::lisla_core::error::ErrorHolder::child_error(self).source_map()
+                ::arraytree_core::error::ErrorHolder::child_error(self).source_map()
             }
             fn file_path(&self)->Option<&FilePathFromProjectRoot> {
-                ::lisla_core::error::ErrorHolder::child_error(self).file_path()
+                ::arraytree_core::error::ErrorHolder::child_error(self).file_path()
             }
             fn project_root(&self)->Option<&ProjectRootPath> {
-                ::lisla_core::error::ErrorHolder::child_error(self).project_root()
+                ::arraytree_core::error::ErrorHolder::child_error(self).project_root()
             }
         }
 
         // enumのErrorは、さらに子となるエラーを持つ
-        impl ::lisla_core::error::ErrorHolder for #name {
-            fn child_error(&self) -> &::lisla_core::error::Error {
+        impl ::arraytree_core::error::ErrorHolder for #name {
+            fn child_error(&self) -> &::arraytree_core::error::Error {
                 match self {
                     #arms
                 }

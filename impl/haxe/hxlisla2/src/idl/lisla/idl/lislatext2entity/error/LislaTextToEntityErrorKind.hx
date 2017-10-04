@@ -1,13 +1,13 @@
-package lisla.idl.lislatext2entity.error;
-import lisla.error.core.InlineToBlockErrorWrapper;
-import lisla.error.parse.AlTreeParseError;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
+package arraytree.idl.arraytreetext2entity.error;
+import arraytree.error.core.InlineToBlockErrorWrapper;
+import arraytree.error.parse.AlTreeParseError;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
 
-enum LislaTextToEntityErrorKind 
+enum ArrayTreeTextToEntityErrorKind 
 {
 	// Parse
     Parse(error:AlTreeParseError);
     
     // ToEntity
-	LislaToEntity(error:InlineToBlockErrorWrapper<LislaToEntityError>);
+	ArrayTreeToEntity(error:InlineToBlockErrorWrapper<ArrayTreeToEntityError>);
 }

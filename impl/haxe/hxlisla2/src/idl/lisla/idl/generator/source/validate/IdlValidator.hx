@@ -1,13 +1,13 @@
-package lisla.idl.generator.source.validate;
+package arraytree.idl.generator.source.validate;
 import hxext.ds.Maybe;
-import lisla.data.meta.core.StringWithMetadata;
-import lisla.idl.library.LibraryResolver;
-import lisla.idl.library.LoadTypesContext;
-import lisla.idl.std.entity.idl.ModulePath;
-import lisla.idl.std.entity.idl.TypeDefinition;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.project.ProjectRootAndFilePath;
+import arraytree.data.meta.core.StringWithMetadata;
+import arraytree.idl.library.LibraryResolver;
+import arraytree.idl.library.LoadTypesContext;
+import arraytree.idl.std.entity.idl.ModulePath;
+import arraytree.idl.std.entity.idl.TypeDefinition;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.project.ProjectRootAndFilePath;
 
 class IdlValidator 
 {

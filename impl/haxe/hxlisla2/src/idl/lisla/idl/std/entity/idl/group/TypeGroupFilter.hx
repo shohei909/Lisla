@@ -1,6 +1,6 @@
-package lisla.idl.std.entity.idl.group;
+package arraytree.idl.std.entity.idl.group;
 import hxext.ds.Maybe;
-import lisla.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.entity.idl.TypePath;
 
 class TypeGroupFilter {
     public var from : TypeGroupPath;

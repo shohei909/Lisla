@@ -1,4 +1,4 @@
-package lisla.idl.exception;
+package arraytree.idl.exception;
 
 class IdlException
 {

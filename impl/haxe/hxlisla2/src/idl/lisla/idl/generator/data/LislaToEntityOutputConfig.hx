@@ -1,14 +1,14 @@
-package lisla.idl.generator.data;
+package arraytree.idl.generator.data;
 import haxe.ds.Option;
-import lisla.idl.generator.output.lisla2entity.path.HaxeLislaToEntityTypePath;
-import lisla.idl.hxlisla.entity.LislaToEntityConfig;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.std.entity.idl.group.TypeGroupFilter;
-import lisla.idl.std.tools.idl.group.TypeGroupFilterTools;
+import arraytree.idl.generator.output.arraytree2entity.path.HaxeArrayTreeToEntityTypePath;
+import arraytree.idl.hxarraytree.entity.ArrayTreeToEntityConfig;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.entity.idl.group.TypeGroupFilter;
+import arraytree.idl.std.tools.idl.group.TypeGroupFilterTools;
 
 using hxext.ds.ResultTools;
 
-class LislaToEntityOutputConfig
+class ArrayTreeToEntityOutputConfig
 {
 	public var filters:Array<TypeGroupFilter>;
 	public var noOutput:Bool;
@@ -18,17 +18,17 @@ class LislaToEntityOutputConfig
         this.noOutput = noOutput;
 		this.filters = filters.concat(
             [
-                TypeGroupFilterTools.create("ArrayLislaToEntity", "lisla.idl.std.lisla2entity.ArrayLislaToEntity"),
-                TypeGroupFilterTools.create("StringLislaToEntity", "lisla.idl.std.lisla2entity.StringLislaToEntity"),
+                TypeGroupFilterTools.create("ArrayArrayTreeToEntity", "arraytree.idl.std.arraytree2entity.ArrayArrayTreeToEntity"),
+                TypeGroupFilterTools.create("StringArrayTreeToEntity", "arraytree.idl.std.arraytree2entity.StringArrayTreeToEntity"),
             ]
         );
 	}
 	
-	public function toHaxeLislaToEntityPath(sourcePath:TypePath):HaxeLislaToEntityTypePath
+	public function toHaxeArrayTreeToEntityPath(sourcePath:TypePath):HaxeArrayTreeToEntityTypePath
 	{
 		var typePath = new TypePath(
 			sourcePath.modulePath, 
-			sourcePath.typeName.map(function (name) return name + "LislaToEntity"),
+			sourcePath.typeName.map(function (name) return name + "ArrayTreeToEntity"),
 			sourcePath.metadata
 		);
 		
@@ -46,6 +46,6 @@ class LislaToEntityOutputConfig
 			}
 		}
 		
-		return new HaxeLislaToEntityTypePath(typePath);
+		return new HaxeArrayTreeToEntityTypePath(typePath);
 	}
 }

@@ -1,17 +1,17 @@
-package lisla.idl.lislatext2entity.error;
+package arraytree.idl.arraytreetext2entity.error;
 import haxe.ds.Option;
-import lisla.error.core.BlockToFileErrorWrapper;
-import lisla.error.core.FileError;
-import lisla.error.core.FileErrorHolder;
-import lisla.idl.library.error.FileNotFoundError;
-import lisla.project.ProjectRootAndFilePath;
-import lisla.project.ProjectRootDirectory;
+import arraytree.error.core.BlockToFileErrorWrapper;
+import arraytree.error.core.FileError;
+import arraytree.error.core.FileErrorHolder;
+import arraytree.idl.library.error.FileNotFoundError;
+import arraytree.project.ProjectRootAndFilePath;
+import arraytree.project.ProjectRootDirectory;
 
-class LislaFileToEntityError implements FileErrorHolder
+class ArrayTreeFileToEntityError implements FileErrorHolder
 {
-    public var kind(default, null):LislaFileToEntityErrorKind;
+    public var kind(default, null):ArrayTreeFileToEntityErrorKind;
     
-    public function new(kind:LislaFileToEntityErrorKind)
+    public function new(kind:ArrayTreeFileToEntityErrorKind)
     {
         this.kind = kind;
     }
@@ -20,21 +20,21 @@ class LislaFileToEntityError implements FileErrorHolder
     {
         return switch(kind)
         {
-			case LislaFileToEntityErrorKind.LislaTextToEntity(error):
+			case ArrayTreeFileToEntityErrorKind.ArrayTreeTextToEntity(error):
 				error;
                 
-            case LislaFileToEntityErrorKind.FileNotFound(error):
+            case ArrayTreeFileToEntityErrorKind.FileNotFound(error):
                 error;
 		}
     }
     
-    public static function ofLislaTextToEntity(
-        error:LislaTextToEntityError,
+    public static function ofArrayTreeTextToEntity(
+        error:ArrayTreeTextToEntityError,
         filePath:ProjectRootAndFilePath
-    ):LislaFileToEntityError
+    ):ArrayTreeFileToEntityError
     {
-        return new LislaFileToEntityError(
-            LislaFileToEntityErrorKind.LislaTextToEntity(
+        return new ArrayTreeFileToEntityError(
+            ArrayTreeFileToEntityErrorKind.ArrayTreeTextToEntity(
                 new BlockToFileErrorWrapper(error, Option.Some(filePath))
             )
         );
@@ -42,10 +42,10 @@ class LislaFileToEntityError implements FileErrorHolder
     
     public static function ofFileNotFound(
         filePath:ProjectRootAndFilePath
-    ):LislaFileToEntityError
+    ):ArrayTreeFileToEntityError
     {
-        return new LislaFileToEntityError(
-            LislaFileToEntityErrorKind.FileNotFound(
+        return new ArrayTreeFileToEntityError(
+            ArrayTreeFileToEntityErrorKind.FileNotFound(
                 new FileNotFoundError(filePath)
             )
         );

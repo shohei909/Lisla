@@ -1,7 +1,7 @@
-package lisla.idl.std.entity.idl;
+package arraytree.idl.std.entity.idl;
 
 import haxe.ds.Option;
-import lisla.data.tree.al.AlTree;
+import arraytree.data.tree.al.AlTree;
 import hxext.ds.Maybe;
 
 class TypeReferenceParameter
@@ -17,7 +17,7 @@ class TypeReferenceParameter
     
     public function toString():String
     {
-        // TODO: write lisla
+        // TODO: write arraytree
         return Std.string(value);
     }
 }

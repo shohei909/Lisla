@@ -1,5 +1,5 @@
 [root]
-name = "lisla_derive"
+name = "arraytree_derive"
 version = "0.1.0"
 dependencies = [
  "quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",

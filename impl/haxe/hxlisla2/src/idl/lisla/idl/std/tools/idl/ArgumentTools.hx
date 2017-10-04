@@ -1,20 +1,20 @@
-package lisla.idl.std.tools.idl;
+package arraytree.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
-import lisla.idl.generator.source.IdlSourceProvider;
-import lisla.idl.std.entity.idl.Argument;
-import lisla.idl.std.entity.idl.ArgumentName;
-import lisla.idl.std.entity.idl.FollowedTypeDefinition;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.error.ArgumentSuffixError;
-import lisla.idl.std.error.ArgumentSuffixErrorKind;
-import lisla.idl.std.error.GetConditionError;
-import lisla.idl.std.error.GetConditionErrorKind;
-import lisla.idl.std.tools.idl.TypeReferenceTools;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardConditionKind;
+import arraytree.idl.generator.source.IdlSourceProvider;
+import arraytree.idl.std.entity.idl.Argument;
+import arraytree.idl.std.entity.idl.ArgumentName;
+import arraytree.idl.std.entity.idl.FollowedTypeDefinition;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.error.ArgumentSuffixError;
+import arraytree.idl.std.error.ArgumentSuffixErrorKind;
+import arraytree.idl.std.error.GetConditionError;
+import arraytree.idl.std.error.GetConditionErrorKind;
+import arraytree.idl.std.tools.idl.TypeReferenceTools;
 
 class ArgumentTools 
 {
@@ -37,7 +37,7 @@ class ArgumentTools
                 {
                     switch (condition)
                     {
-                        case LislaToEntityCaseCondition.Arr(guard):
+                        case ArrayTreeToEntityCaseCondition.Arr(guard):
                             switch [length, guard.getFixedLength()]
                             {
                                 case [_, Option.None]:
@@ -55,7 +55,7 @@ class ArgumentTools
                                     }
                             }
                             
-                        case LislaToEntityCaseCondition.Str | LislaToEntityCaseCondition.Const(_):
+                        case ArrayTreeToEntityCaseCondition.Str | ArrayTreeToEntityCaseCondition.Const(_):
                             return Result.Error(error(argument.name, ArgumentSuffixErrorKind.InlineString));
                     }
                 }

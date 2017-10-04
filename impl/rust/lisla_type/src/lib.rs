@@ -3,14 +3,14 @@
 #![feature(custom_attribute)]
 
 #[macro_use]
-extern crate lisla_derive;
+extern crate arraytree_derive;
 
 #[macro_use]
-extern crate lisla_type_derive;
+extern crate arraytree_type_derive;
 
 #[macro_use]
-extern crate lisla_lang;
-extern crate lisla_core;
+extern crate arraytree_lang;
+extern crate arraytree_core;
 
 pub mod error;
 pub mod types;

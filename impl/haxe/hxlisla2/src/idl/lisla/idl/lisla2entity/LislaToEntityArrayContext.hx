@@ -1,19 +1,19 @@
-package lisla.idl.lisla2entity;
+package arraytree.idl.arraytree2entity;
 
 import haxe.PosInfos;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.data.meta.core.ArrayWithMetadata;
-import lisla.data.meta.core.Metadata;
-import lisla.data.tree.al.AlTree;
-import lisla.data.tree.al.AlTreeKind;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import arraytree.data.meta.core.ArrayWithMetadata;
+import arraytree.data.meta.core.Metadata;
+import arraytree.data.tree.al.AlTree;
+import arraytree.data.tree.al.AlTreeKind;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
 using Lambda;
 
-class LislaToEntityArrayContext
+class ArrayTreeToEntityArrayContext
 {
-	private var config:LislaToEntityConfig;
+	private var config:ArrayTreeToEntityConfig;
 	public var index(default, null):Int;
 	public var length(get, never):Int;
     private var array:ArrayWithMetadata<AlTree<String>>;
@@ -28,7 +28,7 @@ class LislaToEntityArrayContext
         array:Array<AlTree<String>>, 
         // TODO: metadata
         index:Int, 
-        config:LislaToEntityConfig
+        config:ArrayTreeToEntityConfig
     )
 	{
 		this.config = config;
@@ -60,16 +60,16 @@ class LislaToEntityArrayContext
         }
     }
     
-	private inline function readData<T>(process:ProcessFunction<T>):Result<T, Array<LislaToEntityError>>
+	private inline function readData<T>(process:ProcessFunction<T>):Result<T, Array<ArrayTreeToEntityError>>
 	{
 		index++;
 		
 		if (array.data.length < index)
 		{
-			return Result.Error(createError(LislaToEntityErrorKind.EndOfArray));
+			return Result.Error(createError(ArrayTreeToEntityErrorKind.EndOfArray));
 		}
 		
-		var context = new LislaToEntityContext(array.data[index - 1], config);
+		var context = new ArrayTreeToEntityContext(array.data[index - 1], config);
 		return switch (process(context))
 		{
 			case Result.Error(childError):
@@ -80,7 +80,7 @@ class LislaToEntityArrayContext
 		}
 	}
 
-	public inline function read<T>(process:ProcessFunction<T>):Result<T, Array<LislaToEntityError>>
+	public inline function read<T>(process:ProcessFunction<T>):Result<T, Array<ArrayTreeToEntityError>>
 	{
 		return switch (readData(process))
 		{
@@ -92,7 +92,7 @@ class LislaToEntityArrayContext
 		}
 	}
 	
-    public function readLabel(string:String):Result<Bool, Array<LislaToEntityError>>
+    public function readLabel(string:String):Result<Bool, Array<ArrayTreeToEntityError>>
     {
         index++;
         return switch (array.data[index - 1].kind)
@@ -101,11 +101,11 @@ class LislaToEntityArrayContext
                 Result.Ok(true);
                 
             case _:
-                Result.Error([new LislaToEntityError(LislaToEntityErrorKind.UnmatchedLabel(string))]);
+                Result.Error([new ArrayTreeToEntityError(ArrayTreeToEntityErrorKind.UnmatchedLabel(string))]);
         }
     }
     
-    public inline function readRest<T>(process:ProcessFunction<T>, match:AlTree<String>->Bool):Result<Array<T>, Array<LislaToEntityError>> 
+    public inline function readRest<T>(process:ProcessFunction<T>, match:AlTree<String>->Bool):Result<Array<T>, Array<ArrayTreeToEntityError>> 
 	{
 		var array = [];
 		var result = null;
@@ -134,7 +134,7 @@ class LislaToEntityArrayContext
         return result;
 	}
     
-    public inline function readOptional<T>(process:ProcessFunction<T>, match:AlTree<String>->Bool):Result<Option<T>, Array<LislaToEntityError>> 
+    public inline function readOptional<T>(process:ProcessFunction<T>, match:AlTree<String>->Bool):Result<Option<T>, Array<ArrayTreeToEntityError>> 
 	{
         return if (matchNext(match))
         {
@@ -153,7 +153,7 @@ class LislaToEntityArrayContext
         }
 	}
     
-	public inline function readWithDefault<T>(process:ProcessFunction<T>, match:AlTree<String>->Bool, defaultLisla:AlTree<String>):Result<T, Array<LislaToEntityError>>
+	public inline function readWithDefault<T>(process:ProcessFunction<T>, match:AlTree<String>->Bool, defaultArrayTree:AlTree<String>):Result<T, Array<ArrayTreeToEntityError>>
 	{
         return if (matchNext(match))
         {
@@ -168,14 +168,14 @@ class LislaToEntityArrayContext
         }
         else
         {
-            var context = new LislaToEntityContext(defaultLisla, config);
+            var context = new ArrayTreeToEntityContext(defaultArrayTree, config);
             process(context);
         }
 	}
     
-    public inline function readFixedInline<T>(process:ProcessFunction<T>, end:Int):Result<T, Array<LislaToEntityError>>
+    public inline function readFixedInline<T>(process:ProcessFunction<T>, end:Int):Result<T, Array<ArrayTreeToEntityError>>
     {
-        var localContext = new LislaToEntityContext(
+        var localContext = new ArrayTreeToEntityContext(
             new AlTree(AlTreeKind.Arr(array.data.slice(index, end)), array.metadata), 
             config
         );
@@ -183,12 +183,12 @@ class LislaToEntityArrayContext
         return process(localContext);
     }
     
-    public inline function readVariableInline<T>(variableInlineProcess:InlineProcessFunction<T>):Result<T, Array<LislaToEntityError>>
+    public inline function readVariableInline<T>(variableInlineProcess:InlineProcessFunction<T>):Result<T, Array<ArrayTreeToEntityError>>
     {
         return variableInlineProcess(this);
     }
     
-    public inline function readVariableOptionalInline<T>(variableInlineProcess:InlineProcessFunction<T>, match:AlTree<String>->Bool):Result<Option<T>, Array<LislaToEntityError>>
+    public inline function readVariableOptionalInline<T>(variableInlineProcess:InlineProcessFunction<T>, match:AlTree<String>->Bool):Result<Option<T>, Array<ArrayTreeToEntityError>>
     {
         return if (matchNext(match))
         {
@@ -207,7 +207,7 @@ class LislaToEntityArrayContext
         }
     }
     
-    public inline function readFixedOptionalInline<T>(process:ProcessFunction<T>, end:Int, match:AlTree<String>->Bool):Result<Option<T>, Array<LislaToEntityError>>
+    public inline function readFixedOptionalInline<T>(process:ProcessFunction<T>, end:Int, match:AlTree<String>->Bool):Result<Option<T>, Array<ArrayTreeToEntityError>>
     {
         return if (matchNext(match))
         {
@@ -226,7 +226,7 @@ class LislaToEntityArrayContext
         };
     }
     
-    public inline function readVariableRestInline<T>(process:InlineProcessFunction<T>, match:AlTree<String>->Bool):Result<Array<T>, Array<LislaToEntityError>> 
+    public inline function readVariableRestInline<T>(process:InlineProcessFunction<T>, match:AlTree<String>->Bool):Result<Array<T>, Array<ArrayTreeToEntityError>> 
 	{
 		var array = [];
 		var result = null;
@@ -255,7 +255,7 @@ class LislaToEntityArrayContext
         return result;
 	}
     
-    public inline function readFixedRestInline<T>(process:ProcessFunction<T>, end:Int, match:AlTree<String>->Bool):Result<Array<T>, Array<LislaToEntityError>> 
+    public inline function readFixedRestInline<T>(process:ProcessFunction<T>, end:Int, match:AlTree<String>->Bool):Result<Array<T>, Array<ArrayTreeToEntityError>> 
 	{
 		var array = [];
 		var result = null;
@@ -284,11 +284,11 @@ class LislaToEntityArrayContext
         return result;
 	}
     
-	public inline function closeOrError<T>(?posInfos:PosInfos):Option<Array<LislaToEntityError>>
+	public inline function closeOrError<T>(?posInfos:PosInfos):Option<Array<ArrayTreeToEntityError>>
 	{
 		return if (index < array.data.length)
 		{
-			Option.Some(createError(LislaToEntityErrorKind.TooLongArray));
+			Option.Some(createError(ArrayTreeToEntityErrorKind.TooLongArray));
 		}
 		else
         {
@@ -296,11 +296,11 @@ class LislaToEntityArrayContext
         }
 	}
 	
-	private function createError(kind:LislaToEntityErrorKind):Array<LislaToEntityError>
+	private function createError(kind:ArrayTreeToEntityErrorKind):Array<ArrayTreeToEntityError>
 	{
-		return [new LislaToEntityError(kind)];
+		return [new ArrayTreeToEntityError(kind)];
 	}
 }
 
-private typedef ProcessFunction<T> = LislaToEntityContext->Result<T, Array<LislaToEntityError>>;
-private typedef InlineProcessFunction<T> = LislaToEntityArrayContext->Result<T, Array<LislaToEntityError>>;
+private typedef ProcessFunction<T> = ArrayTreeToEntityContext->Result<T, Array<ArrayTreeToEntityError>>;
+private typedef InlineProcessFunction<T> = ArrayTreeToEntityArrayContext->Result<T, Array<ArrayTreeToEntityError>>;

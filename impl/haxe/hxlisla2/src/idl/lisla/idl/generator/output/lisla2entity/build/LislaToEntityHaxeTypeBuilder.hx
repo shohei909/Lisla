@@ -1,4 +1,4 @@
-package lisla.idl.generator.output.lisla2entity.build;
+package arraytree.idl.generator.output.arraytree2entity.build;
 
 import haxe.ds.Option;
 import haxe.macro.Expr;
@@ -6,32 +6,32 @@ import haxe.macro.Expr.Access;
 import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.TypeDefKind;
 import hxext.ds.Result;
-import lisla.data.tree.al.AlTree;
-import lisla.idl.generator.data.LislaToEntityOutputConfig;
-import lisla.idl.generator.output.HaxeConvertContext;
-import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
-import lisla.idl.generator.output.lisla2entity.path.HaxeLislaToEntityTypePathPair;
-import lisla.idl.generator.source.validate.InlinabilityOnTuple;
-import lisla.idl.generator.tools.ExprBuilder;
-import lisla.idl.lisla2entity.LislaToEntityArrayContext;
-import lisla.idl.lisla2entity.LislaToEntityContext;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
-import lisla.idl.std.entity.idl.EnumConstructor;
-import lisla.idl.std.entity.idl.GenericTypeReference;
-import lisla.idl.std.entity.idl.StructElement;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.tools.idl.TypeNameTools;
-import lisla.idl.std.tools.idl.TypeParameterDeclarationCollection;
+import arraytree.data.tree.al.AlTree;
+import arraytree.idl.generator.data.ArrayTreeToEntityOutputConfig;
+import arraytree.idl.generator.output.HaxeConvertContext;
+import arraytree.idl.generator.output.entity.store.HaxeEntityInterface;
+import arraytree.idl.generator.output.arraytree2entity.path.HaxeArrayTreeToEntityTypePathPair;
+import arraytree.idl.generator.source.validate.InlinabilityOnTuple;
+import arraytree.idl.generator.tools.ExprBuilder;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityArrayContext;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityContext;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
+import arraytree.idl.std.entity.idl.EnumConstructor;
+import arraytree.idl.std.entity.idl.GenericTypeReference;
+import arraytree.idl.std.entity.idl.StructElement;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.tools.idl.TypeNameTools;
+import arraytree.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
 import haxe.macro.Expr.TypeDefinition in HaxeTypeDefinition;
-import lisla.idl.std.entity.idl.TypeDefinition in IdlTypeDefinition;
+import arraytree.idl.std.entity.idl.TypeDefinition in IdlTypeDefinition;
 
-class LislaToEntityHaxeTypeBuilder
+class ArrayTreeToEntityHaxeTypeBuilder
 {
-    private var builder:LislaToEntityExprBuilder;
+    private var builder:ArrayTreeToEntityExprBuilder;
     
-    private var pathPair:HaxeLislaToEntityTypePathPair;
+    private var pathPair:HaxeArrayTreeToEntityTypePathPair;
     private var addtionalArgs:Array<FunctionArg>;
     private var dataTypePath:ComplexType;
 	private var dataInterface:HaxeEntityInterface;
@@ -40,22 +40,22 @@ class LislaToEntityHaxeTypeBuilder
     
 	private function new (context:HaxeConvertContext)
 	{
-		this.builder = new LislaToEntityExprBuilder(context);
+		this.builder = new ArrayTreeToEntityExprBuilder(context);
 	}
 	
-	public static function convertType(pathPair:HaxeLislaToEntityTypePathPair, context:HaxeConvertContext):HaxeTypeDefinition
+	public static function convertType(pathPair:HaxeArrayTreeToEntityTypePathPair, context:HaxeConvertContext):HaxeTypeDefinition
 	{
-		return new LislaToEntityHaxeTypeBuilder(context).run(pathPair);
+		return new ArrayTreeToEntityHaxeTypeBuilder(context).run(pathPair);
 	}
 	
-	private function run(pathPair:HaxeLislaToEntityTypePathPair):HaxeTypeDefinition
+	private function run(pathPair:HaxeArrayTreeToEntityTypePathPair):HaxeTypeDefinition
 	{
         this.pathPair = pathPair;
         this.definition = pathPair.typeInfo.definition;
         var typeParameters = pathPair.typeInfo.definition.getTypeParameters();
         this.parameters = typeParameters.collect();
         
-        this.addtionalArgs = typeParameters.toHaxeLislaToEntityArgs(builder.context.entityOutputConfig);
+        this.addtionalArgs = typeParameters.toHaxeArrayTreeToEntityArgs(builder.context.entityOutputConfig);
         this.dataInterface = pathPair.typeInfo.dataInterface;
         
         var dataPath = dataInterface.path;
@@ -83,8 +83,8 @@ class LislaToEntityHaxeTypeBuilder
         }
         
 		return {
-			pack : pathPair.lislaToEntityPath.getModuleArray(),
-			name : pathPair.lislaToEntityPath.typeName.toString(),
+			pack : pathPair.arraytreeToEntityPath.getModuleArray(),
+			name : pathPair.arraytreeToEntityPath.typeName.toString(),
 			params: [], 
 			pos : null,
 			kind : TypeDefKind.TDClass(null, null, false),
@@ -112,7 +112,7 @@ class LislaToEntityHaxeTypeBuilder
 		var args = [
 			{
 				name: "context",
-				type: (macro : lisla.idl.lisla2entity.LislaToEntityContext)
+				type: (macro : arraytree.idl.arraytree2entity.ArrayTreeToEntityContext)
 			}
 		];
         
@@ -126,7 +126,7 @@ class LislaToEntityHaxeTypeBuilder
             kind : FieldType.FFun(
                 {
                     args: args,
-                    ret: macro:hxext.ds.Result<$dataTypePath, Array<lisla.idl.lisla2entity.error.LislaToEntityError>>,
+                    ret: macro:hxext.ds.Result<$dataTypePath, Array<arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError>>,
                     expr: processExpr,
                     params : TypeNameTools.toHaxeParamDecls(parameters.parameters),
                 }
@@ -156,7 +156,7 @@ class LislaToEntityHaxeTypeBuilder
 		var args = [
 			{
 				name: "arrayContext",
-				type: (macro : lisla.idl.lisla2entity.LislaToEntityArrayContext)
+				type: (macro : arraytree.idl.arraytree2entity.ArrayTreeToEntityArrayContext)
 			}
 		].concat(addtionalArgs);
         
@@ -170,7 +170,7 @@ class LislaToEntityHaxeTypeBuilder
             kind : FieldType.FFun(
                 {
                     args: args,
-                    ret: macro:hxext.ds.Result<$dataTypePath, Array<lisla.idl.lisla2entity.error.LislaToEntityError>>,
+                    ret: macro:hxext.ds.Result<$dataTypePath, Array<arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError>>,
                     expr: processExpr,
                     params : TypeNameTools.toHaxeParamDecls(parameters.parameters),
                 }
@@ -207,22 +207,22 @@ class LislaToEntityHaxeTypeBuilder
     // ==============================================================
     private function createTupleExpr(elements:Array<TupleElement>):Expr 
 	{
-        var build = new TupleLislaToEntityBuild(builder, parameters, elements);
+        var build = new TupleArrayTreeToEntityBuild(builder, parameters, elements);
 		var instantiationExpr = builder.createClassInstantiationExpr((macro context), build.declarations, build.references, dataInterface, parameters);
         
         return macro {
-            return switch (context.lisla.kind)
+            return switch (context.arraytree.kind)
             {
-                case lisla.data.tree.al.AlTreeKind.Leaf(_):
+                case arraytree.data.tree.al.AlTreeKind.Leaf(_):
                     hxext.ds.Result.Error(
-                        lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(
-                            context.lisla,
-                            lisla.idl.lisla2entity.error.LislaToEntityErrorKind.CantBeString
+                        arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError.ofArrayTree(
+                            context.arraytree,
+                            arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind.CantBeString
                         )
                     );
                     
-                case lisla.data.tree.al.AlTreeKind.Arr(array):
-                    var arrayContext = new lisla.idl.lisla2entity.LislaToEntityArrayContext(array, 0, context.config);
+                case arraytree.data.tree.al.AlTreeKind.Arr(array):
+                    var arrayContext = new arraytree.idl.arraytree2entity.ArrayTreeToEntityArrayContext(array, 0, context.config);
                     var instance = $instantiationExpr;
                     switch (arrayContext.closeOrError())
                     {
@@ -240,8 +240,8 @@ class LislaToEntityHaxeTypeBuilder
     // ==============================================================
     private function createEnumExpr(constructors:Array<EnumConstructor>):Expr 
 	{
-        var build = new EnumLislaToEntityBuild(builder, dataInterface, parameters, constructors);
-        var switchExpr = ExprBuilder.createSwitchExpr(macro context.lisla, build.cases);
+        var build = new EnumArrayTreeToEntityBuild(builder, dataInterface, parameters, constructors);
+        var switchExpr = ExprBuilder.createSwitchExpr(macro context.arraytree, build.cases);
         return macro return $switchExpr;
 	}
     // ==============================================================
@@ -249,20 +249,20 @@ class LislaToEntityHaxeTypeBuilder
     // ==============================================================
     private function createStructExpr(elements:Array<StructElement>):Expr 
 	{
-        var build = new StructLislaToEntityBuild(builder, dataInterface.path, parameters, elements);
+        var build = new StructArrayTreeToEntityBuild(builder, dataInterface.path, parameters, elements);
         var instantiationExpr = builder.createClassInstantiationExpr((macro context), build.declarations, build.references, dataInterface, parameters);
         
-        return macro return switch (context.lisla.kind)
+        return macro return switch (context.arraytree.kind)
         {
-            case lisla.data.tree.al.AlTreeKind.Leaf(_):
+            case arraytree.data.tree.al.AlTreeKind.Leaf(_):
                 hxext.ds.Result.Error(
-                    lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(
-                        context.lisla,
-                        lisla.idl.lisla2entity.error.LislaToEntityErrorKind.CantBeString
+                    arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError.ofArrayTree(
+                        context.arraytree,
+                        arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind.CantBeString
                     )
                 );
                 
-            case lisla.data.tree.al.AlTreeKind.Arr(array):
+            case arraytree.data.tree.al.AlTreeKind.Arr(array):
                 $instantiationExpr;
         }
     }

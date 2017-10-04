@@ -1,17 +1,17 @@
-package lisla.idl.lislatext2entity.error;
+package arraytree.idl.arraytreetext2entity.error;
 import haxe.ds.Option;
-import lisla.data.meta.position.SourceMap;
-import lisla.error.core.BlockError;
-import lisla.error.core.BlockErrorHolder;
-import lisla.error.core.InlineToBlockErrorWrapper;
-import lisla.error.parse.AlTreeParseError;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
+import arraytree.data.meta.position.SourceMap;
+import arraytree.error.core.BlockError;
+import arraytree.error.core.BlockErrorHolder;
+import arraytree.error.core.InlineToBlockErrorWrapper;
+import arraytree.error.parse.AlTreeParseError;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
 
-class LislaTextToEntityError implements BlockErrorHolder
+class ArrayTreeTextToEntityError implements BlockErrorHolder
 {
-    public var kind:LislaTextToEntityErrorKind;
+    public var kind:ArrayTreeTextToEntityErrorKind;
     
-    public function new (kind:LislaTextToEntityErrorKind)
+    public function new (kind:ArrayTreeTextToEntityErrorKind)
     {
         this.kind = kind;
     }
@@ -20,28 +20,28 @@ class LislaTextToEntityError implements BlockErrorHolder
     {
         return switch(kind)
         {
-			case LislaTextToEntityErrorKind.Parse(error):
+			case ArrayTreeTextToEntityErrorKind.Parse(error):
                 error;
 				
-			case LislaTextToEntityErrorKind.LislaToEntity(error):
+			case ArrayTreeTextToEntityErrorKind.ArrayTreeToEntity(error):
 				error;
 		}
     }
     
-    public static function fromParse(error:AlTreeParseError):LislaTextToEntityError
+    public static function fromParse(error:AlTreeParseError):ArrayTreeTextToEntityError
     {
-        return new LislaTextToEntityError(
-            LislaTextToEntityErrorKind.Parse(error)
+        return new ArrayTreeTextToEntityError(
+            ArrayTreeTextToEntityErrorKind.Parse(error)
         );
     }
     
-    public static function fromLislaToEntity(
-        error:LislaToEntityError,
+    public static function fromArrayTreeToEntity(
+        error:ArrayTreeToEntityError,
         sourceMap:Option<SourceMap>
-    ):LislaTextToEntityError
+    ):ArrayTreeTextToEntityError
     {
-        return new LislaTextToEntityError(
-            LislaTextToEntityErrorKind.LislaToEntity(
+        return new ArrayTreeTextToEntityError(
+            ArrayTreeTextToEntityErrorKind.ArrayTreeToEntity(
                 new InlineToBlockErrorWrapper(
                     error,
                     sourceMap

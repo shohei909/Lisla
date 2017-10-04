@@ -1,16 +1,16 @@
-package lisla.idl.generator.output;
+package arraytree.idl.generator.output;
 
 import hxext.ds.OptionTools;
-import lisla.idl.generator.data.EntityOutputConfig;
-import lisla.idl.generator.data.LislaToEntityOutputConfig;
-import lisla.idl.generator.output.HaxeGenerateConfigFactoryContext;
-import lisla.idl.generator.source.IdlFileSourceReader;
-import lisla.idl.generator.source.IdlSourceReader;
-import lisla.idl.library.LibraryScope;
-import lisla.idl.std.entity.idl.LibraryName;
-import lisla.idl.std.entity.idl.group.TypeGroupFilter;
-import lisla.idl.std.entity.util.version.Version;
-import lisla.idl.std.tools.idl.group.TypeGroupFilterTools;
+import arraytree.idl.generator.data.EntityOutputConfig;
+import arraytree.idl.generator.data.ArrayTreeToEntityOutputConfig;
+import arraytree.idl.generator.output.HaxeGenerateConfigFactoryContext;
+import arraytree.idl.generator.source.IdlFileSourceReader;
+import arraytree.idl.generator.source.IdlSourceReader;
+import arraytree.idl.library.LibraryScope;
+import arraytree.idl.std.entity.idl.LibraryName;
+import arraytree.idl.std.entity.idl.group.TypeGroupFilter;
+import arraytree.idl.std.entity.util.version.Version;
+import arraytree.idl.std.tools.idl.group.TypeGroupFilterTools;
 
 class HaxeGenerateConfigFactory 
 {
@@ -24,7 +24,7 @@ class HaxeGenerateConfigFactory
             getTargetName(context),
             getTargetVersion(context),
             getEntityOutputConfig(context),
-            getLislaToEntityOutputConfig(context),
+            getArrayTreeToEntityOutputConfig(context),
             getSourceReader(context)
         );
     }
@@ -74,7 +74,7 @@ class HaxeGenerateConfigFactory
         return new EntityOutputConfig(noOutput, filters);
     }
     
-    private function getLislaToEntityOutputConfig(context:HaxeGenerateConfigFactoryContext):LislaToEntityOutputConfig
+    private function getArrayTreeToEntityOutputConfig(context:HaxeGenerateConfigFactoryContext):ArrayTreeToEntityOutputConfig
     {
         var filters = [];
         var configs = context.requiredLibraryConfigs.concat([context.generationConfig]);
@@ -84,18 +84,18 @@ class HaxeGenerateConfigFactory
             filters.push(
                 TypeGroupFilterTools.create(
                     generationConfig.target.name.data, 
-                    generationConfig.target.data.haxePackage.toString() + ".lisla2entity"
+                    generationConfig.target.data.haxePackage.toString() + ".arraytree2entity"
                 )
             );
             
-            for (filter in generationConfig.lislaToEntity.data.filter)
+            for (filter in generationConfig.arraytreeToEntity.data.filter)
             {
                 filters.push(filter.data);
             }
         }
         
-        var noOutput = OptionTools.isSome(context.generationConfig.lislaToEntity.data.noOutput);
-        return new LislaToEntityOutputConfig(noOutput, filters);
+        var noOutput = OptionTools.isSome(context.generationConfig.arraytreeToEntity.data.noOutput);
+        return new ArrayTreeToEntityOutputConfig(noOutput, filters);
     }
     
     private function getSourceReader(context:HaxeGenerateConfigFactoryContext):IdlSourceReader

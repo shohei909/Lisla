@@ -1,0 +1,13 @@
+; ArrayTree
+''''''''
+;! Comments start with ! are keeped when ArrayTree is minified.
+;;! 'Keeping document comments are also avarable.'
+; ;! not keeping comment
+; ;;! not keeping comment
+;;;! not keeping comment
+''''''''
+
+; Json
+''''''''
+[]
+''''''''

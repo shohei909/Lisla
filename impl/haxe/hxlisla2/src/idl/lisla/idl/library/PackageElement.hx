@@ -1,24 +1,24 @@
-package lisla.idl.library;
+package arraytree.idl.library;
 
 import haxe.ds.Option;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.idl.exception.SourceException;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.error.LoadIdlErrorKind;
-import lisla.idl.generator.source.DirectoryElement;
-import lisla.idl.generator.source.file.LoadedModule;
-import lisla.idl.generator.source.resolve.IdlResolver;
-import lisla.idl.generator.source.validate.IdlValidator;
-import lisla.idl.generator.source.validate.ValidType;
-import lisla.idl.library.ModuleState;
-import lisla.idl.std.entity.idl.PackagePath;
-import lisla.idl.std.entity.idl.TypeDefinition;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.std.tools.idl.TypeDefinitionTools;
+import arraytree.idl.exception.SourceException;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.error.LoadIdlErrorKind;
+import arraytree.idl.generator.source.DirectoryElement;
+import arraytree.idl.generator.source.file.LoadedModule;
+import arraytree.idl.generator.source.resolve.IdlResolver;
+import arraytree.idl.generator.source.validate.IdlValidator;
+import arraytree.idl.generator.source.validate.ValidType;
+import arraytree.idl.library.ModuleState;
+import arraytree.idl.std.entity.idl.PackagePath;
+import arraytree.idl.std.entity.idl.TypeDefinition;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.tools.idl.TypeDefinitionTools;
 
-using lisla.idl.library.ModuleStateTools;
+using arraytree.idl.library.ModuleStateTools;
 using hxext.ds.MapTools;
 using hxext.ds.ResultTools;
 
@@ -83,7 +83,7 @@ class PackageElement
 	{
 		return new TypePath(
             Maybe.some(path.toModulePath()), 
-            lisla.idl.std.entity.idl.TypeName.create(typeName).getOrThrow()
+            arraytree.idl.std.entity.idl.TypeName.create(typeName).getOrThrow()
         );
 	}
 	

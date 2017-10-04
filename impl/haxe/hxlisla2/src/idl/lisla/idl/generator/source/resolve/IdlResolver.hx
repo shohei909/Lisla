@@ -1,18 +1,18 @@
-package lisla.idl.generator.source.resolve;
+package arraytree.idl.generator.source.resolve;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.idl.generator.error.IdlResolutionError;
-import lisla.idl.generator.error.IdlResolutionErrorKind;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.error.LoadIdlErrorKind;
-import lisla.idl.generator.error.ModuleNotFoundError;
-import lisla.idl.generator.source.file.LoadedModule;
-import lisla.idl.library.LibraryResolver;
-import lisla.idl.library.LoadTypesContext;
-import lisla.idl.library.PackageElement;
-import lisla.idl.std.entity.idl.ModulePath;
-import lisla.idl.std.entity.idl.TypeDefinition;
-import lisla.project.ProjectRootAndFilePath;
+import arraytree.idl.generator.error.IdlResolutionError;
+import arraytree.idl.generator.error.IdlResolutionErrorKind;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.error.LoadIdlErrorKind;
+import arraytree.idl.generator.error.ModuleNotFoundError;
+import arraytree.idl.generator.source.file.LoadedModule;
+import arraytree.idl.library.LibraryResolver;
+import arraytree.idl.library.LoadTypesContext;
+import arraytree.idl.library.PackageElement;
+import arraytree.idl.std.entity.idl.ModulePath;
+import arraytree.idl.std.entity.idl.TypeDefinition;
+import arraytree.project.ProjectRootAndFilePath;
 
 class IdlResolver
 {

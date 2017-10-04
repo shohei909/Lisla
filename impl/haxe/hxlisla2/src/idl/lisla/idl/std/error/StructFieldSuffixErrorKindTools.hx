@@ -1,5 +1,5 @@
-package lisla.idl.std.error;
-using lisla.idl.std.tools.idl.TypeReferenceTools;
+package arraytree.idl.std.error;
+using arraytree.idl.std.tools.idl.TypeReferenceTools;
 
 class StructFieldSuffixErrorKindTools 
 {

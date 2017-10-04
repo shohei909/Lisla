@@ -1,22 +1,22 @@
-package lisla.idl.lislatext2entity;
+package arraytree.idl.arraytreetext2entity;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.data.meta.core.BlockData;
-import lisla.idl.lisla2entity.LislaToEntityConfig;
-import lisla.idl.lisla2entity.LislaToEntityRunner;
-import lisla.idl.lisla2entity.LislaToEntityType;
-import lisla.idl.lislatext2entity.error.LislaTextToEntityError;
-import lisla.parse.Parser;
-import lisla.parse.ParserConfig;
+import arraytree.data.meta.core.BlockData;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityConfig;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityRunner;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityType;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeTextToEntityError;
+import arraytree.parse.Parser;
+import arraytree.parse.ParserConfig;
 
-class LislaTextToEntityRunner 
+class ArrayTreeTextToEntityRunner 
 {
 	public static function run<T>(
-        processorType:LislaToEntityType<T>, 
+        processorType:ArrayTreeToEntityType<T>, 
         text:String, 
         ?parseConfig:ParserConfig, 
-        ?lislaToEntityConfig:LislaToEntityConfig
-    ):Result<BlockData<T>, Array<LislaTextToEntityError>>
+        ?arraytreeToEntityConfig:ArrayTreeToEntityConfig
+    ):Result<BlockData<T>, Array<ArrayTreeTextToEntityError>>
 	{
 		var document = switch (Parser.parse(text, parseConfig))
         {
@@ -25,11 +25,11 @@ class LislaTextToEntityRunner
                 
             case Result.Error(errors):
                 return Result.Error(
-                    [for (error in errors) LislaTextToEntityError.fromParse(error)]
+                    [for (error in errors) ArrayTreeTextToEntityError.fromParse(error)]
                 );
         }
         
-        return switch (LislaToEntityRunner.run(processorType, document.getArrayWithMetadata(), lislaToEntityConfig))
+        return switch (ArrayTreeToEntityRunner.run(processorType, document.getArrayWithMetadata(), arraytreeToEntityConfig))
         {
             case Result.Ok(data):
                 Result.Ok(
@@ -39,7 +39,7 @@ class LislaTextToEntityRunner
             case Result.Error(errors):
                 Result.Error(
                     [for (error in errors) 
-                        LislaTextToEntityError.fromLislaToEntity(
+                        ArrayTreeTextToEntityError.fromArrayTreeToEntity(
                             error, 
                             Option.Some(document.sourceMap)
                         )

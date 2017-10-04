@@ -1,9 +1,9 @@
-package lisla.idl.lisla2entity;
+package arraytree.idl.arraytree2entity;
 import hxext.ds.Result;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
-typedef LislaToEntityType<T> =
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
+typedef ArrayTreeToEntityType<T> =
 {
     public function process(
-        context:LislaToEntityContext
-    ):Result<T, Array<LislaToEntityError>>; // FIXME: Array<DataWithRange<LislaToEntityError>>
+        context:ArrayTreeToEntityContext
+    ):Result<T, Array<ArrayTreeToEntityError>>; // FIXME: Array<DataWithRange<ArrayTreeToEntityError>>
 }

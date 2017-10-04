@@ -1,32 +1,32 @@
-package lisla.idl.generator.output.lisla2entity.build;
+package arraytree.idl.generator.output.arraytree2entity.build;
 import haxe.macro.Expr;
 import hxext.ds.Result;
-import lisla.data.meta.core.StringWithMetadata;
-import lisla.idl.exception.IdlException;
-import lisla.idl.generator.output.entity.EntityHaxeTypePath;
-import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
-import lisla.idl.generator.tools.ExprBuilder;
-import lisla.idl.lisla2entity.LislaToEntityArrayContext;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
-import lisla.idl.std.entity.idl.EnumConstructor;
-import lisla.idl.std.entity.idl.EnumConstructorKind;
-import lisla.idl.std.entity.idl.EnumConstructorName;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.tools.idl.TypeParameterDeclarationCollection;
+import arraytree.data.meta.core.StringWithMetadata;
+import arraytree.idl.exception.IdlException;
+import arraytree.idl.generator.output.entity.EntityHaxeTypePath;
+import arraytree.idl.generator.output.entity.store.HaxeEntityInterface;
+import arraytree.idl.generator.tools.ExprBuilder;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityArrayContext;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
+import arraytree.idl.std.entity.idl.EnumConstructor;
+import arraytree.idl.std.entity.idl.EnumConstructorKind;
+import arraytree.idl.std.entity.idl.EnumConstructorName;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
-class EnumLislaToEntityBuild 
+class EnumArrayTreeToEntityBuild 
 {
     private var targetList:Array<Expr> = [];
     public var cases(default, null):Array<Case> = [];
     
     private var constructors:Array<EnumConstructor>;
     private var parameters:TypeParameterDeclarationCollection;
-    private var builder:LislaToEntityExprBuilder;
+    private var builder:ArrayTreeToEntityExprBuilder;
     private var dataInterface:HaxeEntityInterface;
         
-    public function new(builder:LislaToEntityExprBuilder, dataInterface:HaxeEntityInterface, parameters:TypeParameterDeclarationCollection, constructors:Array<EnumConstructor>) 
+    public function new(builder:ArrayTreeToEntityExprBuilder, dataInterface:HaxeEntityInterface, parameters:TypeParameterDeclarationCollection, constructors:Array<EnumConstructor>) 
     {
         this.builder = builder;
         this.dataInterface = dataInterface;
@@ -78,8 +78,8 @@ class EnumLislaToEntityBuild
                                 case TupleElement.Argument(argument):
                                     addUnfoldCase(name, argument.type);
                                     
-                                case TupleElement.Label(lislaString):
-                                    addPrimitiveCase(name, lislaString.data);
+                                case TupleElement.Label(arraytreeString):
+                                    addPrimitiveCase(name, arraytreeString.data);
                             }
                     }
             }
@@ -90,9 +90,9 @@ class EnumLislaToEntityBuild
                 // case data:
                 values : [macro data],
                 expr: macro hxext.ds.Result.Error(
-                    lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(
-                        context.lisla, 
-                        lisla.idl.lisla2entity.error.LislaToEntityErrorKind.UnmatchedEnumConstructor([$a{targetList}])
+                    arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError.ofArrayTree(
+                        context.arraytree, 
+                        arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind.UnmatchedEnumConstructor([$a{targetList}])
                     )
                 )
             }
@@ -112,7 +112,7 @@ class EnumLislaToEntityBuild
     {
         var guard = builder.createTupleGuardConditions(elements, parameters.parameters);
         var caseExpr = macro  {
-            var arrayContext = new lisla.idl.lisla2entity.LislaToEntityArrayContext(array, 0, context.config);
+            var arrayContext = new arraytree.idl.arraytree2entity.ArrayTreeToEntityArrayContext(array, 0, context.config);
             var data = $instantiationExpr;
             switch (arrayContext.closeOrError())
             {
@@ -124,14 +124,14 @@ class EnumLislaToEntityBuild
             }
         }
         
-        cases.push(LislaToEntityExprBuilder.createTupleCase(guard, caseExpr));
+        cases.push(ArrayTreeToEntityExprBuilder.createTupleCase(guard, caseExpr));
     }
     inline function addTupleCase(name:EnumConstructorName, elements:Array<TupleElement>):Void
     {
         var string = name.name;
         addTarget(string);
         
-        var build = new TupleLislaToEntityBuild(builder, parameters, elements);
+        var build = new TupleArrayTreeToEntityBuild(builder, parameters, elements);
         var instantiationExpr = builder.createEnumInstantiationExpr(build.declarations, build.references, dataInterface.path, name, parameters);
         _addTupleCase(instantiationExpr, elements);
     }
@@ -143,7 +143,7 @@ class EnumLislaToEntityBuild
         };
         cases.push(
             {
-                values: [macro lisla.data.tree.al.AlTreeKind.Leaf(data)],
+                values: [macro arraytree.data.tree.al.AlTreeKind.Leaf(data)],
                 guard: (macro data.data == $stringExpr),
                 expr: instantiationExpr,
             }

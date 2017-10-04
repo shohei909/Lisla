@@ -1,12 +1,12 @@
-package lisla.idl.generator.tools;
+package arraytree.idl.generator.tools;
 import haxe.macro.Expr;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.tree.al.AlTree;
-import lisla.data.meta.core.ArrayWithMetadata;
-import lisla.data.meta.core.StringWithMetadata;
-import lisla.data.meta.core.Metadata;
-import lisla.data.tree.al.AlTreeKind;
+import arraytree.data.tree.al.AlTree;
+import arraytree.data.meta.core.ArrayWithMetadata;
+import arraytree.data.meta.core.StringWithMetadata;
+import arraytree.data.meta.core.Metadata;
+import arraytree.data.tree.al.AlTreeKind;
 
 class ExprBuilder 
 {
@@ -69,20 +69,20 @@ class ExprBuilder
         return macro [$a{exprs}];
     }
     
-    public static function lislaExpr(lisla:AlTree<String>):Expr
+    public static function arraytreeExpr(arraytree:AlTree<String>):Expr
     {
-        return switch lisla.kind
+        return switch arraytree.kind
         {
             case AlTreeKind.Arr(arr):
-                var arrExpr = [for (child in arr.data) lislaExpr(child)];
-                macro lisla.data.tree.al.AlTreeKind.Arr(
-                    new lisla.data.meta.core.ArrayWithMetadata([$a{arrExpr}])
+                var arrExpr = [for (child in arr.data) arraytreeExpr(child)];
+                macro arraytree.data.tree.al.AlTreeKind.Arr(
+                    new arraytree.data.meta.core.ArrayWithMetadata([$a{arrExpr}])
                 );
                 
             case AlTreeKind.Leaf(str):
                 var strExpr = getStringConstExpr(str.data);
-                macro lisla.data.tree.al.AlTreeKind.Leaf(
-                    new lisla.data.meta.core.StringWithMetadata($strExpr)
+                macro arraytree.data.tree.al.AlTreeKind.Leaf(
+                    new arraytree.data.meta.core.StringWithMetadata($strExpr)
                 );
         }
     }

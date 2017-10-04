@@ -1,13 +1,13 @@
 [package]
-name = "lisla_type"
+name = "arraytree_type"
 version = "0.1.0"
 authors = ["shohei909 <909mmsphere@gmail.com>"]
 
 [dependencies]
-lisla_derive = { version = "0.1.0", path = "../lisla_derive" }
-lisla_type_derive = { version = "0.1.0", path = "../lisla_type_derive" }
-lisla_lang = { version = "0.1.0", path = "../lisla_lang" }
-lisla_core = { version = "0.1.0", path = "../lisla_core" }
+arraytree_derive = { version = "0.1.0", path = "../arraytree_derive" }
+arraytree_type_derive = { version = "0.1.0", path = "../arraytree_type_derive" }
+arraytree_lang = { version = "0.1.0", path = "../arraytree_lang" }
+arraytree_core = { version = "0.1.0", path = "../arraytree_core" }
 
 [dev-dependencies]
 serde="1.0.11"

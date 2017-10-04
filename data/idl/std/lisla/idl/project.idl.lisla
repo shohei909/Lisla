@@ -1,13 +1,13 @@
-(package lisla.idl)
+(package arraytree.idl)
 
-(import lisla.util.file)
-(import lisla.idl.library)
+(import arraytree.util.file)
+(import arraytree.idl.library)
 
 (struct ProjectConfig
-    (lisla_home? DirectoryPath)
+    (arraytree_home? DirectoryPath)
     (description? String)
     (idl.. DirectoryPath)
     (extension..< FileExtensionDeclaration)
 )
 
-;; 'Types for Lisla Project'
+;; 'Types for ArrayTree Project'

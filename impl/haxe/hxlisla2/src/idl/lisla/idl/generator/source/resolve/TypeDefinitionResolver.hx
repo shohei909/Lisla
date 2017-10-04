@@ -1,23 +1,23 @@
-package lisla.idl.generator.source.resolve;
+package arraytree.idl.generator.source.resolve;
 
 import haxe.ds.Option;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.meta.core.StringWithMetadata;
-import lisla.idl.generator.error.TypeDefinitionResolutionErrorKind;
-import lisla.idl.generator.source.resolve.IdlResolver;
-import lisla.idl.lisla2entity.LislaToEntityContext;
-import lisla.idl.lislatext2entity.error.LislaTextToEntityErrorKind;
-import lisla.idl.std.entity.idl.TypeDefinition;
-import lisla.idl.std.entity.idl.TypeDependenceName;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypeParameterDeclaration;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.entity.idl.TypeReferenceDependenceKind;
-import lisla.idl.std.entity.idl.TypeReferenceParameter;
-import lisla.idl.std.entity.idl.TypeReferenceParameterKind;
-import lisla.idl.std.lisla2entity.idl.TypeReferenceLislaToEntity;
+import arraytree.data.meta.core.StringWithMetadata;
+import arraytree.idl.generator.error.TypeDefinitionResolutionErrorKind;
+import arraytree.idl.generator.source.resolve.IdlResolver;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityContext;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeTextToEntityErrorKind;
+import arraytree.idl.std.entity.idl.TypeDefinition;
+import arraytree.idl.std.entity.idl.TypeDependenceName;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypeParameterDeclaration;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.entity.idl.TypeReferenceDependenceKind;
+import arraytree.idl.std.entity.idl.TypeReferenceParameter;
+import arraytree.idl.std.entity.idl.TypeReferenceParameterKind;
+import arraytree.idl.std.arraytree2entity.idl.TypeReferenceArrayTreeToEntity;
 
 class TypeDefinitionResolver
 {
@@ -199,8 +199,8 @@ class TypeDefinitionResolver
                     TypeReferenceParameterKind.Dependence(data, dependence.type);
 					
 				case TypeParameterDeclaration.TypeName(_):
-					var lislaToEntityContext = new LislaToEntityContext(referenceParameter.value, parent.context.config);
-					switch (TypeReferenceLislaToEntity.process(lislaToEntityContext))
+					var arraytreeToEntityContext = new ArrayTreeToEntityContext(referenceParameter.value, parent.context.config);
+					switch (TypeReferenceArrayTreeToEntity.process(arraytreeToEntityContext))
 					{
 						case Result.Ok(reference):
 							processTypeReference(reference);

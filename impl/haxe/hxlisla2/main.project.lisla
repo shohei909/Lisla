@@ -1,2 +1,2 @@
-(lisla_home ../../../data/idl)
-(idl lisla/idl)
+(arraytree_home ../../../data/idl)
+(idl arraytree/idl)

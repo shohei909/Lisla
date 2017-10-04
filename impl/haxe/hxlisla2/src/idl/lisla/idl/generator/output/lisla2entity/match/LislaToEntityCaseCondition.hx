@@ -1,9 +1,9 @@
-package lisla.idl.generator.output.lisla2entity.match;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardCondition;
+package arraytree.idl.generator.output.arraytree2entity.match;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardCondition;
 
-enum LislaToEntityCaseCondition 
+enum ArrayTreeToEntityCaseCondition 
 { 
     Const(string:String);
     Str;
-    Arr(guard:LislaToEntityGuardCondition);
+    Arr(guard:ArrayTreeToEntityGuardCondition);
 }

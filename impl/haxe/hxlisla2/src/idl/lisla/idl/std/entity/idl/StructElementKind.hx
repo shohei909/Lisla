@@ -1,4 +1,4 @@
-package lisla.idl.std.entity.idl;
+package arraytree.idl.std.entity.idl;
 
 enum StructElementKind 
 {

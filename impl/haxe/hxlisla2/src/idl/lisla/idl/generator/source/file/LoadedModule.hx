@@ -1,8 +1,8 @@
-package lisla.idl.generator.source.file;
-import lisla.data.meta.core.BlockData;
-import lisla.idl.std.entity.idl.Idl;
-import lisla.project.FileSourceMap;
-import lisla.project.ProjectRootAndFilePath;
+package arraytree.idl.generator.source.file;
+import arraytree.data.meta.core.BlockData;
+import arraytree.idl.std.entity.idl.Idl;
+import arraytree.project.FileSourceMap;
+import arraytree.project.ProjectRootAndFilePath;
 
 class LoadedModule
 {

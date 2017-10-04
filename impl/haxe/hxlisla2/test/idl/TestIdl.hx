@@ -1,7 +1,7 @@
 package;
 import cases.IdlTest;
 import cases.ParseTest;
-import lisla.project.FilePathFromProjectRoot;
+import arraytree.project.FilePathFromProjectRoot;
 import nanotest.NanoTestRunner;
 
 class TestIdl

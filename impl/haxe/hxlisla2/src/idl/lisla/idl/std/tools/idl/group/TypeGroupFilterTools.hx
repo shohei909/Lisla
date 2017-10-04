@@ -1,7 +1,7 @@
-package lisla.idl.std.tools.idl.group;
-import lisla.data.meta.core.tag;
-import lisla.idl.std.entity.idl.group.TypeGroupFilter;
-import lisla.idl.std.entity.idl.group.TypeGroupPath;
+package arraytree.idl.std.tools.idl.group;
+import arraytree.data.meta.core.tag;
+import arraytree.idl.std.entity.idl.group.TypeGroupFilter;
+import arraytree.idl.std.entity.idl.group.TypeGroupPath;
 
 class TypeGroupFilterTools 
 {

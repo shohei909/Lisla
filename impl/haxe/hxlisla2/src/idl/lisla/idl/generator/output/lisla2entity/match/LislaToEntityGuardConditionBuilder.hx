@@ -1,12 +1,12 @@
-package lisla.idl.generator.output.lisla2entity.match;
+package arraytree.idl.generator.output.arraytree2entity.match;
 import haxe.ds.Option;
-using lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKindTools;
+using arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardConditionKindTools;
 
-class LislaToEntityGuardConditionBuilder 
+class ArrayTreeToEntityGuardConditionBuilder 
 {
     private var min:Int = 0;
     private var max:Option<Int>;
-    private var conditions:Array<LislaToEntityGuardConditionKind>;
+    private var conditions:Array<ArrayTreeToEntityGuardConditionKind>;
     public var position(get, never):Int;
     
     private inline function get_position():Int 
@@ -21,12 +21,12 @@ class LislaToEntityGuardConditionBuilder
         conditions = [];
     }
     
-    public function build():LislaToEntityGuardCondition
+    public function build():ArrayTreeToEntityGuardCondition
     {
-        return new LislaToEntityGuardCondition(min, max, conditions);
+        return new ArrayTreeToEntityGuardCondition(min, max, conditions);
     }
     
-    public inline function add(kind:LislaToEntityGuardConditionKind):Void
+    public inline function add(kind:ArrayTreeToEntityGuardConditionKind):Void
     {
         if (isSolid())
         {
@@ -75,11 +75,11 @@ class LislaToEntityGuardConditionBuilder
         var condition;
         if (isSolid())
         {
-            condition = LislaToEntityGuardConditionKind.Always;
+            condition = ArrayTreeToEntityGuardConditionKind.Always;
         }
         else
         {
-            condition = LislaToEntityGuardConditionKind.Never;
+            condition = ArrayTreeToEntityGuardConditionKind.Never;
             for (i in startPosition...conditions.length)
             {
                 condition = condition.merge(conditions[i]);

@@ -1,11 +1,11 @@
-package lisla.idl.generator.output;
+package arraytree.idl.generator.output;
 
 import haxe.macro.Expr.TypeDefinition;
 import hxext.ds.Result;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.output.HaxeGenerateConfig;
-import lisla.idl.generator.output.entity.EntityHaxeGenerator;
-import lisla.idl.generator.output.lisla2entity.LislaToEntityHaxeGenerator;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.output.HaxeGenerateConfig;
+import arraytree.idl.generator.output.entity.EntityHaxeGenerator;
+import arraytree.idl.generator.output.arraytree2entity.ArrayTreeToEntityHaxeGenerator;
 
 class HaxeGenerator
 {
@@ -21,7 +21,7 @@ class HaxeGenerator
                 return Result.Error(errors);
         }
         
-        switch LislaToEntityHaxeGenerator.generateTypes(context)
+        switch ArrayTreeToEntityHaxeGenerator.generateTypes(context)
         {
             case Result.Ok(generatedTypes):
                 for (type in generatedTypes) types.push(type);

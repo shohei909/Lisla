@@ -1,15 +1,15 @@
-package lisla.idl.library.error;
+package arraytree.idl.library.error;
 import haxe.ds.Option;
-import lisla.data.meta.position.Range;
-import lisla.data.meta.position.SourceMap;
-import lisla.error.core.BlockError;
-import lisla.error.core.ElementaryError;
-import lisla.error.core.ErrorName;
-import lisla.error.core.FileError;
-import lisla.error.core.InlineError;
-import lisla.project.FilePathFromProjectRoot;
-import lisla.project.ProjectRootAndFilePath;
-import lisla.project.ProjectRootDirectory;
+import arraytree.data.meta.position.Range;
+import arraytree.data.meta.position.SourceMap;
+import arraytree.error.core.BlockError;
+import arraytree.error.core.ElementaryError;
+import arraytree.error.core.ErrorName;
+import arraytree.error.core.FileError;
+import arraytree.error.core.InlineError;
+import arraytree.project.FilePathFromProjectRoot;
+import arraytree.project.ProjectRootAndFilePath;
+import arraytree.project.ProjectRootDirectory;
 
 class FileNotFoundError 
     implements FileError

@@ -1,5 +1,5 @@
-package lisla.idl.library;
-import lisla.idl.library.ModuleState;
+package arraytree.idl.library;
+import arraytree.idl.library.ModuleState;
 
 class ModuleStateTools
 {

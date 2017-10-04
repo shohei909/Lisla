@@ -1,6 +1,6 @@
-(target hxlisla 
+(target hxarraytree 
     (version 0.0.0)
-    (haxe_package lisla.idl.hxlisla)
+    (haxe_package arraytree.idl.hxarraytree)
 )
 
-(import file lisla.hxgen.lisla)
+(import file arraytree.hxgen.arraytree)

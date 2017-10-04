@@ -1,26 +1,26 @@
-package lisla.project;
+package arraytree.project;
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.meta.core.FileData;
-import lisla.project.FilePathFromProjectRoot;
-import lisla.idl.lislatext2entity.LislaFileToEntityRunner;
-import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
-import lisla.idl.std.entity.idl.project.ProjectConfig;
-import lisla.idl.std.lisla2entity.idl.project.ProjectConfigLislaToEntity;
+import arraytree.data.meta.core.FileData;
+import arraytree.project.FilePathFromProjectRoot;
+import arraytree.idl.arraytreetext2entity.ArrayTreeFileToEntityRunner;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeFileToEntityError;
+import arraytree.idl.std.entity.idl.project.ProjectConfig;
+import arraytree.idl.std.arraytree2entity.idl.project.ProjectConfigArrayTreeToEntity;
 
 #if sys
 import sys.FileSystem;
 import sys.io.File;
 
-class LislaProjectSystem
+class ArrayTreeProjectSystem
 {
     private static var MAX_DEPTH = 4096;
-    private static var MAIN_PROJECT_FILE_PATH = new FilePathFromProjectRoot("main.project.lisla");
-    private static var USER_PROJECT_FILE_PATH = new FilePathFromProjectRoot("user.project.lisla");
+    private static var MAIN_PROJECT_FILE_PATH = new FilePathFromProjectRoot("main.project.arraytree");
+    private static var USER_PROJECT_FILE_PATH = new FilePathFromProjectRoot("user.project.arraytree");
     
-    public static function getCurrentProject():Result<LislaProject, Array<LislaFileToEntityError>>
+    public static function getCurrentProject():Result<ArrayTreeProject, Array<ArrayTreeFileToEntityError>>
     {
         return switch (findProjectHome().toOption())
         {
@@ -28,7 +28,7 @@ class LislaProjectSystem
                 openProject(path);
                 
             case Option.None:
-                Result.Ok(new LislaProject());
+                Result.Ok(new ArrayTreeProject());
         }
     }
     
@@ -48,9 +48,9 @@ class LislaProjectSystem
         return Maybe.none();
     }
     
-    public static function openProject(projectHome:ProjectRootDirectory):Result<LislaProject, Array<LislaFileToEntityError>>
+    public static function openProject(projectHome:ProjectRootDirectory):Result<ArrayTreeProject, Array<ArrayTreeFileToEntityError>>
     {
-        var project = new LislaProject();
+        var project = new ArrayTreeProject();
         
         if (projectHome.exists(MAIN_PROJECT_FILE_PATH))
         {
@@ -81,9 +81,9 @@ class LislaProjectSystem
     
     public static function readProjectConfig(
         filePath:ProjectRootAndFilePath
-    ):Result<FileData<ProjectConfig>, Array<LislaFileToEntityError>>
+    ):Result<FileData<ProjectConfig>, Array<ArrayTreeFileToEntityError>>
     {
-        return LislaFileToEntityRunner.run(filePath, ProjectConfigLislaToEntity);
+        return ArrayTreeFileToEntityRunner.run(filePath, ProjectConfigArrayTreeToEntity);
     }
 }
 

@@ -1,21 +1,21 @@
-package lisla.idl.std.tools.idl;
+package arraytree.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKindTools;
-import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
-import lisla.idl.generator.source.IdlSourceProvider;
-import lisla.idl.std.entity.idl.ArgumentName;
-import lisla.idl.std.entity.idl.EnumConstructor;
-import lisla.idl.std.entity.idl.EnumConstructorKind;
-import lisla.idl.std.entity.idl.EnumConstructorName;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.error.EnumConstructorSuffixError;
-import lisla.idl.std.error.EnumConstructorSuffixErrorKind;
-import lisla.idl.std.error.GetConditionError;
-import lisla.idl.std.error.GetConditionErrorKind;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardConditionKind;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardConditionKindTools;
+import arraytree.idl.generator.output.arraytree2entity.match.FirstElementCondition;
+import arraytree.idl.generator.source.IdlSourceProvider;
+import arraytree.idl.std.entity.idl.ArgumentName;
+import arraytree.idl.std.entity.idl.EnumConstructor;
+import arraytree.idl.std.entity.idl.EnumConstructorKind;
+import arraytree.idl.std.entity.idl.EnumConstructorName;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.error.EnumConstructorSuffixError;
+import arraytree.idl.std.error.EnumConstructorSuffixErrorKind;
+import arraytree.idl.std.error.GetConditionError;
+import arraytree.idl.std.error.GetConditionErrorKind;
 
 class EnumTools 
 {
@@ -28,10 +28,10 @@ class EnumTools
         );
     }
     
-    public static function getGuardConditionKind(constructors:Array<EnumConstructor>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<LislaToEntityGuardConditionKind, GetConditionError>
+    public static function getGuardConditionKind(constructors:Array<EnumConstructor>, source:IdlSourceProvider, definitionParameters:Array<TypeName>):Result<ArrayTreeToEntityGuardConditionKind, GetConditionError>
     {
-        var kind1 = LislaToEntityGuardConditionKind.Never;
-        inline function errorResult(name:EnumConstructorName, kind:EnumConstructorSuffixErrorKind):Result<LislaToEntityGuardConditionKind, GetConditionError>
+        var kind1 = ArrayTreeToEntityGuardConditionKind.Never;
+        inline function errorResult(name:EnumConstructorName, kind:EnumConstructorSuffixErrorKind):Result<ArrayTreeToEntityGuardConditionKind, GetConditionError>
         {
             return Result.Error(error(name, kind));
         }
@@ -44,7 +44,7 @@ class EnumTools
                     switch (name.kind)
                     {
                         case EnumConstructorKind.Normal:
-                            LislaToEntityGuardConditionKind.Const([name.name => true]);
+                            ArrayTreeToEntityGuardConditionKind.Const([name.name => true]);
                     
                         case EnumConstructorKind.Tuple:
                             return errorResult(name, EnumConstructorSuffixErrorKind.TupleSuffixForPrimitiveEnumConstructor);
@@ -57,7 +57,7 @@ class EnumTools
                     switch (parameterized.name.kind)
                     {
                         case EnumConstructorKind.Normal | EnumConstructorKind.Tuple:
-                            LislaToEntityGuardConditionKind.Arr;
+                            ArrayTreeToEntityGuardConditionKind.Arr;
                     
                         case EnumConstructorKind.Inline:
                             var elements = parameterized.elements;
@@ -78,13 +78,13 @@ class EnumTools
                                             return Result.Error(error);
                                     }
                                     
-                                case TupleElement.Label(lislaString):
-                                    LislaToEntityGuardConditionKind.Const([lislaString.data => true]);
+                                case TupleElement.Label(arraytreeString):
+                                    ArrayTreeToEntityGuardConditionKind.Const([arraytreeString.data => true]);
                             }
                     }
             }
             
-            kind1 = LislaToEntityGuardConditionKindTools.merge(kind1, kind2);
+            kind1 = ArrayTreeToEntityGuardConditionKindTools.merge(kind1, kind2);
         }
         
         return Result.Ok(kind1);

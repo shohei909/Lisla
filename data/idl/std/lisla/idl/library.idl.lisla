@@ -1,8 +1,8 @@
-(package lisla.idl)
+(package arraytree.idl)
 
-(import lisla.util.file)
-(import lisla.util.version)
-(import lisla.idl)
+(import arraytree.util.file)
+(import arraytree.util.version)
+(import arraytree.idl)
 
 (struct LibraryConfig
     (version Version)
@@ -27,5 +27,5 @@
     (name LibraryName) (version LibraryVersion)
 )
 
-;; 'IDL for Lisla IDL configure file(.config.lisla)'
+;; 'IDL for ArrayTree IDL configure file(.config.arraytree)'
 

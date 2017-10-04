@@ -1,12 +1,12 @@
-package lisla.idl.library;
+package arraytree.idl.library;
 import hxext.ds.Result;
-import lisla.idl.generator.error.LibraryResolutionError;
-import lisla.idl.generator.error.LibraryFindError;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.source.IdlSourceProvider;
-import lisla.idl.library.error.ModuleResolutionError;
-import lisla.idl.std.entity.idl.LibraryName;
-import lisla.idl.std.entity.idl.ModulePath;
+import arraytree.idl.generator.error.LibraryResolutionError;
+import arraytree.idl.generator.error.LibraryFindError;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.source.IdlSourceProvider;
+import arraytree.idl.library.error.ModuleResolutionError;
+import arraytree.idl.std.entity.idl.LibraryName;
+import arraytree.idl.std.entity.idl.ModulePath;
 
 interface LibraryResolver
 {

@@ -1,6 +1,6 @@
-package lisla.idl.std.entity.idl;
-import lisla.data.meta.core.StringWithMetadata;
-import lisla.idl.std.entity.idl.Argument;
+package arraytree.idl.std.entity.idl;
+import arraytree.data.meta.core.StringWithMetadata;
+import arraytree.idl.std.entity.idl.Argument;
 
 enum EnumConstructorConditionKind 
 {

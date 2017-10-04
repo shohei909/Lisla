@@ -1,18 +1,18 @@
-# Lisla DSL ツールキット
+# ArrayTree DSL ツールキット
 
-Lisla DSL ツールキットは、LislaベースのDSLを簡単に作成するためのツール群です。
+ArrayTree DSL ツールキットは、LislaベースのDSLを簡単に作成するためのツール群です。
 
-IDL on Lisla を使ってデータ構造を記述するだけでDSLの作成が終わり、パーサ、バリデータ、シンタックスハイライタ、入力補完を手に入れることができます。
+IDL on ArrayTree を使ってデータ構造を記述するだけでDSLの作成が終わり、パーサ、バリデータ、シンタックスハイライタ、入力補完を手に入れることができます。
 
 
 # 構成
 
-Lisla DSL ツールキットは以下のツールで構成されます。
+ArrayTree DSL ツールキットは以下のツールで構成されます。
 
 
 ## Rust
 
-### liblisla
+### libarraytree
 RustでLislaをあつかうためのライブラリです
 
 #### 機能
@@ -23,7 +23,7 @@ RustでLislaをあつかうためのライブラリです
 - [ ] データ正規化
 - [ ] Hash生成
 - [ ] ファイル圧縮(minify)
-- Lisla IDL
+- ArrayTree IDL
     - Rust出力
         - [ ] データ構造生成
         - オブジェクトマッピング
@@ -34,11 +34,11 @@ RustでLislaをあつかうためのライブラリです
         - [ ] コードジャンプ
         - [ ] 入力補完
 
-### lislac
+### arraytreec
 Lislaのためのコマンドラインツール
 
 #### 機能
-- [ ] Lisla → Json変換
+- [ ] ArrayTree → Json変換
 - [ ] ファイル圧縮(minify)
 - [ ] フォーマット
 - [ ] バリデーション
@@ -49,14 +49,14 @@ Lislaのためのコマンドラインツール
     - [ ] 入力補完
     - [ ] プラグインシステム
     - プラグイン
-        - [ ] Lisla IDL サポート強化
+        - [ ] ArrayTree IDL サポート強化
 
-- IDL on Lisla
+- IDL on ArrayTree
     - 標準ライブラリ
 
 ## Haxe
 
-### hxlisla
+### hxarraytree
 HaxeでLislaをあつかうためのライブラリです。
 
 #### 機能
@@ -65,18 +65,18 @@ HaxeでLislaをあつかうためのライブラリです。
 - [ ] データ正規化
 - [ ] Hash生成
 
-- Lisla IDL
-    - Lisla → Haxe 出力
+- ArrayTree IDL
+    - ArrayTree → Haxe 出力
         - [x] データ構造
         - [ ] 逆Lisla化
         - [ ] Lisla化
         - [ ] 逆Bisla化
         - [ ] Bisla化
-    - [ ] Haxe → Lisla 出力
+    - [ ] Haxe → ArrayTree 出力
 
 ## エディタ
 
-### Lisla VSCode Plugin
+### ArrayTree VSCode Plugin
 Visual Studio Code上で、Lislaを記述するためのプラグイン
 
 #### 機能
@@ -88,9 +88,9 @@ Visual Studio Code上で、Lislaを記述するためのプラグイン
 
 ### さまざまなLisla DSL
 
-Lisla 
+ArrayTree 
 
-#### Lisla IDL
+#### ArrayTree IDL
 
 #### Clidl (Command Line Interface language)
 

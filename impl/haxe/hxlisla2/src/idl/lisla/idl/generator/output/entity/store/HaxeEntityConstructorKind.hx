@@ -1,4 +1,4 @@
-package lisla.idl.generator.output.entity.store;
+package arraytree.idl.generator.output.entity.store;
 
 enum HaxeEntityConstructorKind
 {

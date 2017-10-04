@@ -1,4 +1,4 @@
-package lisla.idl.generator.data;
+package arraytree.idl.generator.data;
 import haxe.ds.Option;
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -6,29 +6,29 @@ import haxe.macro.ExprTools;
 import haxe.macro.Type;
 import haxe.macro.Type.BaseType;
 import hxext.ds.Maybe;
-import lisla.data.meta.core.ArrayWithMetadata;
-import lisla.data.tree.al.AlTree;
-import lisla.data.meta.core.StringWithMetadata;
-import lisla.idl.generator.output.entity.EntityHaxeTypePath;
-import lisla.idl.generator.output.entity.store.HaxeEntityClassInterface;
-import lisla.idl.generator.output.entity.store.HaxeEntityConstructorKind;
-import lisla.idl.generator.output.entity.store.HaxeEntityConstructorReturnKind;
-import lisla.idl.generator.output.entity.store.HaxeEntityEnumInterface;
-import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
-import lisla.idl.generator.output.entity.store.HaxeEntityInterfaceKind;
-import lisla.idl.std.entity.idl.ArgumentName;
-import lisla.idl.std.entity.idl.EnumConstructorName;
-import lisla.idl.std.entity.idl.ModulePath;
-import lisla.idl.std.entity.idl.PackagePath;
-import lisla.idl.std.entity.idl.StructElementName;
-import lisla.idl.std.entity.idl.TypeDependenceName;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.std.entity.idl.TypeReferenceParameter;
-import lisla.idl.std.entity.idl.group.TypeGroupFilter;
-import lisla.idl.std.entity.idl.group.TypeGroupPath;
-import lisla.idl.std.entity.idl.library.LibraryConfig;
-import lisla.idl.std.tools.idl.group.TypeGroupFilterTools;
+import arraytree.data.meta.core.ArrayWithMetadata;
+import arraytree.data.tree.al.AlTree;
+import arraytree.data.meta.core.StringWithMetadata;
+import arraytree.idl.generator.output.entity.EntityHaxeTypePath;
+import arraytree.idl.generator.output.entity.store.HaxeEntityClassInterface;
+import arraytree.idl.generator.output.entity.store.HaxeEntityConstructorKind;
+import arraytree.idl.generator.output.entity.store.HaxeEntityConstructorReturnKind;
+import arraytree.idl.generator.output.entity.store.HaxeEntityEnumInterface;
+import arraytree.idl.generator.output.entity.store.HaxeEntityInterface;
+import arraytree.idl.generator.output.entity.store.HaxeEntityInterfaceKind;
+import arraytree.idl.std.entity.idl.ArgumentName;
+import arraytree.idl.std.entity.idl.EnumConstructorName;
+import arraytree.idl.std.entity.idl.ModulePath;
+import arraytree.idl.std.entity.idl.PackagePath;
+import arraytree.idl.std.entity.idl.StructElementName;
+import arraytree.idl.std.entity.idl.TypeDependenceName;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.entity.idl.TypeReferenceParameter;
+import arraytree.idl.std.entity.idl.group.TypeGroupFilter;
+import arraytree.idl.std.entity.idl.group.TypeGroupPath;
+import arraytree.idl.std.entity.idl.library.LibraryConfig;
+import arraytree.idl.std.tools.idl.group.TypeGroupFilterTools;
 using hxext.ds.ResultTools;
 using haxe.macro.TypeTools;
 using haxe.macro.ComplexTypeTools;
@@ -45,9 +45,9 @@ class EntityOutputConfig
 		this.noOutput = noOutput;
         this.filters = filters.concat(
             [
-                TypeGroupFilterTools.create("Array",          "lisla.data.meta.core.ArrayWithMetadata"),
-                TypeGroupFilterTools.create("String",         "lisla.data.meta.core.StringWithMetadata"),
-                TypeGroupFilterTools.create("lisla.core.Any", "lisla.data.tree.al.AlTree"),
+                TypeGroupFilterTools.create("Array",          "arraytree.data.meta.core.ArrayWithMetadata"),
+                TypeGroupFilterTools.create("String",         "arraytree.data.meta.core.StringWithMetadata"),
+                TypeGroupFilterTools.create("arraytree.core.Any", "arraytree.data.tree.al.AlTree"),
             ]
         );
 		
@@ -91,7 +91,7 @@ class EntityOutputConfig
 		return new EntityHaxeTypePath(typePath);
 	}
 	
-	public function addPredefinedTypeDirectly(path:String, data:lisla.idl.generator.output.entity.store.HaxeEntityInterface):Void
+	public function addPredefinedTypeDirectly(path:String, data:arraytree.idl.generator.output.entity.store.HaxeEntityInterface):Void
 	{
 		predefinedTypes[path] = data;
 	}
@@ -146,7 +146,7 @@ class EntityOutputConfig
 		var createFunc = Maybe.none();
 		for (field in fields)
 		{
-			if (field.meta.has(":lislaToEntity"))
+			if (field.meta.has(":arraytreeToEntity"))
 			{
 				createFunc = Maybe.some(field);
 				break;
@@ -156,7 +156,7 @@ class EntityOutputConfig
 		var expr = switch (createFunc.toOption())
 		{
 			case Option.Some(field):
-				resolveLislaToEntity(type, field.type, field);
+				resolveArrayTreeToEntity(type, field.type, field);
 				
 			case Option.None:
 				macro HaxeEntityConstructorKind.New;
@@ -167,7 +167,7 @@ class EntityOutputConfig
 		);
 	}
     
-    private static function resolveLislaToEntity(selfType:Type, type:Type, field:ClassField):Expr
+    private static function resolveArrayTreeToEntity(selfType:Type, type:Type, field:ClassField):Expr
     {
         return switch (type)
         {
@@ -186,17 +186,17 @@ class EntityOutputConfig
                                 case [TPType(ok), TPType(err)]:
                                     if (ok.toString() != selfPath)
                                     {
-                                        Context.error("@:lislaToEntity function requires Result<" + selfPath + ", LislaToEntityErrorKind>", field.pos);
+                                        Context.error("@:arraytreeToEntity function requires Result<" + selfPath + ", ArrayTreeToEntityErrorKind>", field.pos);
                                     }
                                     else
                                     {
                                         switch (err.toString())
                                         {
-                                            case "lisla.idl.lisla2entity.error.LislaToEntityErrorKind":
+                                            case "arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind":
                                                 macro HaxeEntityConstructorKind.Function($v{field.name}, HaxeEntityConstructorReturnKind.Result);	
                                                 
                                             case _:
-                                                Context.error("Error type must be lisla.idl.lisla2entity.error.LislaToEntityErrorKind", field.pos);
+                                                Context.error("Error type must be arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind", field.pos);
                                                 return null;
                                         }
                                     }
@@ -215,15 +215,15 @@ class EntityOutputConfig
                 }
                 else
                 {
-                    Context.error("@:lislaToEntity function return type must be Result<" + selfPath + ", LislaToEntityErrorKind> or " + selfPath, field.pos);
+                    Context.error("@:arraytreeToEntity function return type must be Result<" + selfPath + ", ArrayTreeToEntityErrorKind> or " + selfPath, field.pos);
                     null;
                 }
                 
             case TLazy(func):
-                resolveLislaToEntity(selfType, func(), field);
+                resolveArrayTreeToEntity(selfType, func(), field);
                 
             case _:
-                Context.error("@:lislaToEntity function must be function:", field.pos);
+                Context.error("@:arraytreeToEntity function must be function:", field.pos);
                 null;
         }
     }

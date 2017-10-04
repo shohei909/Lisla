@@ -1,30 +1,30 @@
-package lisla.idl.generator.output;
+package arraytree.idl.generator.output;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.idl.exception.ConversionExeption;
-import lisla.idl.exception.IdlException;
-import lisla.idl.generator.data.EntityOutputConfig;
-import lisla.idl.generator.data.LislaToEntityOutputConfig;
-import lisla.idl.generator.source.IdlSourceProvider;
-import lisla.idl.library.LibraryResolver;
-import lisla.idl.library.LoadTypesContext;
-import lisla.idl.std.entity.idl.ModulePath;
-import lisla.idl.std.entity.idl.TypeDefinition;
-import lisla.idl.std.entity.idl.TypePath;
+import arraytree.idl.exception.ConversionExeption;
+import arraytree.idl.exception.IdlException;
+import arraytree.idl.generator.data.EntityOutputConfig;
+import arraytree.idl.generator.data.ArrayTreeToEntityOutputConfig;
+import arraytree.idl.generator.source.IdlSourceProvider;
+import arraytree.idl.library.LibraryResolver;
+import arraytree.idl.library.LoadTypesContext;
+import arraytree.idl.std.entity.idl.ModulePath;
+import arraytree.idl.std.entity.idl.TypeDefinition;
+import arraytree.idl.std.entity.idl.TypePath;
 
 class HaxeConvertContext implements IdlSourceProvider
 {
     public var libraryResolver(default, null):LibraryResolver;
     public var entityOutputConfig(default, null):EntityOutputConfig;
-    public var lislaToEntityConfig(default, null):LislaToEntityOutputConfig;
+    public var arraytreeToEntityConfig(default, null):ArrayTreeToEntityOutputConfig;
     
     public function new(
         libraryResolver:LibraryResolver, 
         entityOutputConfig:EntityOutputConfig,
-        lislaToEntityConfig:LislaToEntityOutputConfig
+        arraytreeToEntityConfig:ArrayTreeToEntityOutputConfig
     )
     {
-        this.lislaToEntityConfig = lislaToEntityConfig;
+        this.arraytreeToEntityConfig = arraytreeToEntityConfig;
         this.libraryResolver = libraryResolver;
         this.entityOutputConfig = entityOutputConfig;
     }

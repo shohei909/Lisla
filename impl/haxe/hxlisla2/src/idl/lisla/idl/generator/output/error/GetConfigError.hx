@@ -1,11 +1,11 @@
-package lisla.idl.generator.output.error;
-import lisla.core.error.FileErrorSummary;
-import lisla.error.core.InlineErrorSummary;
-import lisla.error.core.LislaError;
-import lisla.idl.lislatext2entity.error.LislaFileToEntityErrorKind;
-import lisla.idl.lislatext2entity.error.LislaFileToEntityErrorKindTools;
+package arraytree.idl.generator.output.error;
+import arraytree.core.error.FileErrorSummary;
+import arraytree.error.core.InlineErrorSummary;
+import arraytree.error.core.ArrayTreeError;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeFileToEntityErrorKind;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeFileToEntityErrorKindTools;
 
-class GetConfigError implements LislaError
+class GetConfigError implements ArrayTreeError
 {
     public function new(kind:GetConfigErrorKind)
     {

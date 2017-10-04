@@ -1,7 +1,7 @@
-package lisla.idl.std.tools.idl;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.entity.idl.TypeReferenceParameterKind;
+package arraytree.idl.std.tools.idl;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.entity.idl.TypeReferenceParameterKind;
 
 class TypeReferenceParameterKindTools 
 {

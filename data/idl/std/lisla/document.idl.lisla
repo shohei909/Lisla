@@ -1,6 +1,6 @@
-(package lisla)
-(import lisla.idl)
-(import lisla.idl.portable)
+(package arraytree)
+(import arraytree.idl)
+(import arraytree.idl.portable)
 
 (struct Document
     (comment..< String)
@@ -32,4 +32,4 @@
 ;; (completion)
 (newtype Author String)
 
-;; 'IDL for Lisla Document Comment'
+;; 'IDL for ArrayTree Document Comment'

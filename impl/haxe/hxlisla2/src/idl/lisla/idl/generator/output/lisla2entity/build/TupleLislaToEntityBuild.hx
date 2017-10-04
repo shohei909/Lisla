@@ -1,28 +1,28 @@
-package lisla.idl.generator.output.lisla2entity.build;
+package arraytree.idl.generator.output.arraytree2entity.build;
 import haxe.ds.Option;
 import haxe.macro.Expr;
 import hxext.ds.Result;
-import lisla.idl.exception.IdlException;
-import lisla.idl.generator.output.entity.EntityHaxeTypePath;
-import lisla.idl.generator.tools.ExprBuilder;
-import lisla.idl.std.entity.idl.Argument;
-import lisla.idl.std.entity.idl.ArgumentKind;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.error.GetConditionError;
-import lisla.idl.std.tools.idl.TupleTools;
-import lisla.idl.std.tools.idl.TypeParameterDeclarationCollection;
+import arraytree.idl.exception.IdlException;
+import arraytree.idl.generator.output.entity.EntityHaxeTypePath;
+import arraytree.idl.generator.tools.ExprBuilder;
+import arraytree.idl.std.entity.idl.Argument;
+import arraytree.idl.std.entity.idl.ArgumentKind;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.error.GetConditionError;
+import arraytree.idl.std.tools.idl.TupleTools;
+import arraytree.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
-class TupleLislaToEntityBuild 
+class TupleArrayTreeToEntityBuild 
 {
     private var elements:Array<TupleElement>;
     public var parameters(default, null):TypeParameterDeclarationCollection;
     public var declarations(default, null):Array<Expr>;
     public var references(default, null):Array<Expr>;
-    public var builder(default, null):LislaToEntityExprBuilder;
+    public var builder(default, null):ArrayTreeToEntityExprBuilder;
     
     public function new(
-        builder:LislaToEntityExprBuilder, 
+        builder:ArrayTreeToEntityExprBuilder, 
         parameters:TypeParameterDeclarationCollection,
         elements:Array<TupleElement>
     ) 
@@ -51,13 +51,13 @@ class TupleLislaToEntityBuild
                         case [ArgumentKind.Normal, Option.Some(value)]:
                             var processFunc = builder.createProcessFuncExpr(parameters, destType);
                             var guardFunction = getGuardFuncExpr(data.type);
-                            var lisla = ExprBuilder.lislaExpr(value);
+                            var arraytree = ExprBuilder.arraytreeExpr(value);
                             
                             ExprBuilder.createGetOrReturnExpr(
                                 macro arrayContext.readWithDefault(
                                     $processFunc,
                                     $guardFunction, 
-                                    $lisla
+                                    $arraytree
                                 )
                             );
                             

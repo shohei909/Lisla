@@ -1,8 +1,8 @@
-(package lisla.idl)
+(package arraytree.idl)
 
-(import lisla.idl)
-(import lisla.core)
-(import lisla.util.highlight)
+(import arraytree.idl)
+(import arraytree.core)
+(import arraytree.util.highlight)
 
 (struct TypeDefinitionDocument
     (document_tag.. TypeReference)
@@ -19,4 +19,4 @@
     (completion_type.. TypeReference)
 )
 
-;; 'Document tags for Lisla IDL'
+;; 'Document tags for ArrayTree IDL'

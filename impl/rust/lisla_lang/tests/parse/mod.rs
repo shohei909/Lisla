@@ -2,9 +2,9 @@
 use std::fs;
 use std::io::Read;
 use serde_json;
-use lisla_lang::parse::*;
+use arraytree_lang::parse::*;
 
-const TEST_CASES_PATH: &'static str = "./../../../data/test_case/lisla/";
+const TEST_CASES_PATH: &'static str = "./../../../data/test_case/arraytree/";
 
 #[test]
 fn test_basic() {
@@ -26,12 +26,12 @@ fn test_basic() {
         let case_data = parser.parse(&mut string).unwrap();
         let mut into_iter = case_data.data.vec.into_iter();
 
-        let lisla_string = into_iter.next().unwrap().data.to_leaf().unwrap().string;
+        let arraytree_string = into_iter.next().unwrap().data.to_leaf().unwrap().string;
         let json_string = into_iter.next().unwrap().data.to_leaf().unwrap().string;
-        let lisla_data = parser.parse(&lisla_string).unwrap();
+        let arraytree_data = parser.parse(&arraytree_string).unwrap();
         let json_data = serde_json::from_str(json_string.as_str()).unwrap();
 
-        ::equals(&lisla_data.into(),
+        ::equals(&arraytree_data.into(),
                &json_data,
                entry.path().to_str().unwrap(),
                &mut vec![]);

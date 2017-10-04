@@ -1,15 +1,15 @@
-package lisla.idl.library;
+package arraytree.idl.library;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.idl.generator.error.LibraryFindError;
-import lisla.idl.generator.error.LibraryFindErrorKind;
-import lisla.idl.generator.source.IdlFileSourceReader;
-import lisla.idl.lislatext2entity.LislaFileToEntityRunner;
-import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
-import lisla.idl.std.entity.idl.LibraryName;
-import lisla.idl.std.entity.idl.library.LibraryVersion;
-import lisla.idl.std.lisla2entity.idl.library.LibraryConfigLislaToEntity;
-import lisla.project.ProjectRootAndFilePath;
+import arraytree.idl.generator.error.LibraryFindError;
+import arraytree.idl.generator.error.LibraryFindErrorKind;
+import arraytree.idl.generator.source.IdlFileSourceReader;
+import arraytree.idl.arraytreetext2entity.ArrayTreeFileToEntityRunner;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeFileToEntityError;
+import arraytree.idl.std.entity.idl.LibraryName;
+import arraytree.idl.std.entity.idl.library.LibraryVersion;
+import arraytree.idl.std.arraytree2entity.idl.library.LibraryConfigArrayTreeToEntity;
+import arraytree.project.ProjectRootAndFilePath;
 
 class LibraryScope
 {
@@ -22,10 +22,10 @@ class LibraryScope
     public function read(
         name:String, 
         filePath:ProjectRootAndFilePath, 
-        errorOutput:Array<LislaFileToEntityError>
+        errorOutput:Array<ArrayTreeFileToEntityError>
     ):Void
     {
-        switch(LislaFileToEntityRunner.run(filePath, LibraryConfigLislaToEntity))
+        switch(ArrayTreeFileToEntityRunner.run(filePath, LibraryConfigArrayTreeToEntity))
         {
             case Result.Ok(config):
                 var lib = if (map.exists(name))

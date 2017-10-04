@@ -1,5 +1,5 @@
-package lisla.idl.exception;
-import lisla.idl.exception.IdlException;
+package arraytree.idl.exception;
+import arraytree.idl.exception.IdlException;
 
 class SourceException extends IdlException
 {

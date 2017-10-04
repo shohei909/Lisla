@@ -1,29 +1,29 @@
-package lisla.idl.lislatext2entity;
+package arraytree.idl.arraytreetext2entity;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.data.meta.core.BlockData;
-import lisla.data.meta.core.FileData;
-import lisla.project.FilePathFromProjectRoot;
-import lisla.data.meta.position.LineIndexes;
-import lisla.data.meta.position.RangeCollection;
-import lisla.data.meta.position.SourceMap;
-import lisla.project.ProjectRootAndFilePath;
+import arraytree.data.meta.core.BlockData;
+import arraytree.data.meta.core.FileData;
+import arraytree.project.FilePathFromProjectRoot;
+import arraytree.data.meta.position.LineIndexes;
+import arraytree.data.meta.position.RangeCollection;
+import arraytree.data.meta.position.SourceMap;
+import arraytree.project.ProjectRootAndFilePath;
 
-import lisla.idl.lisla2entity.LislaToEntityConfig;
-import lisla.idl.lisla2entity.LislaToEntityType;
-import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
-import lisla.idl.lislatext2entity.error.LislaFileToEntityErrorKind;
-import lisla.parse.ParserConfig;
-import lisla.project.ProjectRootDirectory;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityConfig;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityType;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeFileToEntityError;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeFileToEntityErrorKind;
+import arraytree.parse.ParserConfig;
+import arraytree.project.ProjectRootDirectory;
 
-class LislaFileToEntityRunner 
+class ArrayTreeFileToEntityRunner 
 {
     public static function run<T>(
         rootAndPath:ProjectRootAndFilePath, 
-        processorType:LislaToEntityType<T>, 
+        processorType:ArrayTreeToEntityType<T>, 
         ?parseConfig:ParserConfig, 
-        ?lislaToEntityConfig:LislaToEntityConfig
-    ):Result<FileData<T>, Array<LislaFileToEntityError>>
+        ?arraytreeToEntityConfig:ArrayTreeToEntityConfig
+    ):Result<FileData<T>, Array<ArrayTreeFileToEntityError>>
     {
         var projectRoot = rootAndPath.projectRoot;
         var filePath = rootAndPath.filePath;
@@ -31,19 +31,19 @@ class LislaFileToEntityRunner
         if (!projectRoot.exists(filePath))
         {
             return Result.Error(
-                [LislaFileToEntityError.ofFileNotFound(rootAndPath)]
+                [ArrayTreeFileToEntityError.ofFileNotFound(rootAndPath)]
             );
         }
         
         var text = projectRoot.getContent(filePath);
-        return switch (LislaTextToEntityRunner.run(processorType, text, parseConfig, lislaToEntityConfig))
+        return switch (ArrayTreeTextToEntityRunner.run(processorType, text, parseConfig, arraytreeToEntityConfig))
         {
             case Result.Ok(data):
                 Result.Ok(data.mapWithFilePath(rootAndPath));
                 
             case Result.Error(errors):
                 Result.Error(
-                    [for (error in errors) LislaFileToEntityError.ofLislaTextToEntity(error, rootAndPath)]
+                    [for (error in errors) ArrayTreeFileToEntityError.ofArrayTreeTextToEntity(error, rootAndPath)]
                 );
         }
     }

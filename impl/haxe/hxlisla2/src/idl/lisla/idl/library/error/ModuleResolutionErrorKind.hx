@@ -1,6 +1,6 @@
-package lisla.idl.library.error;
-import lisla.idl.generator.error.LibraryResolutionError;
-import lisla.idl.generator.error.ModuleNotFoundError;
+package arraytree.idl.library.error;
+import arraytree.idl.generator.error.LibraryResolutionError;
+import arraytree.idl.generator.error.ModuleNotFoundError;
 
 enum ModuleResolutionErrorKind 
 {

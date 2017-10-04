@@ -5,7 +5,7 @@ class Main
 {
 	public static function main():Void
 	{
-		remove("lib/migration/lisla_cli");
+		remove("lib/migration/arraytree_cli");
 		var config = new CliProjectConfig();
 		
 		if (CliProject.run("../../../../../data/idl", config))

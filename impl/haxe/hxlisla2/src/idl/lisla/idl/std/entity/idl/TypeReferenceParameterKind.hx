@@ -1,6 +1,6 @@
-package lisla.idl.std.entity.idl;
-import lisla.data.tree.al.AlTree;
-import lisla.data.meta.core.StringWithMetadata;
+package arraytree.idl.std.entity.idl;
+import arraytree.data.tree.al.AlTree;
+import arraytree.data.meta.core.StringWithMetadata;
 
 enum TypeReferenceParameterKind 
 {

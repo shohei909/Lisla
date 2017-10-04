@@ -1,5 +1,5 @@
 # Specification
-## Lisla
+## ArrayTree
 - [p] test case
     - [x] basic
         - [x] sample
@@ -22,7 +22,7 @@
 - [p] japanese
     - [x] overview
 
-## IDL on Lisla 
+## IDL on ArrayTree 
 - [x] standard library
     - [x] basic
     - [x] for IDL
@@ -37,7 +37,7 @@
 Later
 
 # Rust library
-## Lisla
+## ArrayTree
 - [p] parse
     - [p] basic
     - [ ] document comment
@@ -47,12 +47,12 @@ Later
 - [ ] minify
 - [ ] object map
 - [ ] hash
-- [ ] IDL on Lisla
+- [ ] IDL on ArrayTree
     - [ ] code generation 
         - [ ] data structure
         - [ ] instance
-        - [ ] lislaToEntity
-        - [ ] lislafy
+        - [ ] arraytreeToEntity
+        - [ ] arraytreefy
         - [ ] debislafy
         - [ ] bislafy
     - [ ] lint
@@ -76,17 +76,17 @@ Later
 - [ ] format
 - [ ] syntax highlight
 - [ ] minify
-- [p] IDL on Lisla
+- [p] IDL on ArrayTree
     - [p] code generation 
         - [x] Entity data structure
-        - [p] Lisla to Haxe Entity
+        - [p] ArrayTree to Haxe Entity
         - [ ] IR to Haxe Entity
         - [ ] Haxe Entity to IR
         - [ ] bisla to Haxe Entity
         - [ ] Haxe Entity to bisla
     - [p] convertion
-        - [p] lisla to IR
-        - [ ] IR to lisla
+        - [p] arraytree to IR
+        - [ ] IR to arraytree
         - [ ] JSON to IR
         - [ ] IR to JSON
         - [ ] bisla to IR

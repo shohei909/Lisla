@@ -1,17 +1,17 @@
-package lisla.idl.lisla2entity;
+package arraytree.idl.arraytree2entity;
 import haxe.ds.Option;
-import lisla.data.tree.al.AlTree;
-import lisla.idl.lisla2entity.LislaToEntityArrayContext;
-import lisla.idl.lisla2entity.LislaToEntityConfig;
+import arraytree.data.tree.al.AlTree;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityArrayContext;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityConfig;
 
-class LislaToEntityContext
+class ArrayTreeToEntityContext
 {
-	public var lisla(default, null):AlTree<String>;
-	public var config(default, null):LislaToEntityConfig;
+	public var arraytree(default, null):AlTree<String>;
+	public var config(default, null):ArrayTreeToEntityConfig;
 	
-	public inline function new(lisla:AlTree<String>, config:LislaToEntityConfig)
+	public inline function new(arraytree:AlTree<String>, config:ArrayTreeToEntityConfig)
 	{
-		this.lisla = lisla;
+		this.arraytree = arraytree;
 		this.config = config;
 	}
 }

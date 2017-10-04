@@ -1,4 +1,4 @@
-package lisla.idl.generator.error;
+package arraytree.idl.generator.error;
 
 enum TypeDependenceValidationErrorKind
 {

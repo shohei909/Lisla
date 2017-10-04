@@ -1,9 +1,9 @@
-use ::lisla_lang::tag::*;
-use ::lisla_lang::tree::*;
+use ::arraytree_lang::tag::*;
+use ::arraytree_lang::tree::*;
 use ::types::core::*;
-use ::lisla_lang::leaf::*;
-use ::lisla_lang::from::error::*;
-use ::lisla_core::error::*;
+use ::arraytree_lang::leaf::*;
+use ::arraytree_lang::from::error::*;
+use ::arraytree_core::error::*;
 
 #[derive(LislaNewtype)]
 #[derive(Debug, Clone)]
@@ -34,14 +34,14 @@ pub enum TypeReferece {
 #[derive(Debug, Clone)]
 pub struct GenericTypeReferece {
     pub name: WithTag<TypePath>,
-    #[lisla(spreads_rest)]
+    #[arraytree(spreads_rest)]
     pub arguments: WithTag<ArrayBranch<WithTag<TypeArgument>>>,
 }
 
 #[derive(LislaTuple)]
 #[derive(Debug, Clone)]
 pub struct TypeTypeParameterDeclaration {
-    #[lisla(label = "type")]
+    #[arraytree(label = "type")]
     pub label0 : WithTag<Const>,
     pub name : WithTag<TypeName>,
 }

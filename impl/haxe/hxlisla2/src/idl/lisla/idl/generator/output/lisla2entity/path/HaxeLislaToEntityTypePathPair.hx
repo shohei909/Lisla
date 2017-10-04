@@ -1,20 +1,20 @@
-package lisla.idl.generator.output.lisla2entity.path;
-import lisla.idl.generator.output.entity.EntityHaxeTypePath;
-import lisla.idl.generator.output.lisla2entity.path.HaxeLislaToEntityTypePath;
-import lisla.idl.generator.output.EntityTypeInfomation;
-import lisla.idl.generator.source.validate.ValidType;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.generator.data.EntityOutputConfig;
-import lisla.idl.generator.data.LislaToEntityOutputConfig;
+package arraytree.idl.generator.output.arraytree2entity.path;
+import arraytree.idl.generator.output.entity.EntityHaxeTypePath;
+import arraytree.idl.generator.output.arraytree2entity.path.HaxeArrayTreeToEntityTypePath;
+import arraytree.idl.generator.output.EntityTypeInfomation;
+import arraytree.idl.generator.source.validate.ValidType;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.generator.data.EntityOutputConfig;
+import arraytree.idl.generator.data.ArrayTreeToEntityOutputConfig;
 
-class HaxeLislaToEntityTypePathPair
+class HaxeArrayTreeToEntityTypePathPair
 {
     public var typeInfo(default, null):EntityTypeInfomation;
-	public var lislaToEntityPath(default, null):HaxeLislaToEntityTypePath;
+	public var arraytreeToEntityPath(default, null):HaxeArrayTreeToEntityTypePath;
 	
-	public function new(typeInfo:EntityTypeInfomation, lislaToEntityPath:HaxeLislaToEntityTypePath) 
+	public function new(typeInfo:EntityTypeInfomation, arraytreeToEntityPath:HaxeArrayTreeToEntityTypePath) 
 	{
 		this.typeInfo = typeInfo;
-        this.lislaToEntityPath = lislaToEntityPath;
+        this.arraytreeToEntityPath = arraytreeToEntityPath;
 	}
 }

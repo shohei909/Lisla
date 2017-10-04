@@ -1,14 +1,14 @@
-# Lisla IR
+# ArrayTree IR
 
-## Lisla IRとは
+## ArrayTree IRとは
 
-Lisla IR(Lisla Intermediate Representation, Lisla中間表現)とは、Lisla IDLで型付けされたLislaによって表現可能なデータ構造です。
+ArrayTree IR(ArrayTree Intermediate Representation, Lisla中間表現)とは、ArrayTree IDLで型付けされたLislaによって表現可能なデータ構造です。
 
 Lislaのデータと、JSONやBislaなどの他のデータ形式との変換をする際の内部的な表現として使われます。
 
-## Lisla IRのデータ型
+## ArrayTree IRのデータ型
 
-Lisla IRでは、以下のデータ型があります。
+ArrayTree IRでは、以下のデータ型があります。
 
 * プリミティブ型
    * 可変bit長符号あり整数型
@@ -25,6 +25,6 @@ Lisla IRでは、以下のデータ型があります。
 
 ## LislaからのLisla IR構築
 
-## Lisla IRのJSON変換
+## ArrayTree IRのJSON変換
 
-## Lisla IRのBisla変換
+## ArrayTree IRのBisla変換

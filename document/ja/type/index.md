@@ -1,8 +1,8 @@
-# 型定義フォーマット : type.lisla
+# 型定義フォーマット : type.arraytree
 
-`type.lisla` はLislaの型定義フォーマットで、JSONに対するJSON Schemaに近い概念です。
+`type.arraytree` はLislaの型定義フォーマットで、JSONに対するJSON Schemaに近い概念です。
 
-Lislaと`type.lisla`を合わせて使うことで、以下のような機能を得ることができます。
+Lislaと`type.arraytree`を合わせて使うことで、以下のような機能を得ることができます。
 
 * JSON, Protocol Buffersへの相互変換
     * JSON Schemaの出力
@@ -17,18 +17,18 @@ Lislaと`type.lisla`を合わせて使うことで、以下のような機能を
 
 ## 簡単な例
 
-`type.lisla` で型を定義する簡単な例を見ていきます。
+`type.arraytree` で型を定義する簡単な例を見ていきます。
 
 <table>
-    <tr><th>type.lisla</th><th>データ例</th></tr>
+    <tr><th>type.arraytree</th><th>データ例</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (newtype Row : (Array String))
 </pre>
         </td>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (a b c d)
 </pre>
         </td>
@@ -51,15 +51,15 @@ Lislaと`type.lisla`を合わせて使うことで、以下のような機能を
 このように定義した、`Row`型はまた別の型を構成するために使うことができます。
 
 <table>
-    <tr><th>type.lisla</th><th>データ例</th></tr>
+    <tr><th>type.arraytree</th><th>データ例</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (newtype Table : (Array Row))
 </pre>
         </td>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (
     (a b c d)
     (e f g h)
@@ -70,11 +70,11 @@ Lislaと`type.lisla`を合わせて使うことで、以下のような機能を
     </tr>
 </table>
 
-`type.lisla` 自体の型記述が、 `type.lisla` で行われているため、より大きいサンプルを見たい場合は、[そちら](../../../data/idl/lib/lisla/type.type.lisla) を見てください。
+`type.arraytree` 自体の型記述が、 `type.arraytree` で行われているため、より大きいサンプルを見たい場合は、[そちら](../../../data/idl/lib/arraytree/type.type.arraytree) を見てください。
 
 ## 5種類のユーザー定義型
 
-`type.lisla`では、以下の5種類の型が使えます
+`type.arraytree`では、以下の5種類の型が使えます
 
 * newtype
 * tuple
@@ -87,15 +87,15 @@ Lislaと`type.lisla`を合わせて使うことで、以下のような機能を
 `newtype`は、ほかの型をもとにして同じ構造を持つ新しい型を作ります。
 
 <table>
-    <tr><th>type.lisla</th><th>データ例</th></tr>
+    <tr><th>type.arraytree</th><th>データ例</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (newtype Url : String)
 </pre>
         </td>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 http://example.com
 </pre>
         </td>
@@ -112,10 +112,10 @@ http://example.com
 タプル構造体は、各要素ごとに要素名と型を定義した配列です。
 
 <table>
-    <tr><th>type.lisla</th><th>データ例</th></tr>
+    <tr><th>type.arraytree</th><th>データ例</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (tuple Link
     (var title : String)
     (var url : Url)
@@ -123,7 +123,7 @@ http://example.com
 </pre>
         </td>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 ("Example Domain" http://example.com)
 </pre>
         </td>
@@ -141,10 +141,10 @@ http://example.com
 構造体はキーと値のペアの配列で、各キーに対する型が定義されています。
 
 <table>
-    <tr><th>type.lisla</th><th>データ例</th></tr>
+    <tr><th>type.arraytree</th><th>データ例</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (struct LinkStruct
     (var title : String)
     (var url : Url)
@@ -152,7 +152,7 @@ http://example.com
 </pre>
         </td>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (
     (title "Example Domain")
     (url http://example.com)
@@ -178,10 +178,10 @@ http://example.com
 列挙体は、型に定義された文字列のうち、いずれかの文字列をとります。
 
 <table>
-    <tr><th>type.lisla</th><th>データ例</th></tr>
+    <tr><th>type.arraytree</th><th>データ例</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (enum Boolean
     (case true)
     (case false)
@@ -189,7 +189,7 @@ http://example.com
 </pre>
         </td>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 true
 </pre>
         </td>
@@ -205,10 +205,10 @@ true
 直和型はいくつかの型をもち、そのいずれかの型をとります。
 
 <table>
-    <tr><th>type.lisla</th><th>データ例1</th><th>データ例2</th></tr>
+    <tr><th>type.arraytree</th><th>データ例1</th><th>データ例2</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (union BoolOrLink
     (case Bool : Boolean)
     (case Link : LinkStruct)
@@ -216,12 +216,12 @@ true
 </pre>
         </td>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 true
 </pre>
         </td>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 (
     (url http://example.com)
     (title "Example Domain")
@@ -242,7 +242,7 @@ true
 
 ## その他の制限
 
-## `type.lisla` のモジュールシステム
+## `type.arraytree` のモジュールシステム
 
 ### ライブラリ
 
@@ -256,13 +256,13 @@ true
 
 [標準ライブラリ](../../../data/idl/standard)
 
-### `lisla` ライブラリ
+### `arraytree` ライブラリ
 
-`lisla` 自体の情報をあつかうためのライブラリとして、lislaライブラリを提供しています。
+`arraytree` 自体の情報をあつかうためのライブラリとして、arraytreeライブラリを提供しています。
 
-[lisla ライブラリ](../../../data/idl/lib/lisla/type.type.lisla)
+[arraytree ライブラリ](../../../data/idl/lib/arraytree/type.type.arraytree)
 
-`type.lisla` 自身の型定義も、lislaライブラリに含まれます。
+`type.arraytree` 自身の型定義も、arraytreeライブラリに含まれます。
 
 ## コーディング規約
 

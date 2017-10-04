@@ -1,12 +1,12 @@
-package lisla.idl.std.entity.idl;
+package arraytree.idl.std.entity.idl;
 
-import lisla.data.meta.core.StringWithMetadata;
+import arraytree.data.meta.core.StringWithMetadata;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.meta.core.Metadata;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import arraytree.data.meta.core.Metadata;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
 using hxext.ds.ResultTools;
-using lisla.string.IdentifierTools;
+using arraytree.string.IdentifierTools;
 using StringTools;
 
 class StructElementName
@@ -60,8 +60,8 @@ class StructElementName
         this.metadata = metadata;
     }
     
-	@:lislaToEntity
-	public static function lislaToEntity(string:StringWithMetadata):Result<StructElementName, LislaToEntityErrorKind>
+	@:arraytreeToEntity
+	public static function arraytreeToEntity(string:StringWithMetadata):Result<StructElementName, ArrayTreeToEntityErrorKind>
 	{
 		return switch (create(string.data, string.metadata))
 		{
@@ -69,7 +69,7 @@ class StructElementName
 				Result.Ok(data);
 			
 			case Result.Error(data):
-				Result.Error(LislaToEntityErrorKind.Fatal(data));
+				Result.Error(ArrayTreeToEntityErrorKind.Fatal(data));
 		}
 	}
 	public static function create(string:String, metadata:Metadata):Result<StructElementName, String>

@@ -1,10 +1,10 @@
 package cases;
 import hxext.ds.Result;
-import lisla.idl.data.IdlRepository.TypeRepository;
-import lisla.parse.Printer;
-import lisla.project.ProjectRootDirectory;
+import arraytree.idl.data.IdlRepository.TypeRepository;
+import arraytree.parse.Printer;
+import arraytree.project.ProjectRootDirectory;
 
-class IdlTest extends LislaTestCase
+class IdlTest extends ArrayTreeTestCase
 {
     private var rootDirectory:ProjectRootDirectory;
     public function new() 
@@ -13,11 +13,11 @@ class IdlTest extends LislaTestCase
         rootDirectory = TestCore.PROJECT_ROOT;
 	}
     
-	public function testLislaToEntity():Void
+	public function testArrayTreeToEntity():Void
 	{
         var typeRepository = new TypeRepository(rootDirectory, TestIdl.IDL_DIRECTORY);
         
-    	for (filePath in rootProject.searchFiles(TestIdl.IDL_DIRECTORY, ".idl.lisla"))
+    	for (filePath in rootProject.searchFiles(TestIdl.IDL_DIRECTORY, ".idl.arraytree"))
 		{
             var content = rootDirectory.getContent(filePath);
             var idlData = switch (Printer.parse(content))

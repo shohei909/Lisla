@@ -1,10 +1,10 @@
-package lisla.idl.generator.error;
+package arraytree.idl.generator.error;
 import haxe.ds.Option;
-import lisla.data.meta.position.Range;
-import lisla.error.core.ElementaryError;
-import lisla.error.core.ErrorName;
-import lisla.error.core.InlineError;
-import lisla.idl.std.entity.idl.LibraryName;
+import arraytree.data.meta.position.Range;
+import arraytree.error.core.ElementaryError;
+import arraytree.error.core.ErrorName;
+import arraytree.error.core.InlineError;
+import arraytree.idl.std.entity.idl.LibraryName;
 
 class LibraryFindError implements ElementaryError
 {

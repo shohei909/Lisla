@@ -1,22 +1,22 @@
-package lisla.idl.generator.output.lisla2entity.match;
+package arraytree.idl.generator.output.arraytree2entity.match;
 import haxe.ds.Option;
 import hxext.ds.Maybe;
-import lisla.data.meta.core.Metadata;
+import arraytree.data.meta.core.Metadata;
 
-class LislaToEntityCaseConditionGroup<T>
+class ArrayTreeToEntityCaseConditionGroup<T>
 {
     public var name:T;
-    public var conditions(default, null):Array<LislaToEntityCaseCondition>;
+    public var conditions(default, null):Array<ArrayTreeToEntityCaseCondition>;
     
-    public function new(name:T, conditions:Array<LislaToEntityCaseCondition>) 
+    public function new(name:T, conditions:Array<ArrayTreeToEntityCaseCondition>) 
     {
         this.name = name;
         this.conditions = conditions;
     }
     
-    public static function intersects<T>(groups:Iterable<LislaToEntityCaseConditionGroup<T>>):Option<{group0:LislaToEntityCaseConditionGroup<T>, group1:LislaToEntityCaseConditionGroup<T>}>
+    public static function intersects<T>(groups:Iterable<ArrayTreeToEntityCaseConditionGroup<T>>):Option<{group0:ArrayTreeToEntityCaseConditionGroup<T>, group1:ArrayTreeToEntityCaseConditionGroup<T>}>
     {
-        var processedGroups:Array<LislaToEntityCaseConditionGroup<T>> = [];
+        var processedGroups:Array<ArrayTreeToEntityCaseConditionGroup<T>> = [];
         
         for (group in groups)
         {
@@ -26,7 +26,7 @@ class LislaToEntityCaseConditionGroup<T>
                 {
                     for (existingCondition in processedGroup.conditions)
                     {
-                        if (LislaToEntityCaseConditionTools.intersects(existingCondition, newCondition))
+                        if (ArrayTreeToEntityCaseConditionTools.intersects(existingCondition, newCondition))
                         {
                             return Option.Some({group0:processedGroup, group1:group});
                         }

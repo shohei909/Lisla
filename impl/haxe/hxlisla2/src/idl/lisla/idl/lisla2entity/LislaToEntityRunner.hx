@@ -1,28 +1,28 @@
-package lisla.idl.lisla2entity;
+package arraytree.idl.arraytree2entity;
 import hxext.ds.Result;
-import lisla.data.meta.core.ArrayWithMetadata;
-import lisla.data.tree.al.AlTree;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
+import arraytree.data.meta.core.ArrayWithMetadata;
+import arraytree.data.tree.al.AlTree;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
 
-class LislaToEntityRunner
+class ArrayTreeToEntityRunner
 {
 	public static function run<T>(
-        processorType:LislaToEntityType<T>, 
+        processorType:ArrayTreeToEntityType<T>, 
         array:ArrayWithMetadata<AlTree<String>>, 
-        ?config:LislaToEntityConfig
-    ):Result<T, Array<LislaToEntityError>>
+        ?config:ArrayTreeToEntityConfig
+    ):Result<T, Array<ArrayTreeToEntityError>>
 	{
 		if (config == null)
 		{
-			config = new LislaToEntityConfig();
+			config = new ArrayTreeToEntityConfig();
 		}
 		
-		var context = new LislaToEntityContext(AlTree.fromArray(array), config);
+		var context = new ArrayTreeToEntityContext(AlTree.fromArray(array), config);
 		return processorType.process(context);
 	}
 	
-	public static function processLisla(context:LislaToEntityContext):Result<AlTree<String>, Array<LislaToEntityError>>
+	public static function processArrayTree(context:ArrayTreeToEntityContext):Result<AlTree<String>, Array<ArrayTreeToEntityError>>
 	{
-		return Result.Ok(context.lisla);
+		return Result.Ok(context.arraytree);
 	}
 }

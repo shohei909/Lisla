@@ -1,16 +1,16 @@
-package lisla.idl.std.tools.idl;
+package arraytree.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
-import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
-import lisla.idl.generator.source.IdlSourceProvider;
-import lisla.idl.std.entity.idl.ArgumentKind;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.error.ArgumentSuffixErrorKind;
-import lisla.idl.std.error.GetConditionError;
-import lisla.idl.std.error.GetConditionErrorKind;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.FirstElementCondition;
+import arraytree.idl.generator.source.IdlSourceProvider;
+import arraytree.idl.std.entity.idl.ArgumentKind;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.error.ArgumentSuffixErrorKind;
+import arraytree.idl.std.error.GetConditionError;
+import arraytree.idl.std.error.GetConditionErrorKind;
 
 class TupleElementTools
 {
@@ -53,7 +53,7 @@ class TupleElementTools
         {
             case TupleElement.Label(value):
                 condition.canBeEmpty = false;
-                condition.conditions.push(LislaToEntityCaseCondition.Const(value.data));
+                condition.conditions.push(ArrayTreeToEntityCaseCondition.Const(value.data));
                 Option.None;
                 
             case TupleElement.Argument(argument):

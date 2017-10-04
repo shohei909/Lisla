@@ -1,11 +1,11 @@
-package lisla.idl.std.entity.idl;
+package arraytree.idl.std.entity.idl;
 import haxe.ds.Option;
-import lisla.data.meta.core.StringWithMetadata;
+import arraytree.data.meta.core.StringWithMetadata;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.meta.core.Metadata;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
-import lisla.idl.std.entity.idl.group.TypeGroupPath;
+import arraytree.data.meta.core.Metadata;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
+import arraytree.idl.std.entity.idl.group.TypeGroupPath;
 
 class TypePath
 {
@@ -20,8 +20,8 @@ class TypePath
 		this.metadata = metadata;
 	}
 	
-	@:lislaToEntity
-	public static function lislaToEntity(string:StringWithMetadata):Result<TypePath, LislaToEntityErrorKind>
+	@:arraytreeToEntity
+	public static function arraytreeToEntity(string:StringWithMetadata):Result<TypePath, ArrayTreeToEntityErrorKind>
 	{
 		return switch (create(string.data, string.metadata))
 		{
@@ -29,7 +29,7 @@ class TypePath
 				Result.Ok(data);
 			
 			case Result.Error(data):
-				Result.Error(LislaToEntityErrorKind.Fatal(data));
+				Result.Error(ArrayTreeToEntityErrorKind.Fatal(data));
 		}
 	}
 	

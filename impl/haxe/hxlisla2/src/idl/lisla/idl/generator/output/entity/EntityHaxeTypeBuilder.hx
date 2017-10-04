@@ -1,4 +1,4 @@
-package lisla.idl.generator.output.entity;
+package arraytree.idl.generator.output.entity;
 
 import haxe.macro.Expr;
 import haxe.macro.Expr.ComplexType;
@@ -7,24 +7,24 @@ import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.FunctionArg;
 import haxe.macro.Expr.TypeDefKind;
 import hxext.ds.Maybe;
-import lisla.idl.exception.IdlException;
-import lisla.idl.generator.data.EntityOutputConfig;
-import lisla.idl.generator.output.EntityTypeInfomation;
-import lisla.idl.std.entity.idl.Argument;
-import lisla.idl.std.entity.idl.ArgumentKind;
-import lisla.idl.std.entity.idl.EnumConstructor;
-import lisla.idl.std.entity.idl.StructElement;
-import lisla.idl.std.entity.idl.StructElementKind;
-import lisla.idl.std.entity.idl.StructElementName;
-import lisla.idl.std.entity.idl.StructField;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.tools.idl.TypeDefinitionTools;
-import lisla.idl.std.tools.idl.TypeDependenceDeclarationTools;
-import lisla.idl.std.tools.idl.TypeNameTools;
-import lisla.idl.std.tools.idl.TypeParameterDeclarationTools;
+import arraytree.idl.exception.IdlException;
+import arraytree.idl.generator.data.EntityOutputConfig;
+import arraytree.idl.generator.output.EntityTypeInfomation;
+import arraytree.idl.std.entity.idl.Argument;
+import arraytree.idl.std.entity.idl.ArgumentKind;
+import arraytree.idl.std.entity.idl.EnumConstructor;
+import arraytree.idl.std.entity.idl.StructElement;
+import arraytree.idl.std.entity.idl.StructElementKind;
+import arraytree.idl.std.entity.idl.StructElementName;
+import arraytree.idl.std.entity.idl.StructField;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.tools.idl.TypeDefinitionTools;
+import arraytree.idl.std.tools.idl.TypeDependenceDeclarationTools;
+import arraytree.idl.std.tools.idl.TypeNameTools;
+import arraytree.idl.std.tools.idl.TypeParameterDeclarationTools;
 
 import haxe.macro.Expr.TypeDefinition in HaxeTypeDefinition;
-import lisla.idl.std.entity.idl.TypeDefinition in IdlTypeDefinition;
+import arraytree.idl.std.entity.idl.TypeDefinition in IdlTypeDefinition;
 
 class EntityHaxeTypeBuilder
 {
@@ -121,7 +121,7 @@ class EntityHaxeTypeBuilder
                                         {
                                             name: "metadata",
                                             opt: true,
-                                            type: macro:hxext.ds.Maybe<lisla.data.meta.core.Metadata>,
+                                            type: macro:hxext.ds.Maybe<arraytree.data.meta.core.Metadata>,
                                         },
                                     ],
                                     ret: null,
@@ -268,10 +268,10 @@ class EntityHaxeTypeBuilder
                     args.push(convertField(field, config));
                     
                 case StructElement.Label(name):
-                    addLabel(name, macro:hxext.ds.Maybe<lisla.data.meta.core.Metadata>);
+                    addLabel(name, macro:hxext.ds.Maybe<arraytree.data.meta.core.Metadata>);
                     
                 case StructElement.NestedLabel(name):
-                    addLabel(name, macro:hxext.ds.Maybe<lisla.data.meta.core.Metadata>);
+                    addLabel(name, macro:hxext.ds.Maybe<arraytree.data.meta.core.Metadata>);
             }
         }
         

@@ -1,15 +1,15 @@
-package lisla.idl.generator.output.lisla2entity.build;
+package arraytree.idl.generator.output.arraytree2entity.build;
 import haxe.macro.Expr;
 import hxext.ds.Result;
-import lisla.idl.generator.output.entity.EntityHaxeTypePath;
-import lisla.idl.generator.tools.ExprBuilder;
-import lisla.idl.lisla2entity.LislaToEntityContext;
-import lisla.idl.lisla2entity.error.LislaToEntityError;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
-import lisla.idl.std.entity.idl.StructElement;
-import lisla.idl.std.tools.idl.TypeParameterDeclarationCollection;
+import arraytree.idl.generator.output.entity.EntityHaxeTypePath;
+import arraytree.idl.generator.tools.ExprBuilder;
+import arraytree.idl.arraytree2entity.ArrayTreeToEntityContext;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
+import arraytree.idl.std.entity.idl.StructElement;
+import arraytree.idl.std.tools.idl.TypeParameterDeclarationCollection;
 
-class StructLislaToEntityBuild 
+class StructArrayTreeToEntityBuild 
 {
     private var elements:Array<StructElement>;
     private var sourcePath:EntityHaxeTypePath;
@@ -17,10 +17,10 @@ class StructLislaToEntityBuild
     public var declarations(default, null):Array<Expr>;
     public var references(default, null):Array<Expr>;
     public var cases(default, null):Array<Case>;
-    public var builder(default, null):LislaToEntityExprBuilder;
+    public var builder(default, null):ArrayTreeToEntityExprBuilder;
     
     public function new(
-        builder:LislaToEntityExprBuilder, 
+        builder:ArrayTreeToEntityExprBuilder, 
         sourcePath:EntityHaxeTypePath, 
         parameters:TypeParameterDeclarationCollection, 
         elements:Array<StructElement>) 
@@ -44,27 +44,27 @@ class StructLislaToEntityBuild
         {
             targets.push(element.getElementName().name);
             var id = "arg" + references.length;
-            new StructElementLislaToEntityBuild(this, element, id).run();
+            new StructElementArrayTreeToEntityBuild(this, element, id).run();
         }
         var targetsExpr = ExprBuilder.getStringArrayExpr(targets);
         
         cases.push(
             {
                 // case data:
-                values : [macro lislaData],
+                values : [macro arraytreeData],
                 expr: macro return hxext.ds.Result.Error(
-                    lisla.idl.lisla2entity.error.LislaToEntityError.ofLisla(
-                        lislaData, 
-                        lisla.idl.lisla2entity.error.LislaToEntityErrorKind.UnmatchedStructElement(${targetsExpr})
+                    arraytree.idl.arraytree2entity.error.ArrayTreeToEntityError.ofArrayTree(
+                        arraytreeData, 
+                        arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind.UnmatchedStructElement(${targetsExpr})
                     )
                 )
             }
         );
-        var switchExpr = ExprBuilder.createSwitchExpr(macro lislaData, cases);
+        var switchExpr = ExprBuilder.createSwitchExpr(macro arraytreeData, cases);
         declarations.push(
-            macro for (lislaData in array)
+            macro for (arraytreeData in array)
             {
-                var context = new lisla.idl.lisla2entity.LislaToEntityContext(lislaData, context.config);
+                var context = new arraytree.idl.arraytree2entity.ArrayTreeToEntityContext(arraytreeData, context.config);
                 $switchExpr;
             }
         );

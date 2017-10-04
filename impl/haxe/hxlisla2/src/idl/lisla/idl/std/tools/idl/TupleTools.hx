@@ -1,24 +1,24 @@
-package lisla.idl.std.tools.idl;
+package arraytree.idl.std.tools.idl;
 
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardCondition;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionBuilder;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
-import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
-import lisla.idl.generator.source.IdlSourceProvider;
-import lisla.idl.std.entity.idl.ArgumentKind;
-import lisla.idl.std.entity.idl.ArgumentName;
-import lisla.idl.std.entity.idl.FollowedTypeDefinition;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.error.ArgumentSuffixError;
-import lisla.idl.std.error.ArgumentSuffixErrorKind;
-import lisla.idl.std.error.GetConditionError;
-import lisla.idl.std.error.GetConditionErrorKind;
-using lisla.idl.std.tools.idl.TypeReferenceParameterTools;
-using lisla.idl.std.tools.idl.TypeReferenceTools;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardConditionBuilder;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardConditionKind;
+import arraytree.idl.generator.output.arraytree2entity.match.FirstElementCondition;
+import arraytree.idl.generator.source.IdlSourceProvider;
+import arraytree.idl.std.entity.idl.ArgumentKind;
+import arraytree.idl.std.entity.idl.ArgumentName;
+import arraytree.idl.std.entity.idl.FollowedTypeDefinition;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.error.ArgumentSuffixError;
+import arraytree.idl.std.error.ArgumentSuffixErrorKind;
+import arraytree.idl.std.error.GetConditionError;
+import arraytree.idl.std.error.GetConditionErrorKind;
+using arraytree.idl.std.tools.idl.TypeReferenceParameterTools;
+using arraytree.idl.std.tools.idl.TypeReferenceTools;
 
 class TupleTools 
 {
@@ -37,9 +37,9 @@ class TupleTools
         elements:Array<TupleElement>, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>
-    ):Result<LislaToEntityGuardCondition, GetConditionError>
+    ):Result<ArrayTreeToEntityGuardCondition, GetConditionError>
     {
-        var builder = new LislaToEntityGuardConditionBuilder();
+        var builder = new ArrayTreeToEntityGuardConditionBuilder();
         return switch (_getGuard(elements, source, definitionParameters, builder, []))
         {
             case Option.None:
@@ -54,7 +54,7 @@ class TupleTools
         elements:Array<TupleElement>, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        builder:LislaToEntityGuardConditionBuilder,
+        builder:ArrayTreeToEntityGuardConditionBuilder,
         parentTypes:Array<String>
     ):Option<GetConditionError>
     {
@@ -63,7 +63,7 @@ class TupleTools
             switch (element)
             {
                 case TupleElement.Label(value):
-                    builder.add(LislaToEntityGuardConditionKind.Const([value.data => true]));
+                    builder.add(ArrayTreeToEntityGuardConditionKind.Const([value.data => true]));
                     
                 case TupleElement.Argument(argument):
                     switch [argument.name.kind, argument.defaultValue]
@@ -175,12 +175,12 @@ class TupleTools
         elements:Array<TupleElement>, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>
-    ):Result<LislaToEntityCaseCondition, GetConditionError>
+    ):Result<ArrayTreeToEntityCaseCondition, GetConditionError>
     {
         return switch (getGuard(elements, source, definitionParameters))
         {
             case Result.Ok(data):
-                Result.Ok(LislaToEntityCaseCondition.Arr(data));
+                Result.Ok(ArrayTreeToEntityCaseCondition.Arr(data));
                 
             case Result.Error(error):
                 Result.Error(error);

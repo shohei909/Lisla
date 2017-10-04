@@ -1,31 +1,31 @@
-package lisla.project;
+package arraytree.project;
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
 import hxext.error.ErrorBuffer;
-import lisla.idl.generator.data.EntityOutputConfig;
-import lisla.idl.generator.data.HaxePrintConfig;
-import lisla.idl.generator.data.LislaToEntityOutputConfig;
-import lisla.idl.generator.output.HaxeGenerateConfigFactory;
-import lisla.idl.generator.output.HaxeGenerateConfig;
-import lisla.idl.generator.output.HaxeGenerateConfigFactoryContext;
-import lisla.idl.generator.output.HaxeGenerator;
-import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
-import lisla.idl.generator.output.error.GetConfigErrorKind;
-import lisla.idl.generator.output.haxe.HaxePrinter;
-import lisla.idl.generator.source.IdlFileSourceReader;
-import lisla.idl.hxlisla.entity.ImportConfig;
-import lisla.idl.hxlisla.lisla2entity.GenerationConfigLislaToEntity;
-import lisla.idl.library.LibraryScope;
-import lisla.idl.lislatext2entity.LislaFileToEntityRunner;
-import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.entity.idl.project.ProjectConfig;
-import lisla.idl.std.entity.util.file.FileExtension;
+import arraytree.idl.generator.data.EntityOutputConfig;
+import arraytree.idl.generator.data.HaxePrintConfig;
+import arraytree.idl.generator.data.ArrayTreeToEntityOutputConfig;
+import arraytree.idl.generator.output.HaxeGenerateConfigFactory;
+import arraytree.idl.generator.output.HaxeGenerateConfig;
+import arraytree.idl.generator.output.HaxeGenerateConfigFactoryContext;
+import arraytree.idl.generator.output.HaxeGenerator;
+import arraytree.idl.generator.output.error.CompileIdlToHaxeErrorKind;
+import arraytree.idl.generator.output.error.GetConfigErrorKind;
+import arraytree.idl.generator.output.haxe.HaxePrinter;
+import arraytree.idl.generator.source.IdlFileSourceReader;
+import arraytree.idl.hxarraytree.entity.ImportConfig;
+import arraytree.idl.hxarraytree.arraytree2entity.GenerationConfigArrayTreeToEntity;
+import arraytree.idl.library.LibraryScope;
+import arraytree.idl.arraytreetext2entity.ArrayTreeFileToEntityRunner;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeFileToEntityError;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.entity.idl.project.ProjectConfig;
+import arraytree.idl.std.entity.util.file.FileExtension;
 import sys.FileSystem;
 
-class LislaProject
+class ArrayTreeProject
 {
     public static var LISLA_HOME_VAR:String = "LISLA_HOME";
     
@@ -33,7 +33,7 @@ class LislaProject
     public var description:String;
     public var libraryDirectries(default, null):Array<String>;
     public var extensions(default, null):Map<FileExtension, TypeReference>;
-    private var libraries:Maybe<Result<LibraryScope, Array<LislaFileToEntityError>>>;
+    private var libraries:Maybe<Result<LibraryScope, Array<ArrayTreeFileToEntityError>>>;
     
     public function new() 
     {
@@ -57,7 +57,7 @@ class LislaProject
             return Path.normalize(projectHome + "/" + path);
         }
         
-        config.lislaHome.iter(function (v) home = Maybe.some(resolvePath(v.data)));
+        config.arraytreeHome.iter(function (v) home = Maybe.some(resolvePath(v.data)));
         config.description.iter(function (v) description = v.data);
         
         for (idl in config.idl)
@@ -72,7 +72,7 @@ class LislaProject
         libraries = Maybe.none();
     }
     
-    public function getLibraryScope():Result<LibraryScope, Array<LislaFileToEntityError>>
+    public function getLibraryScope():Result<LibraryScope, Array<ArrayTreeFileToEntityError>>
     {
         switch libraries.toOption()
         {
@@ -97,7 +97,7 @@ class LislaProject
         return result;
     }
     
-    private function findLibraries(file:String, scope:LibraryScope, errors:Array<LislaFileToEntityError>):Void
+    private function findLibraries(file:String, scope:LibraryScope, errors:Array<ArrayTreeFileToEntityError>):Void
     {
         if (FileSystem.exists(file))
         {
@@ -108,10 +108,10 @@ class LislaProject
                     findLibraries(file + "/" + child, scope, errors);
                 }
             }
-            else if (StringTools.endsWith(file, ".library.lisla"))
+            else if (StringTools.endsWith(file, ".library.arraytree"))
             {
                 var fileName = Path.withoutDirectory(file);
-                var name = fileName.substr(0, fileName.length - ".library.lisla".length);
+                var name = fileName.substr(0, fileName.length - ".library.arraytree".length);
                 scope.read(name, file, errors);
             }
         }
@@ -159,7 +159,7 @@ class LislaProject
                 errorBuffer.mapAndPushAll(errors, GetConfigErrorKind.GetLibrary);
                 null;
         }
-        var GenerationConfig = switch (LislaFileToEntityRunner.run(GenerationConfigLislaToEntity, configFilePath))
+        var GenerationConfig = switch (ArrayTreeFileToEntityRunner.run(GenerationConfigArrayTreeToEntity, configFilePath))
         {
             case Result.Ok(_GenerationConfig):
                 _GenerationConfig;
@@ -180,7 +180,7 @@ class LislaProject
             {
                 case ImportConfig.File(fileName):
                     var filePath = Path.join([baseDirectory, fileName.data]);
-                    switch (LislaFileToEntityRunner.run(GenerationConfigLislaToEntity, filePath))
+                    switch (ArrayTreeFileToEntityRunner.run(GenerationConfigArrayTreeToEntity, filePath))
                     {
                         case Result.Ok(_GenerationConfig):
                             requiredGenerationConfigs.push(_GenerationConfig);

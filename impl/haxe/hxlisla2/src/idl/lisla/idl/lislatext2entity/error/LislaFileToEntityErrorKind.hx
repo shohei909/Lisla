@@ -1,9 +1,9 @@
-package lisla.idl.lislatext2entity.error;
-import lisla.error.core.BlockToFileErrorWrapper;
-import lisla.idl.library.error.FileNotFoundError;
+package arraytree.idl.arraytreetext2entity.error;
+import arraytree.error.core.BlockToFileErrorWrapper;
+import arraytree.idl.library.error.FileNotFoundError;
 
-enum LislaFileToEntityErrorKind 
+enum ArrayTreeFileToEntityErrorKind 
 {
     FileNotFound(error:FileNotFoundError);
-    LislaTextToEntity(error:BlockToFileErrorWrapper<LislaTextToEntityError>);
+    ArrayTreeTextToEntity(error:BlockToFileErrorWrapper<ArrayTreeTextToEntityError>);
 }

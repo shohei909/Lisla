@@ -1,26 +1,26 @@
-package lisla.idl.generator.output.lisla2entity.match;
+package arraytree.idl.generator.output.arraytree2entity.match;
 import haxe.ds.Option;
 import haxe.macro.Expr;
-import lisla.data.tree.al.AlTree;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
-using lisla.idl.std.tools.idl.TypeReferenceTools;
+import arraytree.data.tree.al.AlTree;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardConditionKind;
+using arraytree.idl.std.tools.idl.TypeReferenceTools;
 
-class LislaToEntityGuardCondition
+class ArrayTreeToEntityGuardCondition
 {
     public var min(default, null):Int = 0;
     public var max(default, null):Option<Int>;
-    public var conditions(default, null):Array<LislaToEntityGuardConditionKind>;
+    public var conditions(default, null):Array<ArrayTreeToEntityGuardConditionKind>;
     
-    public function new (min:Int, max:Option<Int>, conditions:Array<LislaToEntityGuardConditionKind>)
+    public function new (min:Int, max:Option<Int>, conditions:Array<ArrayTreeToEntityGuardConditionKind>)
     {
         this.min = min;
         this.max = max;
         this.conditions = conditions;
     }
     
-    public static function any():LislaToEntityGuardCondition
+    public static function any():ArrayTreeToEntityGuardCondition
     {
-        return new LislaToEntityGuardCondition(0, Option.None, []);
+        return new ArrayTreeToEntityGuardCondition(0, Option.None, []);
     }
     
     public function getConditionExprs(dataExpr:Expr):Array<Expr>
@@ -67,29 +67,29 @@ class LislaToEntityGuardCondition
                         expr: ExprDef.EConst(Constant.CString(key)),
                         pos: null,
                     }
-                    result.push(macro $dataExpr.data[$index].match(lisla.data.tree.al.AlTreeKind.Leaf(_ => $string)));
+                    result.push(macro $dataExpr.data[$index].match(arraytree.data.tree.al.AlTreeKind.Leaf(_ => $string)));
                 }
             }
             
             switch (condition)
             {
-                case LislaToEntityGuardConditionKind.Const(strings):
+                case ArrayTreeToEntityGuardConditionKind.Const(strings):
                     addConst(strings);
                     
-                case LislaToEntityGuardConditionKind.Str:
-                    result.push(macro $dataExpr.data[$index].match(lisla.data.tree.al.AlTreeKind.Leaf(_)));
+                case ArrayTreeToEntityGuardConditionKind.Str:
+                    result.push(macro $dataExpr.data[$index].match(arraytree.data.tree.al.AlTreeKind.Leaf(_)));
                     
-                case LislaToEntityGuardConditionKind.Arr:
-                    result.push(macro $dataExpr.data[$index].match(lisla.data.tree.al.AlTreeKind.Arr(_)));
+                case ArrayTreeToEntityGuardConditionKind.Arr:
+                    result.push(macro $dataExpr.data[$index].match(arraytree.data.tree.al.AlTreeKind.Arr(_)));
                     
-                case LislaToEntityGuardConditionKind.ArrOrConst(strings):
+                case ArrayTreeToEntityGuardConditionKind.ArrOrConst(strings):
                     addConst(strings);
-                    result.push(macro $dataExpr.data[$index].match(lisla.data.tree.al.AlTreeKind.Arr(_)));
+                    result.push(macro $dataExpr.data[$index].match(arraytree.data.tree.al.AlTreeKind.Arr(_)));
                     
-                case LislaToEntityGuardConditionKind.Never:
+                case ArrayTreeToEntityGuardConditionKind.Never:
                     result.push(macro false);
                     
-                case LislaToEntityGuardConditionKind.Always:
+                case ArrayTreeToEntityGuardConditionKind.Always:
             }
         }
         

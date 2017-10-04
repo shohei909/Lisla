@@ -1,7 +1,7 @@
-package lisla.idl.std.error;
-import lisla.error.core.InlineError;
-import lisla.error.core.InlineErrorHolder;
-import lisla.idl.exception.IdlException;
+package arraytree.idl.std.error;
+import arraytree.error.core.InlineError;
+import arraytree.error.core.InlineErrorHolder;
+import arraytree.idl.exception.IdlException;
 
 class GetConditionError implements InlineErrorHolder 
 {

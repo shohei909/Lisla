@@ -1,14 +1,14 @@
-package lisla.idl.generator.source;
+package arraytree.idl.generator.source;
 import haxe.ds.Option;
 import haxe.io.Path;
 import hxext.ds.Result;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.error.LoadIdlErrorKind;
-import lisla.idl.std.entity.idl.LocalModulePath;
-import lisla.idl.std.entity.idl.ModulePath;
-import lisla.idl.std.entity.idl.PackagePath;
-import lisla.project.FilePathFromProjectRoot;
-import lisla.project.ProjectRootDirectory;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.error.LoadIdlErrorKind;
+import arraytree.idl.std.entity.idl.LocalModulePath;
+import arraytree.idl.std.entity.idl.ModulePath;
+import arraytree.idl.std.entity.idl.PackagePath;
+import arraytree.project.FilePathFromProjectRoot;
+import arraytree.project.ProjectRootDirectory;
 
 #if sys
 import sys.FileSystem;
@@ -40,7 +40,7 @@ class IdlFileSourceReader implements IdlSourceReader
     {
         var localPath = Path.join(path.path);
         var dirPath = directory.concat(localPath);
-        var suffix = ".idl.lisla";
+        var suffix = ".idl.arraytree";
         var names = [];
         
         if (projectRoot.exists(dirPath) && projectRoot.isDirectory(dirPath))
@@ -97,7 +97,7 @@ class IdlFileSourceReader implements IdlSourceReader
     ):FilePathFromProjectRoot
     {
 		var localPath = Path.join(path.path);
-	    return directory.concat(localPath + ".idl.lisla");
+	    return directory.concat(localPath + ".idl.arraytree");
     }
 }
 

@@ -1,8 +1,8 @@
-package lisla.idl.generator.error;
-import lisla.error.core.BlockError;
-import lisla.error.core.ElementaryError;
-import lisla.error.core.FileError;
-import lisla.error.core.InlineError;
+package arraytree.idl.generator.error;
+import arraytree.error.core.BlockError;
+import arraytree.error.core.ElementaryError;
+import arraytree.error.core.FileError;
+import arraytree.error.core.InlineError;
 
 class TypeDefinitionResolutionError 
     implements FileError

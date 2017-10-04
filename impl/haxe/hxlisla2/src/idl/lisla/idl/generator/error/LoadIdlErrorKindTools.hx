@@ -1,10 +1,10 @@
-package lisla.idl.generator.error;
+package arraytree.idl.generator.error;
 import hxext.ds.Maybe;
-import lisla.core.LislaTools;
-import lisla.core.error.IInlineErrorSummary;
-import lisla.error.core.InlineErrorSummary;
-import lisla.data.meta.core.Metadata;
-import lisla.idl.lislatext2entity.error.LislaTextToEntityError;
+import arraytree.core.ArrayTreeTools;
+import arraytree.core.error.IInlineErrorSummary;
+import arraytree.error.core.InlineErrorSummary;
+import arraytree.data.meta.core.Metadata;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeTextToEntityError;
 
 class LoadIdlErrorKindTools 
 {
@@ -30,8 +30,8 @@ class LoadIdlErrorKindTools
             case LoadIdlErrorKind.LibraryVersionNotFound(name, version):
                 summary(version.metadata.upCast(), "Library '" + name + "' version '" + version.data + "' is not found");
                 
-			case LoadIdlErrorKind.LislaTextToEntity(error):
-				LislaTextToEntityError.getSummary(error).replaceKind(errorKind);
+			case LoadIdlErrorKind.ArrayTreeTextToEntity(error):
+				ArrayTreeTextToEntityError.getSummary(error).replaceKind(errorKind);
 				
 			case LoadIdlErrorKind.ModuleDuplicated(module, existingPath):
                 new InlineErrorSummary(
@@ -55,8 +55,8 @@ class LoadIdlErrorKindTools
 			case LoadIdlErrorKind.ModuleNotFound(path):
 				summary(path.metadata.upCast(), "Module " + path.toString() + " is not found");
                 
-            case LoadIdlErrorKind.InvalidTypeDependenceDescription(lisla):
-                summary(LislaTools.getTag(lisla).upCast(), "Invalid '" + LislaTools.toString(lisla) + "' is loop");
+            case LoadIdlErrorKind.InvalidTypeDependenceDescription(arraytree):
+                summary(ArrayTreeTools.getTag(arraytree).upCast(), "Invalid '" + ArrayTreeTools.toString(arraytree) + "' is loop");
                 
             case LoadIdlErrorKind.Validation(error):
                 IdlValidationErrorKindTools.getSummary(error).replaceKind(errorKind);

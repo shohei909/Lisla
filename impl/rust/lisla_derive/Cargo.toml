@@ -1,5 +1,5 @@
 [package]
-name = "lisla_derive"
+name = "arraytree_derive"
 version = "0.1.0"
 authors = ["shohei909 <909mmsphere@gmail.com>"]
 

@@ -1,8 +1,8 @@
-package lisla.idl.generator.error;
+package arraytree.idl.generator.error;
 import haxe.macro.Expr.Metadata;
-import lisla.error.core.BlockError;
-import lisla.error.core.FileError;
-import lisla.error.core.InlineError;
+import arraytree.error.core.BlockError;
+import arraytree.error.core.FileError;
+import arraytree.error.core.InlineError;
 
 enum LibraryResolutionErrorKind
 {

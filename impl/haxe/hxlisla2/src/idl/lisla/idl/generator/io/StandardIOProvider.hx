@@ -1,4 +1,4 @@
-package lisla.idl.generator.io;
+package arraytree.idl.generator.io;
 
 #if sys
 /**

@@ -1,4 +1,4 @@
-package lisla.idl.std.error;
+package arraytree.idl.std.error;
 
 class TypeSpecializeErrorKindTools
 {

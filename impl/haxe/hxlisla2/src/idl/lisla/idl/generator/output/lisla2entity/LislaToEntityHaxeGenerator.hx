@@ -1,20 +1,20 @@
-package lisla.idl.generator.output.lisla2entity;
+package arraytree.idl.generator.output.arraytree2entity;
 import haxe.macro.Expr.TypeDefinition;
 import hxext.ds.Result;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.output.HaxeConvertContext;
-import lisla.idl.generator.output.lisla2entity.build.LislaToEntityHaxeTypeBuilder;
-import lisla.idl.generator.output.lisla2entity.path.HaxeLislaToEntityTypePathPair;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.output.HaxeConvertContext;
+import arraytree.idl.generator.output.arraytree2entity.build.ArrayTreeToEntityHaxeTypeBuilder;
+import arraytree.idl.generator.output.arraytree2entity.path.HaxeArrayTreeToEntityTypePathPair;
 using hxext.ds.ResultTools;
 
-class LislaToEntityHaxeGenerator
+class ArrayTreeToEntityHaxeGenerator
 {
 	public static function generateTypes(context:HaxeGenerateConfig):Result<Array<TypeDefinition>, Array<LoadIdlError>>
 	{
         return switch (context.resolveTargets())
 		{
 			case Result.Ok(data):
-                var config = context.lislaToEntityOutputConfig;
+                var config = context.arraytreeToEntityOutputConfig;
                 
                 var convertContext = new HaxeConvertContext(
                     data.library, 
@@ -28,12 +28,12 @@ class LislaToEntityHaxeGenerator
                     for (info in data.infomations)
                     {
                         
-                        var pathPair = new HaxeLislaToEntityTypePathPair(
+                        var pathPair = new HaxeArrayTreeToEntityTypePathPair(
                             info,
-                            config.toHaxeLislaToEntityPath(info.typePath)
+                            config.toHaxeArrayTreeToEntityPath(info.typePath)
                         );
                         
-                        types.push(LislaToEntityHaxeTypeBuilder.convertType(pathPair, convertContext));
+                        types.push(ArrayTreeToEntityHaxeTypeBuilder.convertType(pathPair, convertContext));
                     }
                 }
                 Result.Ok(types);

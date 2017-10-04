@@ -1,11 +1,11 @@
-package lisla.idl.library.error;
+package arraytree.idl.library.error;
 import haxe.ds.Option;
-import lisla.error.core.BlockError;
-import lisla.idl.lislatext2entity.error.LislaTextToEntityError;
-import lisla.project.FilePathFromProjectRoot;
-import lisla.data.meta.position.SourceMap;
-import lisla.error.core.FileError;
-import lisla.project.ProjectRootAndFilePath;
+import arraytree.error.core.BlockError;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeTextToEntityError;
+import arraytree.project.FilePathFromProjectRoot;
+import arraytree.data.meta.position.SourceMap;
+import arraytree.error.core.FileError;
+import arraytree.project.ProjectRootAndFilePath;
 
 class LibraryReadModuleError 
     implements FileError
@@ -28,7 +28,7 @@ class LibraryReadModuleError
     {
         return switch (kind)
         {
-            case LibraryReadModuleErrorKind.LislaTextToEntity(error):
+            case LibraryReadModuleErrorKind.ArrayTreeTextToEntity(error):
                 error;
                 
             case LibraryReadModuleErrorKind.ModuleResolution(error):
@@ -41,10 +41,10 @@ class LibraryReadModuleError
         return this;
     }
     
-    public static function ofLislaTextToEntity(error:LislaTextToEntityError, filePath:ProjectRootAndFilePath) 
+    public static function ofArrayTreeTextToEntity(error:ArrayTreeTextToEntityError, filePath:ProjectRootAndFilePath) 
     {
         return new LibraryReadModuleError(
-            LibraryReadModuleErrorKind.LislaTextToEntity(error),
+            LibraryReadModuleErrorKind.ArrayTreeTextToEntity(error),
             filePath
         );
     }

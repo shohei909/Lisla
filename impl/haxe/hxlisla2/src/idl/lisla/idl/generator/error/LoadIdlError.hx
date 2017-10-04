@@ -1,12 +1,12 @@
-package lisla.idl.generator.error;
+package arraytree.idl.generator.error;
 
 import haxe.ds.Option;
-import lisla.error.core.FileError;
-import lisla.error.core.FileErrorHolder;
-import lisla.idl.lislatext2entity.error.LislaTextToEntityError;
-import lisla.idl.std.entity.util.file.FilePath;
-import lisla.project.FilePathFromProjectRoot;
-import lisla.project.FileSourceRange;
+import arraytree.error.core.FileError;
+import arraytree.error.core.FileErrorHolder;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeTextToEntityError;
+import arraytree.idl.std.entity.util.file.FilePath;
+import arraytree.project.FilePathFromProjectRoot;
+import arraytree.project.FileSourceRange;
 
 class LoadIdlError implements FileErrorHolder
 {

@@ -1,12 +1,12 @@
-package lisla.idl.std.tools.idl;
+package arraytree.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Maybe;
-import lisla.idl.exception.IdlException;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.entity.idl.TypeReferenceDependenceKind;
-import lisla.idl.std.entity.idl.TypeReferenceParameter;
-import lisla.idl.std.entity.idl.TypeReferenceParameterKind;
+import arraytree.idl.exception.IdlException;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.entity.idl.TypeReferenceDependenceKind;
+import arraytree.idl.std.entity.idl.TypeReferenceParameter;
+import arraytree.idl.std.entity.idl.TypeReferenceParameterKind;
 
 class TypeReferenceParameterTools 
 {

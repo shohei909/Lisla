@@ -1,17 +1,17 @@
-package lisla.idl.std.tools.idl;
+package arraytree.idl.std.tools.idl;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardCondition;
-import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
-import lisla.idl.generator.source.IdlSourceProvider;
-import lisla.idl.std.entity.idl.ArgumentName;
-import lisla.idl.std.entity.idl.FollowedTypeDefinition;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.error.ArgumentSuffixErrorKind;
-import lisla.idl.std.error.GetConditionError;
-import lisla.idl.std.error.GetConditionErrorKind;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.FirstElementCondition;
+import arraytree.idl.generator.source.IdlSourceProvider;
+import arraytree.idl.std.entity.idl.ArgumentName;
+import arraytree.idl.std.entity.idl.FollowedTypeDefinition;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.error.ArgumentSuffixErrorKind;
+import arraytree.idl.std.error.GetConditionError;
+import arraytree.idl.std.error.GetConditionErrorKind;
 
 class FollowedTypeDefinitionTools 
 {
@@ -19,9 +19,9 @@ class FollowedTypeDefinitionTools
         type:FollowedTypeDefinition, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>
-    ):Result<Array<LislaToEntityCaseCondition>, GetConditionError>
+    ):Result<Array<ArrayTreeToEntityCaseCondition>, GetConditionError>
     {
-        var result:Array<LislaToEntityCaseCondition> = [];
+        var result:Array<ArrayTreeToEntityCaseCondition> = [];
         return switch (_getConditions(type, source, definitionParameters, result, []))
         {
             case Option.None:
@@ -36,17 +36,17 @@ class FollowedTypeDefinitionTools
         type:FollowedTypeDefinition, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>, 
-        result:Array<LislaToEntityCaseCondition>,
+        result:Array<ArrayTreeToEntityCaseCondition>,
         enumInlineTypeHistory:Array<String>
     ):Option<GetConditionError>
     {   
         switch (type)
         {
             case FollowedTypeDefinition.Arr(_):
-                result.push(LislaToEntityCaseCondition.Arr(LislaToEntityGuardCondition.any()));
+                result.push(ArrayTreeToEntityCaseCondition.Arr(ArrayTreeToEntityGuardCondition.any()));
                 
             case FollowedTypeDefinition.Str:
-                result.push(LislaToEntityCaseCondition.Str);
+                result.push(ArrayTreeToEntityCaseCondition.Str);
                 
             case FollowedTypeDefinition.Tuple(elements):
                 switch (TupleTools.getCondition(elements, source, definitionParameters))
@@ -120,7 +120,7 @@ class FollowedTypeDefinitionTools
         definitionParameters:Array<TypeName>,
         tupleInlineTypeHistory:Array<String>,
         enumInlineTypeHistory:Array<String>
-    ):Result<Array<LislaToEntityCaseCondition>, GetConditionError>
+    ):Result<Array<ArrayTreeToEntityCaseCondition>, GetConditionError>
     {
         return switch (getFirstElementCondition(type, argumentName, source, definitionParameters, tupleInlineTypeHistory, enumInlineTypeHistory))
         {

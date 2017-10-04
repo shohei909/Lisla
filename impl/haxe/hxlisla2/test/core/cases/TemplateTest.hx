@@ -2,12 +2,12 @@ package cases;
 import haxe.Json;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.data.meta.position.SourceMap;
-import lisla.data.tree.array.ArrayTreeKind;
-import lisla.parse.Parser;
-import lisla.project.ProjectRootDirectory;
+import arraytree.data.meta.position.SourceMap;
+import arraytree.data.tree.array.ArrayTreeKind;
+import arraytree.parse.Parser;
+import arraytree.project.ProjectRootDirectory;
 
-class TemplateTest extends LislaTestCase
+class TemplateTest extends ArrayTreeTestCase
 {
     private var rootDirectory:ProjectRootDirectory;
     
@@ -19,7 +19,7 @@ class TemplateTest extends LislaTestCase
 
 	public function test():Void
 	{
-		for (filePath in rootDirectory.searchFiles(TestCore.TEMPLATE_DIRECTORY, ".lisla"))
+		for (filePath in rootDirectory.searchFiles(TestCore.TEMPLATE_DIRECTORY, ".arraytree"))
 		{
             var content = rootDirectory.getContent(filePath);
             var pair = rootDirectory.makePair(filePath);
@@ -80,7 +80,7 @@ class TemplateTest extends LislaTestCase
                     }
 
                 case _:
-                    fail("test case data must be [lisla, valid cases, invalid cases]").label(filePath);
+                    fail("test case data must be [arraytree, valid cases, invalid cases]").label(filePath);
             }
             */
         }

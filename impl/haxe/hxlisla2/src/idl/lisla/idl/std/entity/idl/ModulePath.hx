@@ -1,10 +1,10 @@
-package lisla.idl.std.entity.idl;
+package arraytree.idl.std.entity.idl;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.meta.core.StringWithMetadata;
-import lisla.data.meta.core.Metadata;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
-import lisla.idl.std.entity.idl.LibraryName;
+import arraytree.data.meta.core.StringWithMetadata;
+import arraytree.data.meta.core.Metadata;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
+import arraytree.idl.std.entity.idl.LibraryName;
 
 class ModulePath extends LocalModulePath
 {
@@ -43,8 +43,8 @@ class ModulePath extends LocalModulePath
         );
     }
     
-	@:lislaToEntity
-	public static function lislaToEntity(string:StringWithMetadata):Result<ModulePath, LislaToEntityErrorKind>
+	@:arraytreeToEntity
+	public static function arraytreeToEntity(string:StringWithMetadata):Result<ModulePath, ArrayTreeToEntityErrorKind>
 	{
 		return switch (create(string.data, string.metadata))
 		{
@@ -52,7 +52,7 @@ class ModulePath extends LocalModulePath
 				Result.Ok(data);
 				
 			case Result.Error(err):
-				Result.Error(LislaToEntityErrorKind.Fatal(err));
+				Result.Error(ArrayTreeToEntityErrorKind.Fatal(err));
 		}
 	}
 	

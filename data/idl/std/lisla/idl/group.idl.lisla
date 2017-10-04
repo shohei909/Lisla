@@ -1,9 +1,9 @@
-(package lisla.idl)
-(import lisla.idl)
+(package arraytree.idl)
+(import arraytree.idl)
 
 (tuple TypeGroupFilter
     (from TypeGroupPath) (to TypeGroupPath)
 )
 (newtype TypeGroupPath String)
 
-;; 'Type for matching Lisla IDL Data'
+;; 'Type for matching ArrayTree IDL Data'

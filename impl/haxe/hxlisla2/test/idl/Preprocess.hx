@@ -1,10 +1,10 @@
 import haxe.io.Path;
 import hxext.ds.Result;
-import lisla.idl.generator.io.StandardIoProvider;
-import lisla.idl.generator.output.HaxeGenerateConfigFactory;
-import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
-import lisla.project.LislaProjectSystem;
-import lisla.project.error.HxlislaErrorKind;
+import arraytree.idl.generator.io.StandardIoProvider;
+import arraytree.idl.generator.output.HaxeGenerateConfigFactory;
+import arraytree.idl.generator.output.error.CompileIdlToHaxeErrorKind;
+import arraytree.project.ArrayTreeProjectSystem;
+import arraytree.project.error.HxarraytreeErrorKind;
 import sys.FileSystem;
 using hxext.ds.ResultTools;
 
@@ -12,43 +12,43 @@ class Preprocess
 {
     public static function main():Void
     {
-        remove("migration/lisla");
+        remove("migration/arraytree");
         
         // new
-        var lislaProject = switch (LislaProjectSystem.getCurrentProject())
+        var arraytreeProject = switch (ArrayTreeProjectSystem.getCurrentProject())
         {
-            case Result.Ok(lislaProject):
-                lislaProject;
+            case Result.Ok(arraytreeProject):
+                arraytreeProject;
                 
             case Result.Error(errors):
-                outputErrorAndClose(errors, HxlislaErrorKind.LoadProject);
+                outputErrorAndClose(errors, HxarraytreeErrorKind.LoadProject);
                 return;
         }
         
-        lislaProject.compileIdlToHaxe(
-            "lisla/hxlisla/lisla.hxgen.lisla", 
+        arraytreeProject.compileIdlToHaxe(
+            "arraytree/hxarraytree/arraytree.hxgen.arraytree", 
             "migration",
-            new LislaHaxeGenerateConfigFactory().create
+            new ArrayTreeHaxeGenerateConfigFactory().create
         ).iter(outputCompileIdlToHaxeErrorAndClose);
         
-        lislaProject.compileIdlToHaxe(
-            "lisla/hxlisla/hxlisla.hxgen.lisla", 
+        arraytreeProject.compileIdlToHaxe(
+            "arraytree/hxarraytree/hxarraytree.hxgen.arraytree", 
             "migration",
-            new HxlislaHaxeGenerateConfigFactory().create
+            new HxarraytreeHaxeGenerateConfigFactory().create
         ).iter(outputCompileIdlToHaxeErrorAndClose);
     }
     
     private static function outputCompileIdlToHaxeErrorAndClose(errors:Array<CompileIdlToHaxeErrorKind>):Void
     {
-        outputErrorAndClose(errors, HxlislaErrorKind.CompileIdlToHaxe);
+        outputErrorAndClose(errors, HxarraytreeErrorKind.CompileIdlToHaxe);
     }
     
-    private inline static function outputErrorAndClose<Kind>(errors:Array<Kind>, func:Kind->HxlislaErrorKind):Void
+    private inline static function outputErrorAndClose<Kind>(errors:Array<Kind>, func:Kind->HxarraytreeErrorKind):Void
     {
         var io = new StandardIoProvider();
         for (error in errors)
         {
-            var summary = HxlislaErrorKindTools.getSummary(func(error));
+            var summary = HxarraytreeErrorKindTools.getSummary(func(error));
             io.printErrorLine(summary.toString());
         }
         
@@ -76,10 +76,10 @@ class Preprocess
 	} 
 }
 
-private class LislaHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
+private class ArrayTreeHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
 {
 }
 
-private class HxlislaHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
+private class HxarraytreeHaxeGenerateConfigFactory extends HaxeGenerateConfigFactory
 {
 }

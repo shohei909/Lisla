@@ -1,13 +1,13 @@
-package lisla.idl.std.entity.idl.group;
+package arraytree.idl.std.entity.idl.group;
 import haxe.ds.Option;
-import lisla.data.meta.core.StringWithMetadata;
+import arraytree.data.meta.core.StringWithMetadata;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.meta.core.Metadata;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
-import lisla.idl.std.entity.idl.PackagePath;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypePath;
+import arraytree.data.meta.core.Metadata;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
+import arraytree.idl.std.entity.idl.PackagePath;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypePath;
 
 class TypeGroupPath
 {
@@ -49,8 +49,8 @@ class TypeGroupPath
 		}
 	}
 	
-	@:lislaToEntity
-	public static function lislaToEntity(string:StringWithMetadata):Result<TypeGroupPath, LislaToEntityErrorKind>
+	@:arraytreeToEntity
+	public static function arraytreeToEntity(string:StringWithMetadata):Result<TypeGroupPath, ArrayTreeToEntityErrorKind>
 	{
 		return switch (create(string.data, string.metadata))
 		{
@@ -58,7 +58,7 @@ class TypeGroupPath
 				Result.Ok(data);
 				
 			case Result.Error(err):
-				Result.Error(LislaToEntityErrorKind.Fatal(err));
+				Result.Error(ArrayTreeToEntityErrorKind.Fatal(err));
 		}
 	}
 	

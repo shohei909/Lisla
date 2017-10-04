@@ -1,7 +1,7 @@
 # バイナリシリアライズ形式「Bisla」
 
-Bislaは、Lisla DSLと互換性のあるバイナリフォーマットです。
+Bislaは、ArrayTree DSLと互換性のあるバイナリフォーマットです。
 
-Lisla IDLによって記述された型データを元にLislaをバイナリ化することができます。
+ArrayTree IDLによって記述された型データを元にLislaをバイナリ化することができます。
 
 

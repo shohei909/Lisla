@@ -1,17 +1,17 @@
-# Lisla 概要
+# ArrayTree 概要
 
 ## Lislaについて
 
 Lislaは、Lispなどに使われるS式に似た文法を持つデータ記述言語です。
 
-[Lisla言語仕様](lisla/index.md)
+[Lisla言語仕様](arraytree/index.md)
 
 
-## Lisla DSL ツールキット
+## ArrayTree DSL ツールキット
 
-Lisla DSL ツールキットは、LislaベースのDSLを簡単に作成するためのツール群です。
+ArrayTree DSL ツールキットは、LislaベースのDSLを簡単に作成するためのツール群です。
 
-Lisla DSL ツールキットでは、IDLを記述するだけでさまざま機能を備えたDSLを手に入れることができるようになります。
+ArrayTree DSL ツールキットでは、IDLを記述するだけでさまざま機能を備えたDSLを手に入れることができるようになります。
 
 * [ ] エディタによる支援
     * [ ] 入力補完
@@ -26,6 +26,6 @@ Lisla DSL ツールキットでは、IDLを記述するだけでさまざま機�
 
 **※チェックのないものは、未実装です**
 
-### Lisla IDL(インターフェース記述言語)
+### ArrayTree IDL(インターフェース記述言語)
 
-[Lisla IDL仕様](lisla_idl/index.md)
+[ArrayTree IDL仕様](arraytree_idl/index.md)

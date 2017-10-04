@@ -1,6 +1,6 @@
-package lisla.idl.generator.output.entity;
-import lisla.idl.generator.output.haxe.HaxeTypePath;
-import lisla.idl.std.entity.idl.TypePath;
+package arraytree.idl.generator.output.entity;
+import arraytree.idl.generator.output.haxe.HaxeTypePath;
+import arraytree.idl.std.entity.idl.TypePath;
 
 class EntityHaxeTypePath extends HaxeTypePath
 {

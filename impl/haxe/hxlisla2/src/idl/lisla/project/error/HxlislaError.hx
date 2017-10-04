@@ -1,13 +1,13 @@
-package lisla.project.error;
-import lisla.error.core.InlineErrorSummary;
-import lisla.error.core.LislaError;
-import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKind;
-import lisla.idl.generator.output.error.CompileIdlToHaxeErrorKindTools;
+package arraytree.project.error;
+import arraytree.error.core.InlineErrorSummary;
+import arraytree.error.core.ArrayTreeError;
+import arraytree.idl.generator.output.error.CompileIdlToHaxeErrorKind;
+import arraytree.idl.generator.output.error.CompileIdlToHaxeErrorKindTools;
 
-class HxlislaError implements LislaError
+class HxarraytreeError implements ArrayTreeError
 {
-    public var kind:HxlislaErrorKind;
-    public function new(kind:HxlislaErrorKind)
+    public var kind:HxarraytreeErrorKind;
+    public function new(kind:HxarraytreeErrorKind)
     {
         this.kind = kind;
     }
@@ -16,10 +16,10 @@ class HxlislaError implements LislaError
     {
         return switch (kind)
         {
-            case HxlislaErrorKind.LoadProject(error):
+            case HxarraytreeErrorKind.LoadProject(error):
                 error.getSummary();
                 
-            case HxlislaErrorKind.CompileIdlToHaxe(error):
+            case HxarraytreeErrorKind.CompileIdlToHaxe(error):
                 error.getSummary();
         }
     }

@@ -1,43 +1,43 @@
-package lisla.idl.library;
+package arraytree.idl.library;
 
 import haxe.ds.Option;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.meta.core.Metadata;
-import lisla.data.meta.position.Range;
-import lisla.data.meta.position.SourceMap;
-import lisla.data.tree.al.AlTreeBlock;
-import lisla.idl.generator.error.IdlLibraryFactorError;
-import lisla.idl.generator.error.IdlLibraryFactorErrorKind;
-import lisla.idl.generator.error.IdlLibraryFactorErrorKind;
-import lisla.idl.generator.error.LibraryResolutionError;
-import lisla.idl.generator.error.LibraryResolutionErrorKind;
-import lisla.idl.generator.error.LibraryFindError;
-import lisla.idl.generator.error.LibraryFindErrorKind;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.error.LoadIdlErrorKind;
-import lisla.idl.generator.error.ModuleNotFoundError;
-import lisla.idl.generator.source.IdlSourceReader;
-import lisla.idl.generator.source.file.LoadedModule;
-import lisla.idl.generator.source.validate.ValidType;
-import lisla.idl.library.PackageElement;
-import lisla.idl.library.error.LibraryReadModuleError;
-import lisla.idl.library.error.LibraryReadModuleErrorKind;
-import lisla.idl.library.error.ModuleResolutionError;
-import lisla.idl.library.error.ModuleResolutionErrorKind;
-import lisla.idl.lislatext2entity.LislaTextToEntityRunner;
-import lisla.idl.std.entity.idl.LibraryName;
-import lisla.idl.std.entity.idl.ModulePath;
-import lisla.idl.std.entity.idl.PackagePath;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.library.LibraryConfig;
-import lisla.idl.std.entity.util.file.FilePath;
-import lisla.idl.std.lisla2entity.idl.IdlLislaToEntity;
-import lisla.project.FileSourceMap;
-import lisla.project.FilePathFromProjectRoot;
-import lisla.project.FileSourceRange;
-import lisla.project.ProjectRootAndFilePath;
-import lisla.project.ProjectRootDirectory;
+import arraytree.data.meta.core.Metadata;
+import arraytree.data.meta.position.Range;
+import arraytree.data.meta.position.SourceMap;
+import arraytree.data.tree.al.AlTreeBlock;
+import arraytree.idl.generator.error.IdlLibraryFactorError;
+import arraytree.idl.generator.error.IdlLibraryFactorErrorKind;
+import arraytree.idl.generator.error.IdlLibraryFactorErrorKind;
+import arraytree.idl.generator.error.LibraryResolutionError;
+import arraytree.idl.generator.error.LibraryResolutionErrorKind;
+import arraytree.idl.generator.error.LibraryFindError;
+import arraytree.idl.generator.error.LibraryFindErrorKind;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.error.LoadIdlErrorKind;
+import arraytree.idl.generator.error.ModuleNotFoundError;
+import arraytree.idl.generator.source.IdlSourceReader;
+import arraytree.idl.generator.source.file.LoadedModule;
+import arraytree.idl.generator.source.validate.ValidType;
+import arraytree.idl.library.PackageElement;
+import arraytree.idl.library.error.LibraryReadModuleError;
+import arraytree.idl.library.error.LibraryReadModuleErrorKind;
+import arraytree.idl.library.error.ModuleResolutionError;
+import arraytree.idl.library.error.ModuleResolutionErrorKind;
+import arraytree.idl.arraytreetext2entity.ArrayTreeTextToEntityRunner;
+import arraytree.idl.std.entity.idl.LibraryName;
+import arraytree.idl.std.entity.idl.ModulePath;
+import arraytree.idl.std.entity.idl.PackagePath;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.library.LibraryConfig;
+import arraytree.idl.std.entity.util.file.FilePath;
+import arraytree.idl.std.arraytree2entity.idl.IdlArrayTreeToEntity;
+import arraytree.project.FileSourceMap;
+import arraytree.project.FilePathFromProjectRoot;
+import arraytree.project.FileSourceRange;
+import arraytree.project.ProjectRootAndFilePath;
+import arraytree.project.ProjectRootDirectory;
 
 class Library extends PackageElement implements LibraryResolver
 {
@@ -175,11 +175,11 @@ class Library extends PackageElement implements LibraryResolver
                 );
         }
         
-		return switch (LislaTextToEntityRunner.run(IdlLislaToEntity, content, null, null))
+		return switch (ArrayTreeTextToEntityRunner.run(IdlArrayTreeToEntity, content, null, null))
         {
             case Result.Error(errors):
                 Result.Error(
-                    [for (error in errors) LibraryReadModuleError.ofLislaTextToEntity(error, rootAndFilePath)]
+                    [for (error in errors) LibraryReadModuleError.ofArrayTreeTextToEntity(error, rootAndFilePath)]
                 );
                 
             case Result.Ok(idl):

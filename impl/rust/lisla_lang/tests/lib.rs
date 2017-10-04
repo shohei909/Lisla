@@ -2,18 +2,18 @@ extern crate serde;
 extern crate serde_json;
 
 #[macro_use]
-extern crate lisla_lang;
+extern crate arraytree_lang;
 
 pub mod macros;
 pub mod parse;
 
 use serde_json::Value;
-use lisla_lang::tree::*;
-use lisla_lang::tag::*;
-use lisla_lang::leaf::*;
+use arraytree_lang::tree::*;
+use arraytree_lang::tag::*;
+use arraytree_lang::leaf::*;
 
-pub fn equals(lisla: &WithTag<ArrayTree<StringLeaf>>, json: &Value, path: &str, stack: &mut Vec<usize>) {
-    match (&lisla.data, json) {
+pub fn equals(arraytree: &WithTag<ArrayTree<StringLeaf>>, json: &Value, path: &str, stack: &mut Vec<usize>) {
+    match (&arraytree.data, json) {
         (&ArrayTree::Array(ref s), &Value::Array(ref j)) => {
             assert!(s.vec.len() == j.len(),
                     "unmatched array length({}:{:?}): {:?} {:?}",
@@ -39,7 +39,7 @@ pub fn equals(lisla: &WithTag<ArrayTree<StringLeaf>>, json: &Value, path: &str, 
         }
 
         (_, _) => {
-            panic!("unmatched({}:{:?}): {:?} {:?}", path, stack, lisla, json);
+            panic!("unmatched({}:{:?}): {:?} {:?}", path, stack, arraytree, json);
         }
     }
 }

@@ -3,5 +3,5 @@
 ## Parse with various options
 
 ## Lisence
-liblisla is unlicensed.
+libarraytree is unlicensed.
 

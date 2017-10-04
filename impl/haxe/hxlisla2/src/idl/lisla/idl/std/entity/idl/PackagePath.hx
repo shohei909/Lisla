@@ -1,9 +1,9 @@
-package lisla.idl.std.entity.idl;
+package arraytree.idl.std.entity.idl;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.meta.core.StringWithMetadata;
-import lisla.data.meta.core.Metadata;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import arraytree.data.meta.core.StringWithMetadata;
+import arraytree.data.meta.core.Metadata;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
 
 class PackagePath
 {
@@ -44,8 +44,8 @@ class PackagePath
 		}
 	}
 	
-	@:lislaToEntity
-	public static function lislaToEntity(string:StringWithMetadata):Result<PackagePath, LislaToEntityErrorKind>
+	@:arraytreeToEntity
+	public static function arraytreeToEntity(string:StringWithMetadata):Result<PackagePath, ArrayTreeToEntityErrorKind>
 	{
 		return switch (create(string.data, string.metadata))
 		{
@@ -53,7 +53,7 @@ class PackagePath
 				Result.Ok(data);
 				
 			case Result.Error(err):
-				Result.Error(LislaToEntityErrorKind.Fatal(err));
+				Result.Error(ArrayTreeToEntityErrorKind.Fatal(err));
 		}
 	}
 	

@@ -1,8 +1,8 @@
-package lisla.idl.generator.data;
+package arraytree.idl.generator.data;
 import haxe.ds.Option;
 import hxext.ds.Maybe;
-import lisla.idl.generator.data.EntityOutputConfig;
-import lisla.idl.generator.data.LislaToEntityOutputConfig;
+import arraytree.idl.generator.data.EntityOutputConfig;
+import arraytree.idl.generator.data.ArrayTreeToEntityOutputConfig;
 
 class HaxePrintConfig
 {

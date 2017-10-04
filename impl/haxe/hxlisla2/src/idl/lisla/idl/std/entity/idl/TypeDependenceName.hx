@@ -1,10 +1,10 @@
-package lisla.idl.std.entity.idl;
-import lisla.data.meta.core.StringWithMetadata;
+package arraytree.idl.std.entity.idl;
+import arraytree.data.meta.core.StringWithMetadata;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.string.IdentifierTools;
-import lisla.data.meta.core.Metadata;
-import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
+import arraytree.string.IdentifierTools;
+import arraytree.data.meta.core.Metadata;
+import arraytree.idl.arraytree2entity.error.ArrayTreeToEntityErrorKind;
 using hxext.ds.ResultTools;
 
 @:forward(metadata, data)
@@ -19,8 +19,8 @@ abstract TypeDependenceName(StringWithMetadata)
 		this = string;
 	}
 	
-	@:lislaToEntity
-	public static function lislaToEntity(string:StringWithMetadata):Result<TypeDependenceName, LislaToEntityErrorKind>
+	@:arraytreeToEntity
+	public static function arraytreeToEntity(string:StringWithMetadata):Result<TypeDependenceName, ArrayTreeToEntityErrorKind>
 	{
 		return try
 		{
@@ -28,7 +28,7 @@ abstract TypeDependenceName(StringWithMetadata)
 		}
 		catch (err:String)
 		{
-			Result.Error(LislaToEntityErrorKind.Fatal(err));
+			Result.Error(ArrayTreeToEntityErrorKind.Fatal(err));
 		}
 	}
 	

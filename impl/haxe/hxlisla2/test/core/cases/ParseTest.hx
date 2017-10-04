@@ -2,15 +2,15 @@ package cases;
 import haxe.Json;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.data.meta.position.SourceMap;
-import lisla.data.tree.array.ArrayTreeKind;
-import lisla.parse.ParseState;
-import lisla.parse.Parser;
-import lisla.project.Project;
-import lisla.project.ProjectRootDirectory;
+import arraytree.data.meta.position.SourceMap;
+import arraytree.data.tree.array.ArrayTreeKind;
+import arraytree.parse.ParseState;
+import arraytree.parse.Parser;
+import arraytree.project.Project;
+import arraytree.project.ProjectRootDirectory;
 
 
-class ParseTest extends LislaTestCase
+class ParseTest extends ArrayTreeTestCase
 {
     private var rootDirectory:ProjectRootDirectory;
     
@@ -22,7 +22,7 @@ class ParseTest extends LislaTestCase
 
 	public function testSuccess():Void
 	{
-		for (filePath in rootDirectory.searchFiles(TestCore.BASIC_DIRECTORY, ".lisla"))
+		for (filePath in rootDirectory.searchFiles(TestCore.BASIC_DIRECTORY, ".arraytree"))
 		{
             var project = new Project(rootDirectory);            
             var caseDocument = switch (project.parse(filePath))
@@ -62,7 +62,7 @@ class ParseTest extends LislaTestCase
                     assertArray(arrayTreeDocument.data, Json.parse(json), filePath);
                     
                 case _:
-                    fail("test case data must be [lisla, json]").label(filePath);
+                    fail("test case data must be [arraytree, json]").label(filePath);
             }
 		}
 	}

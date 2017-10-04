@@ -1,6 +1,6 @@
-package lisla.idl.std.error;
-import lisla.idl.std.entity.idl.ArgumentKind;
-import lisla.idl.std.entity.idl.TypeReference;
+package arraytree.idl.std.error;
+import arraytree.idl.std.entity.idl.ArgumentKind;
+import arraytree.idl.std.entity.idl.TypeReference;
 
 enum ArgumentSuffixErrorKind 
 {

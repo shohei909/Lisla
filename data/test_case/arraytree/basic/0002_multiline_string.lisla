@@ -1,0 +1,19 @@
+; ArrayTree
+''''''''
+"
+Multi
+line
+"
+    '''''    
+    ArrayTree
+    
+     is
+
+      awesome.
+    '''''
+''''''''
+
+; Json
+''''''''
+["Multi\nline", "ArrayTree\n\n is\n\n  awesome."]
+''''''''

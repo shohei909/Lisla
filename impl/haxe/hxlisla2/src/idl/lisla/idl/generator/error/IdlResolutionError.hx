@@ -1,6 +1,6 @@
-package lisla.idl.generator.error;
-import lisla.error.core.FileError;
-import lisla.error.core.FileErrorHolder;
+package arraytree.idl.generator.error;
+import arraytree.error.core.FileError;
+import arraytree.error.core.FileErrorHolder;
 
 class IdlResolutionError implements FileErrorHolder
 {

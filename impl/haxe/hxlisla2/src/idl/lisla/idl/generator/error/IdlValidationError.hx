@@ -1,11 +1,11 @@
-package lisla.idl.generator.error;
-import lisla.error.core.InlineError;
-import lisla.error.core.InlineErrorHolder;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.std.error.GetConditionError;
-import lisla.idl.std.error.GetConditionErrorKind;
-import lisla.idl.std.error.TypeFollowError;
-import lisla.idl.std.error.TypeFollowErrorKind;
+package arraytree.idl.generator.error;
+import arraytree.error.core.InlineError;
+import arraytree.error.core.InlineErrorHolder;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.error.GetConditionError;
+import arraytree.idl.std.error.GetConditionErrorKind;
+import arraytree.idl.std.error.TypeFollowError;
+import arraytree.idl.std.error.TypeFollowErrorKind;
 
 class IdlValidationError implements InlineErrorHolder
 {

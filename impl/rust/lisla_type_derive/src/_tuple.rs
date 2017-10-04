@@ -13,7 +13,7 @@ pub fn impl_tuple(ast: &DeriveInput) -> Tokens {
                 for attr in &field.attrs {
                     if AttrStyle::Outer == attr.style {
                         match attr.value {
-                            MetaItem::List(ref ident, ref items) if (ident == "lisla") => {
+                            MetaItem::List(ref ident, ref items) if (ident == "arraytree") => {
                                 for item in items {
                                     match item {
                                         &NestedMetaItem::MetaItem(MetaItem::NameValue(ref ident, ref value)) if (ident == "label") => {
@@ -40,7 +40,7 @@ pub fn impl_tuple(ast: &DeriveInput) -> Tokens {
                     ShiftKind::Shift => {
                         parameters.append(
                             quote! {
-                                #ident : ::lisla_lang::from::FromArrayTree::from_array_tree(
+                                #ident : ::arraytree_lang::from::FromArrayTree::from_array_tree(
                                     config,
                                     array.shift(config, &tag, errors)?,
                                     (#children),
@@ -59,7 +59,7 @@ pub fn impl_tuple(ast: &DeriveInput) -> Tokens {
                             quote! {
                                 #ident : {
                                     let data = #token;
-                                    ::lisla_lang::from::FromArrayTree::from_array_tree_array(
+                                    ::arraytree_lang::from::FromArrayTree::from_array_tree_array(
                                         config,
                                         data,
                                         tag.clone(),
@@ -78,21 +78,21 @@ pub fn impl_tuple(ast: &DeriveInput) -> Tokens {
     }
     quote! {
         #[allow(unused_variables)]
-        impl ::lisla_lang::from::FromArrayTree for #name {
+        impl ::arraytree_lang::from::FromArrayTree for #name {
             type Parameters = ();
             fn from_array_tree_array(
-                config:& ::lisla_lang::from::FromArrayTreeConfig,
-                mut array: ::lisla_lang::tree::ArrayBranch<::lisla_lang::tag::WithTag<::lisla_lang::tree::ArrayTree<::lisla_lang::leaf::StringLeaf>>>,
-                tag: ::lisla_lang::tag::Tag,
+                config:& ::arraytree_lang::from::FromArrayTreeConfig,
+                mut array: ::arraytree_lang::tree::ArrayBranch<::arraytree_lang::tag::WithTag<::arraytree_lang::tree::ArrayTree<::arraytree_lang::leaf::StringLeaf>>>,
+                tag: ::arraytree_lang::tag::Tag,
                 parameters: Self::Parameters,
                 errors:&mut ErrorWrite<FromArrayTreeError>
-            ) -> Result<::lisla_lang::tag::WithTag<Self>, ()> {
+            ) -> Result<::arraytree_lang::tag::WithTag<Self>, ()> {
                 let data = #name {
                     #parameters
                 };
                 array.finish(config, &tag, errors)?;
                 Result::Ok(
-                    ::lisla_lang::tag::WithTag {
+                    ::arraytree_lang::tag::WithTag {
                         data,
                         tag,
                     }  
@@ -101,11 +101,11 @@ pub fn impl_tuple(ast: &DeriveInput) -> Tokens {
 
             #[allow(unused_variables)]
             fn from_array_tree_string(
-                config:& ::lisla_lang::from::FromArrayTreeConfig,
-                leaf: ::lisla_lang::leaf::StringLeaf,
-                tag: ::lisla_lang::tag::Tag,
+                config:& ::arraytree_lang::from::FromArrayTreeConfig,
+                leaf: ::arraytree_lang::leaf::StringLeaf,
+                tag: ::arraytree_lang::tag::Tag,
                 parameters: Self::Parameters,
-                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
+                errors:&mut ::arraytree_lang::error::ErrorWrite<::arraytree_lang::from::error::FromArrayTreeError>
             ) -> Result<WithTag<Self>, ()> {
                 errors.push(
                     FromArrayTreeError::from(
@@ -118,21 +118,21 @@ pub fn impl_tuple(ast: &DeriveInput) -> Tokens {
             }
 
             fn match_array_tree_array(
-                config:& ::lisla_lang::from::FromArrayTreeConfig,
-                mut array: ::lisla_lang::tree::ArrayBranch<::lisla_lang::tag::WithTag<::lisla_lang::tree::ArrayTree<::lisla_lang::leaf::StringLeaf>>>,
-                tag: ::lisla_lang::tag::Tag,
+                config:& ::arraytree_lang::from::FromArrayTreeConfig,
+                mut array: ::arraytree_lang::tree::ArrayBranch<::arraytree_lang::tag::WithTag<::arraytree_lang::tree::ArrayTree<::arraytree_lang::leaf::StringLeaf>>>,
+                tag: ::arraytree_lang::tag::Tag,
                 parameters: Self::Parameters,
-                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
+                errors:&mut ::arraytree_lang::error::ErrorWrite<::arraytree_lang::from::error::FromArrayTreeError>
             ) -> bool {
                 true
             }
 
             fn match_array_tree_string(
-                config:& ::lisla_lang::from::FromArrayTreeConfig,
-                leaf: ::lisla_lang::leaf::StringLeaf,
-                tag: ::lisla_lang::tag::Tag,
+                config:& ::arraytree_lang::from::FromArrayTreeConfig,
+                leaf: ::arraytree_lang::leaf::StringLeaf,
+                tag: ::arraytree_lang::tag::Tag,
                 parameters: Self::Parameters,
-                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
+                errors:&mut ::arraytree_lang::error::ErrorWrite<::arraytree_lang::from::error::FromArrayTreeError>
             ) -> bool {
                 false
             }

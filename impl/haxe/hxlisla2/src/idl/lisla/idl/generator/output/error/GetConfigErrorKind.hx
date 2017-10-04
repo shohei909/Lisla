@@ -1,9 +1,9 @@
-package lisla.idl.generator.output.error;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.lislatext2entity.error.LislaFileToEntityError;
+package arraytree.idl.generator.output.error;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.arraytreetext2entity.error.ArrayTreeFileToEntityError;
 
 enum GetConfigErrorKind
 {
-   GetLibrary(error:LislaFileToEntityError);
-   GetGenerationConfig(error:LislaFileToEntityError);
+   GetLibrary(error:ArrayTreeFileToEntityError);
+   GetGenerationConfig(error:ArrayTreeFileToEntityError);
 }

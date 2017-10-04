@@ -24,10 +24,10 @@ Lislaはシンプルで、十分な機能を持っています。
 以下は、キャンバスに四角と円を書くという動作を記述したサンプルです。
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 ; 線の色を赤に
 (line_color 0xFF0000)
 
@@ -68,10 +68,10 @@ Lislaでは値がないことを表現するには長さ0の配列を、ペア�
 * ブラックリスト空白文字(全角スペースなど、詳しくは後述)
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">abcd</pre>
+<pre lang="arraytree">abcd</pre>
         </td>
         <td>
 <pre lang="json">["abcd"]</pre>
@@ -86,10 +86,10 @@ Lislaは最上位の階層は配列です。つまり、単純な`abcd`という
 Lislaにおける区切り文字は、空白文字(`` ``(#x20), `\t`(#x9))と改行文字(LF, CR)です。
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 a
 b c
 def</pre>
@@ -104,10 +104,10 @@ def</pre>
 連続した区切り文字と、文頭または文末の区切り文字は無視されます。
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 
 a
 
@@ -129,10 +129,10 @@ def
 特殊な文字を文字列データに含めたい場合、ダブルクオート(`"`)とシングルクオート(`'`)で囲みます。
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 "(abc 'def')" ' "abc" '
 </pre>
         </td>
@@ -147,10 +147,10 @@ def
 クオートの数は、3つまたはそれ以上でも構いません。この場合、同じ種類かつ同じ数のクオートを使って閉じます。
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 """a"b"c""" '''' 'abc' ''''
 </pre>
         </td>
@@ -165,10 +165,10 @@ def
 クオート2つはそれ単体で空白文字列の意味になります。
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 '' ""
 </pre>
         </td>
@@ -186,10 +186,10 @@ def
 配列を入れ子にしたい場合、丸かっこ`()`で囲みます。
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 a ((bc def) (g))
 </pre>
         </td>
@@ -204,10 +204,10 @@ a ((bc def) (g))
 丸カッコの前後の区切り文字は省略可能です。
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 ("a"(bc def)(g))(("hi")jk)
 </pre>
         </td>
@@ -233,16 +233,16 @@ Lislaでは、複数行のクオートあり文字列が使用できます。
 このとき、改行は`\r\n`、`\n`、`\r`のいずれかで、1つの改行というあつかいです。
 
 <table>
-    <tr><th>Lisla</th><th>JSON</th></tr>
+    <tr><th>ArrayTree</th><th>JSON</th></tr>
     <tr>
         <td>
-<pre lang="lisla">
+<pre lang="arraytree">
 "
 Multi
 line
 "
     '''''
-    Lisla
+    ArrayTree
      is
       awesome.
     '''''
@@ -250,7 +250,7 @@ line
         </td>
         <td>
 <pre lang="json">
-["Multi\nline", "Lisla\n is\n  awesome."]
+["Multi\nline", "ArrayTree\n is\n  awesome."]
 </pre>
         </td>
     </tr>
@@ -286,7 +286,7 @@ line
 
 Lislaでは行コメントが使えます。
 
-```lisla
+```arraytree
 ; this is comment
 string ; this is also comment
 ```
@@ -297,7 +297,7 @@ Lislaはブロックコメントはサポートしていません。
 
 `;;`で始まるコメントはドキュメントコメントです。
 
-```lisla
+```arraytree
 ;; """
 ;; # ドキュメントコメントのサンプル
 ;; 
@@ -313,7 +313,7 @@ aaa
 
 `;;;`で始まるコメントは、それをふくむ親配列に対するドキュメントコメントです。
 
-```lisla
+```arraytree
 ;;; """
 ;;; これは配列自体のドキュメントコメントとしてあつかわれます。
 ;;; つまり、このコメントはドキュメント全体に対するドキュメントコメントです。
@@ -339,7 +339,7 @@ aaa
 
 `$`の直後から、クオートなし文字列またはクオートあり文字列を始めると、それはプレースホルダーを表します。
 
-```lisla
+```arraytree
 $ここにユーザーIDを記入する
 $"TODO: 説明文を記入する"
 ```
@@ -361,7 +361,7 @@ LislaはUTF-8のみをサポートしています。
 
 ## 拡張子
 
-`.lisla`
+`.arraytree`
 
 ## 実装
 
@@ -375,4 +375,4 @@ LislaはUTF-8のみをサポートしています。
 
 ## バージョン
 
-ここで説明されている`Lisla`のバージョンは`0.0.1`です。
+ここで説明されている`ArrayTree`のバージョンは`0.0.1`です。

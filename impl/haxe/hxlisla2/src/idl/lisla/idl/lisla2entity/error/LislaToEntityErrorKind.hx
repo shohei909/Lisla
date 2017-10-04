@@ -1,8 +1,8 @@
-package lisla.idl.lisla2entity.error;
+package arraytree.idl.arraytree2entity.error;
 import hxext.ds.Maybe;
-import lisla.data.tree.al.AlTree;
+import arraytree.data.tree.al.AlTree;
 
-enum LislaToEntityErrorKind
+enum ArrayTreeToEntityErrorKind
 {
 	CantBeArray;
 	CantBeString;

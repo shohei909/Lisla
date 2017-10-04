@@ -1,8 +1,8 @@
-(package lisla)
+(package arraytree)
 
-(import lisla.core)
+(import arraytree.core)
 
-;; (document_tag lisla.idl.document.IdlDocumentTag)
+;; (document_tag arraytree.idl.document.IdlDocumentTag)
 (tuple Idl
     (package_declaration PackageDeclaration (package ""))
     (import_declarations.. ImportDeclaration)
@@ -17,7 +17,7 @@
     import (module ModulePath)
 )
 
-;; (document_tag lisla.idl.document.TypeDefinitionDocumentTag)
+;; (document_tag arraytree.idl.document.TypeDefinitionDocumentTag)
 (enum TypeDefinition
     (newtype (name TypeNameDeclaration) (type TypeReference))
     (tuple (name TypeNameDeclaration) (arguments.. TupleElement))
@@ -169,4 +169,4 @@
 )
 (newtype TypeReferenceParameter Any)
 
-;; 'IDL for Lisla Interface Description Language (Lisla IDL)'
+;; 'IDL for ArrayTree Interface Description Language (ArrayTree IDL)'

@@ -1,5 +1,5 @@
-package lisla.idl.generator.error;
-import lisla.idl.std.entity.idl.StructElementName;
+package arraytree.idl.generator.error;
+import arraytree.idl.std.entity.idl.StructElementName;
 
 enum StructElementValidationErrorKind 
 {

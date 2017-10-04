@@ -22,17 +22,17 @@ pub fn impl_newtype(ast: &DeriveInput) -> Tokens {
     };
 
     quote! {
-        impl ::lisla_lang::from::FromArrayTree for #name {
+        impl ::arraytree_lang::from::FromArrayTree for #name {
             type Parameters = ();
 
             fn from_array_tree_array(
-                config:& ::lisla_lang::from::FromArrayTreeConfig,
-                mut array: ::lisla_lang::tree::ArrayBranch<::lisla_lang::tag::WithTag<::lisla_lang::tree::ArrayTree<::lisla_lang::leaf::StringLeaf>>>,
-                tag: ::lisla_lang::tag::Tag,
+                config:& ::arraytree_lang::from::FromArrayTreeConfig,
+                mut array: ::arraytree_lang::tree::ArrayBranch<::arraytree_lang::tag::WithTag<::arraytree_lang::tree::ArrayTree<::arraytree_lang::leaf::StringLeaf>>>,
+                tag: ::arraytree_lang::tag::Tag,
                 parameters: Self::Parameters,
-                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
-            ) -> Result<::lisla_lang::tag::WithTag<Self>, ()> {
-                let with_tag = ::lisla_lang::from::FromArrayTree::from_array_tree_array(
+                errors:&mut ::arraytree_lang::error::ErrorWrite<::arraytree_lang::from::error::FromArrayTreeError>
+            ) -> Result<::arraytree_lang::tag::WithTag<Self>, ()> {
+                let with_tag = ::arraytree_lang::from::FromArrayTree::from_array_tree_array(
                     config,
                     array,
                     tag,
@@ -40,7 +40,7 @@ pub fn impl_newtype(ast: &DeriveInput) -> Tokens {
                     errors,
                 )?;
                 Result::Ok(
-                    ::lisla_lang::tag::WithTag {
+                    ::arraytree_lang::tag::WithTag {
                         data: #name {
                             value: with_tag.data
                         },
@@ -50,13 +50,13 @@ pub fn impl_newtype(ast: &DeriveInput) -> Tokens {
             }
 
             fn from_array_tree_string(
-                config:& ::lisla_lang::from::FromArrayTreeConfig,
-                leaf: ::lisla_lang::leaf::StringLeaf,
-                tag: ::lisla_lang::tag::Tag,
+                config:& ::arraytree_lang::from::FromArrayTreeConfig,
+                leaf: ::arraytree_lang::leaf::StringLeaf,
+                tag: ::arraytree_lang::tag::Tag,
                 parameters: Self::Parameters,
-                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
-            ) -> Result<::lisla_lang::tag::WithTag<Self>, ()> {
-                let with_tag = ::lisla_lang::from::FromArrayTree::from_array_tree_string(
+                errors:&mut ::arraytree_lang::error::ErrorWrite<::arraytree_lang::from::error::FromArrayTreeError>
+            ) -> Result<::arraytree_lang::tag::WithTag<Self>, ()> {
+                let with_tag = ::arraytree_lang::from::FromArrayTree::from_array_tree_string(
                     config,
                     leaf,
                     tag,
@@ -64,7 +64,7 @@ pub fn impl_newtype(ast: &DeriveInput) -> Tokens {
                     errors,
                 )?;
                 Result::Ok(
-                    ::lisla_lang::tag::WithTag {
+                    ::arraytree_lang::tag::WithTag {
                         data: #name {
                             value: with_tag.data
                         },
@@ -74,13 +74,13 @@ pub fn impl_newtype(ast: &DeriveInput) -> Tokens {
             }
 
             fn match_array_tree_array(
-                config:& ::lisla_lang::from::FromArrayTreeConfig,
-                mut array: ::lisla_lang::tree::ArrayBranch<::lisla_lang::tag::WithTag<::lisla_lang::tree::ArrayTree<::lisla_lang::leaf::StringLeaf>>>,
-                tag: ::lisla_lang::tag::Tag,
+                config:& ::arraytree_lang::from::FromArrayTreeConfig,
+                mut array: ::arraytree_lang::tree::ArrayBranch<::arraytree_lang::tag::WithTag<::arraytree_lang::tree::ArrayTree<::arraytree_lang::leaf::StringLeaf>>>,
+                tag: ::arraytree_lang::tag::Tag,
                 parameters: Self::Parameters,
-                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
+                errors:&mut ::arraytree_lang::error::ErrorWrite<::arraytree_lang::from::error::FromArrayTreeError>
             ) -> bool {
-                <#value_type as ::lisla_lang::from::FromArrayTree>::match_array_tree_array(
+                <#value_type as ::arraytree_lang::from::FromArrayTree>::match_array_tree_array(
                     config,
                     array,
                     tag,
@@ -90,13 +90,13 @@ pub fn impl_newtype(ast: &DeriveInput) -> Tokens {
             }
 
             fn match_array_tree_string(
-                config:& ::lisla_lang::from::FromArrayTreeConfig,
-                leaf: ::lisla_lang::leaf::StringLeaf,
-                tag: ::lisla_lang::tag::Tag,
+                config:& ::arraytree_lang::from::FromArrayTreeConfig,
+                leaf: ::arraytree_lang::leaf::StringLeaf,
+                tag: ::arraytree_lang::tag::Tag,
                 parameters: Self::Parameters,
-                errors:&mut ::lisla_lang::error::ErrorWrite<::lisla_lang::from::error::FromArrayTreeError>
+                errors:&mut ::arraytree_lang::error::ErrorWrite<::arraytree_lang::from::error::FromArrayTreeError>
             ) -> bool {
-                <#value_type as ::lisla_lang::from::FromArrayTree>::match_array_tree_string(
+                <#value_type as ::arraytree_lang::from::FromArrayTree>::match_array_tree_string(
                     config,
                     leaf,
                     tag,

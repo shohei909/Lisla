@@ -1,0 +1,22 @@
+; ArrayTree
+''''''''
+;; '''
+;; # Sample for document comment.
+;; 
+;; Documment comment is comment for various tools (e.g. editor, document generation).
+;; This comment is documment comment for first element.
+;; '''
+aaa
+
+;; '''
+;; This is documment comment for whole document.
+;; '''
+;; (author shohei909)
+;; (license Unlicense)
+;; (document_markup markdown)
+''''''''
+
+; Json
+''''''''
+["aaa"]
+''''''''

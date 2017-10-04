@@ -1,2 +1,2 @@
-package lisla.idl.generator.source;
+package arraytree.idl.generator.source;
 

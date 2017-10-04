@@ -1,5 +1,5 @@
-package lisla.idl.std.error;
-import lisla.error.core.ErrorName;
+package arraytree.idl.std.error;
+import arraytree.error.core.ErrorName;
 
 class ArgumentSuffixErrorKindTools 
 {

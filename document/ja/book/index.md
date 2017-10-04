@@ -2,7 +2,7 @@
 # Lislaへの招待
 
 ## Lislaの概要
-Lisla（リスラ）は、文字列型と配列型のみをサポートするデータ記述言語です。
+ArrayTree（リスラ）は、文字列型と配列型のみをサポートするデータ記述言語です。
 
 Lislaは
 * 学ぶのが簡単で
@@ -87,7 +87,7 @@ Lisla標準ツールキットは以下をふくみます。
     * フォーマット
     * 省サイズ化
    
-* Lisla IDLの標準ライブラリ
+* ArrayTree IDLの標準ライブラリ
 
 ここでは、ツールキットのインストール方法とCLIツールの概要について紹介していきます。
 
@@ -106,10 +106,10 @@ Lisla標準ツールキットは以下をふくみます。
 
 
 
-# Lisla IDL
-Lisla IDL(Interface Description Language)は、Lislaの構造を表現するためのスキーマ言語です。
+# ArrayTree IDL
+ArrayTree IDL(Interface Description Language)は、Lislaの構造を表現するためのスキーマ言語です。
 
-Lisla IDLは、それ自体がLisla IDLでスキーマを記述されたLislaです。
+ArrayTree IDLは、それ自体がLisla IDLでスキーマを記述されたLislaです。
 
 LislaのスキーマをLisla IDLで記述することにより、以下の機能を利用できるようになります。
 

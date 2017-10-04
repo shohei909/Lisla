@@ -1,16 +1,16 @@
 (version 1.0.0)
 (about 
     """
-    Hxlisla Command Line Tools
+    Hxarraytree Command Line Tools
     """
 )
 (subcommand convert
     (short c)
-    (input lisla.file.FilePath)
-    (input lisla.file.FilePath)
+    (input arraytree.file.FilePath)
+    (input arraytree.file.FilePath)
 )
 (subcommand idl
     (arg idl
-        (input (lisla.file.FilePathWithExtension (lislaconfig.lisla)))
+        (input (arraytree.file.FilePathWithExtension (arraytreeconfig.arraytree)))
     )
 )

@@ -1,7 +1,7 @@
-package lisla.idl.library.error;
-import lisla.error.core.FileError;
-import lisla.error.core.FileErrorHolder;
-import lisla.idl.std.entity.idl.ModulePath;
+package arraytree.idl.library.error;
+import arraytree.error.core.FileError;
+import arraytree.error.core.FileErrorHolder;
+import arraytree.idl.std.entity.idl.ModulePath;
 
 class ModuleResolutionError 
     implements FileErrorHolder

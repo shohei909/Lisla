@@ -1,6 +1,6 @@
-package lisla.idl.generator.error;
-import lisla.idl.std.entity.idl.LibraryName;
-import lisla.idl.std.entity.util.version.Version;
+package arraytree.idl.generator.error;
+import arraytree.idl.std.entity.idl.LibraryName;
+import arraytree.idl.std.entity.util.version.Version;
 
 enum LibraryFindErrorKind
 {

@@ -1,22 +1,22 @@
-package lisla.idl.generator.output;
+package arraytree.idl.generator.output;
 import haxe.ds.Option;
 import hxext.ds.Result;
-import lisla.idl.generator.error.IdlLibraryFactorError;
-import lisla.project.FilePathFromProjectRoot;
-import lisla.idl.generator.data.EntityOutputConfig;
-import lisla.idl.generator.data.LislaToEntityOutputConfig;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.output.entity.store.HaxeEntityInterface;
-import lisla.idl.generator.output.entity.store.HaxeEntityInterfaceKindTools;
-import lisla.idl.generator.source.IdlSourceReader;
-import lisla.idl.library.LibraryScope;
-import lisla.idl.library.LibraryTypesData;
-import lisla.idl.std.entity.idl.LibraryName;
-import lisla.idl.std.entity.idl.library.LibraryVersion;
-import lisla.idl.std.entity.util.version.Version;
-import lisla.project.FileSourceMap;
-import lisla.project.FileSourceRange;
-import lisla.project.ProjectRootAndFilePath;
+import arraytree.idl.generator.error.IdlLibraryFactorError;
+import arraytree.project.FilePathFromProjectRoot;
+import arraytree.idl.generator.data.EntityOutputConfig;
+import arraytree.idl.generator.data.ArrayTreeToEntityOutputConfig;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.output.entity.store.HaxeEntityInterface;
+import arraytree.idl.generator.output.entity.store.HaxeEntityInterfaceKindTools;
+import arraytree.idl.generator.source.IdlSourceReader;
+import arraytree.idl.library.LibraryScope;
+import arraytree.idl.library.LibraryTypesData;
+import arraytree.idl.std.entity.idl.LibraryName;
+import arraytree.idl.std.entity.idl.library.LibraryVersion;
+import arraytree.idl.std.entity.util.version.Version;
+import arraytree.project.FileSourceMap;
+import arraytree.project.FileSourceRange;
+import arraytree.project.ProjectRootAndFilePath;
 
 class HaxeGenerateConfig
 {
@@ -24,7 +24,7 @@ class HaxeGenerateConfig
     public var libraryScope(default, null):LibraryScope;
     public var sourceReader(default, null):IdlSourceReader;
     public var entityOutputConfig(default, null):EntityOutputConfig;
-    public var lislaToEntityOutputConfig(default, null):LislaToEntityOutputConfig;
+    public var arraytreeToEntityOutputConfig(default, null):ArrayTreeToEntityOutputConfig;
     public var targetName(default, null):LibraryName;
     public var targetVersion(default, null):Version;
     
@@ -34,7 +34,7 @@ class HaxeGenerateConfig
         targetName:LibraryName,
         targetVersion:Version,
         entityOutputConfig:EntityOutputConfig,
-        lislaToEntityOutputConfig:LislaToEntityOutputConfig,
+        arraytreeToEntityOutputConfig:ArrayTreeToEntityOutputConfig,
         sourceReader:IdlSourceReader
     )
     {
@@ -43,7 +43,7 @@ class HaxeGenerateConfig
         this.libraryScope = libraryScope;
         this.targetName = targetName;
         this.entityOutputConfig = entityOutputConfig;
-        this.lislaToEntityOutputConfig = lislaToEntityOutputConfig;
+        this.arraytreeToEntityOutputConfig = arraytreeToEntityOutputConfig;
         this.sourceReader = sourceReader;
     }
     

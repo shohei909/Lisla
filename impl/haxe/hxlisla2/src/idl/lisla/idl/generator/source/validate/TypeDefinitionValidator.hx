@@ -1,37 +1,37 @@
-package lisla.idl.generator.source.validate;
+package arraytree.idl.generator.source.validate;
 import haxe.ds.Option;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
 import hxext.ds.Set;
-import lisla.idl.generator.error.IdlValidationErrorKind;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.error.LoadIdlErrorKind;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseConditionGroup;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseConditionTools;
-import lisla.idl.generator.source.file.IdlFilePath;
-import lisla.idl.generator.source.validate.InlinabilityOnTuple;
-import lisla.idl.generator.source.validate.TypeDefinitionValidator;
-import lisla.idl.library.Library;
-import lisla.idl.library.LibraryResolver;
-import lisla.idl.library.LoadTypesContext;
-import lisla.idl.library.PackageElement;
-import lisla.idl.std.entity.idl.EnumConstructor;
-import lisla.idl.std.entity.idl.EnumConstructorName;
-import lisla.idl.std.entity.idl.LibraryName;
-import lisla.idl.std.entity.idl.ModulePath;
-import lisla.idl.std.entity.idl.StructElement;
-import lisla.idl.std.entity.idl.StructElementName;
-import lisla.idl.std.entity.idl.TupleElement;
-import lisla.idl.std.entity.idl.TypeDefinition;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.tools.idl.EnumConstructorTools;
-import lisla.idl.std.tools.idl.StructElementTools;
-import lisla.idl.std.tools.idl.TupleTools;
-import lisla.idl.std.tools.idl.TypeDefinitionTools;
-import lisla.project.ProjectRootAndFilePath;
+import arraytree.idl.generator.error.IdlValidationErrorKind;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.error.LoadIdlErrorKind;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseConditionGroup;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseConditionTools;
+import arraytree.idl.generator.source.file.IdlFilePath;
+import arraytree.idl.generator.source.validate.InlinabilityOnTuple;
+import arraytree.idl.generator.source.validate.TypeDefinitionValidator;
+import arraytree.idl.library.Library;
+import arraytree.idl.library.LibraryResolver;
+import arraytree.idl.library.LoadTypesContext;
+import arraytree.idl.library.PackageElement;
+import arraytree.idl.std.entity.idl.EnumConstructor;
+import arraytree.idl.std.entity.idl.EnumConstructorName;
+import arraytree.idl.std.entity.idl.LibraryName;
+import arraytree.idl.std.entity.idl.ModulePath;
+import arraytree.idl.std.entity.idl.StructElement;
+import arraytree.idl.std.entity.idl.StructElementName;
+import arraytree.idl.std.entity.idl.TupleElement;
+import arraytree.idl.std.entity.idl.TypeDefinition;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.tools.idl.EnumConstructorTools;
+import arraytree.idl.std.tools.idl.StructElementTools;
+import arraytree.idl.std.tools.idl.TupleTools;
+import arraytree.idl.std.tools.idl.TypeDefinitionTools;
+import arraytree.project.ProjectRootAndFilePath;
 
 class TypeDefinitionValidator implements IdlSourceProvider
 {
@@ -140,7 +140,7 @@ class TypeDefinitionValidator implements IdlSourceProvider
         switch (underlyType.getConditions(this, parameters))
         {
             case Result.Ok(conditions):
-                inlinabilityOnTuple = LislaToEntityCaseConditionTools.getInlinability(conditions);
+                inlinabilityOnTuple = ArrayTreeToEntityCaseConditionTools.getInlinability(conditions);
                 
             case Result.Error(error):
                 addErrorKind(IdlValidationErrorKind.GetCondition(error));
@@ -150,11 +150,11 @@ class TypeDefinitionValidator implements IdlSourceProvider
 	private function validateEnum(constructors:Array<EnumConstructor>):Void
 	{
         var conditionArray = [];
-        var conditionMap = new Map<String, LislaToEntityCaseConditionGroup<EnumConstructorName>>();
+        var conditionMap = new Map<String, ArrayTreeToEntityCaseConditionGroup<EnumConstructorName>>();
         var canInlineFixed = true;
         var canInline = true;
         
-        inline function add(name:EnumConstructorName, conditions:Array<LislaToEntityCaseCondition>):Void
+        inline function add(name:EnumConstructorName, conditions:Array<ArrayTreeToEntityCaseCondition>):Void
         {
             if (conditionMap.exists(name.name))
             {
@@ -166,7 +166,7 @@ class TypeDefinitionValidator implements IdlSourceProvider
                 {
                     conditionArray.push(condition);
                 }
-                conditionMap.set(name.name, new LislaToEntityCaseConditionGroup(name, conditions));
+                conditionMap.set(name.name, new ArrayTreeToEntityCaseConditionGroup(name, conditions));
             }
         }
         
@@ -193,9 +193,9 @@ class TypeDefinitionValidator implements IdlSourceProvider
         
         if (hasError) return;
         
-        inlinabilityOnTuple = LislaToEntityCaseConditionTools.getInlinability(conditionArray);
+        inlinabilityOnTuple = ArrayTreeToEntityCaseConditionTools.getInlinability(conditionArray);
         
-        switch (LislaToEntityCaseConditionGroup.intersects(conditionMap))
+        switch (ArrayTreeToEntityCaseConditionGroup.intersects(conditionMap))
         {
             case Option.Some(groups):
                 addErrorKind(IdlValidationErrorKind.EnumConstuctorConditionDuplicated(groups.group0.name, groups.group1.name));
@@ -208,8 +208,8 @@ class TypeDefinitionValidator implements IdlSourceProvider
     private function validateStruct(elements:Array<StructElement>):Void
     {
         var conditionArray = [];
-        var conditionMap = new Map<String, LislaToEntityCaseConditionGroup<StructElementName>>();
-        inline function add(name:StructElementName, conditions:Array<LislaToEntityCaseCondition>):Void
+        var conditionMap = new Map<String, ArrayTreeToEntityCaseConditionGroup<StructElementName>>();
+        inline function add(name:StructElementName, conditions:Array<ArrayTreeToEntityCaseCondition>):Void
         {
             if (conditionMap.exists(name.name))
             {
@@ -221,7 +221,7 @@ class TypeDefinitionValidator implements IdlSourceProvider
                 {
                     conditionArray.push(condition);
                 }
-                conditionMap.set(name.name, new LislaToEntityCaseConditionGroup(name, conditions));
+                conditionMap.set(name.name, new ArrayTreeToEntityCaseConditionGroup(name, conditions));
             }
         }
         
@@ -240,9 +240,9 @@ class TypeDefinitionValidator implements IdlSourceProvider
         
         if (hasError) return;
         
-        inlinabilityOnTuple = LislaToEntityCaseConditionTools.getInlinability(conditionArray);
+        inlinabilityOnTuple = ArrayTreeToEntityCaseConditionTools.getInlinability(conditionArray);
         
-        switch (LislaToEntityCaseConditionGroup.intersects(conditionMap))
+        switch (ArrayTreeToEntityCaseConditionGroup.intersects(conditionMap))
         {
             case Option.Some(groups):
                 addErrorKind(IdlValidationErrorKind.StructElementConditionDuplicated(groups.group0.name, groups.group1.name));

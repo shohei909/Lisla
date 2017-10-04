@@ -1,8 +1,8 @@
-package lisla.idl.generator.output.entity;
+package arraytree.idl.generator.output.entity;
 import hxext.ds.Result;
-import lisla.idl.generator.error.LoadIdlError;
-import lisla.idl.generator.output.EntityTypeInfomation;
-import lisla.idl.generator.output.HaxeGenerateConfig;
+import arraytree.idl.generator.error.LoadIdlError;
+import arraytree.idl.generator.output.EntityTypeInfomation;
+import arraytree.idl.generator.output.HaxeGenerateConfig;
 import haxe.macro.Expr.TypeDefinition;
 
 class EntityHaxeGenerator 

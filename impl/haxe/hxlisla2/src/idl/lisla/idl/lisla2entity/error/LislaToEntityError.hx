@@ -1,19 +1,19 @@
-package lisla.idl.lisla2entity.error;
+package arraytree.idl.arraytree2entity.error;
 import haxe.ds.Option;
-import lisla.data.meta.position.Range;
-import lisla.data.tree.al.AlTree;
-import lisla.error.core.ElementaryError;
-import lisla.error.core.ErrorName;
-import lisla.error.core.InlineError;
+import arraytree.data.meta.position.Range;
+import arraytree.data.tree.al.AlTree;
+import arraytree.error.core.ElementaryError;
+import arraytree.error.core.ErrorName;
+import arraytree.error.core.InlineError;
 
-class LislaToEntityError 
+class ArrayTreeToEntityError 
     implements InlineError
     implements ElementaryError
 {
-	public var kind(default, null):LislaToEntityErrorKind;
+	public var kind(default, null):ArrayTreeToEntityErrorKind;
 	
 	public function new (
-        kind:LislaToEntityErrorKind
+        kind:ArrayTreeToEntityErrorKind
         
         // TODO: 
         // range:Option<Range>
@@ -26,34 +26,34 @@ class LislaToEntityError
 	{
 		return switch (kind)
 		{
-			case LislaToEntityErrorKind.UnmatchedEnumConstructor(expected):
+			case ArrayTreeToEntityErrorKind.UnmatchedEnumConstructor(expected):
 				"unmatched enum constructor. '" + expected.join(" | ") + "' expected";
 				
-			case LislaToEntityErrorKind.UnmatchedStructElement(expected):
+			case ArrayTreeToEntityErrorKind.UnmatchedStructElement(expected):
 				"unmatched struct element. '" + expected.join(" | ") + "' expected";
                 
-			case LislaToEntityErrorKind.UnmatchedLabel(expected):
+			case ArrayTreeToEntityErrorKind.UnmatchedLabel(expected):
 				"unmatched enum label. '" + expected + "' expected";
 				
-			case LislaToEntityErrorKind.StructElementDuplicated(name):
+			case ArrayTreeToEntityErrorKind.StructElementDuplicated(name):
 				"struct element '" + name + "' is duplicated";
                 
-			case LislaToEntityErrorKind.StructElementNotFound(name):
+			case ArrayTreeToEntityErrorKind.StructElementNotFound(name):
 				"struct element '" + name + "' is not found";
 				
-			case LislaToEntityErrorKind.CantBeArray:
+			case ArrayTreeToEntityErrorKind.CantBeArray:
 				"can't be array";
 				
-			case LislaToEntityErrorKind.CantBeString:
+			case ArrayTreeToEntityErrorKind.CantBeString:
 				"can't be string";
 				
-			case LislaToEntityErrorKind.TooLongArray:
+			case ArrayTreeToEntityErrorKind.TooLongArray:
 				"too long array";
 				
-			case LislaToEntityErrorKind.EndOfArray:
+			case ArrayTreeToEntityErrorKind.EndOfArray:
 				"end of array";
 				
-			case LislaToEntityErrorKind.Fatal(message):
+			case ArrayTreeToEntityErrorKind.Fatal(message):
 				message;
 		}
 	}
@@ -80,8 +80,8 @@ class LislaToEntityError
     }
     
     @:deprecated
-    public static function ofLisla(lisla:AlTree<String>, kind:LislaToEntityErrorKind):Array<LislaToEntityError>
+    public static function ofArrayTree(arraytree:AlTree<String>, kind:ArrayTreeToEntityErrorKind):Array<ArrayTreeToEntityError>
     {
-        return [new LislaToEntityError(kind)];
+        return [new ArrayTreeToEntityError(kind)];
     }
 }

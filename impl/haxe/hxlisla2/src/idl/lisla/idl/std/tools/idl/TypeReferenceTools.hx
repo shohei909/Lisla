@@ -1,37 +1,37 @@
-package lisla.idl.std.tools.idl;
+package arraytree.idl.std.tools.idl;
 import haxe.ds.Option;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
-import lisla.data.meta.core.tag;
-import lisla.data.meta.core.StringWithtag;
+import arraytree.data.meta.core.tag;
+import arraytree.data.meta.core.StringWithtag;
 import hxext.ds.Result;
-import lisla.idl.exception.IdlException;
-import lisla.idl.generator.data.EntityOutputConfig;
-import lisla.idl.generator.output.entity.EntityHaxeTypePath;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
-import lisla.idl.generator.output.lisla2entity.match.LislaToEntityGuardConditionKind;
-import lisla.idl.generator.source.IdlSourceProvider;
-import lisla.idl.std.entity.idl.FollowedTypeDefinition;
-import lisla.idl.std.entity.idl.GenericTypeReference;
-import lisla.idl.std.entity.idl.ModulePath;
-import lisla.idl.std.entity.idl.TypeName;
-import lisla.idl.std.entity.idl.TypePath;
-import lisla.idl.std.entity.idl.TypeReference;
-import lisla.idl.std.entity.idl.TypeReferenceDependenceKind;
-import lisla.idl.std.entity.idl.TypeReferenceParameterKind;
-import lisla.idl.std.error.GetConditionError;
-import lisla.idl.std.error.GetConditionErrorKind;
-import lisla.idl.std.error.TypeFollowErrorKind;
-import lisla.idl.std.error.TypeFollowError;
+import arraytree.idl.exception.IdlException;
+import arraytree.idl.generator.data.EntityOutputConfig;
+import arraytree.idl.generator.output.entity.EntityHaxeTypePath;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityCaseCondition;
+import arraytree.idl.generator.output.arraytree2entity.match.ArrayTreeToEntityGuardConditionKind;
+import arraytree.idl.generator.source.IdlSourceProvider;
+import arraytree.idl.std.entity.idl.FollowedTypeDefinition;
+import arraytree.idl.std.entity.idl.GenericTypeReference;
+import arraytree.idl.std.entity.idl.ModulePath;
+import arraytree.idl.std.entity.idl.TypeName;
+import arraytree.idl.std.entity.idl.TypePath;
+import arraytree.idl.std.entity.idl.TypeReference;
+import arraytree.idl.std.entity.idl.TypeReferenceDependenceKind;
+import arraytree.idl.std.entity.idl.TypeReferenceParameterKind;
+import arraytree.idl.std.error.GetConditionError;
+import arraytree.idl.std.error.GetConditionErrorKind;
+import arraytree.idl.std.error.TypeFollowErrorKind;
+import arraytree.idl.std.error.TypeFollowError;
 
-using lisla.idl.std.tools.idl.TypeDefinitionTools;
-using lisla.idl.std.tools.idl.TypeParameterDeclarationTools;
-using lisla.idl.std.tools.idl.TupleElementTools;
-using lisla.idl.std.tools.idl.ArgumentTools;
-using lisla.idl.std.tools.idl.EnumConstructorTools;
-using lisla.idl.std.tools.idl.TypeReferenceParameterTools;
-using lisla.idl.std.tools.idl.TypeReferenceTools;
-using lisla.idl.std.tools.idl.StructElementTools;
+using arraytree.idl.std.tools.idl.TypeDefinitionTools;
+using arraytree.idl.std.tools.idl.TypeParameterDeclarationTools;
+using arraytree.idl.std.tools.idl.TupleElementTools;
+using arraytree.idl.std.tools.idl.ArgumentTools;
+using arraytree.idl.std.tools.idl.EnumConstructorTools;
+using arraytree.idl.std.tools.idl.TypeReferenceParameterTools;
+using arraytree.idl.std.tools.idl.TypeReferenceTools;
+using arraytree.idl.std.tools.idl.StructElementTools;
 using hxext.ds.ResultTools;
 
 class TypeReferenceTools
@@ -158,7 +158,7 @@ class TypeReferenceTools
         {
             // Any
             targetPath = new TypePath(
-                new ModulePath(["lisla", "core"], new tag()), 
+                new ModulePath(["arraytree", "core"], new tag()), 
                 new TypeName(new StringWithtag("Any", new tag())),
                 new tag()
             );
@@ -223,7 +223,7 @@ class TypeReferenceTools
         type:TypeReference, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>
-    ):Result<LislaToEntityGuardConditionKind, GetConditionError>
+    ):Result<ArrayTreeToEntityGuardConditionKind, GetConditionError>
     {
         return switch (type.follow(source, definitionParameters))
         {
@@ -231,12 +231,12 @@ class TypeReferenceTools
                 switch (data)
                 {
                     case FollowedTypeDefinition.Str:
-                        Result.Ok(LislaToEntityGuardConditionKind.Str);
+                        Result.Ok(ArrayTreeToEntityGuardConditionKind.Str);
                         
                     case FollowedTypeDefinition.Struct(_)
                         | FollowedTypeDefinition.Arr(_)
                         | FollowedTypeDefinition.Tuple(_):
-                        Result.Ok(LislaToEntityGuardConditionKind.Arr);
+                        Result.Ok(ArrayTreeToEntityGuardConditionKind.Arr);
                         
                     case FollowedTypeDefinition.Enum(constructors):
                         constructors.getGuardConditionKind(source, definitionParameters);
@@ -253,7 +253,7 @@ class TypeReferenceTools
         type:TypeReference, 
         source:IdlSourceProvider, 
         definitionParameters:Array<TypeName>
-    ):Result<Array<LislaToEntityCaseCondition>, GetConditionError>
+    ):Result<Array<ArrayTreeToEntityCaseCondition>, GetConditionError>
     {
         return switch (type.follow(source, definitionParameters))
         {

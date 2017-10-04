@@ -1,0 +1,15 @@
+; ArrayTree
+''''''''
+test;comment
+"; not comment"; comment "\n" comment \r comment
+'; not comment
+  ; not comment
+  ; not comment
+  '
+;
+''''''''
+
+; Json
+''''''''
+["test", "; not comment", "; not comment\n; not comment\n; not comment"]
+''''''''

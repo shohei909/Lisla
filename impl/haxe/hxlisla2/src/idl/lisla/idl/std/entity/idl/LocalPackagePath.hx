@@ -1,6 +1,6 @@
-package lisla.idl.std.entity.idl;
+package arraytree.idl.std.entity.idl;
 import hxext.ds.Maybe;
-import lisla.data.meta.core.Metadata;
+import arraytree.data.meta.core.Metadata;
 
 class LocalPackagePath 
 {

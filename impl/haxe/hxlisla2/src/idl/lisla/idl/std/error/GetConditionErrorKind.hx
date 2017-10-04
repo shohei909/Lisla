@@ -1,6 +1,6 @@
-package lisla.idl.std.error;
-import lisla.idl.std.entity.idl.EnumConstructorName;
-import lisla.idl.std.entity.idl.TypePath;
+package arraytree.idl.std.error;
+import arraytree.idl.std.entity.idl.EnumConstructorName;
+import arraytree.idl.std.entity.idl.TypePath;
 
 enum GetConditionErrorKind
 {
