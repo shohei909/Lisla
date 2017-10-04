@@ -1,4 +1,4 @@
-; -------------------- VarInt -------------------------- 
+; -------------------- Variable Integer -------------------------- 
 (newtype (VarInt (var config : VarIntConfig)) : String)
 
 (struct VarIntConfig
@@ -21,8 +21,8 @@
 
 (enum IntegerBase
     (case standard   (= 10) (key 10))
-    (case binary     (= 2)  (key 2))
-    (case octal      (= 8)  (key 8))
+    (case binary     (= 2)  (key 2) )
+    (case octal      (= 8)  (key 8) )
     (case hexdecimal (= 16) (key 16))
 )
 
@@ -68,17 +68,8 @@
 (newtype Int64 : (VarInt INT64_CONFIG))
 (newtype Int32 : (VarInt INT32_CONFIG))
 
-(newtype SingedInt64 : (VarInt SIGNED_INT64_CONFIG))
-(newtype SingedInt32 : (VarInt SIGNED_INT32_CONFIG))
-
 (newtype UnsingedInt64 : (VarInt UNSIGNED_INT64_CONFIG))
 (newtype UnsingedInt32 : (VarInt UNSIGNED_INT32_CONFIG))
-
-(newtype UnsingedFixedInt64 : String)
-(newtype UnsingedFixedInt32 : String)
-
-(newtype SingedFixedInt64 : String)
-(newtype SingedFixedInt32 : String)
 
 (newtype Float64 : String)
 (newtype Float32 : String)
@@ -87,6 +78,16 @@
     (case false (= 0))
     (case true (= 1))
 )
+
+; -------------------- Protocol-Buffers Scalar --------------------------
+(newtype SingedInt64 : (VarInt SIGNED_INT64_CONFIG))
+(newtype SingedInt32 : (VarInt SIGNED_INT32_CONFIG))
+
+(newtype UnsingedFixedInt64 : String)
+(newtype UnsingedFixedInt32 : String)
+
+(newtype SingedFixedInt64 : String)
+(newtype SingedFixedInt32 : String)
 
 
 ; -------------------- Phantom Data --------------------------
