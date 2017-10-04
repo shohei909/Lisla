@@ -1,6 +1,0 @@
-(target hxlisla 
-    (version 0.0.0)
-    (haxe_package lisla.idl.hxlisla)
-)
-
-(import file lisla.hxgen.lisla)
