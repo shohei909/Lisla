@@ -8,14 +8,15 @@
 -lib unifill
 
 --next
--cmd neko "bin/test_core.n" 1>bin/report/core/neko.txt
+-cmd neko "bin/test_core.n" 1>bin/core_neko_report.txt
 
 --next
 -lib nanotest
 -D result_exit_code
---macro nanotest.NanoTestRunner.readResult('bin/report/core/neko.txt', ['test/core'], 'Neko')
+--macro nanotest.NanoTestRunner.readResult('bin/core_neko_report.txt', ['test/core'], 'Neko')
 
-## C Sharp
+
+# C Sharp
 --next
 -cs bin/cs
 -main TestCore
@@ -26,9 +27,9 @@
 -lib unifill
 
 --next
--cmd ""./bin/cs/bin/TestCore.exe"" 1>bin/report/idl/cs.txt
+-cmd ""./bin/cs/bin/TestCore.exe"" 1>bin/core_cs_report.txt
 
 --next
 -lib nanotest
 -D result_exit_code
---macro nanotest.NanoTestRunner.readResult('bin/report/idl/cs.txt', ['test/core'], 'C#')
+--macro nanotest.NanoTestRunner.readResult('bin/core_cs_report.txt', ['test/core'], 'C#')
