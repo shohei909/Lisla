@@ -1,4 +1,4 @@
-package lisla.parse.metadata;
+package lisla.parse.tag;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.LineIndexes;
 import lisla.parse.ParseConfig;
@@ -15,14 +15,13 @@ class UnsettledLeadingTag
 		// TODO
 	}
 	
-	public function toArrayTag(position:CodePointIndex):UnsettledArrayTag
+	public function toArrayTag(isTop:Bool, position:CodePointIndex):UnsettledArrayTag
 	{
-		return new UnsettledArrayTag(this, position);
+		return new UnsettledArrayTag(isTop, this, position);
 	}
 	
 	public function toStringTag(position:CodePointIndex):UnsettledStringTag
 	{
 		return new UnsettledStringTag(this, position);
 	}
-	
 }

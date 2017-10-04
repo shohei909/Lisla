@@ -66,7 +66,7 @@ class CommentContext
 		switch (kind)
 		{
 			case CommentKind.Normal:
-				// TODO: format metadata
+				// TODO: format tag
 				
 			case CommentKind.Document:
                 parent.writeDocument(codePoint);

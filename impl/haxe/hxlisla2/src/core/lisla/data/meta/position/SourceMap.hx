@@ -5,16 +5,21 @@ import lisla.data.meta.position.SourceMap;
 
 class SourceMap
 {
-    public var ranges(default, null):RangeCollection;
     public var lines(default, null):LineIndexes;
+    public var ranges(default, null):RangeCollection;
     
     public function new(
-        ranges:RangeCollection,
-        lines:LineIndexes
+        lines:LineIndexes,
+        ranges:RangeCollection
     ) 
     {
-        this.ranges = ranges;
         this.lines = lines;
+        this.ranges = ranges;
+    }
+    
+    public function toString():String
+    {
+        return getLinesString() + " (character:" + getRangesString() + ")";
     }
     
     public function getRangesString():String
@@ -24,7 +29,8 @@ class SourceMap
     
     public function getLinesString():String
     {
-        return getIncludedLines().join(",");
+        var lines = getIncludedLines();
+        return if (lines.length == 0) "?" else lines.join(",");
     }
     
     public function getIncludedLines():Array<Int>
@@ -49,5 +55,21 @@ class SourceMap
         }
         
         return result;
+    }
+    
+    public function mergeRange(range:Range):SourceMap
+    {
+        return new SourceMap(
+            lines,
+            new RangeCollection(ranges.mergeRange(range))
+        );
+    }
+    
+    public function mergeRanges(childRanges:Array<Range>):SourceMap
+    {
+        return new SourceMap(
+            lines,
+            new RangeCollection(ranges.mergeRanges(childRanges))
+        );
     }
 }

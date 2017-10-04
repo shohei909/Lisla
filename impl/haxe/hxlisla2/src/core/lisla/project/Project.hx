@@ -1,5 +1,6 @@
 package lisla.project;
 import haxe.ds.Option;
+import lisla.data.meta.position.Position;
 import lisla.data.meta.position.SourceContext;
 import lisla.parse.ParseConfig;
 import lisla.parse.Parser;
@@ -21,16 +22,16 @@ class Project
     public function parse(path:LocalPath):ArrayTreeParseResult
     {
         var content = rootDirectory.getContent(path);
-        var context = new SourceContext(
+        var position = new Position(
             Option.Some(rootDirectory),
             Option.Some(path),
-            []
+            Option.None
         );
 
         return Parser.parse(
             content,
             parseConfig,
-            context
+            position
         );
     }
 }

@@ -6,7 +6,7 @@ import lisla.parse.ParseState;
 import lisla.parse.array.ArrayContext;
 import lisla.parse.array.ArrayState;
 import lisla.parse.char.CodePointTools;
-import lisla.parse.metadata.UnsettledStringTag;
+import lisla.parse.tag.UnsettledStringTag;
 import unifill.CodePoint;
 
 class UnquotedStringContext 
@@ -14,16 +14,16 @@ class UnquotedStringContext
     private var top:ParseState;
     private var parent:ArrayContext;
 	private var string:String;
-	private var metadata:UnsettledStringTag;
+	private var tag:UnsettledStringTag;
     private var isPlaceholder:Bool;
 	
-	public inline function new(top:ParseState, parent:ArrayContext, isPlaceholder:Bool, metadata:UnsettledStringTag) 
+	public inline function new(top:ParseState, parent:ArrayContext, isPlaceholder:Bool, tag:UnsettledStringTag) 
 	{
 		this.isPlaceholder = isPlaceholder;
         this.parent = parent;
         this.top = top;
         string = "";
-		this.metadata = metadata;
+		this.tag = tag;
 	}
     
 	public function process(codePoint:CodePoint):Void
@@ -67,7 +67,11 @@ class UnquotedStringContext
         parent.pushString(
             string, 
             isPlaceholder, 
-            metadata.settle(top.context, top.position)
+            tag.settle(
+                top.context,
+                top.codePointIndex,
+                [Range.createWithEnd(tag.startPosition, top.codePointIndex)]
+            )
         );
         parent.state = ArrayState.Normal(false);
 	}

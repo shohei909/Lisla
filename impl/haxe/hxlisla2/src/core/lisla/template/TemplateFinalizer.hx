@@ -1,7 +1,7 @@
 package lisla.template;
 import hxext.ds.Result;
 import lisla.data.leaf.template.TemplateLeaf;
-import lisla.data.meta.core.Metadata;
+import lisla.data.meta.core.Tag;
 import lisla.error.template.TemplateFinalizeError;
 import lisla.error.template.TemplateFinalizeErrorKind;
 
@@ -9,7 +9,7 @@ class TemplateFinalizer
 {
     public static function finalize(
         leaf:TemplateLeaf, 
-        metadata:Metadata
+        tag:Tag
     ):Result<String, Array<TemplateFinalizeError>>
     {
         return switch (leaf)
@@ -22,7 +22,7 @@ class TemplateFinalizer
                     [
                         new TemplateFinalizeError(
                             TemplateFinalizeErrorKind.UnbindedPlaceholderExists(placeholder), 
-                            metadata.position
+                            tag.position
                         )
                     ]
                 );

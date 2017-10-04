@@ -14,3 +14,21 @@
 -lib nanotest
 -D result_exit_code
 --macro nanotest.NanoTestRunner.readResult('bin/report/core/neko.txt', ['test/core'], 'Neko')
+
+## C Sharp
+--next
+-cs bin/cs
+-main TestCore
+-cp test/core
+-cp src/core
+
+-lib nanotest
+-lib unifill
+
+--next
+-cmd ""./bin/cs/bin/TestCore.exe"" 1>bin/report/idl/cs.txt
+
+--next
+-lib nanotest
+-D result_exit_code
+--macro nanotest.NanoTestRunner.readResult('bin/report/idl/cs.txt', ['test/core'], 'C#')

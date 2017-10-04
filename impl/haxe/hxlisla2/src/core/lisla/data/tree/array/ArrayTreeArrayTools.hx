@@ -1,13 +1,13 @@
 package lisla.data.tree.array;
 import hxext.ds.Result;
-import lisla.data.meta.core.Metadata;
+import lisla.data.meta.core.Tag;
 import lisla.data.tree.array.ArrayTree;
 
 class ArrayTreeArrayTools 
 {
     public static function mapOrError<LeafType, NewLeafType, ErrorType>(
         array:Array<ArrayTree<LeafType>>,
-        func:LeafType->Metadata->Result<NewLeafType, Array<ErrorType>>,
+        func:LeafType->Tag->Result<NewLeafType, Array<ErrorType>>,
         persevering:Bool
     ):Result<Array<ArrayTree<NewLeafType>>, Array<ErrorType>> {
         var errors = [];

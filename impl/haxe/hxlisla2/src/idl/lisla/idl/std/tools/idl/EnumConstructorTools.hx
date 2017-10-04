@@ -1,6 +1,6 @@
 package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
-import lisla.data.meta.core.StringWithMetadata;
+import lisla.data.meta.core.StringWithtag;
 import hxext.ds.Result;
 import lisla.idl.generator.output.lisla2entity.match.LislaToEntityCaseCondition;
 import lisla.idl.generator.output.lisla2entity.match.FirstElementCondition;
@@ -102,7 +102,7 @@ class EnumConstructorTools
                 switch (parameterized.name.kind)
                 {
                     case EnumConstructorKind.Normal:
-                        var label = TupleElement.Label(new StringWithMetadata(parameterized.name.name, parameterized.name.metadata));
+                        var label = TupleElement.Label(new StringWithtag(parameterized.name.name, parameterized.name.tag));
                         switch (TupleTools.getGuard([label].concat(parameterized.elements), source, definitionParameters))
                         {
                             case Result.Ok(data):
@@ -190,7 +190,7 @@ class EnumConstructorTools
                 switch (parameterized.name.kind)
                 {
                     case EnumConstructorKind.Normal:
-                        var label = TupleElement.Label(new StringWithMetadata(parameterized.name.name, parameterized.name.metadata));
+                        var label = TupleElement.Label(new StringWithtag(parameterized.name.name, parameterized.name.tag));
                         Option.Some([label].concat(parameterized.elements));
                         
                     case EnumConstructorKind.Tuple:

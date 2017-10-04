@@ -17,54 +17,38 @@ class RangeCollection
         
         for (range in sourceRanges)
         {
-            if (range.length <= new CodePointIndex(0))
-            {
-                continue;
-            }
-            
             ranges.push(range);
             index += range.length;
             indexes.push(index);
         }
     }
     
-    public function merge(localRanges:RangeCollection, context:SourceContext):RangeCollection
+    public function merge(localRanges:RangeCollection):RangeCollection
     {
-        var result = [];
-        
-        for (range in localRanges.ranges)
-        {
-            for (localRange in mergeRange(range, context))
-            {
-                result.push(localRange);
-            }
-        }
-        
+        var result = mergeRanges(localRanges.ranges);
         return new RangeCollection(result);
     }
     
-    public function mergeRange(localRange:Range, context:SourceContext):Array<Range>
+    public function mergeRanges(localRanges:Array<Range>):Array<Range>
+    {
+        return [
+            for (range in localRanges)
+            {
+                for (localRange in mergeRange(range))
+                {
+                    localRange;
+                }
+            }
+        ];
+    }
+    
+    public function mergeRange(localRange:Range):Array<Range>
     {
         var length = ranges.length;
-        if (localRange.start < new CodePointIndex(0))
-        {
-            throw new FatalException(
-                "localRange.start is lower out of range.", 
-                RangeCollection, 
-                "LocalRangeStartIsLowerOutOfRange",
-                context.getPosition(localRange)
-            );
-        }
+        var start = if (localRange.start < new CodePointIndex(0)) new CodePointIndex(0) else localRange.start;
+        
         var last = indexes[length];
-        if (last < localRange.end)
-        {
-            throw new FatalException(
-                "localRange.end is higher out of range.", 
-                RangeCollection, 
-                "LocalRangeEndIsUpperOutOfRange",
-                context.getPosition(localRange)
-            );
-        }
+        var end = if (last < localRange.end) last else localRange.end;
      
         var startRangeIndex = getRangeIndexAt(localRange.start);
         var endRangeIndex = getRangeIndexAt(localRange.end);
@@ -72,11 +56,8 @@ class RangeCollection
         var result = [];
         inline function add(parentRange:Range, startPosition:CodePointIndex, endPosition:CodePointIndex):Void
         {
-            var range = Range.createWithEnd(parentRange.start + startPosition, endPosition - startPosition);
-            if (range.length > new CodePointIndex(0))
-            {
-                result.push(range);
-            }
+            var range = Range.createWithLength(parentRange.start + startPosition, endPosition - startPosition);
+            result.push(range);
         }
         
         var inlinePosition = localRange.start - indexes[startRangeIndex];
@@ -93,7 +74,6 @@ class RangeCollection
             var parentRange = ranges[endRangeIndex];
             add(parentRange, inlinePosition, endInlinePosition);
         }
-        
         return result;
     }
     
@@ -108,6 +88,7 @@ class RangeCollection
     
     public function toString():String
     {
-        return [for (range in ranges) range.toString()].join(",");
+        var strings = [for (range in ranges) range.toString()];
+        return if (strings.length == 0) "?" else strings.join(",");
     }
 }

@@ -1,6 +1,6 @@
 package lisla.idl.std.lisla2entity;
 import hxext.ds.Result;
-import lisla.data.meta.core.ArrayWithMetadata;
+import lisla.data.meta.core.ArrayWithtag;
 import lisla.data.tree.al.AlTree;
 import lisla.data.tree.al.AlTreeKind;
 import lisla.idl.lisla2entity.LislaToEntityContext;
@@ -9,7 +9,7 @@ import lisla.idl.lisla2entity.error.LislaToEntityErrorKind;
 
 class ArrayLislaToEntity
 {
-    public static function process<T>(context:LislaToEntityContext, tLislaToEntity):Result<ArrayWithMetadata<AlTree<T>>, Array<LislaToEntityError>> 
+    public static function process<T>(context:LislaToEntityContext, tLislaToEntity):Result<ArrayWithtag<AlTree<T>>, Array<LislaToEntityError>> 
 	{
 		return switch (context.lisla.kind)
 		{
@@ -30,7 +30,7 @@ class ArrayLislaToEntity
 							data.push(o);
 					}
 				}
-				Result.Ok(new ArrayWithMetadata(data, context.lisla.metadata));
+				Result.Ok(new ArrayWithtag(data, context.lisla.tag));
 		}
 	}
 }

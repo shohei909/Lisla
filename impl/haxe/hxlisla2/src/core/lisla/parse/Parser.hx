@@ -3,11 +3,11 @@ package lisla.parse;
 import haxe.ds.Option;
 import hxext.ds.Result;
 import lisla.data.meta.position.CodePointIndex;
+import lisla.data.meta.position.Position;
 import lisla.data.meta.position.SourceContext;
 import lisla.data.tree.array.ArrayTreeArrayTools;
 import lisla.data.tree.array.ArrayTreeDocument;
 import lisla.error.parse.ArrayTreeParseError;
-import lisla.error.parse.ArrayTreeParseErrorKind;
 import lisla.parse.result.ArrayTreeParseResult;
 import lisla.parse.result.ArrayTreeTemplateParseResult;
 import lisla.template.TemplateFinalizer;
@@ -18,23 +18,23 @@ class Parser
     public static function parse(
         string:String,
         ?config:ParseConfig,
-        ?context:SourceContext
+        ?position:Position
     ):ArrayTreeParseResult
     {
 		if (config == null) 
 		{
 			config = new ParseConfig();
 		}
-        if (context == null) 
+        if (position == null) 
 		{
-			context = new SourceContext(
+			position = new Position(
                 Option.None,
                 Option.None,
-                []
+                Option.None
             );
 		}
         
-        var template = switch (parseTemplate(string, config, context))
+        var template = switch (parseTemplate(string, config, position))
         {
             case Result.Ok(ok):
                 ok;
@@ -48,7 +48,7 @@ class Parser
         return switch (ArrayTreeArrayTools.mapOrError(template.data, TemplateFinalizer.finalize, config.persevering))
         {
             case Result.Ok(ok):
-                Result.Ok(new ArrayTreeDocument(ok, template.context, template.metadata));
+                Result.Ok(new ArrayTreeDocument(ok, template.tag));
                 
             case Result.Error(errors):
                 Result.Error(
@@ -60,27 +60,26 @@ class Parser
 	public static function parseTemplate(
         string:String, 
         ?config:ParseConfig,
-        ?context:SourceContext
+        ?position:Position
     ):ArrayTreeTemplateParseResult
 	{
 		if (config == null) 
 		{
 			config = new ParseConfig();
 		}
-        if (context == null) 
+        if (position == null) 
 		{
-			context = new SourceContext(
+			position = new Position(
                 Option.None,
                 Option.None,
-                []
+                Option.None
             );
 		}
 
 		var parser = new ParseState(
             string, 
             config, 
-            context,
-            new CodePointIndex(0)
+            position
         );
 
 		try

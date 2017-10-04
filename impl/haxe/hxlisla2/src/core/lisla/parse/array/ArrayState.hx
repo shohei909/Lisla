@@ -1,8 +1,8 @@
 package lisla.parse.array;
 import lisla.parse.string.QuotedStringContext;
 import lisla.parse.string.UnquotedStringContext;
-import lisla.parse.metadata.UnsettledArrayTag;
-import lisla.parse.metadata.UnsettledLeadingTag;
+import lisla.parse.tag.UnsettledArrayTag;
+import lisla.parse.tag.UnsettledLeadingTag;
 
 enum ArrayState
 {

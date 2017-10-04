@@ -1,5 +1,5 @@
 package lisla.data.node.core;
-import lisla.data.meta.core.MetadataHolder;
+import lisla.data.meta.core.tagHolder;
 
-interface Node extends MetadataHolder {
+interface Node extends tagHolder {
 }

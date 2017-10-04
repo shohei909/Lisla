@@ -1,28 +1,25 @@
 package lisla.data.tree.array;
 
-import lisla.data.meta.core.ArrayWithMetadata;
-import lisla.data.meta.core.Metadata;
+import lisla.data.meta.core.ArrayWithTag;
+import lisla.data.meta.core.Tag;
 import lisla.data.meta.position.SourceContext;
 
 class ArrayTreeDocument<LeafType>
 {   
     public var data(default, null):Array<ArrayTree<LeafType>>;
-    public var context(default, null):SourceContext;
-    public var metadata(default, null):Metadata;
+    public var tag(default, null):Tag;
 
     public function new(
         data:Array<ArrayTree<LeafType>>,
-        context:SourceContext,
-        metadata:Metadata
+        tag:Tag
     ) 
     {
-        this.metadata = metadata;
-        this.context = context;
+        this.tag = tag;
         this.data = data;
     }
 
-    public function getArrayWithMetadata():ArrayWithMetadata<ArrayTree<LeafType>>
+    public function getArrayWithTag():ArrayWithTag<ArrayTree<LeafType>>
     {
-        return new ArrayWithMetadata(data, metadata);
-    }    
+        return new ArrayWithTag(data, tag);
+    }
 }

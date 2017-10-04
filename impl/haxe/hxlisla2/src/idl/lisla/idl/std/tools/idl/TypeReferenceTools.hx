@@ -2,8 +2,8 @@ package lisla.idl.std.tools.idl;
 import haxe.ds.Option;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
-import lisla.data.meta.core.Metadata;
-import lisla.data.meta.core.StringWithMetadata;
+import lisla.data.meta.core.tag;
+import lisla.data.meta.core.StringWithtag;
 import hxext.ds.Result;
 import lisla.idl.exception.IdlException;
 import lisla.idl.generator.data.EntityOutputConfig;
@@ -158,9 +158,9 @@ class TypeReferenceTools
         {
             // Any
             targetPath = new TypePath(
-                new ModulePath(["lisla", "core"], new Metadata()), 
-                new TypeName(new StringWithMetadata("Any", new Metadata())),
-                new Metadata()
+                new ModulePath(["lisla", "core"], new tag()), 
+                new TypeName(new StringWithtag("Any", new tag())),
+                new tag()
             );
         }
         

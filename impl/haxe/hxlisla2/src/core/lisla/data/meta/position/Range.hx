@@ -34,6 +34,6 @@ class Range
     
     public function toString():String
     {
-        return start + "-" + start + length;
+        return start + "-" + (start + length);
     }
 }

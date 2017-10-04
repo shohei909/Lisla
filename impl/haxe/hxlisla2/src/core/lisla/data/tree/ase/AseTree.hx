@@ -1,16 +1,16 @@
 package lisla.data.tree.ase;
 import hxext.ds.Result;
-import lisla.data.meta.core.MetadataHolderImpl;
+import lisla.data.meta.core.TagHolderImpl;
 import lisla.data.tree.core.Tree;
 
-class AseTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
+class AseTree<LeafType> extends TagHolderImpl implements Tree<LeafType>
 {
     public var kind(default, null):AseTreeKind<LeafType>;
     
-    public function new(kind:AseTreeKind<LeafType>, metadata:Metadata) 
+    public function new(kind:AseTreeKind<LeafType>, tag:tag) 
     {
-        if (metadata == null) throw "test";
-        super(metadata);
+        if (tag == null) throw "test";
+        super(tag);
         this.kind = kind;
     }
     
@@ -20,14 +20,14 @@ class AseTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
         {
             case AseTreeKind.Arr(array):
                 var kind = [for (element in array) element.map(func)];
-                new AseTree(AseTreeKind.Arr(kind), metadata.shallowClone());
+                new AseTree(AseTreeKind.Arr(kind), tag.shallowClone());
                 
             case AseTreeKind.Enum(label, array):
                 var kind = [for (element in array) element.map(func)];
-                new AseTree(AseTreeKind.Enum(label, kind), metadata.shallowClone());
+                new AseTree(AseTreeKind.Enum(label, kind), tag.shallowClone());
                 
             case AseTreeKind.Leaf(leaf):
-                new AseTree(AseTreeKind.Leaf(func(leaf)), metadata.shallowClone());
+                new AseTree(AseTreeKind.Leaf(func(leaf)), tag.shallowClone());
         }
     }
     
@@ -42,7 +42,7 @@ class AseTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
                 switch (AselTreeArrayTools.mapOrError(array, func, persevering))
                 {
                     case Result.Ok(ok):
-                        Result.Ok(new AseTree(AseTreeKind.Arr(ok), metadata.shallowClone()));
+                        Result.Ok(new AseTree(AseTreeKind.Arr(ok), tag.shallowClone()));
                         
                     case Result.Error(errors):
                         Result.Error(errors);
@@ -52,10 +52,10 @@ class AseTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
                 switch (func(leaf))
                 {
                     case Result.Ok(ok):
-                        Result.Ok(new AseTree(AseTreeKind.Leaf(ok), metadata.shallowClone()));
+                        Result.Ok(new AseTree(AseTreeKind.Leaf(ok), tag.shallowClone()));
                         
                     case Result.Error(errors):
-                        var range = OptionTools.getOrElse(metadata.range, Range.zero());
+                        var range = OptionTools.getOrElse(tag.range, Range.zero());
                         Result.Error([for (error in errors) new DataWithRange(error, range)]);
                 }
         }

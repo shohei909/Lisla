@@ -11,6 +11,8 @@ class DocumentComment
     
     public function new(rawData:String, ranges:RangeCollection) 
     {
+        this.rawData = rawData;
+        this.ranges = ranges;
         parsedData = Option.None;
     }
 }

@@ -41,8 +41,10 @@ class ParseTest extends LislaTestCase
 
             switch [caseDocument.data[0].kind, caseDocument.data[1].kind]
             {
-                case [ArrayTreeKind.Leaf(alTree), ArrayTreeKind.Leaf(json)]:				
-                    var arrayTreeDocument = switch (Parser.parse(alTree))
+                case [ArrayTreeKind.Leaf(arrayTree), ArrayTreeKind.Leaf(json)]:
+                    var tag = caseDocument.data[0].tag;
+                    var position = tag.innerPosition;
+                    var arrayTreeDocument = switch (Parser.parse(arrayTree, null, position))
                     {
                         case Result.Ok(_document):
                             _document;
@@ -64,7 +66,7 @@ class ParseTest extends LislaTestCase
             }
 		}
 	}
-	
+    
 	public function testFailure():Void
 	{
 		for (filePath in rootDirectory.searchFiles(TestCore.INVALID_NONFATAL_DIRECTORY, ".lisla"))

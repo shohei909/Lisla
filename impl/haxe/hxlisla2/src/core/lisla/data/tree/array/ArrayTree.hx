@@ -1,41 +1,41 @@
 package lisla.data.tree.array;
 import hxext.ds.OptionTools;
 import hxext.ds.Result;
-import lisla.data.meta.core.ArrayWithMetadata;
-import lisla.data.meta.core.Metadata;
-import lisla.data.meta.core.MetadataHolderImpl;
-import lisla.data.meta.core.StringWithMetadata;
+import lisla.data.meta.core.ArrayWithTag;
+import lisla.data.meta.core.Tag;
+import lisla.data.meta.core.TagHolderImpl;
+import lisla.data.meta.core.StringWithTag;
 import lisla.data.meta.position.Range;
 import lisla.data.tree.array.ArrayTreeArrayTools;
 import lisla.data.tree.array.ArrayTreeKind;
 import lisla.data.tree.core.Tree;
 
-class ArrayTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
+class ArrayTree<LeafType> extends TagHolderImpl implements Tree<LeafType>
 {
     public var kind(default, null):ArrayTreeKind<LeafType>;
     
-    public function new(kind:ArrayTreeKind<LeafType>, metadata:Metadata) 
+    public function new(kind:ArrayTreeKind<LeafType>, tag:Tag) 
     {
-        if (metadata == null) throw "test";
-        super(metadata);
+        if (tag == null) throw "test";
+        super(tag);
         this.kind = kind;
     }
     
-    public function map<NewLeafType>(func:LeafType->NewLeafType):ArrayTree<NewLeafType>
+    public function map<NewLeafType>(func:LeafType->Dynamic):ArrayTree<NewLeafType>
     {
         return switch (kind)
         {
             case ArrayTreeKind.Arr(array):
                 var kind = [for (element in array) element.map(func)];
-                new ArrayTree(ArrayTreeKind.Arr(kind), metadata.shallowClone());
+                new ArrayTree(ArrayTreeKind.Arr(kind), tag.shallowClone());
                 
             case ArrayTreeKind.Leaf(leaf):
-                new ArrayTree(ArrayTreeKind.Leaf(func(leaf)), metadata.shallowClone());
+                new ArrayTree(ArrayTreeKind.Leaf(func(leaf)), tag.shallowClone());
         }
     }
     
     public function mapOrError<NewLeafType, ErrorType>(
-        func:LeafType->Metadata->Result<NewLeafType, Array<ErrorType>>,
+        func:LeafType->Tag->Result<NewLeafType, Array<ErrorType>>,
         persevering:Bool
     ):Result<ArrayTree<NewLeafType>, Array<ErrorType>>
     {
@@ -45,17 +45,17 @@ class ArrayTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
                 switch (ArrayTreeArrayTools.mapOrError(array, func, persevering))
                 {
                     case Result.Ok(ok):
-                        Result.Ok(new ArrayTree(ArrayTreeKind.Arr(ok), metadata.shallowClone()));
+                        Result.Ok(new ArrayTree(ArrayTreeKind.Arr(ok), tag.shallowClone()));
                         
                     case Result.Error(errors):
                         Result.Error(errors);
                 }
                 
             case ArrayTreeKind.Leaf(leaf):
-                switch (func(leaf, metadata))
+                switch (func(leaf, tag))
                 {
                     case Result.Ok(ok):
-                        Result.Ok(new ArrayTree(ArrayTreeKind.Leaf(ok), metadata.shallowClone()));
+                        Result.Ok(new ArrayTree(ArrayTreeKind.Leaf(ok), tag.shallowClone()));
                         
                     case Result.Error(errors):
                         Result.Error(errors);
@@ -63,19 +63,19 @@ class ArrayTree<LeafType> extends MetadataHolderImpl implements Tree<LeafType>
         }
     }
     
-    public static function fromArray<T>(array:ArrayWithMetadata<ArrayTree<T>>):ArrayTree<T>
+    public static function fromArray<T>(array:ArrayWithTag<ArrayTree<T>>):ArrayTree<T>
     {
         return new ArrayTree(
             ArrayTreeKind.Arr(array.data),
-            array.metadata
+            array.tag
         );
     }
     
-    public static function fromString(string:StringWithMetadata):ArrayTree<String>
+    public static function fromString(string:StringWithTag):ArrayTree<String>
     {
         return new ArrayTree(
             ArrayTreeKind.Leaf(string.data),
-            string.metadata
+            string.tag
         );
     }
 }

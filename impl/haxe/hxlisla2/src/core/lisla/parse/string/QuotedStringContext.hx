@@ -1,7 +1,7 @@
 package lisla.parse.string;
 using lisla.parse.char.CodePointTools;
 
-import lisla.data.meta.core.Metadata;
+import lisla.data.meta.core.Tag;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Range;
 import lisla.data.tree.array.ArrayTree;
@@ -11,8 +11,8 @@ import lisla.parse.ParseState;
 import lisla.parse.array.ArrayContext;
 import lisla.parse.array.ArrayParent;
 import lisla.parse.array.ArrayState;
-import lisla.parse.metadata.UnsettledLeadingTag;
-import lisla.parse.metadata.UnsettledStringTag;
+import lisla.parse.tag.UnsettledLeadingTag;
+import lisla.parse.tag.UnsettledStringTag;
 import unifill.CodePoint;
 import lisla.data.leaf.template.TemplateLeaf;
 
@@ -23,38 +23,30 @@ class QuotedStringContext
     
 	private var currentLine:QuotedStringLine;
     private var currentString:Array<QuotedStringLine>;
-	private var storedData:Array<QuotedStringArrayPair>;
 	
 	private var state:QuotedStringState;
 	private var singleQuoted:Bool;
 	private var startQuoteCount:Int;
-	private var metadata:UnsettledStringTag;
+	private var tag:UnsettledStringTag;
     
     private var lastIndent:String;
     private var isPlaceholder:Bool;
     
-	public function new(top:ParseState, parent:ArrayContext, singleQuoted:Bool, isPlaceholder:Bool, startQuoteCount:Int, metadata:UnsettledStringTag) 
+	public function new(top:ParseState, parent:ArrayContext, singleQuoted:Bool, isPlaceholder:Bool, startQuoteCount:Int, tag:UnsettledStringTag) 
 	{
 		this.isPlaceholder = isPlaceholder;
         this.top = top;
         this.parent = parent;
         this.singleQuoted = singleQuoted;
 		this.startQuoteCount = startQuoteCount;
-		this.metadata = metadata;
+		this.tag = tag;
         this.currentString = [];
-		this.storedData = [];
-		this.currentLine = new QuotedStringLine(metadata.startPosition);
+		this.currentLine = new QuotedStringLine(tag.startPosition);
 		this.state = QuotedStringState.Indent;
         
         this.lastIndent = "";
 	}
 	
-    public function store(data:QuotedStringArrayPair):Void
-    {
-        metadata = new UnsettledLeadingTag().toStringTag(top.position);
-        storedData.push(data);
-    }
-    
     public function process(codePoint:CodePoint):Void
 	{
 		switch (state) 
@@ -141,7 +133,7 @@ class QuotedStringContext
         
 		currentLine.newLine = string;
 		currentString.push(currentLine);
-		currentLine = new QuotedStringLine(top.position);
+		currentLine = new QuotedStringLine(top.codePointIndex);
 		state = QuotedStringState.Indent;
 	}
 	
@@ -192,8 +184,8 @@ class QuotedStringContext
 	
 	private function endUnclosedQuotedString(endQuoteCount:Int):Void
 	{
-		var startPosition = metadata.startPosition;
-		top.error(BasicParseErrorKind.UnclosedQuote, Range.createWithEnd(metadata.startPosition - startQuoteCount, startPosition));
+		var startPosition = tag.startPosition;
+		top.error(BasicParseErrorKind.UnclosedQuote, Range.createWithEnd(tag.startPosition - startQuoteCount, startPosition));
 		parent.state = ArrayState.Normal(false);
 	}
 	
@@ -201,72 +193,72 @@ class QuotedStringContext
 	{
 		if (endQuoteCount > startQuoteCount)
 		{
-			top.error(BasicParseErrorKind.TooManyClosingQuotes(startQuoteCount, endQuoteCount), Range.createWithEnd(top.position - endQuoteCount, top.position));
+			top.error(BasicParseErrorKind.TooManyClosingQuotes(startQuoteCount, endQuoteCount), Range.createWithEnd(top.codePointIndex - endQuoteCount, top.codePointIndex));
 		}
 		
-        var isFirstGroup = true;
-        var skipIndent = if (currentLine.isWhite()) lastIndent else "";
+        var skipIndent = lastIndent;
         var skipIndentSize = skipIndent.length;
-        
-        function addString(lines:Array<QuotedStringLine>, isLastGroup:Bool, metadata:Metadata):Void
-        {
-            var string = "";
-            var isGroupTop = true;
-            
-            for (line in lines)
-            {
-                var isSkipTarget = lines.length > 1 && isFirstGroup && isGroupTop && line.isWhite();
-                if (!isSkipTarget)
-                {
-                    if (isGroupTop)
-                    {
-                        string += line.content;
-                    }
-                    else
-                    {
-                        if (line.content.length == 0)
-                        {
-                            // nothing to do.
-                        }
-                        else if (line.content.substr(0, skipIndentSize) == skipIndent)
-                        {
-                            string += line.content.substr(skipIndentSize);
-                        }
-                        else
-                        {
-                            top.error(BasicParseErrorKind.UnmatchedIndentWhiteSpaces, Range.createWithLength(line.startPosition, skipIndentSize));
-                            string += line.content;
-                        }
-                    }
-                    string += line.newLine;
-                }
-                
-                isGroupTop = false;
-            }
-            
-            parent.pushString(string, isPlaceholder, metadata);
-            isFirstGroup = false;
-        }
-        
-        for (pair in storedData)
-        {
-            addString(pair.string, false, pair.metadata);
-            
-            for (tree in pair.trees)
-            {
-                parent.push(tree, false);
-            }
-        }
+        var string = "";
+        var isFirstLine = true;
+        var innerRanges = [];
+        var endPosition:CodePointIndex;
         
         if (currentString.length == 0 || !currentLine.isWhite())
         {
             currentString.push(currentLine);
+            endPosition = top.codePointIndex - endQuoteCount;
         }
         else
         {
-            currentString[currentString.length - 1].newLine = "";
+            var lastLine = currentString[currentString.length - 1];
+            endPosition = lastLine.startPosition - lastLine.newLine.length;
+            lastLine.newLine = "";
         }
         
-        addString(currentString, true, metadata.settle(top.context, top.position));
+        var length = currentString.length;
+        for (i in 0...length)
+        {
+            var line = currentString[i];
+            var isSkipTarget = currentString.length > 1 && isFirstLine && line.isWhite();
+            if (!isSkipTarget)
+            {
+                var startPosition = line.startPosition;
+                if (isFirstLine)
+                {
+                    string += line.content;
+                }
+                else
+                {
+                    if (line.content.length == 0)
+                    {
+                        // nothing to do.
+                    }
+                    else if (line.content.substr(0, skipIndentSize) == skipIndent)
+                    {
+                        startPosition += skipIndentSize;
+                        string += line.content.substr(skipIndentSize);
+                    }
+                    else
+                    {
+                        top.error(BasicParseErrorKind.UnmatchedIndentWhiteSpaces, Range.createWithLength(line.startPosition, line.indent));
+                        string += line.content;
+                    }
+                }
+                string += line.newLine;
+                
+                var end = if (i == length - 1) endPosition else currentString[i + 1].startPosition;
+                innerRanges.push(
+                    Range.createWithEnd(startPosition, end)
+                );
+            }
+            
+            isFirstLine = false;
+        }
+        
+        parent.pushString(
+            string, 
+            isPlaceholder, 
+            tag.settle(top.context, top.codePointIndex, innerRanges)
+        );
 	}
 }

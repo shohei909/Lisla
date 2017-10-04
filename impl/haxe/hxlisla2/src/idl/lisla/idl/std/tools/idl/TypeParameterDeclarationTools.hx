@@ -54,7 +54,7 @@ class TypeParameterDeclarationTools
 					);
 					
 				case TypeParameterDeclaration.TypeName(typeName):
-					var haxeTypePath = ComplexType.TPath(new EntityHaxeTypePath(new TypePath(Maybe.none(), typeName, typeName.metadata)).toMacroPath());
+					var haxeTypePath = ComplexType.TPath(new EntityHaxeTypePath(new TypePath(Maybe.none(), typeName, typeName.tag)).toMacroPath());
 					result.push(
 						{
 							name: typeName.toLislaToEntityVariableName(),

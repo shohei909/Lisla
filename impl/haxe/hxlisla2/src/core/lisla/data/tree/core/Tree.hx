@@ -1,7 +1,6 @@
 package lisla.data.tree.core;
-import lisla.data.meta.core.MetadataHolder;
+import lisla.data.meta.core.TagHolder;
 
-interface Tree<LeafType> extends MetadataHolder
+interface Tree<LeafType> extends TagHolder
 {
-    public function map<NewLeafType>(func:LeafType-> NewLeafType):Tree<NewLeafType>;
 }

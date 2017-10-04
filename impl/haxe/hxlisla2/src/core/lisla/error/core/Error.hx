@@ -33,7 +33,7 @@ class Error<ErrorDetail:IErrorDetailHolder>
     
     public function toString():String
     {
-        return getMessage() + "(" + getName() + ")";
+        return position.toString() + ": " + getMessage() + "(" + getName() + ")";
     }
     
     public function convert<T:IErrorDetailHolder>(newDetailHolder:T):Error<T>

@@ -8,28 +8,35 @@ import lisla.project.LocalPath;
 
 class SourceContext 
 {
-    public var projectRoot:Option<ProjectRootDirectory>;
-    public var filePath:Option<LocalPath>;
-    public var sourceMaps:Array<SourceMap>;
-
-    public function new(
-        projectRoot:Option<ProjectRootDirectory>,
-        filePath:Option<LocalPath>,
-        sourceMaps:Array<SourceMap>
-    ) 
+    public var position(default, null):Position;
+    public var lines:LineIndexes;
+    
+    public function new(position:Position) 
     {
-        this.projectRoot = projectRoot;
-        this.filePath = filePath;
-        this.sourceMaps = sourceMaps;
+        this.position = position;
+        lines = new LineIndexes();
     }
     
     public function getPosition(range:Range):Position
     {
+        return getPositionWithRanges([range]);
+    }
+    
+    public function getPositionWithRanges(ranges:Array<Range>):Position
+    {
         return new Position(
-            projectRoot,
-            filePath,
-            sourceMaps,
-            Option.Some(range)
+            position.projectRoot,
+            position.localPath,
+            Option.Some(
+                switch (position.sourceMap)
+                {
+                    case Option.Some(_sourceMap):
+                        _sourceMap.mergeRanges(ranges);
+                        
+                    case Option.None:
+                        new SourceMap(lines, new RangeCollection(ranges));
+                }
+            )
         );
     }
 }
