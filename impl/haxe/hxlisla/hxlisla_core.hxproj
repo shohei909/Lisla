@@ -12,6 +12,7 @@
     <movie minorVersion="0" />
     <movie platform="hxml" />
     <movie background="#FFFFFF" />
+    <movie preferredSDK="Haxe 4.0.0;4.0.0;" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -29,6 +30,7 @@
   </build>
   <!-- haxelib libraries -->
   <haxelib>
+    <library name="hx3compat" />
     <library name="nanotest" />
     <library name="unifill" />
   </haxelib>

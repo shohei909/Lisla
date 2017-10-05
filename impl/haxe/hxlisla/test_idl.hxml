@@ -21,14 +21,15 @@
 -cp generated
 -lib nanotest
 -lib unifill
+-lib hx3compat
 
 --next
--cmd neko "bin/test.n" 1>bin/report/idl/neko.txt
+-cmd neko "bin/test.n" 1>bin/report_idl_neko.txt
 
 --next
 -lib nanotest
 -D result_exit_code
---macro nanotest.NanoTestRunner.readResult('bin/report/idl/neko.txt', ['test/idl', 'test/core'], 'Neko')
+--macro nanotest.NanoTestRunner.readResult('bin/report_idl_neko.txt', ['test/idl', 'test/core'], 'Neko')
 
 
 ## C Sharp
@@ -44,9 +45,9 @@
 #-lib unifill
 #
 #--next
-#-cmd ""./bin/cs/bin/TestIdl.exe"" 1>bin/report/idl/cs.txt
+#-cmd ""./bin/cs/bin/TestIdl.exe"" 1>bin/report_idl_cs.txt
 #
 #--next
 #-lib nanotest
 #-D result_exit_code
-#--macro nanotest.NanoTestRunner.readResult('bin/report/idl/cs.txt', ['test/idl', 'test/core'], 'C#')
+#--macro nanotest.NanoTestRunner.readResult('bin/report_idl_cs.txt', ['test/idl', 'test/core'], 'C#')
