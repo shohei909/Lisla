@@ -1,11 +1,9 @@
 package lisla.data.tree.array;
-import hxext.ds.OptionTools;
 import hxext.ds.Result;
-import lisla.data.meta.core.ArrayWithTag;
+import lisla.data.meta.core.MaybeTag;
 import lisla.data.meta.core.Tag;
 import lisla.data.meta.core.TagHolderImpl;
-import lisla.data.meta.core.StringWithTag;
-import lisla.data.meta.position.Range;
+import lisla.data.meta.core.WithTag;
 import lisla.data.tree.array.ArrayTreeArrayTools;
 import lisla.data.tree.array.ArrayTreeKind;
 import lisla.data.tree.core.Tree;
@@ -14,7 +12,7 @@ class ArrayTree<LeafType> extends TagHolderImpl implements Tree<LeafType>
 {
     public var kind(default, null):ArrayTreeKind<LeafType>;
     
-    public function new(kind:ArrayTreeKind<LeafType>, tag:Tag) 
+    public function new(kind:ArrayTreeKind<LeafType>, tag:MaybeTag) 
     {
         if (tag == null) throw "test";
         super(tag);
@@ -35,7 +33,7 @@ class ArrayTree<LeafType> extends TagHolderImpl implements Tree<LeafType>
     }
     
     public function mapOrError<NewLeafType, ErrorType>(
-        func:LeafType->Tag->Result<NewLeafType, Array<ErrorType>>,
+        func:LeafType->MaybeTag->Result<NewLeafType, Array<ErrorType>>,
         persevering:Bool
     ):Result<ArrayTree<NewLeafType>, Array<ErrorType>>
     {
@@ -63,7 +61,7 @@ class ArrayTree<LeafType> extends TagHolderImpl implements Tree<LeafType>
         }
     }
     
-    public static function fromArray<T>(array:ArrayWithTag<ArrayTree<T>>):ArrayTree<T>
+    public static function fromArray<T>(array:WithTag<Array<ArrayTree<T>>>):ArrayTree<T>
     {
         return new ArrayTree(
             ArrayTreeKind.Arr(array.data),
@@ -71,7 +69,7 @@ class ArrayTree<LeafType> extends TagHolderImpl implements Tree<LeafType>
         );
     }
     
-    public static function fromString(string:StringWithTag):ArrayTree<String>
+    public static function fromString(string:WithTag<String>):ArrayTree<String>
     {
         return new ArrayTree(
             ArrayTreeKind.Leaf(string.data),

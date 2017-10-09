@@ -48,9 +48,6 @@ class BasicParseErrorDetail implements IErrorDetail
 			case BasicParseErrorKind.InvalidPlaceholderPosition:
 				"Invalid placeholder position.";
 				
-			case BasicParseErrorKind.TooManyClosingQuotes(expected, actual):
-				"Too many closing quotes. " + expected + " expected but actual " + actual;
-				
 			case BasicParseErrorKind.TooManyClosingBracket:
 				"Too many closing brackets.";
 				

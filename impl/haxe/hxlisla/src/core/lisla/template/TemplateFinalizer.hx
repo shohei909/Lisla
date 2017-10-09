@@ -1,6 +1,7 @@
 package lisla.template;
 import hxext.ds.Result;
 import lisla.data.leaf.template.TemplateLeaf;
+import lisla.data.meta.core.MaybeTag;
 import lisla.data.meta.core.Tag;
 import lisla.error.template.TemplateFinalizeError;
 import lisla.error.template.TemplateFinalizeErrorKind;
@@ -9,7 +10,7 @@ class TemplateFinalizer
 {
     public static function finalize(
         leaf:TemplateLeaf, 
-        tag:Tag
+        tag:MaybeTag
     ):Result<String, Array<TemplateFinalizeError>>
     {
         return switch (leaf)

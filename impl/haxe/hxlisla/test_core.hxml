@@ -4,7 +4,6 @@
 -cp test/core
 -cp src/core
 
--lib hx3compat
 -lib nanotest
 -lib unifill
 
@@ -12,10 +11,9 @@
 -cmd neko "bin/test_core.n" 1>bin/core_neko_report.txt
 
 --next
--lib hx3compat
 -lib nanotest
 -D result_exit_code
---macro nanotest.NanoTestRunner.readResult('bin/core_neko_report.txt', ['test/core'], 'Neko')
+--macro nanotest.NanoTestRunner.readResult('bin/core_neko_report.txt', ['test/core', 'src/core'], 'Neko')
 
 
 # C Sharp
@@ -25,7 +23,6 @@
 -cp test/core
 -cp src/core
 
--lib hx3compat
 -lib nanotest
 -lib unifill
 
@@ -33,7 +30,6 @@
 -cmd ""./bin/cs/bin/TestCore.exe"" 1>bin/core_cs_report.txt
 
 --next
--lib hx3compat
 -lib nanotest
 -D result_exit_code
---macro nanotest.NanoTestRunner.readResult('bin/core_cs_report.txt', ['test/core'], 'C#')
+--macro nanotest.NanoTestRunner.readResult('bin/core_cs_report.txt', ['test/core', 'src/core'], 'C#')

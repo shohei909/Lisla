@@ -2,6 +2,7 @@ package cases;
 import haxe.Json;
 import haxe.ds.Option;
 import hxext.ds.Result;
+import lisla.assert.Assert;
 import lisla.data.meta.position.SourceMap;
 import lisla.data.tree.array.ArrayTreeKind;
 import lisla.parse.ParseState;

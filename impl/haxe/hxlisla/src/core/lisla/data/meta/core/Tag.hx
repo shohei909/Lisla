@@ -1,14 +1,16 @@
 package lisla.data.meta.core;
 import haxe.ds.Option;
+import hxext.ds.Maybe;
 import lisla.data.meta.comment.DocumentComment;
 import lisla.data.meta.position.Position;
 import lisla.data.meta.position.Range;
 import lisla.data.meta.position.SourceContext;
 
-class Tag {
+class Tag 
+{
     public var position:Position;
     public var innerPosition:Position;
-    public var documentComment:Option<DocumentComment>;
+    public var documentComment:Maybe<DocumentComment>;
 
     public function new(
         position:Position,
@@ -16,7 +18,7 @@ class Tag {
     ) {
         this.innerPosition = innerPosition;
         this.position = position;
-        documentComment = Option.None;
+        documentComment = Maybe.none();
     }
 
     public function shallowClone():Tag {

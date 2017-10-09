@@ -1,6 +1,7 @@
 package lisla.parse;
 
 import haxe.ds.Option;
+import hxext.ds.Maybe;
 import hxext.ds.Result;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Position;
@@ -28,9 +29,9 @@ class Parser
         if (position == null) 
 		{
 			position = new Position(
-                Option.None,
-                Option.None,
-                Option.None
+                Maybe.none(),
+                Maybe.none(),
+                Maybe.none()
             );
 		}
         
@@ -69,11 +70,7 @@ class Parser
 		}
         if (position == null) 
 		{
-			position = new Position(
-                Option.None,
-                Option.None,
-                Option.None
-            );
+			position = Position.empty();
 		}
 
 		var parser = new ParseState(

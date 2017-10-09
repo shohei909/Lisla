@@ -7,7 +7,6 @@ enum BasicParseErrorKind
     SeparaterRequired;
     UnclosedArray;
     UnclosedQuote;
-    TooManyClosingQuotes(expected:Int, actual:Int);
 	TooManyClosingBracket;
 	UnmatchedIndentWhiteSpaces;
     InvalidPlaceholderPosition;

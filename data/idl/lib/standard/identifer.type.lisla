@@ -1,0 +1,4 @@
+(newtype UpperCamelIdentifer : String)
+(newtype LowerCamelIdentifer : String)
+(newtype UpperSnakeIdentifer : String)
+(newtype LowerSnakeIdentifer : String)

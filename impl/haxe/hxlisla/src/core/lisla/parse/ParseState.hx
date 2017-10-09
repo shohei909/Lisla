@@ -121,7 +121,17 @@ class ParseState
     
     public inline function errorWithCurrentPosition(kind:BasicParseErrorKind):Void 
     {
-        var range = Range.createWithEnd(this.codePointIndex - 1, this.codePointIndex);
+        var range = getCurrentRange();
 		return error(kind, range);
+    }
+    
+    public function getCurrentRange():Range
+    {
+        return Range.createWithEnd(this.codePointIndex - 1, this.codePointIndex);
+    }
+    
+    public function getCurrentPosition():Position
+    {
+        return this.context.getPosition(getCurrentRange());
     }
 }

@@ -114,18 +114,18 @@ class ArrayContext
 			// QuotedString, Normal
 			// --------------------------
 			case [CodePointTools.DOUBLE_QUOTE, ArrayState.Normal(separated)]:
-                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, Range.createWithLength(top.codePointIndex - 1, 1));
+                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, top.getCurrentRange());
 				state = ArrayState.OpeningQuote(false, false, 1);
 				
 			case [CodePointTools.SINGLE_QUOTE, ArrayState.Normal(separated)]:
-                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, Range.createWithLength(top.codePointIndex - 1, 1));
+                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, top.getCurrentRange());
 				state = ArrayState.OpeningQuote(true, false, 1);
 				
 			// --------------------------
 			// Dollar
 			// --------------------------
-			case [CodePointTools.DOLLAR, ArrayState.Normal(separated)]:
-                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, Range.createWithLength(top.codePointIndex - 1, 1));
+			case [CodePointTools.AT, ArrayState.Normal(separated)]:
+                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, top.getCurrentRange());
 				state = ArrayState.Dollar;
 				
 			case [CodePointTools.DOUBLE_QUOTE, ArrayState.Dollar]:
@@ -135,10 +135,10 @@ class ArrayContext
 				state = ArrayState.OpeningQuote(true, true, 1);
                 
             case [
-                CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB | CodePointTools.CLOSEING_PAREN | CodePointTools.OPENNING_PAREN | CodePointTools.SEMICOLON | CodePointTools.DOLLAR,
+                CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB | CodePointTools.CLOSEING_PAREN | CodePointTools.OPENNING_PAREN | CodePointTools.SEMICOLON | CodePointTools.AT,
                 ArrayState.Dollar
             ]:
-                top.error(BasicParseErrorKind.EmptyPlaceholder, Range.createWithLength(top.codePointIndex - 1, 1));
+                top.error(BasicParseErrorKind.EmptyPlaceholder, top.getCurrentRange());
                 state = ArrayState.Normal(false);
                 process(codePoint);
                 
@@ -148,7 +148,7 @@ class ArrayContext
 			// Other, Normal
 			// --------------------------
 			case [_, ArrayState.Normal(separated)]:
-                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, Range.createWithLength(top.codePointIndex - 1, 1));
+                if (!separated) top.error(BasicParseErrorKind.SeparaterRequired, top.getCurrentRange());
 				startUnquotedString(codePoint, false);
 		}
 	}
@@ -199,7 +199,7 @@ class ArrayContext
             var tag = popStringTag(top.codePointIndex - 2).settle(
                 top.context, 
                 top.codePointIndex, 
-                [Range.createWithEnd(top.codePointIndex - 1, top.codePointIndex - 1)]
+                [top.getCurrentRange()]
             );
             pushString("", isPlaceholder, tag);
 		}
@@ -276,7 +276,7 @@ class ArrayContext
                 }
                 
             case ArrayState.Dollar:
-                top.error(BasicParseErrorKind.EmptyPlaceholder, Range.createWithLength(top.codePointIndex - 1, 1));
+                top.error(BasicParseErrorKind.EmptyPlaceholder, top.getCurrentRange());
                 state = ArrayState.Normal(false);
                 Option.None;
                 

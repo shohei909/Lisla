@@ -1,8 +1,7 @@
 package lisla.data.tree.array;
 
-import lisla.data.meta.core.ArrayWithTag;
 import lisla.data.meta.core.Tag;
-import lisla.data.meta.position.SourceContext;
+import lisla.data.meta.core.WithTag;
 
 class ArrayTreeDocument<LeafType>
 {   
@@ -18,8 +17,8 @@ class ArrayTreeDocument<LeafType>
         this.data = data;
     }
 
-    public function getArrayWithTag():ArrayWithTag<ArrayTree<LeafType>>
+    public function getArrayWithTag():WithTag<Array<ArrayTree<LeafType>>>
     {
-        return new ArrayWithTag(data, tag);
+        return new WithTag(data, tag);
     }
 }

@@ -30,7 +30,6 @@
   </build>
   <!-- haxelib libraries -->
   <haxelib>
-    <library name="hx3compat" />
     <library name="nanotest" />
     <library name="unifill" />
   </haxelib>

@@ -1,5 +1,6 @@
 package lisla.project;
 import haxe.ds.Option;
+import hxext.ds.Maybe;
 import lisla.data.meta.position.Position;
 import lisla.data.meta.position.SourceContext;
 import lisla.parse.ParseConfig;
@@ -23,9 +24,9 @@ class Project
     {
         var content = rootDirectory.getContent(path);
         var position = new Position(
-            Option.Some(rootDirectory),
-            Option.Some(path),
-            Option.None
+            Maybe.some(rootDirectory),
+            Maybe.some(path),
+            Maybe.none()
         );
 
         return Parser.parse(

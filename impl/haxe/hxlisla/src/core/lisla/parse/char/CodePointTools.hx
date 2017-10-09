@@ -4,7 +4,7 @@ import unifill.CodePoint;
 class CodePointTools
 {
 	public static inline var SEMICOLON:Int = 0x3B;
-	public static inline var DOLLAR:Int = 0x24;
+	public static inline var AT:Int = 0x40; 
 	public static inline var SINGLE_QUOTE:Int = 0x27;
 	public static inline var DOUBLE_QUOTE:Int = 0x22;
 	public static inline var CR:Int = 0x0D;

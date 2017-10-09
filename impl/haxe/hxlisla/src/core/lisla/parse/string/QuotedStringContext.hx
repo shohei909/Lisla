@@ -1,11 +1,13 @@
 package lisla.parse.string;
 using lisla.parse.char.CodePointTools;
-
+import lisla.assert.Assert;
 import lisla.data.meta.core.Tag;
 import lisla.data.meta.position.CodePointIndex;
+import lisla.data.meta.position.Position;
 import lisla.data.meta.position.Range;
 import lisla.data.tree.array.ArrayTree;
 import lisla.data.tree.array.ArrayTreeKind;
+import lisla.error.exception.FatalException;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseState;
 import lisla.parse.array.ArrayContext;
@@ -65,18 +67,26 @@ class QuotedStringContext
 			case QuotedStringState.Quotes(length):
 				if (matchQuote(codePoint))
 				{
-					state = QuotedStringState.Quotes(length + 1);
+                    if (startQuoteCount == length)
+                    {
+                        currentLine.content += codePoint.toString();
+                    }
+                    else
+                    {
+                        state = QuotedStringState.Quotes(length + 1);
+                    }
 				}
 				else
 				{
-					if (startQuoteCount <= length)
+					if (startQuoteCount == length)
 					{
-						endClosedQuotedString(length);
+						endClosedQuotedString();
 						parent.process(codePoint);
 					}
-					else
-					{
-						addQuotes(length);
+                    else 
+                    {
+                        Assert.assert(startQuoteCount > length, top.getCurrentPosition());
+                    	addQuotes(length);
 						state = QuotedStringState.Body;
 						processBody(codePoint);
 					}
@@ -177,7 +187,7 @@ class QuotedStringContext
 				}
 				else
 				{
-					endClosedQuotedString(length);
+					endClosedQuotedString();
 				}
 		}
 	}
@@ -189,13 +199,8 @@ class QuotedStringContext
 		parent.state = ArrayState.Normal(false);
 	}
 	
-	private function endClosedQuotedString(endQuoteCount:Int):Void
+	private function endClosedQuotedString():Void
 	{
-		if (endQuoteCount > startQuoteCount)
-		{
-			top.error(BasicParseErrorKind.TooManyClosingQuotes(startQuoteCount, endQuoteCount), Range.createWithEnd(top.codePointIndex - endQuoteCount, top.codePointIndex));
-		}
-		
         var skipIndent = lastIndent;
         var skipIndentSize = skipIndent.length;
         var string = "";
@@ -206,7 +211,7 @@ class QuotedStringContext
         if (currentString.length == 0 || !currentLine.isWhite())
         {
             currentString.push(currentLine);
-            endPosition = top.codePointIndex - endQuoteCount;
+            endPosition = top.codePointIndex - startQuoteCount;
         }
         else
         {

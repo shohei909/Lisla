@@ -1,10 +1,8 @@
 package lisla.data.meta.position;
+import hxext.ds.Maybe;
 import lisla.data.meta.position.Position;
 import lisla.data.meta.position.Range;
-import lisla.project.ProjectRootDirectory;
-import haxe.ds.Option;
 import lisla.data.meta.position.SourceMap;
-import lisla.project.LocalPath;
 
 class SourceContext 
 {
@@ -27,15 +25,11 @@ class SourceContext
         return new Position(
             position.projectRoot,
             position.localPath,
-            Option.Some(
-                switch (position.sourceMap)
-                {
-                    case Option.Some(_sourceMap):
-                        _sourceMap.mergeRanges(ranges);
-                        
-                    case Option.None:
-                        new SourceMap(lines, new RangeCollection(ranges));
-                }
+            Maybe.some(
+                position.sourceMap.match(
+                    _sourceMap -> _sourceMap.mergeRanges(ranges),
+                    () -> new SourceMap(lines, new RangeCollection(ranges))
+                )
             )
         );
     }

@@ -12,7 +12,7 @@ using unifill.Unifill;
 
 class Printer
 {
-    public static function printAlTree(alTree:ArrayTree<String>, ?config:PrintConfig):String
+    public static function printArrayTree(arrayTree:ArrayTree<String>, ?config:PrintConfig):String
     {
 		if (config == null) 
 		{
@@ -20,11 +20,11 @@ class Printer
 		}
         
         var string = "";
-        switch (alTree.kind)
+        switch (arrayTree.kind)
         {
             case ArrayTreeKind.Arr(array):
                 string += "[";
-                string += [for (tree in array) printAlTree(tree, config)].join(" ");
+                string += [for (tree in array) printArrayTree(tree, config)].join(" ");
                 string += "]";
             
             case ArrayTreeKind.Leaf(string):

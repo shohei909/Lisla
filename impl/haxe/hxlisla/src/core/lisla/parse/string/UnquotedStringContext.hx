@@ -42,7 +42,7 @@ class UnquotedStringContext
 			// --------------------------
 			case CodePointTools.CR | CodePointTools.LF | CodePointTools.SPACE | CodePointTools.TAB | 
                 CodePointTools.CLOSEING_PAREN | CodePointTools.OPENNING_PAREN | 
-                CodePointTools.DOUBLE_QUOTE | CodePointTools.SINGLE_QUOTE | CodePointTools.DOLLAR:
+                CodePointTools.DOUBLE_QUOTE | CodePointTools.SINGLE_QUOTE | CodePointTools.AT:
 				end();
 				parent.process(codePoint);
 			

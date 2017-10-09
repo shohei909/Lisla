@@ -92,4 +92,19 @@ abstract Maybe<T>(Null<T>) from Null<T>
 	{
 		return maybe.map(function (arr) return [for (e in arr) func(e)]);
 	}
+    
+	public inline function match<U>(
+        onSome: T -> U,
+        onNone: Void -> U
+    ):U
+	{
+		return if (isSome())
+        {
+            onSome(this);
+        }
+        else
+        {
+            onNone();
+        }
+	}
 }

@@ -21,7 +21,6 @@
 -cp generated
 -lib nanotest
 -lib unifill
--lib hx3compat
 
 --next
 -cmd neko "bin/test.n" 1>bin/report_idl_neko.txt

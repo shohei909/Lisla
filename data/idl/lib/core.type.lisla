@@ -76,7 +76,7 @@
 
 (enum Boolean
     (case false (= 0))
-    (case true (= 1))
+    (case true  (= 1))
 )
 
 ; -------------------- Protocol-Buffers Scalar --------------------------
@@ -90,31 +90,23 @@
 (newtype SingedFixedInt32 : String)
 
 
-; -------------------- Phantom Data --------------------------
-(tuple Void)
+; -------------------- Empty Data --------------------------
+(tuple Empty)
 (enum (Const (value const : String))
-    (case const (key (reference const)))
+    (case const (key $const))
 )
 
-
-; -------------------- Special --------------------------
+; -------------------- Special Data Structure --------------------------
 (union Any
     (case string : String)
     (case array : (Array Any))
 )
-(newtype (Map (type Key) (type Value)) : 
-    (Array (KeyValuePair Key Value))
-)
-(tuple (KeyValuePair (type Key) (type Value))
-    (var key : Key)
-    (var value : Value)
-)
-
+(newtype (Tuple (type T (rule repeated))) : (Array Any))
+(newtype (Map (type Key) (type Value)) : (Array (Tuple Key Value)))
 (union (Option (type T))
-    (case None : Unit)
-    (case Some : T)
+    (case None : Empty)
+    (case Some : (Tuple T))
 )
-
 
 ; -------------------- Special String --------------------------
 (newtype Base64 : String)

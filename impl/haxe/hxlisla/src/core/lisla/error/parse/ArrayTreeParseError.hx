@@ -1,5 +1,6 @@
 package lisla.error.parse;
 import haxe.ds.Option;
+import hxext.ds.Maybe;
 import lisla.data.meta.position.Position;
 import lisla.data.meta.position.SourceMap;
 import lisla.error.core.Error;
@@ -10,7 +11,7 @@ using hxext.ds.OptionTools;
 
 class ArrayTreeParseError extends Error<ArrayTreeParseErrorDetail>
 {
-    public function new(kind:ArrayTreeParseErrorKind, position:Position) 
+    public function new(kind:ArrayTreeParseErrorKind, position:Maybe<Position>) 
     {
         super(
             new ArrayTreeParseErrorDetail(kind),

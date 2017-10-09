@@ -1,19 +1,35 @@
-(newtype Idl = (Array Declaration))
+(import standard.identifer.UpperCamelIdentifer)
+(import standard.identifer.LowerSnakeIdentifer)
+
+(newtype Idl : (Array Declaration))
 
 (union Declaration
-    (case Import : ImportDeclaration)
-    (case Tuple : TupleDeclaration)
-    (case Struct : StructDeclaration)
-    (case Union : UnionDeclaration)
-    (case Newtype : NewtypeDeclaration)
+    (case Import : ImportDeclaration
+        (label import)
+    )
+    (case Tuple : TupleDeclaration
+        (label tuple)
+    )
+    (case Struct : StructDeclaration
+        (label struct)
+    )
+    (case Union : UnionDeclaration
+        (label union)
+    )
+    (case Newtype : NewtypeDeclaration
+        (label newtype)
+    )
+    (case Enum : EnumDeclaration
+        (label enum)
+    )
 )
 
 
 ; -------------------- Name --------------------------
-(newtype TypePath : String)
-(newtype VariableName : String)
-(newtype KindName : String)
-(newtype TypeName : String)
+(newtype TypePath : UpperCamelIdentifer)
+(newtype VariableName : LowerSnakeIdentifer)
+(newtype KindName : UpperCamelIdentifer)
+(newtype TypeName : UpperCamelIdentifer)
 
 
 ; -------------------- Type Reference --------------------------
@@ -23,9 +39,10 @@
 )
 (tuple GenericTypeReference
     (var name : TypePath)
-    (spreads arguments : (Array TypeArgument))
+    (var arguments : TypeArgument repeated)
 )
-(newtype TypeArgument : Any)
+(newtype TypeArgument : (Value Any))
+(newtype (Value T) : Any)
 
 
 
@@ -36,154 +53,155 @@
 )
 (tuple GenericTypeDeclaration
     (var name : TypeName)
-    (spreads parameters : (Array TypeParameterDeclaration))
+    (var parameters : TypeParameterDeclaration repeated)
 )
 (union TypeParameterDeclaration
-    (case Value : ValueTypeParameterDeclaration)
-    (case Type : TypeTypeParameterDeclaration)
+    (case Value : ValueTypeParameterDeclaration
+        (label value)
+    )
+    (case Type : TypeTypeParameterDeclaration
+        (label tuple)
+    )
 )
 (tuple ValueTypeParameterDeclaration
-    (label value)
     (var name : VariableName)
     (label :)
     (var type : TypeReference)
+    (var attributes : TypeParameterDeclarationAttributes)
 )
 (tuple TypeTypeParameterDeclaration
-    (label type)
     (var name : TypeName)
-)
-(tuple KindTypeParameterDeclaration
-    (label kind)
-    (var name : KindDeclaration)
-)
-(tuple KindDeclaration
-    (var name : KindName)
-    (spreads parameters : (Array KindParameter))
-)
-(union KindParameter
-    (case Type : TypeKindParameter)
-    (case Array : (Array KindParameter))
+    (var attributes : TypeParameterDeclarationAttributes)
 )
 (newtype TypeKindParameter : (Const (value _))
+(struct TypeParameterDeclarationAttributes
+    (var rule : VarRule optional spread)
+)
 
 
 ; -------------------- Import --------------------------
 (tuple ImportDeclaration 
     (label package)
     (var path : TypePath)
-    (optional spreads new_name : ImportAsDeclaration)
+    (var attributes : ImportAttributes optional spread)
 )
-(tuple ImportAsDeclaration
+(tuple ImportAttributes
     (label as)
     (var name : TypeName)
 )
 
 
 ; -------------------- Struct --------------------------
-(tuple StructDeclaration 
-    (label struct)
-    (var path : TypeDeclaration)
-    (spreads elements : (Array StructElement))
+(tuple StructDeclaration
+    (var name : TypeDeclaration)
+    (var elements : StructElement repeated)
 )
 (union StructElement
-    (case Var : VarStructElement)
-    (case OptionalVar : OptionalVarStructElement)
-    (case Label : LabelStructElement)
-    (case Spreads : SpreadsElement)
+    (case Extends : ExtendsElement
+        (label extends)
+    )
+    (case Const : ConstElement
+        (label const)
+    )
+    (case Var : StructVarElement
+        (label var)
+    )
 )
-(tuple LabelStructElement
-    (label label)
-    (var key : String)
-    (label :)
-    (var value : Any)
-)
-(tuple VarElement
-    (label var)
+(tuple ExtendsElement
     (var name : VariableName)
     (label :)
     (var type : TypeReference)
-    (spreads attributes : VarAttributes)
 )
-(struct VarAttributes
-    (optional var tag : Int32)
+(tuple ConstElement
+    (var name : String)
+    (label :)
+    (var value : (Value T))
 )
-(tuple OptionalVarElement
-    (label optional)
-    (label var)
+(tuple StructVarElement
     (var name : VariableName)
     (label :)
     (var type : TypeReference)
-    (spreads attributes : OptionalVarAttributes)
+    (var attributes : StructVarAttributes spread)
 )
-(struct OptionalVarAttributes
-    (optional var tag : Int32)
-    (optional var default : Any)
+(struct StructVarAttributes
+    (var rule : VarRule optional forward)
+    (var nest : StructVarNest optional forward)
+    (var tag : (Value Int32) optional)
 )
-(tuple SpreadsElement
-    (label spreads)
-    (var name : VariableName)
-    (label :)
-    (var type : TypeReference)
-    (spreads attributes : VarAttributes)
+(union VarRule
+    (case Default : (Tuple (Value Any)) (label default))
+    (case Optional : (Const optional))
+    (case Repeated : (Const repeated))
 )
-
+(union StructVarNest
+    (case Spreads : (Const spread))
+    (case Forwards : (Const forward))
+)
 
 ; -------------------- Union --------------------------
 (newtype VariantName : String)
 (tuple UnionDeclaration
-    (label union)
-    (var type : UnionDeclaration)
-    (spreads elements : (Array UnionElement))
+    (var name : TypeDeclaration)
+    (var elements : UnionElement repeated)
 )
 (tuple UnionElement
-    (case Case : CaseUnionElement)
+    (case Case : UnionCaseElement
+        (label case)
+    )
 )
-(tuple CaseUnionElement
-    (label case)
+(tuple UnionCaseElement
     (var name : VariantName)
     (label :)
     (var type : TypeReference)
-    (spreads attributes : CaseUnionAttributes)
+    (var attributes : UnionCaseAttributes spread)
 )
-(struct CaseUnionAttributes
-    (optional var tag : Int32)
+(struct UnionCaseAttributes
+    (var tag : (Value Int32) optional)
+    (var header : UnionCaseHeader repeated forward)
 )
-
+(enum UnionCaseHeader
+    (case Label : LabelElement
+        (label label)
+    )
+    (case Const : ConstElement
+        (label const)
+    )
+)
 
 ; -------------------- Tuple --------------------------
 (tuple TupleDeclaration
-    (label tuple)
-    (var type : TypeDeclaration)
-    (spreads elements : (Array TupleElement))
+    (var name : TypeDeclaration)
+    (var elements : TupleElement repeaded)
 )
 (union TupleElement
-    (case Label : LabelElement)
-    (case Var : VarElement)
-    (case OptionalVar : OptionalVarElement)
-    (case Spreads : SpreadsElement)
-    (case OptionalSpreads : OptionalSpreadsElement)
+    (case Label : LabelElement
+        (label label)
+    )
+    (case Var : TupleVarElement
+        (label var)
+    )
 )
-(tuple OptionalSpreadsElement
-    (label optional)
-    (label spreads)
+(tuple LabelElement
+    (var name : String)
+)
+(tuple TupleVarElement
     (var name : VariableName)
     (label :)
     (var type : TypeReference)
-    (spreads attributes : OptionalVarAttributes)
+    (var attributes : TupleVarAttributes spread)
 )
-(tuple SpreadsElement
-    (label spreads)
-    (var name : VariableName)
-    (label :)
-    (var type : TypeReference)
-    (spreads attributes : VarAttributes)
+(struct TupleVarAttributes
+    (var rule : VarRule optional forward)
+    (var nest : TupleVarNest optional forward)
+    (var tag : (Value Int32) optional)
 )
-
+(union TupleVarNest
+    (case Spread : (Const spread))
+)
 
 ; -------------------- Newtype --------------------------
 (tuple NewtypeDeclaration
-    (label newtype)
-    (var type : TypeDeclaration)
+    (var name : TypeDeclaration)
     (label :)
     (var underly_type : TypeReference)
 )
@@ -191,18 +209,19 @@
 
 ; ------------------- Enum ------------------------------ 
 (tuple EnumDeclaration
-    (label enum)
     (var type : TypeDeclaration)
-    (spreads elements : (Array EnumElement))
+    (var elements : EnumElement repeated)
 )
 (union EnumElement
-    (case Case : CaseEnumElement)
+    (case Case : EnumCaseElement
+        (label case)
+    )
 )
-(tuple CaseEnumElement
-    (label case)
+(tuple EnumCaseElement
     (var name : VariableName)
-    (spreads attributes : CaseEnumAttributes)
+    (var attributes : EnumCaseAttributes spread)
 )
-(struct CaseEnumAttributes
-    (optional var value : Int32 (key =))
+(struct EnumCaseAttributes
+    (var key : String optional)
+    (var value : (Value Int32) optional (key =))
 )
