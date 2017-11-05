@@ -6,7 +6,6 @@ import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Position;
 import lisla.data.meta.position.Range;
 import lisla.data.tree.array.ArrayTree;
-import lisla.data.tree.array.ArrayTreeKind;
 import lisla.error.exception.FatalException;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseState;

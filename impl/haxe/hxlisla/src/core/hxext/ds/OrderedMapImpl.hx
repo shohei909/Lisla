@@ -68,4 +68,9 @@ class OrderedMapImpl<Key, Value>
     {
         return rawKeys.copy();
     }
+    
+    public function isEmpty():Bool
+    {
+        return rawKeys.length == 0;
+    }
 }

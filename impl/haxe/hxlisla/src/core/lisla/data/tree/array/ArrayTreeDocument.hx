@@ -1,24 +1,17 @@
 package lisla.data.tree.array;
 
+import lisla.data.meta.core.MaybeTag;
 import lisla.data.meta.core.Tag;
 import lisla.data.meta.core.WithTag;
 
-class ArrayTreeDocument<LeafType>
-{   
-    public var data(default, null):Array<ArrayTree<LeafType>>;
-    public var tag(default, null):Tag;
-
+@:forward
+abstract ArrayTreeDocument<LeafType>(WithTag<ArrayTreeArray<LeafType>>)
+{
     public function new(
-        data:Array<ArrayTree<LeafType>>,
-        tag:Tag
+        data:ArrayTreeArray<LeafType>,
+        tag:MaybeTag
     ) 
     {
-        this.tag = tag;
-        this.data = data;
-    }
-
-    public function getArrayWithTag():WithTag<Array<ArrayTree<LeafType>>>
-    {
-        return new WithTag(data, tag);
+        this = new WithTag(data, tag);
     }
 }

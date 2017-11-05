@@ -1,19 +1,28 @@
 package lisla.data.tree.array;
 import hxext.ds.Result;
 import lisla.data.meta.core.MaybeTag;
-import lisla.data.tree.array.ArrayTree;
+using lisla.data.tree.array.ArrayTreeArrayTools;
+using lisla.data.tree.array.ArrayTreeTools;
 
 class ArrayTreeArrayTools 
 {
     public static function mapOrError<LeafType, NewLeafType, ErrorType>(
-        array:Array<ArrayTree<LeafType>>,
+        array:ArrayTreeArray<LeafType>,
         func:LeafType->MaybeTag->Result<NewLeafType, Array<ErrorType>>,
         persevering:Bool
-    ):Result<Array<ArrayTree<NewLeafType>>, Array<ErrorType>> {
+    ):Result<ArrayTreeArray<NewLeafType>, Array<ErrorType>> {
+        var data:ArrayTreeArray<NewLeafType> = [];
         var errors = [];
-        var data = [];
-        for (element in array) {
-            switch (element.mapOrError(func, persevering)) {
+        for (element in array)
+        {
+            switch (
+                ArrayTreeTools.mapOrError(
+                    element,
+                    func, 
+                    persevering
+                )
+            ) 
+            {
                 case Result.Ok(ok):
                     data.push(ok);
 

@@ -3,7 +3,7 @@ import haxe.Json;
 import haxe.ds.Option;
 import hxext.ds.Result;
 import lisla.data.meta.position.SourceMap;
-import lisla.data.tree.array.ArrayTreeKind;
+import lisla.data.tree.array.ArrayTree;
 import lisla.parse.Parser;
 import lisla.project.ProjectRootDirectory;
 

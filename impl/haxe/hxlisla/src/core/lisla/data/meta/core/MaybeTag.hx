@@ -1,5 +1,4 @@
 package lisla.data.meta.core;
-import haxe.ds.Option;
 import hxext.ds.Maybe;
 import lisla.data.meta.comment.DocumentComment;
 import lisla.data.meta.position.Position;

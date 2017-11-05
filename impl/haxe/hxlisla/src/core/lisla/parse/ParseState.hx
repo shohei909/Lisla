@@ -2,12 +2,9 @@ package lisla.parse;
 import haxe.ds.Option;
 import hxext.ds.Result;
 import lisla.data.meta.position.CodePointIndex;
-import lisla.data.meta.position.LineIndexes;
 import lisla.data.meta.position.Position;
 import lisla.data.meta.position.Range;
-import lisla.data.meta.position.RangeCollection;
 import lisla.data.meta.position.SourceContext;
-import lisla.data.meta.position.SourceMap;
 import lisla.data.tree.array.ArrayTreeDocument;
 import lisla.error.core.Error;
 import lisla.error.parse.BasicParseError;
@@ -15,10 +12,9 @@ import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.array.ArrayContext;
 import lisla.parse.array.ArrayParent;
 import lisla.parse.char.CodePointTools;
-import lisla.parse.tag.UnsettledLeadingTag;
 import lisla.parse.result.ArrayTreeTemplateParseResult;
+import lisla.parse.tag.UnsettledLeadingTag;
 import unifill.CodePoint;
-
 class ParseState
 {
     public var context(default, null):SourceContext;

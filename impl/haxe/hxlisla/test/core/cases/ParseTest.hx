@@ -4,7 +4,7 @@ import haxe.ds.Option;
 import hxext.ds.Result;
 import lisla.assert.Assert;
 import lisla.data.meta.position.SourceMap;
-import lisla.data.tree.array.ArrayTreeKind;
+import lisla.data.tree.array.ArrayTree;
 import lisla.parse.ParseState;
 import lisla.parse.Parser;
 import lisla.project.Project;
@@ -40,9 +40,9 @@ class ParseTest extends LislaTestCase
                     continue;
             }
 
-            switch [caseDocument.data[0].kind, caseDocument.data[1].kind]
+            switch [caseDocument.data[0].data, caseDocument.data[1].data]
             {
-                case [ArrayTreeKind.Leaf(arrayTree), ArrayTreeKind.Leaf(json)]:
+                case [ArrayTree.Leaf(arrayTree), ArrayTree.Leaf(json)]:
                     var tag = caseDocument.data[0].tag;
                     var position = tag.innerPosition;
                     var arrayTreeDocument = switch (Parser.parse(arrayTree, null, position))

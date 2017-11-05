@@ -1,11 +1,8 @@
 package lisla.parse;
 
-import haxe.ds.Option;
 import hxext.ds.Maybe;
 import hxext.ds.Result;
-import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Position;
-import lisla.data.meta.position.SourceContext;
 import lisla.data.tree.array.ArrayTreeArrayTools;
 import lisla.data.tree.array.ArrayTreeDocument;
 import lisla.error.parse.ArrayTreeParseError;

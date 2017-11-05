@@ -7,7 +7,7 @@
     - [ ] advanced
         - [ ] sample
             - [ ] invalid
-                - [ ] nonfatal
+                - [p] nonfatal
                     - [ ] blacklisted whitespaces
                     - [ ] repair
                 - [ ] fatal

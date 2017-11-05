@@ -7,14 +7,18 @@
     (case Import : ImportDeclaration
         (label import)
     )
+    (case Type : TypeDeclaration)
+)
+
+(union TypeDeclaration
     (case Tuple : TupleDeclaration
         (label tuple)
     )
-    (case Struct : StructDeclaration
-        (label struct)
-    )
     (case Union : UnionDeclaration
         (label union)
+    )
+    (case Struct : StructDeclaration
+        (label struct)
     )
     (case Newtype : NewtypeDeclaration
         (label newtype)
@@ -24,12 +28,11 @@
     )
 )
 
-
 ; -------------------- Name --------------------------
-(newtype TypePath : UpperCamelIdentifer)
+(newtype TypePath : String)
 (newtype VariableName : LowerSnakeIdentifer)
-(newtype KindName : UpperCamelIdentifer)
 (newtype TypeName : UpperCamelIdentifer)
+(newtype VariantName : UpperCamelIdentifer)
 
 
 ; -------------------- Type Reference --------------------------
@@ -42,7 +45,7 @@
     (var arguments : TypeArgument repeated)
 )
 (newtype TypeArgument : (Value Any))
-(newtype (Value T) : Any)
+(newtype (Value (type T)) : Any)
 
 
 
@@ -60,20 +63,19 @@
         (label value)
     )
     (case Type : TypeTypeParameterDeclaration
-        (label tuple)
+        (label type)
     )
 )
 (tuple ValueTypeParameterDeclaration
     (var name : VariableName)
     (label :)
     (var type : TypeReference)
-    (var attributes : TypeParameterDeclarationAttributes)
+    (var attributes : TypeParameterDeclarationAttributes spread)
 )
 (tuple TypeTypeParameterDeclaration
     (var name : TypeName)
-    (var attributes : TypeParameterDeclarationAttributes)
+    (var attributes : TypeParameterDeclarationAttributes spread)
 )
-(newtype TypeKindParameter : (Const (value _))
 (struct TypeParameterDeclarationAttributes
     (var rule : VarRule optional spread)
 )
@@ -83,9 +85,9 @@
 (tuple ImportDeclaration 
     (label package)
     (var path : TypePath)
-    (var attributes : ImportAttributes optional spread)
+    (var as : ImportAsAttribute optional spread)
 )
-(tuple ImportAttributes
+(tuple ImportAsAttribute
     (label as)
     (var name : TypeName)
 )
@@ -129,17 +131,16 @@
     (var tag : (Value Int32) optional)
 )
 (union VarRule
-    (case Default : (Tuple (Value Any)) (label default))
     (case Optional : (Const optional))
     (case Repeated : (Const repeated))
+    (case Default : (Tuple (Value Any)) (label default))
 )
 (union StructVarNest
-    (case Spreads : (Const spread))
-    (case Forwards : (Const forward))
+    (case Spread : (Const spread))
+    (case Forward : (Const forward))
 )
 
 ; -------------------- Union --------------------------
-(newtype VariantName : String)
 (tuple UnionDeclaration
     (var name : TypeDeclaration)
     (var elements : UnionElement repeated)
@@ -156,10 +157,10 @@
     (var attributes : UnionCaseAttributes spread)
 )
 (struct UnionCaseAttributes
+    (var headers : UnionCaseHeader repeated forward)
     (var tag : (Value Int32) optional)
-    (var header : UnionCaseHeader repeated forward)
 )
-(enum UnionCaseHeader
+(union UnionCaseHeader
     (case Label : LabelElement
         (label label)
     )
@@ -222,6 +223,6 @@
     (var attributes : EnumCaseAttributes spread)
 )
 (struct EnumCaseAttributes
-    (var key : String optional)
     (var value : (Value Int32) optional (key =))
+    (var key : String optional)
 )

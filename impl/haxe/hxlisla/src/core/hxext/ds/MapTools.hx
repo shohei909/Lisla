@@ -1,4 +1,5 @@
 package hxext.ds;
+import haxe.ds.Map;
 import haxe.ds.Option;
 
 class MapTools
@@ -14,4 +15,9 @@ class MapTools
 			Maybe.none();
 		}
 	}	
+    
+    public static function isEmpty<T, U>(map:Map<T, U>):Bool
+    {
+        return !map.iterator().hasNext();
+    }
 }

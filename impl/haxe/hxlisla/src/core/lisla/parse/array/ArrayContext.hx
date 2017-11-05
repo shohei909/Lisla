@@ -3,10 +3,11 @@ import haxe.ds.Option;
 import lisla.data.leaf.template.Placeholder;
 import lisla.data.leaf.template.TemplateLeaf;
 import lisla.data.meta.core.Tag;
+import lisla.data.meta.core.WithTag;
 import lisla.data.meta.position.CodePointIndex;
 import lisla.data.meta.position.Range;
 import lisla.data.tree.array.ArrayTree;
-import lisla.data.tree.array.ArrayTreeKind;
+import lisla.data.tree.array.ArrayTreeArray;
 import lisla.error.parse.BasicParseErrorKind;
 import lisla.parse.ParseState;
 import lisla.parse.array.ArrayParent;
@@ -21,7 +22,7 @@ using lisla.parse.char.CodePointTools;
 class ArrayContext
 {
     private var parent:ArrayParent;
-    private var data:Array<ArrayTree<TemplateLeaf>>;
+    private var data:Array<WithTag<ArrayTree<TemplateLeaf>>>;
 	private var tag:UnsettledArrayTag;
 	private var elementTag:UnsettledLeadingTag;
     private var top:ParseState;
@@ -216,7 +217,7 @@ class ArrayContext
 		top.current = destination;
 	}
     
-    public function push(tree:ArrayTree<TemplateLeaf>, separated:Bool):Void
+    public function push(tree:WithTag<ArrayTree<TemplateLeaf>>, separated:Bool):Void
     {
         data.push(tree);
 		state = ArrayState.Normal(separated);
@@ -232,13 +233,13 @@ class ArrayContext
         {
             TemplateLeaf.Str(string);
         }
-        push(new ArrayTree(ArrayTreeKind.Leaf(kind), tag), false);
+        push(new WithTag(ArrayTree.Leaf(kind), tag), false);
     }
     
-    public function pushArray(trees:Array<ArrayTree<TemplateLeaf>>, tag:Tag):Void
+    public function pushArray(trees:ArrayTreeArray<TemplateLeaf>, tag:Tag):Void
     {
-        var kind = ArrayTreeKind.Arr(trees);
-        push(new ArrayTree(kind, tag), true);
+        var kind = ArrayTree.Arr(trees);
+        push(new WithTag(kind, tag), true);
     }
     
     public function writeDocument(codePoint:CodePoint):Void
@@ -247,7 +248,7 @@ class ArrayContext
         tag.writeDocument(top.config, codePoint, top.codePointIndex - 1);
     }
     
-	public inline function endTop():{trees:Array<ArrayTree<TemplateLeaf>>, tag:Tag}
+	public inline function endTop():{trees:ArrayTreeArray<TemplateLeaf>, tag:Tag}
 	{
 		return {
             trees: data, 
@@ -255,7 +256,7 @@ class ArrayContext
         }
 	}
     
-    public inline function getData():Option<{trees:Array<ArrayTree<TemplateLeaf>>, tag:Tag}> 
+    public inline function getData():Option<{trees:ArrayTreeArray<TemplateLeaf>, tag:Tag}> 
 	{
 		return switch (state)
         {

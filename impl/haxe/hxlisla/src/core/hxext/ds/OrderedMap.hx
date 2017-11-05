@@ -3,7 +3,7 @@ import haxe.ds.StringMap;
 
 @:multiType(@:followWithAbstracts Key)
 @:forward
-abstract OrderedMap<Key, Value>(OrderedMapImpl<Key, Value>) 
+abstract OrderedMap<Key, Value>(OrderedMapImpl<Key, Value>) from OrderedMapImpl<Key, Value>
 {
     public function new();
 
@@ -22,7 +22,7 @@ abstract OrderedMap<Key, Value>(OrderedMapImpl<Key, Value>)
 		return new OrderedMapImpl(new Map<K, V>());
 	}
 
-	@:from static inline function fromStringOrderedMap<V>(map:OrderedMapImpl<String, V>):OrderedMap<String, V> 
+	@:from static inline function fromStringOrderedMap<K:String, V>(map:OrderedMapImpl<K, V>):OrderedMap<K, V> 
     {
 		return cast map;
 	}
@@ -32,7 +32,7 @@ abstract OrderedMap<Key, Value>(OrderedMapImpl<Key, Value>)
 		return new OrderedMapImpl(new Map<K, V>());
 	}
 
-	@:from static inline function fromIntOrderedMap<V>(map:OrderedMapImpl<Int, V>):OrderedMap<Int, V> 
+	@:from static inline function fromIntOrderedMap<K:Int, V>(map:OrderedMapImpl<K, V>):OrderedMap<K, V> 
     {
 		return cast map;
 	}

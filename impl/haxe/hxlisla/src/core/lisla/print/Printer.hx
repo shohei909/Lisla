@@ -1,8 +1,8 @@
 package lisla.print;
 
 import hxext.ds.Result;
+import lisla.data.tree.array.ArrayTreeWithTag;
 import lisla.data.tree.array.ArrayTree;
-import lisla.data.tree.array.ArrayTreeKind;
 import lisla.error.parse.ArrayTreeParseError;
 import lisla.parse.result.ArrayTreeParseResult;
 import lisla.parse.result.ArrayTreeTemplateParseResult;
@@ -12,7 +12,7 @@ using unifill.Unifill;
 
 class Printer
 {
-    public static function printArrayTree(arrayTree:ArrayTree<String>, ?config:PrintConfig):String
+    public static function printArrayTree(arrayTree:ArrayTreeWithTag<String>, ?config:PrintConfig):String
     {
 		if (config == null) 
 		{
@@ -22,12 +22,12 @@ class Printer
         var string = "";
         switch (arrayTree.kind)
         {
-            case ArrayTreeKind.Arr(array):
+            case ArrayTree.Arr(array):
                 string += "[";
                 string += [for (tree in array) printArrayTree(tree, config)].join(" ");
                 string += "]";
             
-            case ArrayTreeKind.Leaf(string):
+            case ArrayTree.Leaf(string):
                 var escapedString = string.split("\\").join("\\\\").split("\"").join("\\\"").split("\r").join("\\r").split("\n").join("\\n");
                 string += '"$escapedString"';
         }
